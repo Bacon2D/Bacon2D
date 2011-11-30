@@ -12,4 +12,8 @@ QDeclarativeListProperty<GameItem> GameScene::gameItems()
 
 void GameScene::update(long delta)
 {
+    GameItem *item;
+
+    foreach (item, m_gameItems)
+        item->update(delta);
 }
