@@ -17,6 +17,9 @@ public:
 
     QDeclarativeListProperty<GameItem> gameItems();
 
+public slots:
+    void update(long delta);
+
 private:
     QList<GameItem *> m_gameItems;
 };

@@ -9,3 +9,7 @@ QDeclarativeListProperty<GameItem> GameScene::gameItems()
 {
     return QDeclarativeListProperty<GameItem>(this, m_gameItems);
 }
+
+void GameScene::update(long delta)
+{
+}
