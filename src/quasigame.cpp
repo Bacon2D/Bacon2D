@@ -3,8 +3,12 @@
 
 QuasiGame::QuasiGame(QQuickItem *parent)
     : QQuickItem(parent),
-      m_currentScene(0)
+      m_currentScene(0),
+      m_fps(DEFAULT_FPS)
 {
+    connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(update()));
+    m_gameTime.start();
+    m_updateTimer.start(1000 / m_fps);
 }
 
 GameScene *QuasiGame::currentScene() const {
@@ -21,4 +25,22 @@ void QuasiGame::setCurrentScene(GameScene *currentScene) {
         connect(this, SIGNAL(update(long)), m_currentScene, SLOT(update(long)));
 
     emit currentSceneChanged();
+}
+
+int QuasiGame::fps() const
+{
+    return m_fps;
+}
+
+void QuasiGame::setFps(int fps)
+{
+    m_fps = fps;
+
+    emit fpsChanged();
+}
+
+void QuasiGame::update()
+{
+    long elapsedTime = m_gameTime.restart();
+    emit update(elapsedTime);
 }
