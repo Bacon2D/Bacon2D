@@ -9,6 +9,9 @@ class QuasiGame : public QQuickItem
 
 public:
     QuasiGame(QQuickItem *parent = 0);
+
+signals:
+    void update(long delta);
 };
 
 #endif /* _QUASIGAME_H_ */
