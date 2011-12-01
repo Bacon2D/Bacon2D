@@ -2,7 +2,11 @@ TEMPLATE = lib
 CONFIG += qt plugin
 QT += declarative
 
-TARGET = qmlgameitemplugin
+TARGET = quasigameplugins
+
+DESTDIR = lib
+OBJECTS_DIR = tmp
+MOC_DIR = tmp
 
 DEPENDPATH += .
 INCLUDEPATH += .
