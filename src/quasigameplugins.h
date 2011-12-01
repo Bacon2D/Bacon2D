@@ -15,8 +15,8 @@ public:
     void registerTypes(const char *uri)
     {
         qmlRegisterType<QuasiGame>(uri, 1, 0, "QuasiGame");
-        qmlRegisterType<GameScene>(uri, 1, 0, "GameScene");
-        qmlRegisterType<GameItem>(uri, 1, 0, "GameItem");
+        qmlRegisterType<GameScene>(uri, 1, 0, "QuasiGame");
+        qmlRegisterType<GameItem>(uri, 1, 0, "QuasiGame");
     }
 };
 
