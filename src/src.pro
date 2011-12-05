@@ -12,4 +12,4 @@ DEPENDPATH += .
 INCLUDEPATH += .
 
 HEADERS += gameitem.h gamescene.h quasigame.h quasigameplugins.h
-SOURCES += gameitem.cpp gamescene.cpp quasigame.cpp
+SOURCES += gameitem.cpp gamescene.cpp quasigame.cpp quasigameplugins.cpp

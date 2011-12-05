@@ -7,20 +7,13 @@
 #include "gamescene.h"
 #include "gameitem.h"
 
-class GameItemPlugin : public  QDeclarativeExtensionPlugin
+class QuasiGamePlugins : public  QDeclarativeExtensionPlugin
 {
     Q_OBJECT
 
 public:
-    void registerTypes(const char *uri)
-    {
-        qmlRegisterType<QuasiGame>(uri, 1, 0, "QuasiGame");
-        qmlRegisterType<GameScene>(uri, 1, 0, "QuasiGame");
-        qmlRegisterType<GameItem>(uri, 1, 0, "QuasiGame");
-    }
+    void registerTypes(const char *uri);
 };
-
-Q_EXPORT_PLUGIN2(qmlgameitemplugin, GameItemPlugin);
 
 #endif /* _QUASIGAMEPLUGINS_H_ */
 
