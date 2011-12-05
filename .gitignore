@@ -4,3 +4,5 @@ moc*
 *.moc
 *.o
 Makefile*
+lib/
+imports/
