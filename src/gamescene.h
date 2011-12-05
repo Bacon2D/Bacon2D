@@ -28,6 +28,8 @@ signals:
     void runningChanged();
 
 private:
+    static void append_gameItem(QDeclarativeListProperty<GameItem> *list, GameItem *gameItem);
+
     QList<GameItem *> m_gameItems;
     bool m_running;
 };

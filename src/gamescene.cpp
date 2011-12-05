@@ -1,5 +1,14 @@
 #include "gamescene.h"
 
+void GameScene::append_gameItem(QDeclarativeListProperty<GameItem> *list, GameItem *gameItem)
+{
+    GameScene *scene = qobject_cast<GameScene *>(list->object);
+    if (scene) {
+        gameItem->setParentItem(scene);
+        scene->m_gameItems.append(gameItem);
+    }
+}
+
 GameScene::GameScene(QQuickItem *parent)
     : QQuickItem(parent)
 {
@@ -7,7 +16,7 @@ GameScene::GameScene(QQuickItem *parent)
 
 QDeclarativeListProperty<GameItem> GameScene::gameItems()
 {
-    return QDeclarativeListProperty<GameItem>(this, m_gameItems);
+    return QDeclarativeListProperty<GameItem>(this, 0, &GameScene::append_gameItem);
 }
 
 void GameScene::update(long delta)
