@@ -11,6 +11,7 @@ void GameScene::append_gameItem(QDeclarativeListProperty<GameItem> *list, GameIt
 
 GameScene::GameScene(QQuickItem *parent)
     : QQuickItem(parent)
+    , m_running(true)
 {
 }
 
