@@ -13,3 +13,10 @@ INCLUDEPATH += .
 
 HEADERS += gameitem.h gamescene.h quasigame.h quasigameplugins.h
 SOURCES += gameitem.cpp gamescene.cpp quasigame.cpp quasigameplugins.cpp
+
+target.path += imports/QuasiGame
+
+target.files = lib/*
+target.files += qmldir
+
+INSTALLS += target
