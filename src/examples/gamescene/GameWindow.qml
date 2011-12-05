@@ -7,7 +7,9 @@ QuasiGame {
     width: 400
     height: 250
 
-    currentScene: GameScene {
+    currentScene: scene
+
+    GameScene {
         id: scene
 
         gameItems: GameItem {
