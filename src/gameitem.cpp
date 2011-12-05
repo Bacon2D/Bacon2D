@@ -26,7 +26,7 @@ void GameItem::setUpdateScript(QDeclarativeScriptString updateScript)
     if (m_expression)
         delete m_expression;
 
-    m_expression = new QDeclarativeExpression(m_updateScript);
+    m_expression = new QDeclarativeExpression(m_updateScript.context(), m_updateScript.scopeObject(), m_updateScript.script());
 
     emit updateScriptChanged();
 }
