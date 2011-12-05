@@ -6,7 +6,7 @@ QuasiGame::QuasiGame(QQuickItem *parent)
       m_currentScene(0),
       m_fps(DEFAULT_FPS)
 {
-    connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(update()));
+    connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(onUpdate()));
     m_gameTime.start();
     m_updateTimer.start(1000 / m_fps);
 }
@@ -39,7 +39,7 @@ void QuasiGame::setFps(int fps)
     emit fpsChanged();
 }
 
-void QuasiGame::update()
+void QuasiGame::onUpdate()
 {
     long elapsedTime = m_gameTime.restart();
     emit update(elapsedTime);

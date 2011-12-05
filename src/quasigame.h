@@ -26,7 +26,7 @@ public:
     void setFps(int fps);
 
 public slots:
-    void update();
+    void onUpdate();
 
 signals:
     void update(long delta);
