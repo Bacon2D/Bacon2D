@@ -11,7 +11,7 @@ GameItem::GameItem(QQuickItem *parent)
 
 void GameItem::update(long delta)
 {
-    if (m_updateInterval && m_updateTime.elapsed() >= m_updateInterval
+    if ((m_updateInterval && m_updateTime.elapsed() >= m_updateInterval)
         || !m_updateInterval) {
         m_updateTime.restart();
         if (m_expression)
