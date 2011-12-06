@@ -6,10 +6,14 @@ GameItem {
     id: spriteItem
 
     property alias sprite: spriteImage
+    property alias sprites: spriteImage.sprites
+    property string currentSprite: ""
 
     SpriteImage {
         id: spriteImage
 
         anchors.fill: parent
     }
+
+    onCurrentSpriteChanged: spriteImage.jumpTo(currentSprite)
 }
