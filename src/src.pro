@@ -17,6 +17,7 @@ SOURCES += gameitem.cpp gamescene.cpp quasigame.cpp quasigameplugins.cpp
 target.path += imports/QuasiGame
 
 target.files = lib/*
+target.files += qml/*
 target.files += qmldir
 
 INSTALLS += target
