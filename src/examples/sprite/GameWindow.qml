@@ -22,13 +22,32 @@ QuasiGame {
             width: 230
             height: 230
 
-            sprite.sprites: Sprite {
-                name: "default"
-                frames: 4
-                duration: 60
+            updateInterval: 5000
+            sprite.interpolate: true
 
-                source: "sprite.png"
+            updateScript: {
+                if (currentSprite == "sliding")
+                    currentSprite = "jumping"
+                else
+                    currentSprite = "sliding"
             }
+
+            sprites: [
+                Sprite {
+                    name: "sliding"
+                    frames: 4
+                    duration: 60
+
+                    source: "sliding.png"
+                },
+                Sprite {
+                    name: "jumping"
+                    frames: 10
+                    duration: 60
+
+                    source: "jumping.png"
+                }
+            ]
         }
     }
 }
