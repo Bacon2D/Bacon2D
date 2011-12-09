@@ -21,6 +21,8 @@ QuasiGame {
             GameItem {
                 id: item
 
+                property string name: "RED"
+
                 width: rect.width
                 height: rect.height
                 x: 0
@@ -40,10 +42,23 @@ QuasiGame {
                     color: item.collided ? "green" : "red"
                 }
 
-                //onCollidedChanged: if (collided) console.log("red collided")
+                onCollidedChanged: {
+                    if (collided) {
+                        console.log("red collided with:")
+                        var collidedList = item.collidedItems()
+                        console.log(collidedList)
+                        for (var i=0; i< collidedList.length; ++i) {
+                            var gameItem = collidedList[i]
+                            console.log(gameItem)
+                            console.log(gameItem.name)
+                        }
+                    }
+                }
             },
             GameItem {
                 id: item2
+
+                property string name: "BLUE"
 
                 width: rect2.width
                 height: rect2.height
@@ -63,11 +78,11 @@ QuasiGame {
 
                     color: item2.collided ? "green" : "blue"
                 }
-
-                //onCollidedChanged: if (collided) console.log("blue collided")
             },
             GameItem {
                 id: item3
+
+                property string name: "YELLOW"
 
                 width: rect3.width
                 height: rect3.height
@@ -88,11 +103,11 @@ QuasiGame {
 
                     color: item3.collided ? "green" : "yellow"
                 }
-
-                //onCollidedChanged: if (collided) console.log("yellow collided")
             },
             GameItem {
                 id: item4
+
+                property string name: "GRAY"
 
                 width: rect4.width
                 height: rect4.height
@@ -113,8 +128,6 @@ QuasiGame {
 
                     color: item3.collided ? "green" : "gray"
                 }
-
-                //onCollidedChanged: if (collided) console.log("gray collided")
             }
         ]
     }
