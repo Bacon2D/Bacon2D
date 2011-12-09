@@ -1,9 +1,10 @@
 #include "gameitem.h"
+#include "gamescene.h"
 
 #include <QDeclarativeExpression>
 
-GameItem::GameItem(QQuickItem *parent)
-    : QQuickItem(parent)
+GameItem::GameItem(GameScene *parent)
+    : QQuickItem((QQuickItem *)parent)
     , m_expression(0)
     , m_updateInterval(0)
     , m_collided(false)
@@ -59,4 +60,11 @@ void GameItem::setCollided(bool collided)
     m_collided = collided;
 
     emit collidedChanged();
+}
+
+QList<QObject *> GameItem::collidedItems()
+{
+    GameScene *scene = qobject_cast<GameScene *>(parent());
+
+    return scene->collidedItems(this);
 }

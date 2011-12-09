@@ -22,6 +22,8 @@ public:
     bool running() const;
     void setRunning(bool running);
 
+    Q_INVOKABLE QList<QObject *> collidedItems(GameItem *gameItem);
+
 public slots:
     void update(long delta);
 

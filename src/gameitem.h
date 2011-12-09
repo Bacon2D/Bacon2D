@@ -6,6 +6,7 @@
 #include <QDeclarativeScriptString>
 
 class QDeclarativeExpression;
+class GameScene;
 
 class GameItem : public QQuickItem
 {
@@ -16,7 +17,7 @@ class GameItem : public QQuickItem
     Q_PROPERTY(bool collided READ collided WRITE setCollided NOTIFY collidedChanged)
 
 public:
-    GameItem(QQuickItem *parent = 0); // XXX gamescene
+    GameItem(GameScene *parent = 0);
 
     QDeclarativeScriptString updateScript() const;
     void setUpdateScript(QDeclarativeScriptString updateScript);
@@ -26,6 +27,8 @@ public:
 
     bool collided();
     void setCollided(bool collided);
+
+    Q_INVOKABLE QList<QObject *> collidedItems();
 
 public slots:
     virtual void update(long delta);

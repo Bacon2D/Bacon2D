@@ -73,6 +73,7 @@ void GameScene::checkCollisions()
             otherItem->setCollided(otherItem->collided() ? true : collided);
 
             (*m_collisions)[i][j] = collided;
+            (*m_collisions)[j][i] = collided;
         }
     }
 }
@@ -88,4 +89,23 @@ bool GameScene::checkCollision(GameItem *item, GameItem *otherItem)
     return itemRect.intersects(otherItemRect)
            || itemRect.contains(otherItemRect)
            || otherItemRect.contains(itemRect);
+}
+
+QList<QObject *> GameScene::collidedItems(GameItem *gameItem)
+{
+    QList<QObject *> collidedItemsList;
+
+    if (m_collisions) {
+        int index = m_gameItems.indexOf(gameItem);
+
+        if (index != -1) {
+            for (int i=0; i < m_gameItems.size(); ++i) {
+                if (i != index && (*m_collisions)[index][i]) {
+                    collidedItemsList.append(m_gameItems.at(i));
+                }
+            }
+        }
+    }
+
+    return collidedItemsList;
 }
