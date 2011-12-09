@@ -3,10 +3,10 @@
 #include <QDeclarativeExpression>
 
 GameItem::GameItem(QQuickItem *parent)
-    : QQuickItem(parent),
-      m_expression(0),
-      m_updateInterval(0),
-      m_collided(false)
+    : QQuickItem(parent)
+    , m_expression(0)
+    , m_updateInterval(0)
+    , m_collided(false)
 {
 }
 

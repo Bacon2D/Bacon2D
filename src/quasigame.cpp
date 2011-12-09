@@ -2,9 +2,9 @@
 #include "gamescene.h"
 
 QuasiGame::QuasiGame(QQuickItem *parent)
-    : QQuickItem(parent),
-      m_currentScene(0),
-      m_fps(DEFAULT_FPS)
+    : QQuickItem(parent)
+    , m_currentScene(0)
+    , m_fps(DEFAULT_FPS)
 {
     connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(onUpdate()));
     m_gameTime.start();
