@@ -2,6 +2,7 @@
 #define _GAMESCENE_H_
 
 #include <QtCore/QList>
+#include <QtCore/QVector>
 #include <QtDeclarative>
 
 #include "gameitem.h"
@@ -29,9 +30,13 @@ signals:
 
 private:
     static void append_gameItem(QDeclarativeListProperty<GameItem> *list, GameItem *gameItem);
+    void checkCollisions();
+    bool checkCollision(GameItem *item, GameItem *otherItem);
 
+private:
     QList<GameItem *> m_gameItems;
     bool m_running;
+    QVector<QVector<bool> > *m_collisions;
 };
 
 #endif /* _GAMESCENE_H_ */

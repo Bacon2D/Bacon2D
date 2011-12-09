@@ -12,6 +12,7 @@ void GameScene::append_gameItem(QDeclarativeListProperty<GameItem> *list, GameIt
 GameScene::GameScene(QQuickItem *parent)
     : QQuickItem(parent)
     , m_running(true)
+    , m_collisions(0)
 {
 }
 
@@ -24,6 +25,8 @@ void GameScene::update(long delta)
 {
     if (!m_running) // TODO: stop Qt animations as well
         return;
+
+    checkCollisions();
 
     GameItem *item;
 
@@ -41,4 +44,48 @@ void GameScene::setRunning(bool running)
     m_running = running;
 
     emit runningChanged();
+}
+
+void GameScene::checkCollisions()
+{
+    int itemCount = m_gameItems.count();
+
+    if (!m_collisions) {
+        m_collisions = new QVector<QVector<bool> >(itemCount);
+    }
+
+    GameItem *item, *otherItem;
+
+    foreach (item, m_gameItems)
+        item->setCollided(false);
+
+    for (int i = 0; i < itemCount; ++i) {
+        item = m_gameItems.at(i);
+        for (int j = 0; j < itemCount; ++j) {
+            if (i == j)
+                continue;
+
+            otherItem = m_gameItems.at(j);
+
+            bool collided = checkCollision(item, otherItem);
+
+            item->setCollided(item->collided() ? true : collided);
+            otherItem->setCollided(otherItem->collided() ? true : collided);
+
+            (*m_collisions)[i][j] = collided;
+        }
+    }
+}
+
+bool GameScene::checkCollision(GameItem *item, GameItem *otherItem)
+{
+    QRectF itemRect = item->boundingRect();
+    QRectF otherItemRect = otherItem->boundingRect();
+
+    itemRect.moveTo(item->x(), item->y());
+    otherItemRect.moveTo(otherItem->x(), otherItem->y());
+
+    return itemRect.intersects(otherItemRect)
+           || itemRect.contains(otherItemRect)
+           || otherItemRect.contains(itemRect);
 }

@@ -5,7 +5,8 @@
 GameItem::GameItem(QQuickItem *parent)
     : QQuickItem(parent),
       m_expression(0),
-      m_updateInterval(0)
+      m_updateInterval(0),
+      m_collided(false)
 {
 }
 
@@ -46,4 +47,16 @@ void GameItem::setUpdateInterval(int updateInterval)
     m_updateInterval = updateInterval;
 
     emit updateScriptChanged();
+}
+
+bool GameItem::collided()
+{
+    return m_collided;
+}
+
+void GameItem::setCollided(bool collided)
+{
+    m_collided = collided;
+
+    emit collidedChanged();
 }
