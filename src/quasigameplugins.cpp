@@ -1,5 +1,9 @@
 #include "quasigameplugins.h"
 
+#include "quasigame.h"
+#include "gamescene.h"
+#include "gameitem.h"
+
 void QuasiGamePlugins::registerTypes(const char *uri)
 {
     qmlRegisterType<QuasiGame>("QuasiGame", 1, 0, "QuasiGame");

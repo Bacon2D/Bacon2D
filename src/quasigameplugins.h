@@ -3,10 +3,6 @@
 
 #include <QtDeclarative/QDeclarativeExtensionPlugin>
 
-#include "quasigame.h"
-#include "gamescene.h"
-#include "gameitem.h"
-
 class QuasiGamePlugins : public  QDeclarativeExtensionPlugin
 {
     Q_OBJECT
