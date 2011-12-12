@@ -126,7 +126,7 @@ QuasiGame {
                     width: 50
                     height: 50
 
-                    color: item3.collided ? "green" : "gray"
+                    color: item4.collided ? "green" : "gray"
                 }
             }
         ]
