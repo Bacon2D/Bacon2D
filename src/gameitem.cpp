@@ -28,14 +28,16 @@ QDeclarativeScriptString GameItem::updateScript() const
 
 void GameItem::setUpdateScript(QDeclarativeScriptString updateScript)
 {
-    m_updateScript = updateScript;
+    if (m_updateScript.script() != updateScript.script()) {
+        m_updateScript = updateScript;
 
-    if (m_expression)
-        delete m_expression;
+        if (m_expression)
+            delete m_expression;
 
-    m_expression = new QDeclarativeExpression(m_updateScript.context(), m_updateScript.scopeObject(), m_updateScript.script());
+        m_expression = new QDeclarativeExpression(m_updateScript.context(), m_updateScript.scopeObject(), m_updateScript.script());
 
-    emit updateScriptChanged();
+        emit updateScriptChanged();
+    }
 }
 
 int GameItem::updateInterval() const
@@ -45,9 +47,11 @@ int GameItem::updateInterval() const
 
 void GameItem::setUpdateInterval(int updateInterval)
 {
-    m_updateInterval = updateInterval;
+    if (m_updateInterval != updateInterval) {
+        m_updateInterval = updateInterval;
 
-    emit updateScriptChanged();
+        emit updateScriptChanged();
+    }
 }
 
 bool GameItem::collided()
@@ -57,9 +61,11 @@ bool GameItem::collided()
 
 void GameItem::setCollided(bool collided)
 {
-    m_collided = collided;
+    if (m_collided != collided) {
+        m_collided = collided;
 
-    emit collidedChanged();
+        emit collidedChanged();
+    }
 }
 
 QList<QObject *> GameItem::collidedItems()
