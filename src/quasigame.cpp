@@ -16,15 +16,17 @@ GameScene *QuasiGame::currentScene() const {
 }
 
 void QuasiGame::setCurrentScene(GameScene *currentScene) {
-    if (m_currentScene)
-        disconnect(SIGNAL(update(long)));
+    if (m_currentScene != currentScene) {
+        if (m_currentScene)
+            disconnect(SIGNAL(update(long)));
 
-    m_currentScene = currentScene;
+        m_currentScene = currentScene;
 
-    if (m_currentScene)
-        connect(this, SIGNAL(update(long)), m_currentScene, SLOT(update(long)));
+        if (m_currentScene)
+            connect(this, SIGNAL(update(long)), m_currentScene, SLOT(update(long)));
 
-    emit currentSceneChanged();
+        emit currentSceneChanged();
+    }
 }
 
 int QuasiGame::fps() const
@@ -34,9 +36,11 @@ int QuasiGame::fps() const
 
 void QuasiGame::setFps(int fps)
 {
-    m_fps = fps;
+    if (m_fps != fps) {
+        m_fps = fps;
 
-    emit fpsChanged();
+        emit fpsChanged();
+    }
 }
 
 void QuasiGame::onUpdate()
