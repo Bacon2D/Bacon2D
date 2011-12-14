@@ -11,8 +11,8 @@ MOC_DIR = tmp
 DEPENDPATH += .
 INCLUDEPATH += .
 
-HEADERS += gameitem.h gamescene.h quasigame.h quasigameplugins.h gamesprite.h
-SOURCES += gameitem.cpp gamescene.cpp quasigame.cpp quasigameplugins.cpp gamesprite.cpp
+HEADERS += gameitem.h gamescene.h quasigame.h quasigameplugins.h gamesprite.h spriteanimation.h
+SOURCES += gameitem.cpp gamescene.cpp quasigame.cpp quasigameplugins.cpp gamesprite.cpp spriteanimation.cpp
 
 target.path += imports/QuasiGame
 

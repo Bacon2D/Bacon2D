@@ -4,6 +4,7 @@
 #include "gamescene.h"
 #include "gameitem.h"
 #include "gamesprite.h"
+#include "spriteanimation.h"
 
 void QuasiGamePlugins::registerTypes(const char *uri)
 {
@@ -11,6 +12,7 @@ void QuasiGamePlugins::registerTypes(const char *uri)
     qmlRegisterType<GameScene>("QuasiGame", 1, 0, "GameScene");
     qmlRegisterType<GameItem>("QuasiGame", 1, 0, "GameItem");
     qmlRegisterType<GameSprite>("QuasiGame", 1, 0, "GameSprite");
+    qmlRegisterType<SpriteAnimation>("QuasiGame", 1, 0, "SpriteAnimation");
 }
 
 Q_EXPORT_PLUGIN2(QuasiGame, QuasiGamePlugins);
