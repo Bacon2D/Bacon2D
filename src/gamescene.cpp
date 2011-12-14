@@ -41,9 +41,11 @@ bool GameScene::running() const
 
 void GameScene::setRunning(bool running)
 {
-    m_running = running;
+    if (m_running != running) {
+        m_running = running;
 
-    emit runningChanged();
+        emit runningChanged();
+    }
 }
 
 void GameScene::checkCollisions()
