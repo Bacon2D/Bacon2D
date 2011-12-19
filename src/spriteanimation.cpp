@@ -65,7 +65,7 @@ int SpriteAnimation::loops() const
 
 void SpriteAnimation::setLoops(int loops)
 {
-    if (m_loops = loops) {
+    if (m_loops != loops) {
         m_loops = loops;
 
         setLoopCount(loops);
