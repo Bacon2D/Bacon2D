@@ -84,6 +84,8 @@ void GameSprite::setFrame(int frame)
 void GameSprite::updateSizeInfo()
 {
     m_frameWidth = m_pixMap->width() / m_frames;
+    setWidth(m_frameWidth);
+    setHeight(m_pixMap->height());
 }
 
 int GameSprite::initialFrame() const

@@ -19,35 +19,50 @@ QuasiGame {
         height: parent.height
 
         gameItems: SpriteItem {
-            width: 230
-            height: 230
+            id: spriteItem
 
-            updateInterval: 5000
-            sprite.interpolate: true
 
-            updateScript: {
-                if (currentSprite == "sliding")
-                    currentSprite = "jumping"
-                else
-                    currentSprite = "sliding"
-            }
+            animation: "sliding"
 
-            sprites: [
-                Sprite {
+            animations: [
+                SpriteAnimationItem {
                     name: "sliding"
-                    frames: 4
-                    duration: 60
 
-                    source: "sliding.png"
+                    sprite: GameSprite {
+                        source: "sliding.png"
+                        frames: 4
+                    }
+
+                    spriteAnimation: SpriteAnimation {
+                        duration: 450
+                        loops: Animation.Infinite
+                    }
                 },
-                Sprite {
+                SpriteAnimationItem {
                     name: "jumping"
-                    frames: 10
-                    duration: 60
 
-                    source: "jumping.png"
+                    sprite: GameSprite {
+
+                        source: "jumping.png"
+                        frames: 10
+                    }
+
+                    spriteAnimation: SpriteAnimation {
+                        duration: 600
+                        loops: Animation.Infinite
+                    }
                 }
             ]
+        }
+    }
+
+    MouseArea {
+        anchors.fill: parent
+
+        onClicked: {
+            spriteItem.animation = spriteItem.animation == "sliding" ? "jumping"
+                                                                     : "sliding"
+            print("animation", spriteItem.animation)
         }
     }
 }
