@@ -1,0 +1,26 @@
+A simple 2D game engine.
+
+Roadmap:
+
+First release:
+
+Create update/render control: DONE
+Create a Game basic element: DONE
+Create a Scene basic element: DONE
+Create a GameItem basic element: DONE
+Create a GameItem-based Sprite element: DONE
+Create QState-based animation control: DONE
+Create a GameItem-based scrollable background element: ONGOING
+Create a physics-based game scene: -
+Create physics-based game items: -
+Create HUD: -
+A example game: -
+
+Future implementations:
+
+Create transitions for animation changes: -
+Add transition animations between game scenes: -
+Create Cutscenes: -
+Create a GameItem-based tilemap background: -
+Create a tilemap editor: -
+Create a game editor: -
