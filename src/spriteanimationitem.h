@@ -10,9 +10,9 @@ class SpriteAnimationItem : public QState
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString name READ name WRITE setName CONSTANT)
-    Q_PROPERTY(GameSprite *sprite READ sprite WRITE setSprite CONSTANT)
-    Q_PROPERTY(SpriteAnimation *spriteAnimation READ spriteAnimation WRITE setSpriteAnimation CONSTANT)
+    Q_PROPERTY(QString name READ name WRITE setName)
+    Q_PROPERTY(GameSprite *sprite READ sprite WRITE setSprite)
+    Q_PROPERTY(SpriteAnimation *spriteAnimation READ spriteAnimation WRITE setSpriteAnimation)
 
 public:
     SpriteAnimationItem(QState *parent = 0);
