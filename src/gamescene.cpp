@@ -52,8 +52,10 @@ void GameScene::checkCollisions()
 {
     int itemCount = m_gameItems.count();
 
-    if (!m_collisions) {
-        m_collisions = new QVector<QVector<bool> >(itemCount);
+    if (!m_collisions || (m_collisions->count() != itemCount)) {
+        if (m_collisions)
+            delete [] m_collisions;
+        m_collisions = new QVector<QVector<bool> >(itemCount, QVector<bool>(itemCount));
     }
 
     GameItem *item, *otherItem;
