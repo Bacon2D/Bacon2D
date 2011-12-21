@@ -48,8 +48,14 @@ QuasiGame {
                     }
 
                     spriteAnimation: SpriteAnimation {
+                        id: jumpingAnimation
+
                         duration: 600
-                        loops: Animation.Infinite
+                        loops: 2
+
+                        onFinished: {
+                            spriteItem.animation = "sliding"
+                        }
                     }
                 }
             ]
@@ -62,7 +68,6 @@ QuasiGame {
         onClicked: {
             spriteItem.animation = spriteItem.animation == "sliding" ? "jumping"
                                                                      : "sliding"
-            print("animation", spriteItem.animation)
         }
     }
 }
