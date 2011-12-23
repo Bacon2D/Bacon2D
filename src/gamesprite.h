@@ -1,8 +1,7 @@
 #ifndef _GAMESPRITE_H_
 #define _GAMESPRITE_H_
 
-#include <QtDeclarative>
-#include <QQuickPaintedItem>
+#include <QtQuick/QQuickPaintedItem>
 
 class QPixmap;
 

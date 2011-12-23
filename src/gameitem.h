@@ -2,7 +2,7 @@
 #define _GAMEITEM_H_
 
 #include <QTime>
-#include <QtDeclarative>
+#include <QtQuick/QQuickItem>
 #include <QDeclarativeScriptString>
 
 class QDeclarativeExpression;

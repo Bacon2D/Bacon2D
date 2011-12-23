@@ -1,6 +1,7 @@
 #include "gamesprite.h"
 
-#include <QPixmap>
+#include <QtGui/QPixmap>
+#include <QtGui/QPainter>
 
 GameSprite::GameSprite(QQuickItem *parent)
     : QQuickPaintedItem(parent)

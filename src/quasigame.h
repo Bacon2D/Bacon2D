@@ -3,7 +3,7 @@
 
 #include <QtCore/QTimer>
 #include <QtCore/QTime>
-#include <QtDeclarative>
+#include <QtQuick/QQuickItem>
 
 class GameScene;
 

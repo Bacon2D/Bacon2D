@@ -3,7 +3,7 @@
 
 #include <QtCore/QList>
 #include <QtCore/QVector>
-#include <QtDeclarative>
+#include <QtQuick/QQuickItem>
 
 #include "gameitem.h"
 
