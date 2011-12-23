@@ -1,6 +1,6 @@
 TEMPLATE = lib
 CONFIG += qt plugin
-QT += declarative
+QT += quick declarative
 
 TARGET = quasigameplugins
 
