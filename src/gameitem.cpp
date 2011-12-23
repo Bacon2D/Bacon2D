@@ -8,6 +8,7 @@ GameItem::GameItem(GameScene *parent)
     , m_expression(0)
     , m_updateInterval(0)
     , m_collided(false)
+    , m_scene(0)
 {
 }
 
@@ -73,4 +74,14 @@ QList<QObject *> GameItem::collidedItems()
     GameScene *scene = qobject_cast<GameScene *>(parent());
 
     return scene->collidedItems(this);
+}
+
+GameScene *GameItem::scene()
+{
+    return m_scene;
+}
+
+void GameItem::setScene(GameScene *scene)
+{
+    m_scene = scene;
 }

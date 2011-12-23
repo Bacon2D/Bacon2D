@@ -30,6 +30,9 @@ public:
 
     Q_INVOKABLE QList<QObject *> collidedItems();
 
+    GameScene *scene();
+    void setScene(GameScene *scene);
+
 public slots:
     virtual void update(long delta);
 
@@ -44,6 +47,7 @@ private:
     int m_updateInterval;
     QTime m_updateTime;
     bool m_collided;
+    GameScene *m_scene;
 };
 
 #endif /* _GAMEITEM_H_ */
