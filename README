@@ -13,11 +13,11 @@ Create QState-based animation control: DONE
 Create a GameItem-based scrollable background element: ONGOING
 Create a physics-based game scene: -
 Create physics-based game items: -
-Create HUD: -
 A example game: -
 
 Future implementations:
 
+Add debug rendering -
 Create transitions for animation changes: -
 Add transition animations between game scenes: -
 Create Cutscenes: -
