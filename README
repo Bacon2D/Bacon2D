@@ -17,6 +17,7 @@ A example game: -
 
 Future implementations:
 
+Reimplement base items using the basic scenegraph types -
 Add debug rendering -
 Create transitions for animation changes: -
 Add transition animations between game scenes: -
