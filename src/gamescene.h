@@ -29,6 +29,7 @@ public slots:
 
 signals:
     void runningChanged();
+    void gameItemAdded(GameItem *gameItem);
 
 private:
     static void append_gameItem(QDeclarativeListProperty<GameItem> *list, GameItem *gameItem);

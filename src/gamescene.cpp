@@ -7,6 +7,7 @@ void GameScene::append_gameItem(QDeclarativeListProperty<GameItem> *list, GameIt
         gameItem->setScene(scene);
         gameItem->setParentItem(scene);
         scene->m_gameItems.append(gameItem);
+        emit scene->gameItemAdded(gameItem);
     }
 }
 
