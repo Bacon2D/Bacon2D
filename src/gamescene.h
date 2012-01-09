@@ -35,7 +35,7 @@ private:
     void checkCollisions();
     bool checkCollision(GameItem *item, GameItem *otherItem);
 
-private:
+protected:
     QList<GameItem *> m_gameItems;
     bool m_running;
     QVector<QVector<bool> > *m_collisions;
