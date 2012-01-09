@@ -7,6 +7,8 @@
 #include "spriteanimation.h"
 #include "spriteanimationitem.h"
 #include "spriteitem.h"
+#include "box2dscene.h"
+#include "box2ditem.h"
 
 void QuasiGamePlugins::registerTypes(const char *uri)
 {
@@ -17,6 +19,8 @@ void QuasiGamePlugins::registerTypes(const char *uri)
     qmlRegisterType<SpriteAnimation>("QuasiGame", 1, 0, "SpriteAnimation");
     qmlRegisterType<SpriteItem>("QuasiGame", 1, 0, "SpriteItem");
     qmlRegisterType<SpriteAnimationItem>("QuasiGame", 1, 0, "SpriteAnimationItem");
+    qmlRegisterType<Box2DScene>("QuasiGame", 1, 0, "Box2DScene");
+    qmlRegisterType<Box2DItem>("QuasiGame", 1, 0, "Box2DItem");
 }
 
 Q_EXPORT_PLUGIN2(QuasiGame, QuasiGamePlugins);
