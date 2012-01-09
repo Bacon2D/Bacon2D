@@ -109,3 +109,101 @@ void Box2DItem::initialize(b2World *world)
 
     m_body->CreateFixture(shape, 0.0f);
 }
+
+qreal Box2DItem::linearDamping() const
+{
+    return m_linearDamping;
+}
+
+void Box2DItem::setLinearDamping(qreal linearDamping)
+{
+    if (m_linearDamping != linearDamping) {
+        m_linearDamping = linearDamping;
+
+        emit linearDampingChanged();
+    }
+}
+
+qreal Box2DItem::angularDamping() const
+{
+    return m_angularDamping;
+}
+
+void Box2DItem::setAngularDamping(qreal angularDamping)
+{
+    if (m_angularDamping != angularDamping) {
+        m_angularDamping = angularDamping;
+
+        emit angularDampingChanged();
+    }
+}
+
+Box2DItem::BodyType Box2DItem::bodyType() const
+{
+    return m_bodyType;
+}
+
+void Box2DItem::setBodyType(BodyType bodyType)
+{
+    if (m_bodyType != bodyType) {
+        m_bodyType = bodyType;
+
+        emit bodyTypeChanged();
+    }
+}
+
+bool Box2DItem::bullet() const
+{
+    return m_bullet;
+}
+
+void Box2DItem::setBullet(bool bullet)
+{
+    if (m_bullet != bullet) {
+        m_bullet = bullet;
+
+        emit bulletChanged();
+    }
+}
+
+bool Box2DItem::sleepingAllowed() const
+{
+    return m_sleepingAllowed;
+}
+
+void Box2DItem::setSleepingAllowed(bool sleepingAllowed)
+{
+    if (m_sleepingAllowed != sleepingAllowed) {
+        m_sleepingAllowed = sleepingAllowed;
+
+        emit sleepingAllowedChanged();
+    }
+}
+
+bool Box2DItem::fixedRotation() const
+{
+    return m_fixedRotation;
+}
+
+void Box2DItem::setFixedRotation(bool fixedRotation)
+{
+    if (m_fixedRotation != fixedRotation) {
+        m_fixedRotation = fixedRotation;
+
+        emit fixedRotationChanged();
+    }
+}
+
+bool Box2DItem::active() const
+{
+    return m_active;
+}
+
+void Box2DItem::setActive(bool active)
+{
+    if (m_active != active) {
+        m_active = active;
+
+        emit activeChanged();
+    }
+}

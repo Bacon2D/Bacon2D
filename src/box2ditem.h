@@ -11,6 +11,14 @@ class Box2DItem : public GameItem
 {
     Q_OBJECT
 
+    Q_PROPERTY(qreal linearDamping READ linearDamping WRITE setLinearDamping NOTIFY linearDampingChanged)
+    Q_PROPERTY(qreal angularDamping READ angularDamping WRITE setAngularDamping NOTIFY angularDampingChanged)
+    Q_PROPERTY(BodyType bodyType READ bodyType WRITE setBodyType NOTIFY bodyTypeChanged)
+    Q_PROPERTY(bool bullet READ bullet WRITE setBullet NOTIFY bulletChanged)
+    Q_PROPERTY(bool sleepingAllowed READ sleepingAllowed WRITE setSleepingAllowed NOTIFY sleepingAllowedChanged)
+    Q_PROPERTY(bool fixedRotation READ fixedRotation WRITE setFixedRotation NOTIFY fixedRotationChanged)
+    Q_PROPERTY(bool active READ active WRITE setActive)
+
 public:
     enum BodyType {
         Static,
@@ -22,6 +30,27 @@ public:
 
     b2Body *body();
 
+    qreal linearDamping() const;
+    void setLinearDamping(qreal linearDamping);
+
+    qreal angularDamping() const;
+    void setAngularDamping(qreal angularDamping);
+
+    BodyType bodyType() const;
+    void setBodyType(BodyType bodyType);
+
+    bool bullet() const;
+    void setBullet(bool bullet);
+
+    bool sleepingAllowed() const;
+    void setSleepingAllowed(bool allowed);
+
+    bool fixedRotation() const;
+    void setFixedRotation(bool fixedRotation);
+
+    bool active() const;
+    void setActive(bool active);
+
     void synchronize();
 
     void initialize(b2World *world);
@@ -31,6 +60,16 @@ protected:
 
 private slots:
     void onRotationChanged();
+
+signals:
+    void activeChanged();
+    void linearDampingChanged();
+    void angularDampingChanged();
+    void bodyTypeChanged();
+    void bulletChanged();
+    void sleepingAllowedChanged();
+    void fixedRotationChanged();
+    void linearVelocityChanged();
 
 private:
     b2Body *m_body;
