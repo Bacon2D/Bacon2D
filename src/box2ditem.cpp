@@ -207,3 +207,9 @@ void Box2DItem::setActive(bool active)
         emit activeChanged();
     }
 }
+
+void Box2DItem::applyTorque(float torque)
+{
+    if (m_body)
+        m_body->ApplyTorque(torque);
+}
