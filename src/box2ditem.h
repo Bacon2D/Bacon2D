@@ -11,6 +11,7 @@ class Box2DItem : public GameItem
 {
     Q_OBJECT
 
+    Q_ENUMS(BodyType)
     Q_PROPERTY(qreal linearDamping READ linearDamping WRITE setLinearDamping NOTIFY linearDampingChanged)
     Q_PROPERTY(qreal angularDamping READ angularDamping WRITE setAngularDamping NOTIFY angularDampingChanged)
     Q_PROPERTY(BodyType bodyType READ bodyType WRITE setBodyType NOTIFY bodyTypeChanged)
