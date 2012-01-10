@@ -20,6 +20,11 @@ void GameItem::update(long delta)
         if (m_expression)
             m_expression->evaluate();
     }
+
+    foreach (QQuickItem *child, childItems())
+        if (GameItem *item = dynamic_cast<GameItem *>(child)) {
+            item->update(delta);
+        }
 }
 
 QDeclarativeScriptString GameItem::updateScript() const
