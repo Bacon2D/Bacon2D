@@ -57,6 +57,7 @@ public:
     void initialize(b2World *world);
 
     Q_INVOKABLE void applyTorque(float torque);
+    Q_INVOKABLE void applyLinearImpulse(QPointF impulse, QPointF point);
 
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);

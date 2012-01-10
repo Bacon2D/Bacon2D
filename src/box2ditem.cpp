@@ -213,3 +213,13 @@ void Box2DItem::applyTorque(float torque)
     if (m_body)
         m_body->ApplyTorque(torque);
 }
+
+void Box2DItem::applyLinearImpulse(QPointF impulse, QPointF point)
+{
+    if (m_body) {
+        m_body->ApplyLinearImpulse(b2Vec2(impulse.x() / scaleRatio,
+                                          -impulse.y() / scaleRatio),
+                                   b2Vec2(point.x() / scaleRatio,
+                                          -point.y() / scaleRatio));
+    }
+}
