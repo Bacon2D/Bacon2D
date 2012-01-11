@@ -1,4 +1,5 @@
 #include "gamescene.h"
+#include "gamebasebackground.h"
 
 void GameScene::append_gameItem(QDeclarativeListProperty<GameItem> *list, GameItem *gameItem)
 {
@@ -8,6 +9,22 @@ void GameScene::append_gameItem(QDeclarativeListProperty<GameItem> *list, GameIt
         gameItem->setParentItem(scene);
         scene->m_gameItems.append(gameItem);
         emit scene->gameItemAdded(gameItem);
+    }
+
+    if (gameItem->objectName() == QString("background")){
+        QObject *item;
+
+        foreach (item, gameItem->children()){
+            GameBaseBackground *back = qobject_cast<GameBaseBackground *>(item);
+
+            if (back) {
+                // TODO: these values should be configurable
+                //back->setTileWidth(40);
+                //back->setTileHeight(40);
+                back->setTileWidth(32);
+                back->setTileHeight(32);
+            }
+        }
     }
 }
 

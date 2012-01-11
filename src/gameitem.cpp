@@ -10,6 +10,7 @@ GameItem::GameItem(GameScene *parent)
     , m_collided(false)
     , m_scene(0)
 {
+    setZ(1);
 }
 
 void GameItem::update(long delta)

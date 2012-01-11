@@ -11,6 +11,7 @@
 #include "box2ditem.h"
 #include "box2ddistancejointitem.h"
 #include "box2dmousejointitem.h"
+#include "gameanimatedbackground.h"
 
 void QuasiGamePlugins::registerTypes(const char *uri)
 {
@@ -25,6 +26,8 @@ void QuasiGamePlugins::registerTypes(const char *uri)
     qmlRegisterType<Box2DItem>("QuasiGame", 1, 0, "Box2DItem");
     qmlRegisterType<Box2DDistanceJointItem>("QuasiGame", 1, 0, "Box2DDistanceJointItem");
     qmlRegisterType<Box2DMouseJointItem>("QuasiGame", 1, 0, "Box2DMouseJointItem");
+    qmlRegisterType<GameBaseBackground>("QuasiGame", 1, 0, "GameBaseBackground");
+    qmlRegisterType<GameAnimatedBackground>("QuasiGame", 1, 0, "GameAnimatedBackground");
 }
 
 Q_EXPORT_PLUGIN2(QuasiGame, QuasiGamePlugins);
