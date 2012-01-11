@@ -6,6 +6,7 @@
 class GameScene;
 class b2World;
 class b2Body;
+class b2Fixture;
 class b2FixtureDef;
 
 class Box2DItem : public GameItem
@@ -20,6 +21,9 @@ class Box2DItem : public GameItem
     Q_PROPERTY(bool sleepingAllowed READ sleepingAllowed WRITE setSleepingAllowed NOTIFY sleepingAllowedChanged)
     Q_PROPERTY(bool fixedRotation READ fixedRotation WRITE setFixedRotation NOTIFY fixedRotationChanged)
     Q_PROPERTY(bool active READ active WRITE setActive)
+    Q_PROPERTY(qreal density READ density WRITE setDensity NOTIFY densityChanged)
+    Q_PROPERTY(qreal friction READ friction WRITE setFriction NOTIFY frictionChanged)
+    Q_PROPERTY(qreal restitution READ restitution WRITE setRestitution NOTIFY restitutionChanged)
 
 public:
     enum BodyType {
@@ -53,6 +57,15 @@ public:
     bool active() const;
     void setActive(bool active);
 
+    float density();
+    void setDensity(float density);
+
+    float friction();
+    void setFriction(float friction);
+
+    float restitution();
+    void setRestitution(float restitution);
+
     void synchronize();
 
     void initialize(b2World *world);
@@ -72,6 +85,9 @@ signals:
     void sleepingAllowedChanged();
     void fixedRotationChanged();
     void linearVelocityChanged();
+    void densityChanged();
+    void frictionChanged();
+    void restitutionChanged();
 
 private:
     b2Body *m_body;
@@ -84,6 +100,10 @@ private:
     bool m_fixedRotation;
     bool m_active;
     b2FixtureDef *m_fixtureDef;
+    b2Fixture *m_fixture;
+    float m_density;
+    float m_friction;
+    float m_restitution;
 };
 
 #endif /* _BOX2DITEN_H_ */

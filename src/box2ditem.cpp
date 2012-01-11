@@ -16,6 +16,10 @@ Box2DItem::Box2DItem(GameScene *parent)
     , m_fixedRotation(false)
     , m_active(true)
     , m_fixtureDef(0)
+    , m_fixture(0)
+    , m_density(0)
+    , m_friction(0)
+    , m_restitution(0)
 {
     setTransformOrigin(TopLeft);
     connect(this, SIGNAL(rotationChanged()), SLOT(onRotationChanged()));
@@ -86,8 +90,11 @@ void Box2DItem::initialize(b2World *world)
 
     m_fixtureDef = new b2FixtureDef;
     m_fixtureDef->shape = &shape;
+    m_fixtureDef->density = m_density;
+    m_fixtureDef->friction = m_friction;
+    m_fixtureDef->restitution = m_restitution;
 
-    m_body->CreateFixture(m_fixtureDef);
+    m_fixture = m_body->CreateFixture(m_fixtureDef);
 }
 
 qreal Box2DItem::linearDamping() const
@@ -201,5 +208,61 @@ void Box2DItem::applyLinearImpulse(QPointF impulse, QPointF point)
                                           -impulse.y() / scaleRatio),
                                    b2Vec2(point.x() / scaleRatio,
                                           -point.y() / scaleRatio));
+    }
+}
+
+float Box2DItem::density()
+{
+    return m_density;
+}
+
+void Box2DItem::setDensity(float density)
+{
+    if (m_density != density) {
+        m_density = density;
+
+        if (m_body) {
+            m_fixtureDef->density = density;
+            m_fixture->SetDensity(density);
+            m_body->ResetMassData();
+        }
+
+        emit densityChanged();
+    }
+}
+
+float Box2DItem::friction()
+{
+    return m_friction;
+}
+
+void Box2DItem::setFriction(float friction)
+{
+    if (m_friction != friction) {
+        m_friction = friction;
+
+        if (m_body) {
+            m_fixtureDef->friction = friction;
+            m_fixture->SetFriction(friction);
+        }
+
+        emit frictionChanged();
+    }
+}
+
+float Box2DItem::restitution()
+{
+    return m_restitution;
+}
+
+void Box2DItem::setRestitution(float restitution)
+{
+    if (m_restitution != restitution) {
+        m_restitution = restitution;
+
+        if (m_body) {
+            m_fixtureDef->restitution = restitution;
+            m_fixture->SetRestitution(restitution);
+        }
     }
 }
