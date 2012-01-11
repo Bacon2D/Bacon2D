@@ -21,7 +21,7 @@ Box2DItem::Box2DItem(GameScene *parent)
     , m_friction(0)
     , m_restitution(0)
 {
-    setTransformOrigin(TopLeft);
+    setTransformOrigin(Center);
     connect(this, SIGNAL(rotationChanged()), SLOT(onRotationChanged()));
 }
 
