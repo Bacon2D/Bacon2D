@@ -6,6 +6,7 @@
 class GameScene;
 class b2World;
 class b2Body;
+class b2FixtureDef;
 
 class Box2DItem : public GameItem
 {
@@ -59,9 +60,6 @@ public:
     Q_INVOKABLE void applyTorque(float torque);
     Q_INVOKABLE void applyLinearImpulse(QPointF impulse, QPointF point);
 
-protected:
-    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
-
 private slots:
     void onRotationChanged();
 
@@ -85,6 +83,7 @@ private:
     bool m_sleepingAllowed;
     bool m_fixedRotation;
     bool m_active;
+    b2FixtureDef *m_fixtureDef;
 };
 
 #endif /* _BOX2DITEN_H_ */

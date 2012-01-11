@@ -15,6 +15,7 @@ Box2DItem::Box2DItem(GameScene *parent)
     , m_sleepingAllowed(true)
     , m_fixedRotation(false)
     , m_active(true)
+    , m_fixtureDef(0)
 {
     setTransformOrigin(TopLeft);
     connect(this, SIGNAL(rotationChanged()), SLOT(onRotationChanged()));
@@ -38,11 +39,10 @@ void Box2DItem::synchronize()
         const b2Vec2 position = m_body->GetPosition();
         const float32 angle = m_body->GetAngle();
 
-        const qreal newX = position.x * scaleRatio;
-        const qreal newY = -position.y * scaleRatio;
+        const qreal newX = position.x * scaleRatio - width() / 2.0;
+        const qreal newY = -position.y * scaleRatio - height() / 2.0;
         const qreal newRotation = -(angle * 360.0) / (2 * b2_pi);
 
-        // Do fuzzy comparisions to avoid small inaccuracies causing repaints
         if (!qFuzzyCompare(x(), newX) || !qFuzzyCompare(y(), newY))
             setPos(QPointF(newX, newY));
         if (!qFuzzyCompare(rotation(), newRotation))
@@ -60,21 +60,6 @@ void Box2DItem::onRotationChanged()
     }
 }
 
-void Box2DItem::geometryChanged(const QRectF &newGeometry,
-                                const QRectF &oldGeometry)
-{
-    if (!m_synchronizing && m_body) {
-        if (newGeometry.topLeft() != oldGeometry.topLeft()) {
-            const QPointF pos = newGeometry.topLeft();
-            m_body->SetTransform(b2Vec2(pos.x() / scaleRatio,
-                                        -pos.y() / scaleRatio),
-                                 m_body->GetAngle());
-        }
-    }
-
-    QQuickItem::geometryChanged(newGeometry, oldGeometry);
-}
-
 /*
  * Shamelessly stolen from qml-box2d project at gitorious
  *
@@ -84,7 +69,9 @@ void Box2DItem::initialize(b2World *world)
 {
     b2BodyDef bodyDef;
     bodyDef.type = static_cast<b2BodyType>(m_bodyType);
-    bodyDef.position.Set(x() / scaleRatio, -y() / scaleRatio);
+    bodyDef.position.Set((x() + width() / 2.0) / scaleRatio,
+                         (-y() - height() / 2.0) / scaleRatio);
+
     bodyDef.angle = -(rotation() * (2 * b2_pi)) / 360.0;
     bodyDef.linearDamping = m_linearDamping;
     bodyDef.angularDamping = m_angularDamping;
@@ -94,20 +81,13 @@ void Box2DItem::initialize(b2World *world)
 
     m_body = world->CreateBody(&bodyDef);
 
-    const float32 _x = x() / scaleRatio;
-    const float32 _y = -y() / scaleRatio;
+    b2PolygonShape shape;
+    shape.SetAsBox(width() / scaleRatio / 2.0, height() / scaleRatio / 2.0);
 
-    b2Vec2 vertices[4];
-    vertices[0].Set(_x, _y);
-    vertices[1].Set(_x, _y - height() / scaleRatio);
-    vertices[2].Set(_x + width() / scaleRatio, _y - height() / scaleRatio);
-    vertices[3].Set(_x + width() / scaleRatio, _y);
-    int32 count = 4;
+    m_fixtureDef = new b2FixtureDef;
+    m_fixtureDef->shape = &shape;
 
-    b2PolygonShape *shape = new b2PolygonShape;
-    shape->Set(vertices, count);
-
-    m_body->CreateFixture(shape, 0.0f);
+    m_body->CreateFixture(m_fixtureDef);
 }
 
 qreal Box2DItem::linearDamping() const
