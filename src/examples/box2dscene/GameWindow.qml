@@ -40,20 +40,18 @@ QuasiGame {
                 density: 50
                 restitution: 0.6
                 sleepingAllowed: false
-                bullet: true
 
                 Rectangle {
                     color: "red"
                     anchors.fill: parent
                 }
 
-                MouseArea {
-                    anchors.fill: box2ditem1
-                    drag.target: box2ditem1
-                }
-
                 x: 250
                 y: 0
+            },
+            Box2DDistanceJointItem {
+                box2ditemA: fixedItem
+                box2ditemB: box2ditem1
             },
             Box2DItem {
                 id: box2ditem2
@@ -64,10 +62,16 @@ QuasiGame {
                 friction: 0.3
                 density: 50
                 restitution: 0.6
+                sleepingAllowed: false
 
                 Rectangle {
                     color: "blue"
                     anchors.fill: parent
+                }
+
+                MouseArea {
+                    anchors.fill: box2ditem2
+                    drag.target: box2ditem2
                 }
 
                 x: 400
