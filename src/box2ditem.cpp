@@ -5,7 +5,7 @@
 #include <Box2D/Box2D.h>
 
 Box2DItem::Box2DItem(GameScene *parent)
-    : GameItem(parent)
+    : Box2DBaseItem(parent)
     , m_body(0)
     , m_synchronizing(false)
     , m_linearDamping(0.0f)
@@ -71,6 +71,9 @@ void Box2DItem::onRotationChanged()
  */
 void Box2DItem::initialize(b2World *world)
 {
+    if (m_initialized)
+        return;
+
     b2BodyDef bodyDef;
     bodyDef.type = static_cast<b2BodyType>(m_bodyType);
     bodyDef.position.Set((x() + width() / 2.0) / scaleRatio,
@@ -95,6 +98,8 @@ void Box2DItem::initialize(b2World *world)
     m_fixtureDef->restitution = m_restitution;
 
     m_fixture = m_body->CreateFixture(m_fixtureDef);
+
+    m_initialized = true;
 }
 
 qreal Box2DItem::linearDamping() const

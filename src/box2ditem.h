@@ -1,6 +1,7 @@
 #ifndef _BOX2DITEN_H_
 #define _BOX2DITEN_H_
 
+#include "box2dbaseitem.h"
 #include "gameitem.h"
 
 class GameScene;
@@ -9,7 +10,7 @@ class b2Body;
 class b2Fixture;
 class b2FixtureDef;
 
-class Box2DItem : public GameItem
+class Box2DItem : public Box2DBaseItem
 {
     Q_OBJECT
 

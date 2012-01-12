@@ -14,7 +14,7 @@ INCLUDEPATH += .
 INCLUDEPATH += $$BOX2DPATH/include
 LIBS += -L$$BOX2DPATH/lib -lBox2D
 
-HEADERS += gameitem.h gamescene.h quasigame.h quasigameplugins.h gamesprite.h spriteanimation.h spriteitem.h spriteanimationitem.h animationtransition.h animationchangeevent.h box2dscene.h box2ditem.h box2djointitem.h
+HEADERS += gameitem.h gamescene.h quasigame.h quasigameplugins.h gamesprite.h spriteanimation.h spriteitem.h spriteanimationitem.h animationtransition.h animationchangeevent.h box2dscene.h box2ditem.h box2djointitem.h box2dbaseitem.h
 SOURCES += gameitem.cpp gamescene.cpp quasigame.cpp quasigameplugins.cpp gamesprite.cpp spriteanimation.cpp spriteitem.cpp spriteanimationitem.cpp animationtransition.cpp box2dscene.cpp box2ditem.cpp box2djointitem.cpp
 
 target.path += imports/QuasiGame

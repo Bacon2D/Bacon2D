@@ -1,6 +1,7 @@
 #include "box2dscene.h"
 
 #include "box2ditem.h"
+#include "box2dbaseitem.h"
 
 #include <Box2D/Box2D.h>
 
@@ -47,16 +48,18 @@ void Box2DScene::update(long delta)
 
     foreach (item, m_gameItems) {
         item->update(delta);
-        Box2DItem *box2DItem = dynamic_cast<Box2DItem *>(item);
-        if (box2DItem) {
-            box2DItem->synchronize();
+        if (Box2DBaseItem* baseItem = dynamic_cast<Box2DBaseItem*>(item)) {
+            if (!baseItem->initialized())
+                baseItem->initialize(m_world);
+            if (Box2DItem *box2DItem = dynamic_cast<Box2DItem *>(item))
+                box2DItem->synchronize();
         }
     }
 }
 
 void Box2DScene::onGameItemAdded(GameItem* gameItem)
 {
-    Box2DItem *box2DItem = dynamic_cast<Box2DItem *>(gameItem);
-    if (box2DItem)
+    Box2DBaseItem *box2DItem = dynamic_cast<Box2DBaseItem *>(gameItem);
+    if (box2DItem && !box2DItem->initialized())
         box2DItem->initialize(m_world);
 }

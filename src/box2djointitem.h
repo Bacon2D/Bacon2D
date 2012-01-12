@@ -1,12 +1,12 @@
 #ifndef _BOX2DJOINTITEM_H_
 #define _BOX2DJOINTITEM_H_
 
+#include "box2dbaseitem.h"
 #include "gameitem.h"
 
 class Box2DItem;
-class b2World;
 
-class Box2DJointItem : public GameItem
+class Box2DJointItem : public Box2DBaseItem
 {
     Q_OBJECT
 
@@ -25,8 +25,6 @@ public:
 
     bool collideConnected();
     void setCollideConnected(bool collideConnected);
-
-    virtual void initialize(b2World *world) = 0;
 
 signals:
     void box2ditemAChanged();
