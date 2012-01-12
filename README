@@ -11,8 +11,17 @@ Create a GameItem basic element: DONE
 Create a GameItem-based Sprite element: DONE
 Create QState-based animation control: DONE
 Create a GameItem-based scrollable background element: ONGOING
-Create a physics-based game scene: -
-Create physics-based game items: -
+Create a physics-based game scene: DONE
+Create physics-based game items: ONGOING
+  Create box items - DONE
+  Create circle items -
+  Create polygon items -
+  Create joints - ONGOING
+    Create painted/textured joints -
+    Create distance joint - DONE
+    Create revolute joint - ONGOING
+    Create rope joint -
+
 A example game: -
 
 Future implementations:
