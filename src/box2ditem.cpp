@@ -266,3 +266,19 @@ void Box2DItem::setRestitution(float restitution)
         }
     }
 }
+
+void Box2DItem::geometryChanged(const QRectF &newGeometry,
+                                const QRectF &oldGeometry)
+{
+    if (!m_synchronizing && m_body) {
+        if (newGeometry.topLeft() != oldGeometry.topLeft()) {
+            const QPointF pos = newGeometry.topLeft();
+
+            m_body->SetTransform(b2Vec2((pos.x() + width() / 2.0) / scaleRatio,
+                                        (-pos.y() - height() / 2.0) / scaleRatio),
+                                 m_body->GetAngle());
+        }
+    }
+
+    QQuickItem::geometryChanged(newGeometry, oldGeometry);
+}
