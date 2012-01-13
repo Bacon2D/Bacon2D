@@ -6,7 +6,7 @@ Box2DJointItem::Box2DJointItem(GameScene *parent)
     : Box2DBaseItem(parent)
     , m_box2ditemA(0)
     , m_box2ditemB(0)
-    , m_collideConnected(false)
+    , m_collideConnected(true)
 {
 
 }

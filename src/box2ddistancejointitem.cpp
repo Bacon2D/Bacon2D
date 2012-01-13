@@ -4,8 +4,6 @@
 
 #include <Box2D/Box2D.h>
 
-#include <QDebug>
-
 Box2DDistanceJointItem::Box2DDistanceJointItem(GameScene *parent)
     : Box2DJointItem(parent)
     , m_joint(0)
@@ -23,6 +21,8 @@ void Box2DDistanceJointItem::initialize(b2World *world)
         m_box2ditemB->initialize(world);
 
     m_joint = new b2DistanceJointDef;
+
+    m_joint->collideConnected = m_collideConnected;
 
     m_joint->Initialize(m_box2ditemA->body(),
                         m_box2ditemB->body(),
