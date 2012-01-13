@@ -16,11 +16,15 @@ QuasiGame {
 
         gameItems: [
             Box2DItem {
-                id: fixedItem
-                bodyType: Box2DItem.Static
+                id: mouseItem
 
                 width: 60
                 height: 60
+
+                friction: 0.3
+                density: 50
+                restitution: 0.6
+                sleepingAllowed: false
 
                 Rectangle {
                     color: "green"
@@ -50,7 +54,7 @@ QuasiGame {
                 y: 0
             },
             Box2DDistanceJointItem {
-                box2ditemA: fixedItem
+                box2ditemA: mouseItem
                 box2ditemB: box2ditem1
             },
             Box2DItem {
@@ -69,13 +73,11 @@ QuasiGame {
                     anchors.fill: parent
                 }
 
-                MouseArea {
-                    anchors.fill: box2ditem2
-                    drag.target: box2ditem2
-                }
-
                 x: 400
                 y: 300
+            },
+            Box2DMouseJointItem {
+                target: mouseItem
             },
             Box2DItem {
                 id: ground
