@@ -29,6 +29,23 @@ void Box2DMouseJointItem::setTarget(Box2DItem *target)
     }
 }
 
+float Box2DMouseJointItem::maxForce()
+{
+    return m_maxForce;
+}
+
+void Box2DMouseJointItem::setMaxForce(float maxForce)
+{
+    if (m_maxForce != maxForce) {
+        m_maxForce = maxForce;
+
+        if (m_joint)
+            m_joint->SetMaxForce(maxForce);
+
+        emit maxForceChanged();
+    }
+}
+
 void Box2DMouseJointItem::initialize(b2World *world)
 {
     if (m_initialized || !m_target)
