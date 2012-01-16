@@ -8,7 +8,6 @@ class GameScene;
 class b2World;
 class b2Body;
 class b2Fixture;
-class b2FixtureDef;
 
 class Box2DItem : public Box2DBaseItem
 {
@@ -103,7 +102,6 @@ private:
     bool m_sleepingAllowed;
     bool m_fixedRotation;
     bool m_active;
-    b2FixtureDef *m_fixtureDef;
     b2Fixture *m_fixture;
     float m_density;
     float m_friction;

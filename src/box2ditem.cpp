@@ -15,7 +15,6 @@ Box2DItem::Box2DItem(GameScene *parent)
     , m_sleepingAllowed(true)
     , m_fixedRotation(false)
     , m_active(true)
-    , m_fixtureDef(0)
     , m_fixture(0)
     , m_density(0)
     , m_friction(0)
@@ -91,13 +90,13 @@ void Box2DItem::initialize(b2World *world)
     b2PolygonShape shape;
     shape.SetAsBox(width() / scaleRatio / 2.0, height() / scaleRatio / 2.0);
 
-    m_fixtureDef = new b2FixtureDef;
-    m_fixtureDef->shape = &shape;
-    m_fixtureDef->density = m_density;
-    m_fixtureDef->friction = m_friction;
-    m_fixtureDef->restitution = m_restitution;
+    b2FixtureDef fixtureDef;
+    fixtureDef.shape = &shape;
+    fixtureDef.density = m_density;
+    fixtureDef.friction = m_friction;
+    fixtureDef.restitution = m_restitution;
 
-    m_fixture = m_body->CreateFixture(m_fixtureDef);
+    m_fixture = m_body->CreateFixture(&fixtureDef);
 
     m_initialized = true;
 }
@@ -111,6 +110,9 @@ void Box2DItem::setLinearDamping(qreal linearDamping)
 {
     if (m_linearDamping != linearDamping) {
         m_linearDamping = linearDamping;
+
+        if (m_body)
+            m_body->SetLinearDamping(linearDamping);
 
         emit linearDampingChanged();
     }
@@ -126,6 +128,9 @@ void Box2DItem::setAngularDamping(qreal angularDamping)
     if (m_angularDamping != angularDamping) {
         m_angularDamping = angularDamping;
 
+        if (m_body)
+            m_body->SetAngularDamping(angularDamping);
+
         emit angularDampingChanged();
     }
 }
@@ -139,6 +144,9 @@ void Box2DItem::setBodyType(BodyType bodyType)
 {
     if (m_bodyType != bodyType) {
         m_bodyType = bodyType;
+
+        if (m_body)
+            m_body->SetType((b2BodyType)bodyType);
 
         emit bodyTypeChanged();
     }
@@ -154,6 +162,9 @@ void Box2DItem::setBullet(bool bullet)
     if (m_bullet != bullet) {
         m_bullet = bullet;
 
+        if (m_body)
+            m_body->SetBullet(bullet);
+
         emit bulletChanged();
     }
 }
@@ -167,6 +178,9 @@ void Box2DItem::setSleepingAllowed(bool sleepingAllowed)
 {
     if (m_sleepingAllowed != sleepingAllowed) {
         m_sleepingAllowed = sleepingAllowed;
+
+        if (m_body)
+            m_body->SetSleepingAllowed(sleepingAllowed);
 
         emit sleepingAllowedChanged();
     }
@@ -182,6 +196,9 @@ void Box2DItem::setFixedRotation(bool fixedRotation)
     if (m_fixedRotation != fixedRotation) {
         m_fixedRotation = fixedRotation;
 
+        if (m_body)
+            m_body->SetFixedRotation(fixedRotation);
+
         emit fixedRotationChanged();
     }
 }
@@ -195,6 +212,9 @@ void Box2DItem::setActive(bool active)
 {
     if (m_active != active) {
         m_active = active;
+
+        if (m_body)
+            m_body->SetActive(active);
 
         emit activeChanged();
     }
@@ -226,8 +246,7 @@ void Box2DItem::setDensity(float density)
     if (m_density != density) {
         m_density = density;
 
-        if (m_body) {
-            m_fixtureDef->density = density;
+        if (m_body && m_fixture) {
             m_fixture->SetDensity(density);
             m_body->ResetMassData();
         }
@@ -246,8 +265,7 @@ void Box2DItem::setFriction(float friction)
     if (m_friction != friction) {
         m_friction = friction;
 
-        if (m_body) {
-            m_fixtureDef->friction = friction;
+        if (m_fixture) {
             m_fixture->SetFriction(friction);
         }
 
@@ -265,8 +283,7 @@ void Box2DItem::setRestitution(float restitution)
     if (m_restitution != restitution) {
         m_restitution = restitution;
 
-        if (m_body) {
-            m_fixtureDef->restitution = restitution;
+        if (m_fixture) {
             m_fixture->SetRestitution(restitution);
         }
     }
