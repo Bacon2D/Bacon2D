@@ -3,7 +3,8 @@
 
 #include "box2djointitem.h"
 
-class b2DistanceJointDef;
+class b2DistanceJoint;
+
 
 class Box2DDistanceJointItem : public Box2DJointItem
 {
@@ -15,7 +16,7 @@ public:
     void initialize(b2World *world);
 
 private:
-    b2DistanceJointDef *m_joint;
+    b2DistanceJoint *m_joint;
 };
 
 #endif /* _BOX2DDISTANCEJOINTITEM_H_ */

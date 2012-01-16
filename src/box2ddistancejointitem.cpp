@@ -20,16 +20,16 @@ void Box2DDistanceJointItem::initialize(b2World *world)
     if (!m_box2ditemB->initialized())
         m_box2ditemB->initialize(world);
 
-    m_joint = new b2DistanceJointDef;
+    b2DistanceJointDef jointDef;
 
-    m_joint->collideConnected = m_collideConnected;
+    jointDef.collideConnected = m_collideConnected;
 
-    m_joint->Initialize(m_box2ditemA->body(),
+    jointDef.Initialize(m_box2ditemA->body(),
                         m_box2ditemB->body(),
                         m_box2ditemA->body()->GetWorldCenter(),
                         m_box2ditemB->body()->GetWorldCenter());
 
-    world->CreateJoint(m_joint); // TODO store the joint
+    m_joint = static_cast<b2DistanceJoint *>(world->CreateJoint(&jointDef));
 
     m_initialized = true;
 }
