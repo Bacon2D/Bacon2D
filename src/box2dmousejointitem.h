@@ -3,7 +3,6 @@
 
 #include "box2dbaseitem.h"
 
-class b2MouseJointDef;
 class b2MouseJoint;
 class Box2DItem;
 
@@ -36,7 +35,6 @@ signals:
     void maxForceChanged();
 
 private:
-    b2MouseJointDef *m_jointDef;
     b2MouseJoint *m_joint;
     Box2DItem *m_target;
     bool m_collideConnected;
