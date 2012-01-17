@@ -7,7 +7,6 @@
 Box2DItem::Box2DItem(GameScene *parent)
     : Box2DBaseItem(parent)
     , m_body(0)
-    , m_synchronizing(false)
     , m_linearDamping(0.0f)
     , m_angularDamping(0.0f)
     , m_bodyType(Dynamic)
@@ -28,32 +27,6 @@ Box2DItem::Box2DItem(GameScene *parent)
 b2Body *Box2DItem::body()
 {
     return m_body;
-}
-
-/*
- * Shamelessly stolen from qml-box2d project at gitorious
- *
- * https://gitorious.org/qml-box2d/qml-box2d
- */
-void Box2DItem::synchronize()
-{
-    if (m_body) {
-        m_synchronizing = true;
-
-        const b2Vec2 position = m_body->GetPosition();
-        const float32 angle = m_body->GetAngle();
-
-        const qreal newX = position.x * scaleRatio - width() / 2.0;
-        const qreal newY = -position.y * scaleRatio - height() / 2.0;
-        const qreal newRotation = -(angle * 360.0) / (2 * b2_pi);
-
-        if (!qFuzzyCompare(x(), newX) || !qFuzzyCompare(y(), newY))
-            setPos(QPointF(newX, newY));
-        if (!qFuzzyCompare(rotation(), newRotation))
-            setRotation(newRotation);
-
-        m_synchronizing = false;
-    }
 }
 
 void Box2DItem::onRotationChanged()
@@ -371,4 +344,20 @@ void Box2DItem::setVertices(const QVariantList &vertices)
 
         emit verticesChanged();
     }
+}
+
+b2Vec2 Box2DItem::b2TransformOrigin()
+{
+    b2Vec2 vec;
+    if (m_body)
+        vec = m_body->GetPosition();
+    return vec;
+}
+
+float Box2DItem::b2Angle()
+{
+    float32 angle = 0.0f;
+    if (m_body)
+        angle = m_body->GetAngle();
+    return angle;
 }

@@ -79,9 +79,11 @@ public:
     QVariantList vertices() const;
     void setVertices(const QVariantList &vertices);
 
-    void synchronize();
-
     void initialize(b2World *world);
+
+    b2Vec2 b2TransformOrigin();
+
+    float b2Angle();
 
     Q_INVOKABLE void applyTorque(float torque);
     Q_INVOKABLE void applyLinearImpulse(QPointF impulse, QPointF point);
@@ -109,7 +111,6 @@ signals:
 
 private:
     b2Body *m_body;
-    bool m_synchronizing;
     qreal m_linearDamping;
     qreal m_angularDamping;
     BodyType m_bodyType;

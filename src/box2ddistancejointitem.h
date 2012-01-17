@@ -15,6 +15,10 @@ public:
 
     void initialize(b2World *world);
 
+    b2Vec2 b2TransformOrigin();
+
+    float b2Angle();
+
 private:
     b2DistanceJoint *m_joint;
 };

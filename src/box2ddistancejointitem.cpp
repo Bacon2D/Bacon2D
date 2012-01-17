@@ -1,6 +1,7 @@
 #include "box2ddistancejointitem.h"
 
 #include "box2ditem.h"
+#include "util.h"
 
 #include <Box2D/Box2D.h>
 
@@ -32,4 +33,20 @@ void Box2DDistanceJointItem::initialize(b2World *world)
     m_joint = static_cast<b2DistanceJoint *>(world->CreateJoint(&jointDef));
 
     m_initialized = true;
+}
+
+b2Vec2 Box2DDistanceJointItem::b2TransformOrigin()
+{
+    b2Vec2 vec;
+    if (m_joint)
+        vec = m_joint->GetAnchorB();
+    return vec;
+}
+
+float Box2DDistanceJointItem::b2Angle()
+{
+    float32 angle = 0.0f;
+    if (m_joint)
+        angle = b2Util::b2Angle(m_joint->GetAnchorB(), m_joint->GetAnchorA());
+    return angle;
 }

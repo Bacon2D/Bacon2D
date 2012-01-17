@@ -13,6 +13,7 @@ Box2DMouseJointItem::Box2DMouseJointItem(GameScene *parent)
     , m_collideConnected(true)
     , m_maxForce(200.0f)
 {
+    m_synchronize = false;
 }
 
 Box2DItem *Box2DMouseJointItem::target()
@@ -93,4 +94,14 @@ void Box2DMouseJointItem::setCollideConnected(bool collideConnected)
 
         emit collideConnectedChanged();
     }
+}
+
+b2Vec2 Box2DMouseJointItem::b2TransformOrigin()
+{
+    return b2Vec2(0, 0); // FIXME: remove "m_syncronize" member and return correct position
+}
+
+float Box2DMouseJointItem::b2Angle()
+{
+    return 0.0f;
 }

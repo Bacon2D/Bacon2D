@@ -46,7 +46,7 @@ void Box2DScene::update(long delta)
 
     foreach (item, m_gameItems) {
         item->update(delta);
-        if (Box2DItem *box2DItem = dynamic_cast<Box2DItem *>(item))
+        if (Box2DBaseItem *box2DItem = dynamic_cast<Box2DBaseItem *>(item))
             box2DItem->synchronize();
     }
 }

@@ -27,7 +27,12 @@ public:
     void setMaxForce(float maxForce);
 
     void initialize(b2World *world);
+
     void update(long delta);
+
+    b2Vec2 b2TransformOrigin();
+
+    float b2Angle();
 
 signals:
     void targetChanged();
