@@ -11,6 +11,7 @@ Box2DItem::Box2DItem(GameScene *parent)
     , m_linearDamping(0.0f)
     , m_angularDamping(0.0f)
     , m_bodyType(Dynamic)
+    , m_shape(Rectangle)
     , m_bullet(false)
     , m_sleepingAllowed(true)
     , m_fixedRotation(false)
@@ -87,11 +88,43 @@ void Box2DItem::initialize(b2World *world)
 
     m_body = world->CreateBody(&bodyDef);
 
-    b2PolygonShape shape;
-    shape.SetAsBox(width() / scaleRatio / 2.0, height() / scaleRatio / 2.0);
+    b2Shape *shape;
+
+    switch (m_shape){
+        case Rectangle:
+            shape = new b2PolygonShape;
+            ((b2PolygonShape*)shape)->SetAsBox(width() / scaleRatio / 2.0, height() / scaleRatio / 2.0);
+            break;
+        case Polygon:
+            {
+                // TODO: check for b2_maxPolygonVertices
+                int i;
+                b2Vec2 *vertices = new b2Vec2[m_vertices.length()];
+
+                for (i = 0; i < m_vertices.length(); i++){
+                    QVariantList temp = m_vertices.at(i).toList();
+
+                    const float x = temp.at(0).toFloat() - (width() / 2);
+                    const float y = temp.at(1).toFloat() - (height() / 2);
+                    vertices[i].Set(x / scaleRatio, y / scaleRatio);
+
+                }
+
+                shape = new b2PolygonShape;
+                ((b2PolygonShape*)shape)->Set(vertices, m_vertices.length());
+            }
+            break;
+        case Circle:
+            shape = new b2CircleShape;
+            ((b2CircleShape*)shape)->m_radius = width() / scaleRatio / 2.0f;
+            break;
+        default:
+            // TODO error handling
+            break;
+    }
 
     b2FixtureDef fixtureDef;
-    fixtureDef.shape = &shape;
+    fixtureDef.shape = shape;
     fixtureDef.density = m_density;
     fixtureDef.friction = m_friction;
     fixtureDef.restitution = m_restitution;
@@ -137,6 +170,21 @@ void Box2DItem::setAngularDamping(qreal angularDamping)
             m_body->SetAngularDamping(angularDamping);
 
         emit angularDampingChanged();
+    }
+}
+
+Box2DItem::Shape Box2DItem::shape() const
+{
+    return m_shape;
+}
+
+void Box2DItem::setShape(Shape shape)
+{
+    if (m_shape != shape) {
+        m_shape = shape;
+
+        emit shapeChanged();
+        // XXX needs additional treatment?
     }
 }
 
@@ -308,4 +356,19 @@ void Box2DItem::geometryChanged(const QRectF &newGeometry,
     }
 
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
+}
+
+QVariantList Box2DItem::vertices() const
+{
+    return m_vertices;
+}
+
+void Box2DItem::setVertices(const QVariantList &vertices)
+{
+    if (m_vertices != vertices) {
+        m_vertices.clear(); // XXX it's really needed?
+        m_vertices = vertices;
+
+        emit verticesChanged();
+    }
 }

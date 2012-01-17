@@ -13,10 +13,11 @@ class Box2DItem : public Box2DBaseItem
 {
     Q_OBJECT
 
-    Q_ENUMS(BodyType)
+    Q_ENUMS(BodyType Shape)
     Q_PROPERTY(qreal linearDamping READ linearDamping WRITE setLinearDamping NOTIFY linearDampingChanged)
     Q_PROPERTY(qreal angularDamping READ angularDamping WRITE setAngularDamping NOTIFY angularDampingChanged)
     Q_PROPERTY(BodyType bodyType READ bodyType WRITE setBodyType NOTIFY bodyTypeChanged)
+    Q_PROPERTY(Shape shape READ shape WRITE setShape NOTIFY shapeChanged)
     Q_PROPERTY(bool bullet READ bullet WRITE setBullet NOTIFY bulletChanged)
     Q_PROPERTY(bool sleepingAllowed READ sleepingAllowed WRITE setSleepingAllowed NOTIFY sleepingAllowedChanged)
     Q_PROPERTY(bool fixedRotation READ fixedRotation WRITE setFixedRotation NOTIFY fixedRotationChanged)
@@ -24,12 +25,18 @@ class Box2DItem : public Box2DBaseItem
     Q_PROPERTY(qreal density READ density WRITE setDensity NOTIFY densityChanged)
     Q_PROPERTY(qreal friction READ friction WRITE setFriction NOTIFY frictionChanged)
     Q_PROPERTY(qreal restitution READ restitution WRITE setRestitution NOTIFY restitutionChanged)
+    Q_PROPERTY(QVariantList vertices READ vertices WRITE setVertices NOTIFY verticesChanged)
 
 public:
     enum BodyType {
         Static,
         Kinematic,
         Dynamic
+    };
+    enum Shape {
+        Rectangle,
+        Polygon,
+        Circle
     };
 
     Box2DItem(GameScene *parent = 0);
@@ -44,6 +51,9 @@ public:
 
     BodyType bodyType() const;
     void setBodyType(BodyType bodyType);
+
+    Shape shape() const;
+    void setShape(Shape shape);
 
     bool bullet() const;
     void setBullet(bool bullet);
@@ -66,6 +76,9 @@ public:
     float restitution();
     void setRestitution(float restitution);
 
+    QVariantList vertices() const;
+    void setVertices(const QVariantList &vertices);
+
     void synchronize();
 
     void initialize(b2World *world);
@@ -84,6 +97,7 @@ signals:
     void linearDampingChanged();
     void angularDampingChanged();
     void bodyTypeChanged();
+    void shapeChanged();
     void bulletChanged();
     void sleepingAllowedChanged();
     void fixedRotationChanged();
@@ -91,6 +105,7 @@ signals:
     void densityChanged();
     void frictionChanged();
     void restitutionChanged();
+    void verticesChanged();
 
 private:
     b2Body *m_body;
@@ -98,6 +113,7 @@ private:
     qreal m_linearDamping;
     qreal m_angularDamping;
     BodyType m_bodyType;
+    Shape m_shape;
     bool m_bullet;
     bool m_sleepingAllowed;
     bool m_fixedRotation;
@@ -106,6 +122,7 @@ private:
     float m_density;
     float m_friction;
     float m_restitution;
+    QVariantList m_vertices;
 };
 
 #endif /* _BOX2DITEN_H_ */
