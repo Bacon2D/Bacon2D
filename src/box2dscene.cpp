@@ -13,8 +13,6 @@ Box2DScene::Box2DScene(QQuickItem *parent)
     const b2Vec2 gravity(m_gravity.x(), m_gravity.y());
 
     m_world = new b2World(gravity);
-
-    connect(this, SIGNAL(gameItemAdded(GameItem*)), SLOT(onGameItemAdded(GameItem*)));
 }
 
 b2World *Box2DScene::world()
@@ -48,18 +46,17 @@ void Box2DScene::update(long delta)
 
     foreach (item, m_gameItems) {
         item->update(delta);
-        if (Box2DBaseItem* baseItem = dynamic_cast<Box2DBaseItem*>(item)) {
-            if (!baseItem->initialized())
-                baseItem->initialize(m_world);
-            if (Box2DItem *box2DItem = dynamic_cast<Box2DItem *>(item))
-                box2DItem->synchronize();
-        }
+        if (Box2DItem *box2DItem = dynamic_cast<Box2DItem *>(item))
+            box2DItem->synchronize();
     }
 }
 
-void Box2DScene::onGameItemAdded(GameItem* gameItem)
+void Box2DScene::componentComplete()
 {
-    Box2DBaseItem *box2DItem = dynamic_cast<Box2DBaseItem *>(gameItem);
-    if (box2DItem && !box2DItem->initialized())
-        box2DItem->initialize(m_world);
+    QQuickItem::componentComplete();
+
+    foreach (GameItem *item, m_gameItems) {
+        if (Box2DBaseItem *box2DItem = dynamic_cast<Box2DBaseItem *>(item))
+            box2DItem->initialize(m_world);
+    }
 }

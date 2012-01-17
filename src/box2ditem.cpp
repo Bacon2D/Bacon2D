@@ -98,6 +98,11 @@ void Box2DItem::initialize(b2World *world)
 
     m_fixture = m_body->CreateFixture(&fixtureDef);
 
+    foreach (QQuickItem *item, childItems()) {
+        if (Box2DBaseItem *box2DItem = dynamic_cast<Box2DBaseItem *>(item))
+            box2DItem->initialize(world);
+    }
+
     m_initialized = true;
 }
 

@@ -19,9 +19,10 @@ public:
     void setGravity(QPointF gravity);
     QPointF gravity();
 
+    void componentComplete();
+
 public slots:
     void update(long delta);
-    void onGameItemAdded(GameItem* gameItem);
 
 private:
     b2World *m_world;
