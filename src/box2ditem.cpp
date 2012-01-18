@@ -49,8 +49,8 @@ void Box2DItem::initialize(b2World *world)
 
     b2BodyDef bodyDef;
     bodyDef.type = static_cast<b2BodyType>(m_bodyType);
-    bodyDef.position.Set((x() + width() / 2.0) / scaleRatio,
-                         (-y() - height() / 2.0) / scaleRatio);
+    bodyDef.position.Set((x() + width() / 2.0) / m_scaleRatio,
+                         (-y() - height() / 2.0) / m_scaleRatio);
 
     bodyDef.angle = -(rotation() * (2 * b2_pi)) / 360.0;
     bodyDef.linearDamping = m_linearDamping;
@@ -66,7 +66,7 @@ void Box2DItem::initialize(b2World *world)
     switch (m_shape){
         case Rectangle:
             shape = new b2PolygonShape;
-            ((b2PolygonShape*)shape)->SetAsBox(width() / scaleRatio / 2.0, height() / scaleRatio / 2.0);
+            ((b2PolygonShape*)shape)->SetAsBox(width() / m_scaleRatio / 2.0, height() / m_scaleRatio / 2.0);
             break;
         case Polygon:
             {
@@ -79,7 +79,7 @@ void Box2DItem::initialize(b2World *world)
 
                     const float x = temp.at(0).toFloat() - (width() / 2);
                     const float y = temp.at(1).toFloat() - (height() / 2);
-                    vertices[i].Set(x / scaleRatio, y / scaleRatio);
+                    vertices[i].Set(x / m_scaleRatio, y / m_scaleRatio);
 
                 }
 
@@ -89,7 +89,7 @@ void Box2DItem::initialize(b2World *world)
             break;
         case Circle:
             shape = new b2CircleShape;
-            ((b2CircleShape*)shape)->m_radius = width() / scaleRatio / 2.0f;
+            ((b2CircleShape*)shape)->m_radius = width() / m_scaleRatio / 2.0f;
             break;
         default:
             // TODO error handling
@@ -255,10 +255,10 @@ void Box2DItem::applyTorque(float torque)
 void Box2DItem::applyLinearImpulse(QPointF impulse, QPointF point)
 {
     if (m_body) {
-        m_body->ApplyLinearImpulse(b2Vec2(impulse.x() / scaleRatio,
-                                          -impulse.y() / scaleRatio),
-                                   b2Vec2(point.x() / scaleRatio,
-                                          -point.y() / scaleRatio));
+        m_body->ApplyLinearImpulse(b2Vec2(impulse.x() / m_scaleRatio,
+                                          -impulse.y() / m_scaleRatio),
+                                   b2Vec2(point.x() / m_scaleRatio,
+                                          -point.y() / m_scaleRatio));
     }
 }
 
@@ -322,8 +322,8 @@ void Box2DItem::geometryChanged(const QRectF &newGeometry,
         if (newGeometry.topLeft() != oldGeometry.topLeft()) {
             const QPointF pos = newGeometry.topLeft();
 
-            m_body->SetTransform(b2Vec2((pos.x() + width() / 2.0) / scaleRatio,
-                                        (-pos.y() - height() / 2.0) / scaleRatio),
+            m_body->SetTransform(b2Vec2((pos.x() + width() / 2.0) / m_scaleRatio,
+                                        (-pos.y() - height() / 2.0) / m_scaleRatio),
                                  m_body->GetAngle());
         }
     }

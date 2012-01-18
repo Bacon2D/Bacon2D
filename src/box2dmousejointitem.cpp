@@ -79,7 +79,7 @@ void Box2DMouseJointItem::update(long delta)
     GameItem::update(delta);
 
     QPointF mousePos = mapToScene(scene()->canvas()->mapFromGlobal(QCursor::pos()));
-    m_joint->SetTarget(b2Vec2(mousePos.x() / scaleRatio, -mousePos.y() / scaleRatio));
+    m_joint->SetTarget(b2Vec2(mousePos.x() / m_scaleRatio, -mousePos.y() / m_scaleRatio));
 }
 
 bool Box2DMouseJointItem::collideConnected()

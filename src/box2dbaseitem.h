@@ -2,7 +2,6 @@
 #define _BOX2DBASEITEM_H_
 
 #include "gameitem.h"
-#include "box2dscene.h" // FIXME remove this include and remove scaleRatio from gameScene, make it a constant member of Box2DBaseItem
 
 class b2World;
 struct b2Vec2;
@@ -25,6 +24,8 @@ protected:
     virtual float b2Angle() = 0;
 
 protected:
+    static float m_scaleRatio;
+
     bool m_initialized;
     bool m_synchronizing;
     bool m_synchronize;

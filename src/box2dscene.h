@@ -5,8 +5,6 @@
 
 class b2World;
 
-static const float scaleRatio = 32.0f; // 32 pixels in one meter
-
 class Box2DScene : public GameScene
 {
     Q_OBJECT
