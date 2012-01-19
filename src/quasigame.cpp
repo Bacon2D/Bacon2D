@@ -17,13 +17,19 @@ GameScene *QuasiGame::currentScene() const {
 
 void QuasiGame::setCurrentScene(GameScene *currentScene) {
     if (m_currentScene != currentScene) {
-        if (m_currentScene)
+        if (m_currentScene) {
+            m_currentScene->setRunning(false);
+            m_currentScene->setVisible(false);
             disconnect(SIGNAL(update(long)));
+        }
 
         m_currentScene = currentScene;
 
-        if (m_currentScene)
+        if (m_currentScene) {
             connect(this, SIGNAL(update(long)), m_currentScene, SLOT(update(long)));
+            m_currentScene->setVisible(true);
+            m_currentScene->setRunning(true);
+        }
 
         emit currentSceneChanged();
     }

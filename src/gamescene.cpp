@@ -30,9 +30,10 @@ void GameScene::append_gameItem(QDeclarativeListProperty<GameItem> *list, GameIt
 
 GameScene::GameScene(QQuickItem *parent)
     : QQuickItem(parent)
-    , m_running(true)
+    , m_running(false)
     , m_collisions(0)
 {
+    setVisible(false);
 }
 
 QDeclarativeListProperty<GameItem> GameScene::gameItems()
