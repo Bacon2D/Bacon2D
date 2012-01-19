@@ -54,8 +54,17 @@ QuasiGame {
                 y: 0
             },
             Box2DDistanceJointItem {
+                id: distJoint
+
                 box2ditemA: mouseItem
                 box2ditemB: box2ditem1
+
+                Rectangle {
+                    width: 5
+                    radius: 5
+                    height: distJoint.length
+                    color: "yellow"
+                }
             },
             Box2DItem {
                 id: box2ditem2
