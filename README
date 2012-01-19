@@ -14,8 +14,8 @@ Create a GameItem-based scrollable background element: ONGOING
 Create a physics-based game scene: DONE
 Create physics-based game items: ONGOING
   Create box items - DONE
-  Create circle items -
-  Create polygon items -
+  Create circle items - DONE
+  Create polygon items - DONE
   Create joints - ONGOING
     Create painted/textured joints -
     Create mouse joint - DONE
