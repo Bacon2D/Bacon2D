@@ -5,10 +5,11 @@
 
 class b2DistanceJoint;
 
-
 class Box2DDistanceJointItem : public Box2DJointItem
 {
     Q_OBJECT
+
+    Q_PROPERTY(float length READ length NOTIFY lengthChanged)
 
 public:
     Box2DDistanceJointItem(GameScene *parent = 0);
@@ -18,6 +19,14 @@ public:
     b2Vec2 b2TransformOrigin();
 
     float b2Angle();
+
+    float length();
+
+protected:
+    void itemChange(ItemChange change, const ItemChangeData &data);
+
+signals:
+    void lengthChanged();
 
 private:
     b2DistanceJoint *m_joint;

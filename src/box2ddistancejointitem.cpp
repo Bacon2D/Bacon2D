@@ -32,6 +32,9 @@ void Box2DDistanceJointItem::initialize(b2World *world)
 
     m_joint = static_cast<b2DistanceJoint *>(world->CreateJoint(&jointDef));
 
+    setHeight(length());
+    emit lengthChanged();
+
     m_initialized = true;
 }
 
@@ -39,7 +42,7 @@ b2Vec2 Box2DDistanceJointItem::b2TransformOrigin()
 {
     b2Vec2 vec;
     if (m_joint)
-        vec = m_joint->GetAnchorB();
+        vec = b2Util::b2Center(m_joint->GetAnchorA(), m_joint->GetAnchorB());
     return vec;
 }
 
@@ -49,4 +52,22 @@ float Box2DDistanceJointItem::b2Angle()
     if (m_joint)
         angle = b2Util::b2Angle(m_joint->GetAnchorB(), m_joint->GetAnchorA());
     return angle;
+}
+
+float Box2DDistanceJointItem::length()
+{
+    if (m_joint)
+        return b2Util::b2Length(m_joint->GetAnchorA(), m_joint->GetAnchorB()) * m_scaleRatio;
+    return 0;
+}
+
+void Box2DDistanceJointItem::itemChange(ItemChange change, const ItemChangeData &data)
+{
+    if (change == ItemChildAddedChange) {
+        QQuickItem *child = data.item;
+        if (width() < child->width())
+            setWidth(child->width());
+    }
+
+    QQuickItem::itemChange(change, data);
 }
