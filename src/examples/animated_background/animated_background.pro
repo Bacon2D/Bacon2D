@@ -1,5 +1,5 @@
 CONFIG += qt
-QT += gui declarative
+QT += quick
 
 TEMPLATE = app
 TARGET = animated_background

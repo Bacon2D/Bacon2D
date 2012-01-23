@@ -1,5 +1,5 @@
 CONFIG += qt
-QT += gui declarative
+QT += quick
 
 TEMPLATE = app
 TARGET = box2dpolygon_circle
