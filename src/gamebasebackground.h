@@ -5,6 +5,8 @@
 #include <QString>
 #include <QtQuick/QQuickPaintedItem>
 
+#include "layer.h"
+
 class GameBaseBackground : public QQuickPaintedItem
 {
     Q_OBJECT
@@ -41,7 +43,7 @@ protected:
     int m_totalRows;
 
     QString m_source;
-    QList<QPixmap> m_tiles;
+    Layer::LayerList m_layers;
 
     QPixmap *m_currentPixmap;
 

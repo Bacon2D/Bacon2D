@@ -87,8 +87,9 @@ void GameAnimatedBackground::updateTiles()
     m_totalColumns = pix.width() / m_tileWidth;
     m_totalRows = pix.height() / m_tileHeight;
 
-    m_tiles.clear();
+    m_layers.clear();
 
+    Layer layer;
     int i, j;
     for (i = 0; i < m_totalRows; i++){
         for (j = 0; j < m_totalColumns; j++){
@@ -99,7 +100,7 @@ void GameAnimatedBackground::updateTiles()
                         pix, j * m_tileWidth, i * m_tileHeight, m_tileWidth, m_tileHeight);
             p.end();
 
-            m_tiles.append(temp);
+            layer.addTile(temp);
 
             if (m_type == Mirrored){
                 QPainter p(&temp);
@@ -111,6 +112,7 @@ void GameAnimatedBackground::updateTiles()
             }
         }
     }
+    m_layers.append(layer);
 
     drawPixmap();
     update();
@@ -191,12 +193,12 @@ void GameAnimatedBackground::drawPixmap()
             } else {
                 for (i = 0; i < m_numRows; i++){
                     for (j = startJ; j < maxJ + startJ; j++){
-                        index = ((i * m_totalColumns) + (j - startJ) + currentOffset) % m_tiles.size();
+                        index = ((i * m_totalColumns) + (j - startJ) + currentOffset) % m_layers.at(0).count();
 
                         if (m_drawingMirrored){
                             p.drawPixmap(j * m_tileWidth, i * m_tileHeight, m_mirroredTiles.at(index));
                         } else{
-                            p.drawPixmap(j * m_tileWidth, i * m_tileHeight, m_tiles.at(index));
+                            p.drawPixmap(j * m_tileWidth, i * m_tileHeight, m_layers.at(0).getTile(index));
                         }
 
                         // just draw a grid
