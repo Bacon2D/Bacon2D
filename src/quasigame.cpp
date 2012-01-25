@@ -20,7 +20,7 @@ void QuasiGame::setCurrentScene(GameScene *currentScene) {
         if (m_currentScene) {
             m_currentScene->setRunning(false);
             m_currentScene->setVisible(false);
-            disconnect(SIGNAL(update(const long &)));
+            m_currentScene->disconnect(SIGNAL(update(const long &)));
         }
 
         m_currentScene = currentScene;
