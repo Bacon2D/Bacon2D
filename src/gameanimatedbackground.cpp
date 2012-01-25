@@ -126,32 +126,12 @@ void GameAnimatedBackground::drawPixmap()
     if (m_currentPixmap)
         delete m_currentPixmap;
 
-    // use cached image, if exists
-    /*int temp = m_columnOffset + m_numColumns;
-    if (temp >= m_totalColumns)
-        temp -= m_totalColumns;*/ // TODO
-
-    //if (QPixmapCache::find(QString("IMAGEM_%1").arg(m_columnOffset), m_currentPixmap)){
-    //    qDebug() << QString("CACHED %1").arg(m_columnOffset);
-    /*QString str = QString("IMAGEM_%1").arg(temp);
-    qDebug() << "temp:" << temp << "str:" << str;
-    if (QPixmapCache::find(str, m_currentPixmap)){
-    //if (QPixmapCache::find(QString("IMAGEM_%1").arg(temp), m_currentPixmap)){
-        qDebug() << QString("CACHED %1").arg(temp);
-
-        m_columnOffset = m_columnOffset + m_numColumns;
-        if (m_columnOffset >= m_totalColumns)
-            m_columnOffset -= m_totalColumns;
-        return;
-    }*/
-
     m_currentPixmap = new QPixmap(2 * boundingRect().width(), boundingRect().height());
 
     QPainter p(m_currentPixmap);
         bool completed = false;
         int i = 0, j = 0, index = 0;
         int startJ = 0;
-        //int maxJ = (m_numColumns) - m_columnOffset;
         int maxJ = (m_numColumns*2) - m_columnOffset;
         int counter = 0;
         int adder = 0;
@@ -213,19 +193,6 @@ void GameAnimatedBackground::drawPixmap()
             }
         } while (!completed);
     p.end();
-
-    //m_currentPixmap = temp;
-
-        /*QString str2 = QString("IMAGEM_%1").arg(m_columnOffset);
-    QPixmapCache::insert(str2, *m_currentPixmap);
-    //QPixmapCache::insert(QString("IMAGEM_%1").arg(m_columnOffset), *m_currentPixmap);
-    qDebug() << QString("CREATED %1").arg(m_columnOffset) << "str2:" << str2 << "\n--";
-    //m_currentPixmap->save(QString("/tmp/HUA-%1.png").arg(m_columnOffset));
-    //m_currentPixmap->save("/tmp/" + str2 + ".png");*/
-    /*if (m_type == Mirrored && m_drawingMirrored)
-        m_currentPixmap->save(QString("/tmp/HUA-%1-m.png").arg(m_columnOffset));
-    else
-        m_currentPixmap->save(QString("/tmp/HUA-%1.png").arg(m_columnOffset));*/
 }
 
 void GameAnimatedBackground::paint(QPainter *painter)
