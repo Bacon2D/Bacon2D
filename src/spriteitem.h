@@ -23,10 +23,10 @@ class SpriteItem : public GameItem
 public:
     SpriteItem(GameScene *parent = 0);
 
-    QDeclarativeListProperty<SpriteAnimationItem> animations();
+    QDeclarativeListProperty<SpriteAnimationItem> animations() const;
 
     QString animation() const;
-    void setAnimation(QString animation, bool force = false);
+    void setAnimation(const QString &animation, const bool &force = false);
 
     GameSprite *currentSprite() const;
     void setCurrentSprite(GameSprite *currentSprite);

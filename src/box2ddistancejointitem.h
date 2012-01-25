@@ -16,11 +16,11 @@ public:
 
     void initialize(b2World *world);
 
-    b2Vec2 b2TransformOrigin();
+    b2Vec2 b2TransformOrigin() const;
 
-    float b2Angle();
+    float b2Angle() const;
 
-    float length();
+    float length() const;
 
 protected:
     void itemChange(ItemChange change, const ItemChangeData &data);

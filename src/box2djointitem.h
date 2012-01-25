@@ -17,14 +17,14 @@ class Box2DJointItem : public Box2DBaseItem
 public:
     Box2DJointItem(GameScene *parent = 0);
 
-    Box2DItem *box2ditemA();
+    Box2DItem *box2ditemA() const;
     void setBox2ditemA(Box2DItem *box2ditemA);
 
-    Box2DItem *box2ditemB();
+    Box2DItem *box2ditemB() const;
     void setBox2ditemB(Box2DItem *box2ditemB);
 
-    bool collideConnected();
-    void setCollideConnected(bool collideConnected);
+    bool collideConnected() const;
+    void setCollideConnected(const bool &collideConnected);
 
 signals:
     void box2ditemAChanged();

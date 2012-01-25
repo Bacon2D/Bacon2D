@@ -18,16 +18,16 @@ public:
     GameSprite(QQuickItem *parent = 0);
 
     QString source() const;
-    void setSource(QString source);
+    void setSource(const QString &source);
 
     int frames() const;
-    void setFrames(int frames);
+    void setFrames(const int &frames);
 
     int frame() const;
-    void setFrame(int frame);
+    void setFrame(const int &frame);
 
     int initialFrame() const;
-    void setInitialFrame(int initialFrame);
+    void setInitialFrame(const int &initialFrame);
 
     void paint(QPainter *painter);
 

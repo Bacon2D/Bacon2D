@@ -11,7 +11,7 @@ Box2DJointItem::Box2DJointItem(GameScene *parent)
 
 }
 
-Box2DItem *Box2DJointItem::box2ditemA()
+Box2DItem *Box2DJointItem::box2ditemA() const
 {
     return m_box2ditemA;
 }
@@ -25,7 +25,7 @@ void Box2DJointItem::setBox2ditemA(Box2DItem *box2ditemA)
     }
 }
 
-Box2DItem *Box2DJointItem::box2ditemB()
+Box2DItem *Box2DJointItem::box2ditemB() const
 {
     return m_box2ditemB;
 }
@@ -39,12 +39,12 @@ void Box2DJointItem::setBox2ditemB(Box2DItem *box2ditemB)
     }
 }
 
-bool Box2DJointItem::collideConnected()
+bool Box2DJointItem::collideConnected() const
 {
     return m_collideConnected;
 }
 
-void Box2DJointItem::setCollideConnected(bool collideConnected)
+void Box2DJointItem::setCollideConnected(const bool &collideConnected)
 {
     if (m_collideConnected != collideConnected) {
         m_collideConnected = collideConnected;

@@ -20,13 +20,13 @@ void QuasiGame::setCurrentScene(GameScene *currentScene) {
         if (m_currentScene) {
             m_currentScene->setRunning(false);
             m_currentScene->setVisible(false);
-            disconnect(SIGNAL(update(long)));
+            disconnect(SIGNAL(update(const long &)));
         }
 
         m_currentScene = currentScene;
 
         if (m_currentScene) {
-            connect(this, SIGNAL(update(long)), m_currentScene, SLOT(update(long)));
+            connect(this, SIGNAL(update(const long &)), m_currentScene, SLOT(update(const long &)));
             m_currentScene->setVisible(true);
             m_currentScene->setRunning(true);
         }
@@ -40,7 +40,7 @@ int QuasiGame::fps() const
     return m_fps;
 }
 
-void QuasiGame::setFps(int fps)
+void QuasiGame::setFps(const int &fps)
 {
     if (m_fps != fps) {
         m_fps = fps;

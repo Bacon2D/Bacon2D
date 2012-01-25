@@ -17,22 +17,22 @@ class Box2DMouseJointItem : public Box2DBaseItem
 public:
     Box2DMouseJointItem(GameScene *parent = 0);
 
-    Box2DItem *target();
+    Box2DItem *target() const;
     void setTarget(Box2DItem *target);
 
-    bool collideConnected();
-    void setCollideConnected(bool collideConnected);
+    bool collideConnected() const;
+    void setCollideConnected(const bool &collideConnected);
 
-    float maxForce();
-    void setMaxForce(float maxForce);
+    float maxForce() const;
+    void setMaxForce(const float &maxForce);
 
     void initialize(b2World *world);
 
-    void update(long delta);
+    void update(const long &delta);
 
-    b2Vec2 b2TransformOrigin();
+    b2Vec2 b2TransformOrigin() const;
 
-    float b2Angle();
+    float b2Angle() const;
 
 signals:
     void targetChanged();

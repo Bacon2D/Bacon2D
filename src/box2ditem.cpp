@@ -24,7 +24,7 @@ Box2DItem::Box2DItem(GameScene *parent)
     connect(this, SIGNAL(rotationChanged()), SLOT(onRotationChanged()));
 }
 
-b2Body *Box2DItem::body()
+b2Body *Box2DItem::body() const
 {
     return m_body;
 }
@@ -117,7 +117,7 @@ qreal Box2DItem::linearDamping() const
     return m_linearDamping;
 }
 
-void Box2DItem::setLinearDamping(qreal linearDamping)
+void Box2DItem::setLinearDamping(const qreal &linearDamping)
 {
     if (m_linearDamping != linearDamping) {
         m_linearDamping = linearDamping;
@@ -134,7 +134,7 @@ qreal Box2DItem::angularDamping() const
     return m_angularDamping;
 }
 
-void Box2DItem::setAngularDamping(qreal angularDamping)
+void Box2DItem::setAngularDamping(const qreal &angularDamping)
 {
     if (m_angularDamping != angularDamping) {
         m_angularDamping = angularDamping;
@@ -151,7 +151,7 @@ Box2DItem::Shape Box2DItem::shape() const
     return m_shape;
 }
 
-void Box2DItem::setShape(Shape shape)
+void Box2DItem::setShape(const Shape &shape)
 {
     if (m_shape != shape) {
         m_shape = shape;
@@ -166,7 +166,7 @@ Box2DItem::BodyType Box2DItem::bodyType() const
     return m_bodyType;
 }
 
-void Box2DItem::setBodyType(BodyType bodyType)
+void Box2DItem::setBodyType(const BodyType &bodyType)
 {
     if (m_bodyType != bodyType) {
         m_bodyType = bodyType;
@@ -183,7 +183,7 @@ bool Box2DItem::bullet() const
     return m_bullet;
 }
 
-void Box2DItem::setBullet(bool bullet)
+void Box2DItem::setBullet(const bool &bullet)
 {
     if (m_bullet != bullet) {
         m_bullet = bullet;
@@ -200,7 +200,7 @@ bool Box2DItem::sleepingAllowed() const
     return m_sleepingAllowed;
 }
 
-void Box2DItem::setSleepingAllowed(bool sleepingAllowed)
+void Box2DItem::setSleepingAllowed(const bool &sleepingAllowed)
 {
     if (m_sleepingAllowed != sleepingAllowed) {
         m_sleepingAllowed = sleepingAllowed;
@@ -217,7 +217,7 @@ bool Box2DItem::fixedRotation() const
     return m_fixedRotation;
 }
 
-void Box2DItem::setFixedRotation(bool fixedRotation)
+void Box2DItem::setFixedRotation(const bool &fixedRotation)
 {
     if (m_fixedRotation != fixedRotation) {
         m_fixedRotation = fixedRotation;
@@ -234,7 +234,7 @@ bool Box2DItem::active() const
     return m_active;
 }
 
-void Box2DItem::setActive(bool active)
+void Box2DItem::setActive(const bool &active)
 {
     if (m_active != active) {
         m_active = active;
@@ -246,13 +246,13 @@ void Box2DItem::setActive(bool active)
     }
 }
 
-void Box2DItem::applyTorque(float torque)
+void Box2DItem::applyTorque(const float &torque)
 {
     if (m_body)
         m_body->ApplyTorque(torque);
 }
 
-void Box2DItem::applyLinearImpulse(QPointF impulse, QPointF point)
+void Box2DItem::applyLinearImpulse(const QPointF &impulse, const QPointF &point)
 {
     if (m_body) {
         m_body->ApplyLinearImpulse(b2Vec2(impulse.x() / m_scaleRatio,
@@ -262,12 +262,12 @@ void Box2DItem::applyLinearImpulse(QPointF impulse, QPointF point)
     }
 }
 
-float Box2DItem::density()
+float Box2DItem::density() const
 {
     return m_density;
 }
 
-void Box2DItem::setDensity(float density)
+void Box2DItem::setDensity(const float &density)
 {
     if (m_density != density) {
         m_density = density;
@@ -281,12 +281,12 @@ void Box2DItem::setDensity(float density)
     }
 }
 
-float Box2DItem::friction()
+float Box2DItem::friction() const
 {
     return m_friction;
 }
 
-void Box2DItem::setFriction(float friction)
+void Box2DItem::setFriction(const float &friction)
 {
     if (m_friction != friction) {
         m_friction = friction;
@@ -299,12 +299,12 @@ void Box2DItem::setFriction(float friction)
     }
 }
 
-float Box2DItem::restitution()
+float Box2DItem::restitution() const
 {
     return m_restitution;
 }
 
-void Box2DItem::setRestitution(float restitution)
+void Box2DItem::setRestitution(const float &restitution)
 {
     if (m_restitution != restitution) {
         m_restitution = restitution;
@@ -346,7 +346,7 @@ void Box2DItem::setVertices(const QVariantList &vertices)
     }
 }
 
-b2Vec2 Box2DItem::b2TransformOrigin()
+b2Vec2 Box2DItem::b2TransformOrigin() const
 {
     b2Vec2 vec;
     if (m_body)
@@ -354,7 +354,7 @@ b2Vec2 Box2DItem::b2TransformOrigin()
     return vec;
 }
 
-float Box2DItem::b2Angle()
+float Box2DItem::b2Angle() const
 {
     float32 angle = 0.0f;
     if (m_body)

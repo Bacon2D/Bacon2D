@@ -26,7 +26,7 @@ GameBaseBackground::~GameBaseBackground()
     QPixmapCache::clear();
 }
 
-void GameBaseBackground::setTileHeight(const int value)
+void GameBaseBackground::setTileHeight(const int &value)
 {
     if (value != m_tileHeight){
         m_tileHeight = value;
@@ -38,7 +38,7 @@ void GameBaseBackground::setTileHeight(const int value)
     }
 }
 
-void GameBaseBackground::setTileWidth(const int value)
+void GameBaseBackground::setTileWidth(const int &value)
 {
     if (value != m_tileWidth){
         m_tileWidth = value;

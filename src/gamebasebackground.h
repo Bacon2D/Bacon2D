@@ -18,10 +18,10 @@ public:
     virtual ~GameBaseBackground();
 
     int tileHeight() const { return m_tileHeight; }
-    void setTileHeight(const int value);
+    void setTileHeight(const int &value);
 
     int tileWidth() const { return m_tileWidth; }
-    void setTileWidth(const int value);
+    void setTileWidth(const int &value);
 
     QString source() const { return m_source; };
     void setSource(const QString &source);

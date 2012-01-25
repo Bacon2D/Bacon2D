@@ -16,7 +16,7 @@ Box2DMouseJointItem::Box2DMouseJointItem(GameScene *parent)
     m_synchronize = false;
 }
 
-Box2DItem *Box2DMouseJointItem::target()
+Box2DItem *Box2DMouseJointItem::target() const
 {
     return m_target;
 }
@@ -30,12 +30,12 @@ void Box2DMouseJointItem::setTarget(Box2DItem *target)
     }
 }
 
-float Box2DMouseJointItem::maxForce()
+float Box2DMouseJointItem::maxForce() const
 {
     return m_maxForce;
 }
 
-void Box2DMouseJointItem::setMaxForce(float maxForce)
+void Box2DMouseJointItem::setMaxForce(const float &maxForce)
 {
     if (m_maxForce != maxForce) {
         m_maxForce = maxForce;
@@ -71,7 +71,7 @@ void Box2DMouseJointItem::initialize(b2World *world)
     m_initialized = true;
 }
 
-void Box2DMouseJointItem::update(long delta)
+void Box2DMouseJointItem::update(const long &delta)
 {
     if (!m_joint)
         return;
@@ -82,12 +82,12 @@ void Box2DMouseJointItem::update(long delta)
     m_joint->SetTarget(b2Vec2(mousePos.x() / m_scaleRatio, -mousePos.y() / m_scaleRatio));
 }
 
-bool Box2DMouseJointItem::collideConnected()
+bool Box2DMouseJointItem::collideConnected() const
 {
     return m_collideConnected;
 }
 
-void Box2DMouseJointItem::setCollideConnected(bool collideConnected)
+void Box2DMouseJointItem::setCollideConnected(const bool &collideConnected)
 {
     if (m_collideConnected != collideConnected) {
         m_collideConnected = collideConnected;
@@ -96,12 +96,12 @@ void Box2DMouseJointItem::setCollideConnected(bool collideConnected)
     }
 }
 
-b2Vec2 Box2DMouseJointItem::b2TransformOrigin()
+b2Vec2 Box2DMouseJointItem::b2TransformOrigin() const
 {
     return b2Vec2(0, 0); // FIXME: remove "m_syncronize" member and return correct position
 }
 
-float Box2DMouseJointItem::b2Angle()
+float Box2DMouseJointItem::b2Angle() const
 {
     return 0.0f;
 }

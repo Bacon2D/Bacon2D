@@ -20,21 +20,21 @@ public:
     GameItem(GameScene *parent = 0);
 
     QDeclarativeScriptString updateScript() const;
-    void setUpdateScript(QDeclarativeScriptString updateScript);
+    void setUpdateScript(const QDeclarativeScriptString &updateScript);
 
     int updateInterval() const;
-    void setUpdateInterval(int updateInterval);
+    void setUpdateInterval(const int &updateInterval);
 
-    bool collided();
-    void setCollided(bool collided);
+    bool collided() const;
+    void setCollided(const bool &collided);
 
-    Q_INVOKABLE QList<QObject *> collidedItems();
+    Q_INVOKABLE QList<QObject *> collidedItems() const;
 
-    GameScene *scene();
+    GameScene *scene() const;
     void setScene(GameScene *scene);
 
 public slots:
-    virtual void update(long delta);
+    virtual void update(const long &delta);
 
 signals:
     void updateScriptChanged();

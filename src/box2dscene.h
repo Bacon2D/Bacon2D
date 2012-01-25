@@ -12,15 +12,15 @@ class Box2DScene : public GameScene
 public:
     Box2DScene(QQuickItem *parent = 0);
 
-    b2World *world();
+    b2World *world() const;
 
-    void setGravity(QPointF gravity);
-    QPointF gravity();
+    void setGravity(const QPointF &gravity);
+    QPointF gravity() const;
 
     void componentComplete();
 
 public slots:
-    void update(long delta);
+    void update(const long &delta);
 
 private:
     b2World *m_world;

@@ -38,7 +38,7 @@ void Box2DDistanceJointItem::initialize(b2World *world)
     m_initialized = true;
 }
 
-b2Vec2 Box2DDistanceJointItem::b2TransformOrigin()
+b2Vec2 Box2DDistanceJointItem::b2TransformOrigin() const
 {
     b2Vec2 vec;
     if (m_joint)
@@ -46,7 +46,7 @@ b2Vec2 Box2DDistanceJointItem::b2TransformOrigin()
     return vec;
 }
 
-float Box2DDistanceJointItem::b2Angle()
+float Box2DDistanceJointItem::b2Angle() const
 {
     float32 angle = 0.0f;
     if (m_joint)
@@ -54,7 +54,7 @@ float Box2DDistanceJointItem::b2Angle()
     return angle;
 }
 
-float Box2DDistanceJointItem::length()
+float Box2DDistanceJointItem::length() const
 {
     if (m_joint)
         return b2Util::b2Length(m_joint->GetAnchorA(), m_joint->GetAnchorB()) * m_scaleRatio;

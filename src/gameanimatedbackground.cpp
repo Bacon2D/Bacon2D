@@ -16,7 +16,7 @@ GameAnimatedBackground::~GameAnimatedBackground()
 {
 }
 
-void GameAnimatedBackground::setHorizontalOffset(const int offset)
+void GameAnimatedBackground::setHorizontalOffset(const int &offset)
 {
     int temp = offset;
     if (temp < 0)
@@ -34,7 +34,7 @@ void GameAnimatedBackground::setHorizontalOffset(const int offset)
     }
 }
 
-void GameAnimatedBackground::setDirection(const Direction direction)
+void GameAnimatedBackground::setDirection(const Direction &direction)
 {
     if (direction != m_direction){
         if (direction == Backward)
@@ -47,7 +47,7 @@ void GameAnimatedBackground::setDirection(const Direction direction)
     }
 }
 
-void GameAnimatedBackground::setType(const Type type)
+void GameAnimatedBackground::setType(const Type &type)
 {
     if (type != m_type){
         m_type = type;

@@ -12,7 +12,7 @@ Box2DBaseItem::Box2DBaseItem(GameScene *parent )
 {
 }
 
-bool Box2DBaseItem::initialized()
+bool Box2DBaseItem::initialized() const
 {
     return m_initialized;
 }

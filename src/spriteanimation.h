@@ -20,10 +20,10 @@ public:
     void setSprite(GameSprite *sprite);
 
     bool running() const;
-    void setRunning(bool running);
+    void setRunning(const bool &running);
 
     int loops() const;
-    void setLoops(int loops);
+    void setLoops(const int &loops);
 
 signals:
     void spriteChanged();

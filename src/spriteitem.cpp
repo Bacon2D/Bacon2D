@@ -27,9 +27,9 @@ SpriteItem::SpriteItem(GameScene *parent)
 {
 }
 
-QDeclarativeListProperty<SpriteAnimationItem> SpriteItem::animations()
+QDeclarativeListProperty<SpriteAnimationItem> SpriteItem::animations() const
 {
-    return QDeclarativeListProperty<SpriteAnimationItem>(this, 0, &SpriteItem::append_animation);
+    return QDeclarativeListProperty<SpriteAnimationItem>(const_cast<SpriteItem *>(this), 0, &SpriteItem::append_animation);
 }
 
 QString SpriteItem::animation() const
@@ -37,7 +37,7 @@ QString SpriteItem::animation() const
     return m_animation;
 }
 
-void SpriteItem::setAnimation(QString animation, bool force)
+void SpriteItem::setAnimation(const QString &animation, const bool &force)
 {
     if (force || (m_animation != animation)) {
         m_animation = animation;

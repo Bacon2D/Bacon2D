@@ -18,7 +18,7 @@ QString GameSprite::source() const
     return m_source;
 }
 
-void GameSprite::setSource(QString source)
+void GameSprite::setSource(const QString &source)
 {
     if (m_source != source) {
         if (m_pixMap)
@@ -52,7 +52,7 @@ int GameSprite::frames() const
     return m_frames;
 }
 
-void GameSprite::setFrames(int frames)
+void GameSprite::setFrames(const int &frames)
 {
     if (m_frames != frames) {
         m_frames = frames;
@@ -71,7 +71,7 @@ int GameSprite::frame() const
     return m_frame;
 }
 
-void GameSprite::setFrame(int frame)
+void GameSprite::setFrame(const int &frame)
 {
     if (m_frame != frame) {
         m_frame = frame;
@@ -94,7 +94,7 @@ int GameSprite::initialFrame() const
     return m_initialFrame;
 }
 
-void GameSprite::setInitialFrame(int initialFrame)
+void GameSprite::setInitialFrame(const int &initialFrame)
 {
     m_initialFrame = initialFrame;
 

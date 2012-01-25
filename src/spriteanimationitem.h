@@ -18,7 +18,7 @@ public:
     SpriteAnimationItem(QState *parent = 0);
 
     QString name() const;
-    void setName(QString name);
+    void setName(const QString &name);
 
     GameSprite *sprite() const;
     void setSprite(GameSprite *sprite);

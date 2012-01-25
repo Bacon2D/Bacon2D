@@ -23,13 +23,13 @@ public:
     void setCurrentScene(GameScene *currentScene);
 
     int fps() const;
-    void setFps(int fps);
+    void setFps(const int &fps);
 
 public slots:
     void onUpdate();
 
 signals:
-    void update(long delta);
+    void update(const long &delta);
     void currentSceneChanged();
     void fpsChanged();
 

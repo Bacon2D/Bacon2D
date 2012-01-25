@@ -42,7 +42,7 @@ bool SpriteAnimation::running() const
     return m_running;
 }
 
-void SpriteAnimation::setRunning(bool running)
+void SpriteAnimation::setRunning(const bool &running)
 {
     if (m_running != running) {
         m_running = running;
@@ -63,7 +63,7 @@ int SpriteAnimation::loops() const
     return m_loops;
 }
 
-void SpriteAnimation::setLoops(int loops)
+void SpriteAnimation::setLoops(const int &loops)
 {
     if (m_loops != loops) {
         m_loops = loops;

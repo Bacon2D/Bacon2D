@@ -31,13 +31,13 @@ public:
     ~GameAnimatedBackground();
 
     int horizontalOffset() const { return m_horizontalOffset; };
-    void setHorizontalOffset(const int offset);
+    void setHorizontalOffset(const int &offset);
 
     Direction direction() const { return m_direction; };
-    void setDirection(const Direction direction);
+    void setDirection(const Direction &direction);
 
     Type type() const { return m_type; };
-    void setType(const Type type);
+    void setType(const Type &type);
 
     void drawPixmap();
     void paint(QPainter *painter);

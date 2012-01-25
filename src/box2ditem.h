@@ -41,52 +41,52 @@ public:
 
     Box2DItem(GameScene *parent = 0);
 
-    b2Body *body();
+    b2Body *body() const;
 
     qreal linearDamping() const;
-    void setLinearDamping(qreal linearDamping);
+    void setLinearDamping(const qreal &linearDamping);
 
     qreal angularDamping() const;
-    void setAngularDamping(qreal angularDamping);
+    void setAngularDamping(const qreal &angularDamping);
 
     BodyType bodyType() const;
-    void setBodyType(BodyType bodyType);
+    void setBodyType(const BodyType &bodyType);
 
     Shape shape() const;
-    void setShape(Shape shape);
+    void setShape(const Shape &shape);
 
     bool bullet() const;
-    void setBullet(bool bullet);
+    void setBullet(const bool &bullet);
 
     bool sleepingAllowed() const;
-    void setSleepingAllowed(bool allowed);
+    void setSleepingAllowed(const bool &allowed);
 
     bool fixedRotation() const;
-    void setFixedRotation(bool fixedRotation);
+    void setFixedRotation(const bool &fixedRotation);
 
     bool active() const;
-    void setActive(bool active);
+    void setActive(const bool &active);
 
-    float density();
-    void setDensity(float density);
+    float density() const;
+    void setDensity(const float &density);
 
-    float friction();
-    void setFriction(float friction);
+    float friction() const;
+    void setFriction(const float &friction);
 
-    float restitution();
-    void setRestitution(float restitution);
+    float restitution() const;
+    void setRestitution(const float &restitution);
 
     QVariantList vertices() const;
     void setVertices(const QVariantList &vertices);
 
     void initialize(b2World *world);
 
-    b2Vec2 b2TransformOrigin();
+    b2Vec2 b2TransformOrigin() const;
 
-    float b2Angle();
+    float b2Angle() const;
 
-    Q_INVOKABLE void applyTorque(float torque);
-    Q_INVOKABLE void applyLinearImpulse(QPointF impulse, QPointF point);
+    Q_INVOKABLE void applyTorque(const float &torque);
+    Q_INVOKABLE void applyLinearImpulse(const QPointF &impulse, const QPointF &point);
 
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);

@@ -12,7 +12,7 @@ QString SpriteAnimationItem::name() const
     return m_name;
 }
 
-void SpriteAnimationItem::setName(QString name)
+void SpriteAnimationItem::setName(const QString &name)
 {
     m_name = name;
 }

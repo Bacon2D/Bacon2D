@@ -13,15 +13,15 @@ class Box2DBaseItem : public GameItem
 public:
     Box2DBaseItem(GameScene *parent = 0);
 
-    bool initialized();
+    bool initialized() const;
 
     virtual void initialize(b2World *world) = 0;
 
     void synchronize();
 
 protected:
-    virtual b2Vec2 b2TransformOrigin() = 0;
-    virtual float b2Angle() = 0;
+    virtual b2Vec2 b2TransformOrigin() const = 0;
+    virtual float b2Angle() const = 0;
 
 protected:
     static float m_scaleRatio;

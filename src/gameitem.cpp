@@ -13,7 +13,7 @@ GameItem::GameItem(GameScene *parent)
     setZ(1);
 }
 
-void GameItem::update(long delta)
+void GameItem::update(const long &delta)
 {
     if ((m_updateInterval && m_updateTime.elapsed() >= m_updateInterval)
         || !m_updateInterval) {
@@ -33,7 +33,7 @@ QDeclarativeScriptString GameItem::updateScript() const
     return m_updateScript;
 }
 
-void GameItem::setUpdateScript(QDeclarativeScriptString updateScript)
+void GameItem::setUpdateScript(const QDeclarativeScriptString &updateScript)
 {
     if (m_updateScript.script() != updateScript.script()) {
         m_updateScript = updateScript;
@@ -52,7 +52,7 @@ int GameItem::updateInterval() const
     return m_updateInterval;
 }
 
-void GameItem::setUpdateInterval(int updateInterval)
+void GameItem::setUpdateInterval(const int &updateInterval)
 {
     if (m_updateInterval != updateInterval) {
         m_updateInterval = updateInterval;
@@ -61,12 +61,12 @@ void GameItem::setUpdateInterval(int updateInterval)
     }
 }
 
-bool GameItem::collided()
+bool GameItem::collided() const
 {
     return m_collided;
 }
 
-void GameItem::setCollided(bool collided)
+void GameItem::setCollided(const bool &collided)
 {
     if (m_collided != collided) {
         m_collided = collided;
@@ -75,14 +75,14 @@ void GameItem::setCollided(bool collided)
     }
 }
 
-QList<QObject *> GameItem::collidedItems()
+QList<QObject *> GameItem::collidedItems() const
 {
     GameScene *scene = qobject_cast<GameScene *>(parent());
 
-    return scene->collidedItems(this);
+    return scene->collidedItems(const_cast<GameItem *>(this));
 }
 
-GameScene *GameItem::scene()
+GameScene *GameItem::scene() const
 {
     return m_scene;
 }

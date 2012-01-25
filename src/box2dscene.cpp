@@ -15,24 +15,24 @@ Box2DScene::Box2DScene(QQuickItem *parent)
     m_world = new b2World(gravity);
 }
 
-b2World *Box2DScene::world()
+b2World *Box2DScene::world() const
 {
     return m_world;
 }
 
-void Box2DScene::setGravity(QPointF gravity)
+void Box2DScene::setGravity(const QPointF &gravity)
 {
     m_gravity = gravity;
     if (m_world)
         m_world->SetGravity(b2Vec2(gravity.x(), gravity.y()));
 }
 
-QPointF Box2DScene::gravity()
+QPointF Box2DScene::gravity() const
 {
     return m_gravity;
 }
 
-void Box2DScene::update(long delta)
+void Box2DScene::update(const long &delta)
 {
     if (!m_running)
         return;

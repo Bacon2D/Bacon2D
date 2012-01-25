@@ -17,15 +17,15 @@ class GameScene : public QQuickItem
 public:
     GameScene(QQuickItem *parent = 0);
 
-    QDeclarativeListProperty<GameItem> gameItems();
+    QDeclarativeListProperty<GameItem> gameItems() const;
 
     bool running() const;
-    void setRunning(bool running);
+    void setRunning(const bool &running);
 
-    Q_INVOKABLE QList<QObject *> collidedItems(GameItem *gameItem);
+    Q_INVOKABLE QList<QObject *> collidedItems(GameItem *gameItem) const;
 
 public slots:
-    void update(long delta);
+    void update(const long &delta);
 
 signals:
     void runningChanged();
@@ -33,7 +33,7 @@ signals:
 private:
     static void append_gameItem(QDeclarativeListProperty<GameItem> *list, GameItem *gameItem);
     void checkCollisions();
-    bool checkCollision(GameItem *item, GameItem *otherItem);
+    bool checkCollision(GameItem *item, GameItem *otherItem) const;
 
 protected:
     QList<GameItem *> m_gameItems;
