@@ -19,3 +19,11 @@ b2Vec2 b2Util::b2Center(const b2Vec2 &v1, const b2Vec2 &v2)
     return b2Vec2((v1.x + v2.x) / 2.0f,
                   (v1.y + v2.y) / 2.0f);
 }
+
+QPointF b2Util::qTopLeft(const b2Vec2 &vec, const QRectF &geometry, const qreal &scaleRatio)
+{
+    const qreal newX = vec.x * scaleRatio - geometry.width() / 2.0;
+    const qreal newY = -vec.y * scaleRatio - geometry.height() / 2.0;
+
+    return QPointF(newX, newY);
+}
