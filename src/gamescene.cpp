@@ -132,3 +132,17 @@ QList<QObject *> GameScene::collidedItems(GameItem *gameItem) const
 
     return collidedItemsList;
 }
+
+Viewport *GameScene::viewport() const
+{
+    return m_viewport;
+}
+
+void GameScene::setViewport(Viewport *viewport)
+{
+    if (m_viewport != viewport) {
+        m_viewport = viewport;
+
+        emit viewportChanged();
+    }
+}

@@ -6,6 +6,7 @@
 #include <QtQuick/QQuickItem>
 
 class GameScene;
+class Viewport;
 
 class QuasiGame : public QQuickItem
 {
@@ -38,6 +39,7 @@ private:
     QTimer m_updateTimer;
     QTime m_gameTime;
     int m_fps;
+    Viewport *m_viewport;
 };
 
 #endif /* _QUASIGAME_H_ */

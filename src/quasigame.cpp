@@ -1,10 +1,13 @@
 #include "quasigame.h"
+
 #include "gamescene.h"
+#include "viewport.h"
 
 QuasiGame::QuasiGame(QQuickItem *parent)
     : QQuickItem(parent)
     , m_currentScene(0)
     , m_fps(DEFAULT_FPS)
+    , m_viewport(0)
 {
     connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(onUpdate()));
     m_gameTime.start();
@@ -18,6 +21,12 @@ GameScene *QuasiGame::currentScene() const {
 void QuasiGame::setCurrentScene(GameScene *currentScene) {
     if (m_currentScene != currentScene) {
         if (m_currentScene) {
+            if (m_viewport) {
+                m_viewport->setVisible(false);
+                m_viewport->disconnect(SIGNAL(update(const long &)));
+                m_viewport = 0;
+            }
+
             m_currentScene->setRunning(false);
             m_currentScene->setVisible(false);
             m_currentScene->disconnect(SIGNAL(update(const long &)));
@@ -26,6 +35,23 @@ void QuasiGame::setCurrentScene(GameScene *currentScene) {
         m_currentScene = currentScene;
 
         if (m_currentScene) {
+            if (m_viewport = m_currentScene->viewport()) {
+                m_viewport->setParentItem(this);
+                m_viewport->setScene(m_currentScene);
+                m_viewport->setWidth(width());
+                m_viewport->setHeight(height());
+                m_viewport->setContentWidth(m_currentScene->width());
+                m_viewport->setContentHeight(m_currentScene->height());
+                m_viewport->updateMaxOffsets();
+                m_viewport->setVisible(true);
+
+                m_currentScene->setParentItem(m_viewport);
+
+                connect(this, SIGNAL(update(const long &)), m_viewport, SLOT(update(const long &)));
+            } else {
+                m_currentScene->setParentItem(this);
+            }
+
             connect(this, SIGNAL(update(const long &)), m_currentScene, SLOT(update(const long &)));
             m_currentScene->setVisible(true);
             m_currentScene->setRunning(true);
