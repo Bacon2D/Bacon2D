@@ -1,5 +1,7 @@
 #include "box2dbaseitem.h"
 
+#include "util.h"
+
 #include <Box2D/Box2D.h>
 
 float Box2DBaseItem::m_scaleRatio = 32.0f;
@@ -27,15 +29,12 @@ void Box2DBaseItem::synchronize()
     if (m_synchronize && m_initialized) {
         m_synchronizing = true;
 
-        const b2Vec2 position = b2TransformOrigin();
+        const QPointF newPoint = b2Util::qTopLeft(b2TransformOrigin(), boundingRect(), m_scaleRatio);
         const float32 angle = b2Angle();
-
-        const qreal newX = position.x * m_scaleRatio - width() / 2.0;
-        const qreal newY = -position.y * m_scaleRatio - height() / 2.0;
         const qreal newRotation = -(angle * 360.0) / (2 * b2_pi);
 
-        if (!qFuzzyCompare(x(), newX) || !qFuzzyCompare(y(), newY))
-            setPos(QPointF(newX, newY));
+        if (!qFuzzyCompare(x(), newPoint.x()) || !qFuzzyCompare(y(), newPoint.y()))
+            setPos(newPoint);
         if (!qFuzzyCompare(rotation(), newRotation))
             setRotation(newRotation);
 
