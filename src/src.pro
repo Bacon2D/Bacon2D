@@ -32,6 +32,7 @@ HEADERS += gameitem.h \
            box2dmousejointitem.h \
            layer.h \
            gamebasebackground.h \
+           gamestaticbackground.h \
            gameanimatedbackground.h \
            util.h
 
@@ -52,6 +53,7 @@ SOURCES += gameitem.cpp \
            box2dmousejointitem.cpp \
            layer.cpp \
            gamebasebackground.cpp \
+           gamestaticbackground.cpp \
            gameanimatedbackground.cpp \
            util.cpp
 

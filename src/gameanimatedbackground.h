@@ -62,4 +62,4 @@ private:
     QList<QPixmap> m_mirroredTiles;
 };
 
-#endif /* _GAMEBACKGROUND_H_ */
+#endif /* _GAMEANIMATEDBACKGROUND_H_ */

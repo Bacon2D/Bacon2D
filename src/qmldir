@@ -1,2 +1,3 @@
 plugin quasigameplugins
 AnimatedBackground 1.0 AnimatedBackground.qml
+StaticBackground 1.0 StaticBackground.qml

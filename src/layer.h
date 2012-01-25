@@ -25,7 +25,7 @@ public:
     int count() const;
 
     int setPixmap(const QPixmap &pix);
-    QPixmap getPixmap();
+    QPixmap getPixmap() const;
 
 private:
     QList<QPixmap> m_pixmaps; // can be a list of tiles or a single image

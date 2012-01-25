@@ -113,7 +113,7 @@ int Layer::setPixmap(const QPixmap &pix)
  * \return the stored pixmap (full lenght), or null if none
  * \sa getTile()
  */
-QPixmap Layer::getPixmap()
+QPixmap Layer::getPixmap() const
 {
     return m_pixmaps.at(0);
 }
