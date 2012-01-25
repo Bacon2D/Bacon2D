@@ -12,6 +12,7 @@ namespace b2Util
     b2Vec2 b2Center(const b2Vec2 &v1, const b2Vec2 &v2);
 
     QPointF qTopLeft(const b2Vec2 &vec, const QRectF &geometry, const qreal &scaleRatio = 1.0);
+    qreal qAngle(qreal b2Angle);
 }
 
 #endif /* _UTIL_H_ */

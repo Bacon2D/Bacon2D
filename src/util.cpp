@@ -27,3 +27,8 @@ QPointF b2Util::qTopLeft(const b2Vec2 &vec, const QRectF &geometry, const qreal 
 
     return QPointF(newX, newY);
 }
+
+qreal b2Util::qAngle(qreal angle)
+{
+    return -(angle * 360.0) / (2 * b2_pi);
+}
