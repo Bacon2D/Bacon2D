@@ -60,6 +60,7 @@ private:
     bool m_shouldMirror;
 
     QList<QPixmap> m_mirroredTiles;
+    const float m_areaToDraw;
 };
 
 #endif /* _GAMEANIMATEDBACKGROUND_H_ */

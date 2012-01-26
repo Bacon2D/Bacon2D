@@ -8,6 +8,7 @@ GameAnimatedBackground::GameAnimatedBackground(GameBaseBackground *parent)
       , m_type(Infinite)
       , m_drawingMirrored(false)
       , m_shouldMirror(false)
+      , m_areaToDraw(2.0)
 {
     connect(this, SIGNAL(horizontalOffsetChanged()), this, SLOT(update()));
 }
@@ -126,19 +127,19 @@ void GameAnimatedBackground::drawPixmap()
     if (m_currentPixmap)
         delete m_currentPixmap;
 
-    m_currentPixmap = new QPixmap(2 * boundingRect().width(), boundingRect().height());
+    m_currentPixmap = new QPixmap(boundingRect().width() * m_areaToDraw, boundingRect().height());
 
     QPainter p(m_currentPixmap);
         bool completed = false;
         int i = 0, j = 0, index = 0;
         int startJ = 0;
-        int maxJ = (m_numColumns*2) - m_columnOffset;
+        int maxJ = (m_numColumns * m_areaToDraw) - m_columnOffset;
         int counter = 0;
         int adder = 0;
         int currentOffset = m_columnOffset;
 
         bool halfDraw = false;
-        int colsToDraw = 2*m_numColumns;
+        int colsToDraw = m_numColumns * m_areaToDraw;
 
         do {
             if (adder > 0){
