@@ -18,12 +18,22 @@ QuasiGame {
         height: parent.height
 
         entities: [
-            StaticBackground {
-                id: backgroundItem
-
+            GameLayers {
                 anchors.fill: parent
+                tiled: false
 
-                source: "not_so_large.png" // image source
+                layers: [
+                    StaticLayer {
+                        source: "not_so_large.png" // image source
+                        factor: 1.0
+                        order: 1
+                    },
+                    StaticLayer {
+                        source: "not_so_large2.png"
+                        factor: 1.0
+                        order: 2
+                    }
+                ]
             },
             QuasiSprite {
                 id: spriteItem
