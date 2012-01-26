@@ -78,7 +78,7 @@ void Box2DMouseJointItem::update(const long &delta)
 
     GameItem::update(delta);
 
-    QPointF mousePos = mapToScene(scene()->canvas()->mapFromGlobal(QCursor::pos()));
+    QPointF mousePos = mapFromItem(scene()->parentItem(), scene()->canvas()->mapFromGlobal(QCursor::pos()));
     m_joint->SetTarget(b2Vec2(mousePos.x() / m_scaleRatio, -mousePos.y() / m_scaleRatio));
 }
 
