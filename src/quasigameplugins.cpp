@@ -9,12 +9,15 @@
 #include "box2ditem.h"
 #include "box2ddistancejointitem.h"
 #include "box2dmousejointitem.h"
-#include "gamestaticbackground.h"
-#include "gameanimatedbackground.h"
+#include "gamelayers.h"
+#include "staticlayer.h"
+#include "animatedlayer.h"
 #include "viewport.h"
 
 void QuasiGamePlugins::registerTypes(const char *uri)
 {
+    qmlRegisterUncreatableType<Quasi>("QuasiGame", 1, 0, "Quasi", "Exporting Quasi enums to QML");
+
     qmlRegisterType<QuasiGame>("QuasiGame", 1, 0, "QuasiGame");
     qmlRegisterType<GameScene>("QuasiGame", 1, 0, "QuasiScene");
     qmlRegisterType<GameItem>("QuasiGame", 1, 0, "QuasiEntity");
@@ -24,10 +27,10 @@ void QuasiGamePlugins::registerTypes(const char *uri)
     qmlRegisterType<Box2DItem>("QuasiGame", 1, 0, "QuasiBody");
     qmlRegisterType<Box2DDistanceJointItem>("QuasiGame", 1, 0, "QuasiDistanceJoint");
     qmlRegisterType<Box2DMouseJointItem>("QuasiGame", 1, 0, "QuasiMouseJoint");
-    qmlRegisterType<GameStaticBackground>("QuasiGame", 1, 0, "GameStaticBackground"); // Use StaticBackground on QML
-    qmlRegisterType<GameAnimatedBackground>("QuasiGame", 1, 0, "GameAnimatedBackground"); // Use AnimatedBackground on QML
-    qmlRegisterType<GameBaseBackground>("QuasiGame", 1, 0, "GameBaseBackground");
-    qmlRegisterType<GameAnimatedBackground>("QuasiGame", 1, 0, "GameAnimatedBackground");
+    qmlRegisterType<GameLayers>("QuasiGame", 1, 0, "GameLayers");
+    qmlRegisterType<Layer>("QuasiGame", 1, 0, "Layer");
+    qmlRegisterType<StaticLayer>("QuasiGame", 1, 0, "StaticLayer");
+    qmlRegisterType<AnimatedLayer>("QuasiGame", 1, 0, "AnimatedLayer");
     qmlRegisterType<Viewport>("QuasiGame", 1, 0, "QuasiViewport");
 }
 

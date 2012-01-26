@@ -30,12 +30,13 @@ HEADERS += gameitem.h \
            box2ddistancejointitem.h \
            box2dmousejointitem.h \
            layer.h \
-           gamebasebackground.h \
-           gamestaticbackground.h \
-           gameanimatedbackground.h \
+           staticlayer.h \
+           animatedlayer.h \
+           gamelayers.h \
            util.h \
            viewport.h \
-           box2ddebugdrawitem.h
+           box2ddebugdrawitem.h \
+           enums.h
 
 SOURCES += gameitem.cpp \
            gamescene.cpp \
@@ -52,9 +53,9 @@ SOURCES += gameitem.cpp \
            box2ddistancejointitem.cpp \
            box2dmousejointitem.cpp \
            layer.cpp \
-           gamebasebackground.cpp \
-           gamestaticbackground.cpp \
-           gameanimatedbackground.cpp \
+           animatedlayer.cpp \
+           staticlayer.cpp \
+           gamelayers.cpp \
            util.cpp \
            viewport.cpp \
            box2ddebugdrawitem.cpp
