@@ -7,6 +7,7 @@
 
 #include "gameitem.h"
 
+class QuasiGame;
 class Viewport;
 
 class GameScene : public QQuickItem
@@ -16,9 +17,10 @@ class GameScene : public QQuickItem
     Q_PROPERTY(QDeclarativeListProperty<GameItem> gameItems READ gameItems)
     Q_PROPERTY(bool running READ running WRITE setRunning NOTIFY runningChanged)
     Q_PROPERTY(Viewport *viewport READ viewport WRITE setViewport NOTIFY viewportChanged)
+    Q_PROPERTY(QuasiGame *game READ game WRITE setGame)
 
 public:
-    GameScene(QQuickItem *parent = 0);
+    GameScene(QuasiGame *parent = 0);
 
     QDeclarativeListProperty<GameItem> gameItems() const;
 
@@ -27,6 +29,9 @@ public:
 
     Viewport *viewport() const;
     void setViewport(Viewport *viewport);
+
+    QuasiGame *game() const;
+    void setGame(QuasiGame *game);
 
     Q_INVOKABLE QList<QObject *> collidedItems(GameItem *gameItem) const;
 
@@ -47,6 +52,7 @@ protected:
     bool m_running;
     QVector<QVector<bool> > *m_collisions;
     Viewport *m_viewport;
+    QuasiGame *m_game;
 };
 
 #endif /* _GAMESCENE_H_ */

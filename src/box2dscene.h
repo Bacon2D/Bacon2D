@@ -4,13 +4,14 @@
 #include "gamescene.h"
 
 class b2World;
+class QuasiGame;
 
 class Box2DScene : public GameScene
 {
     Q_OBJECT
 
 public:
-    Box2DScene(QQuickItem *parent = 0);
+    Box2DScene(QuasiGame *parent = 0);
 
     b2World *world() const;
 

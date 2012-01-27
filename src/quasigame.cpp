@@ -35,7 +35,9 @@ void QuasiGame::setCurrentScene(GameScene *currentScene) {
         m_currentScene = currentScene;
 
         if (m_currentScene) {
-            if (m_viewport = m_currentScene->viewport()) {
+            m_currentScene->setGame(this);
+
+            if ((m_viewport = m_currentScene->viewport())) {
                 m_viewport->setParentItem(this);
                 m_viewport->setScene(m_currentScene);
                 m_viewport->setWidth(width());

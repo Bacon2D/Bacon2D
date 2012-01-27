@@ -1,4 +1,6 @@
 #include "gamescene.h"
+
+#include "quasigame.h"
 #include "gamebasebackground.h"
 
 void GameScene::append_gameItem(QDeclarativeListProperty<GameItem> *list, GameItem *gameItem)
@@ -27,10 +29,12 @@ void GameScene::append_gameItem(QDeclarativeListProperty<GameItem> *list, GameIt
     }
 }
 
-GameScene::GameScene(QQuickItem *parent)
+GameScene::GameScene(QuasiGame *parent)
     : QQuickItem(parent)
     , m_running(false)
     , m_collisions(0)
+    , m_viewport(0)
+    , m_game(0)
 {
     setVisible(false);
 }
@@ -145,4 +149,14 @@ void GameScene::setViewport(Viewport *viewport)
 
         emit viewportChanged();
     }
+}
+
+QuasiGame *GameScene::game() const
+{
+    return m_game;
+}
+
+void GameScene::setGame(QuasiGame *game)
+{
+    m_game = game;
 }

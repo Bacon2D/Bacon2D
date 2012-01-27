@@ -1,11 +1,12 @@
 #include "box2dscene.h"
 
+#include "quasigame.h"
 #include "box2ditem.h"
 #include "box2dbaseitem.h"
 
 #include <Box2D/Box2D.h>
 
-Box2DScene::Box2DScene(QQuickItem *parent)
+Box2DScene::Box2DScene(QuasiGame *parent)
     : GameScene(parent)
     , m_world(0)
     , m_gravity(qreal(0), qreal(-10))
