@@ -16,6 +16,7 @@ class QuasiGame : public QQuickItem
 
     Q_PROPERTY(GameScene *currentScene READ currentScene WRITE setCurrentScene NOTIFY currentSceneChanged)
     Q_PROPERTY(int fps READ fps WRITE setFps NOTIFY fpsChanged)
+    Q_PROPERTY(QPointF mouse READ mouse)
 
 public:
     QuasiGame(QQuickItem *parent = 0);
@@ -25,6 +26,8 @@ public:
 
     int fps() const;
     void setFps(const int &fps);
+
+    QPointF mouse() const;
 
 public slots:
     void onUpdate();

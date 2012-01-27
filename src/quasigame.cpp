@@ -1,5 +1,8 @@
 #include "quasigame.h"
 
+#include <QQuickCanvas>
+#include <QCursor>
+
 #include "gamescene.h"
 #include "viewport.h"
 
@@ -81,4 +84,9 @@ void QuasiGame::onUpdate()
 {
     long elapsedTime = m_gameTime.restart();
     emit update(elapsedTime);
+}
+
+QPointF QuasiGame::mouse() const
+{
+    return m_currentScene->mapFromItem(this, canvas()->mapFromGlobal(QCursor::pos()));
 }
