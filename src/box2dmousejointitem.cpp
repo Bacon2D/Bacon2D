@@ -1,5 +1,6 @@
 #include "box2dmousejointitem.h"
 
+#include "quasigame.h"
 #include "box2dscene.h"
 #include "box2ditem.h"
 
@@ -78,7 +79,7 @@ void Box2DMouseJointItem::update(const long &delta)
 
     GameItem::update(delta);
 
-    QPointF mousePos = mapFromItem(scene()->parentItem(), scene()->canvas()->mapFromGlobal(QCursor::pos()));
+    QPointF mousePos = game()->mouse();
     m_joint->SetTarget(b2Vec2(mousePos.x() / m_scaleRatio, -mousePos.y() / m_scaleRatio));
 }
 
