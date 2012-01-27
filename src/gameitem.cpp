@@ -1,7 +1,9 @@
 #include "gameitem.h"
-#include "gamescene.h"
 
 #include <QDeclarativeExpression>
+
+#include "quasigame.h"
+#include "gamescene.h"
 
 GameItem::GameItem(GameScene *parent)
     : QQuickItem((QQuickItem *)parent)
@@ -90,4 +92,11 @@ GameScene *GameItem::scene() const
 void GameItem::setScene(GameScene *scene)
 {
     m_scene = scene;
+}
+
+QuasiGame *GameItem::game() const
+{
+    if (m_scene)
+        return m_scene->game();
+    return 0;
 }

@@ -6,6 +6,7 @@
 #include <QDeclarativeScriptString>
 
 class QDeclarativeExpression;
+class QuasiGame;
 class GameScene;
 
 class GameItem : public QQuickItem
@@ -15,6 +16,7 @@ class GameItem : public QQuickItem
     Q_PROPERTY(QDeclarativeScriptString updateScript READ updateScript WRITE setUpdateScript NOTIFY updateScriptChanged)
     Q_PROPERTY(int updateInterval READ updateInterval WRITE setUpdateInterval NOTIFY updateIntervalChanged)
     Q_PROPERTY(bool collided READ collided WRITE setCollided NOTIFY collidedChanged)
+    Q_PROPERTY(QuasiGame *game READ game)
 
 public:
     GameItem(GameScene *parent = 0);
@@ -32,6 +34,8 @@ public:
 
     GameScene *scene() const;
     void setScene(GameScene *scene);
+
+    QuasiGame *game() const;
 
 public slots:
     virtual void update(const long &delta);
