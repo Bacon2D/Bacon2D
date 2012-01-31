@@ -4,7 +4,7 @@ QT += quick
 
 TARGET = quasigameplugins
 
-DESTDIR = lib
+DESTDIR = $$PWD/imports/QuasiGame
 OBJECTS_DIR = tmp
 MOC_DIR = tmp
 
@@ -61,10 +61,9 @@ SOURCES += gameitem.cpp \
            viewport.cpp \
            box2ddebugdrawitem.cpp
 
-target.path += imports/QuasiGame
-
-target.files = lib/*
+target.path = $$QT5PATH/imports/QuasiGame
+target.files = qmldir
 target.files += qml/*
-target.files += qmldir
+target.files += $$OUT_PWD/imports/QuasiGame/*
 
 INSTALLS += target
