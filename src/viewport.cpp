@@ -22,10 +22,7 @@ float Viewport::xOffset()
 
 void Viewport::setXOffset(float xOffset)
 {
-    xOffset = xOffset > m_maxXOffset ? m_maxXOffset : xOffset;
-
-    if (xOffset < 0.0f)
-        xOffset = 0.0f;
+    xOffset = qBound<float>(0.0f, xOffset, m_maxXOffset);
 
     if (m_xOffset != xOffset) {
         m_xOffset = xOffset;
@@ -44,9 +41,7 @@ float Viewport::yOffset()
 
 void Viewport::setYOffset(float yOffset)
 {
-    yOffset = yOffset > m_maxYOffset ? m_maxYOffset : yOffset;
-    if (yOffset < 0.0f)
-        yOffset = 0.0f;
+    yOffset = qBound<float>(0.0f, yOffset, m_maxYOffset);
 
     if (m_yOffset != yOffset) {
         m_yOffset = yOffset;
