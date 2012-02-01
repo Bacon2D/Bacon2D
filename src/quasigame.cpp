@@ -11,10 +11,10 @@ QuasiGame::QuasiGame(QQuickItem *parent)
     , m_currentScene(0)
     , m_fps(DEFAULT_FPS)
     , m_viewport(0)
+    , m_timerId(0)
 {
-    connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(onUpdate()));
     m_gameTime.start();
-    m_updateTimer.start(1000 / m_fps);
+    m_timerId = startTimer(1000 / m_fps);
 }
 
 GameScene *QuasiGame::currentScene() const {
@@ -26,13 +26,11 @@ void QuasiGame::setCurrentScene(GameScene *currentScene) {
         if (m_currentScene) {
             if (m_viewport) {
                 m_viewport->setVisible(false);
-                m_viewport->disconnect(SIGNAL(update(const long &)));
                 m_viewport = 0;
             }
 
             m_currentScene->setRunning(false);
             m_currentScene->setVisible(false);
-            m_currentScene->disconnect(SIGNAL(update(const long &)));
         }
 
         m_currentScene = currentScene;
@@ -51,13 +49,10 @@ void QuasiGame::setCurrentScene(GameScene *currentScene) {
                 m_viewport->setVisible(true);
 
                 m_currentScene->setParentItem(m_viewport);
-
-                connect(this, SIGNAL(update(const long &)), m_viewport, SLOT(update(const long &)));
             } else {
                 m_currentScene->setParentItem(this);
             }
 
-            connect(this, SIGNAL(update(const long &)), m_currentScene, SLOT(update(const long &)));
             m_currentScene->setVisible(true);
             m_currentScene->setRunning(true);
         }
@@ -80,10 +75,18 @@ void QuasiGame::setFps(const int &fps)
     }
 }
 
-void QuasiGame::onUpdate()
+void QuasiGame::timerEvent(QTimerEvent *event)
+{
+    update();
+}
+
+void QuasiGame::update()
 {
     long elapsedTime = m_gameTime.restart();
-    emit update(elapsedTime);
+    if (m_currentScene)
+        m_currentScene->update(elapsedTime);
+    if (m_viewport)
+        m_viewport->update(elapsedTime);
 }
 
 QPointF QuasiGame::mouse() const

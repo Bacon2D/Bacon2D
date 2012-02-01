@@ -37,7 +37,6 @@ public:
 
     QuasiGame *game() const;
 
-public slots:
     virtual void update(const long &delta);
 
 signals:

@@ -39,8 +39,7 @@ public:
 
     Q_INVOKABLE QList<QObject *> collidedItems(GameItem *gameItem) const;
 
-public slots:
-    void update(const long &delta);
+    virtual void update(const long &delta);
 
 signals:
     void runningChanged();

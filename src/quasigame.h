@@ -1,7 +1,6 @@
 #ifndef _QUASIGAME_H_
 #define _QUASIGAME_H_
 
-#include <QtCore/QTimer>
 #include <QtCore/QTime>
 #include <QtQuick/QQuickItem>
 
@@ -29,20 +28,20 @@ public:
 
     QPointF mouse() const;
 
-public slots:
-    void onUpdate();
+protected:
+    void timerEvent(QTimerEvent *event);
+    void update();
 
 signals:
-    void update(const long &delta);
     void currentSceneChanged();
     void fpsChanged();
 
 private:
     GameScene *m_currentScene;
-    QTimer m_updateTimer;
     QTime m_gameTime;
     int m_fps;
     Viewport *m_viewport;
+    int m_timerId;
 };
 
 #endif /* _QUASIGAME_H_ */

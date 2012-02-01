@@ -10,7 +10,6 @@ GameAnimatedBackground::GameAnimatedBackground(GameBaseBackground *parent)
       , m_shouldMirror(false)
       , m_areaToDraw(2.0)
 {
-    connect(this, SIGNAL(horizontalOffsetChanged()), this, SLOT(update()));
 }
 
 GameAnimatedBackground::~GameAnimatedBackground()
@@ -30,6 +29,8 @@ void GameAnimatedBackground::setHorizontalOffset(const int &offset)
             drawPixmap();
             m_horizontalOffset = 0;
         }
+
+        update();
 
         emit horizontalOffsetChanged();
     }
