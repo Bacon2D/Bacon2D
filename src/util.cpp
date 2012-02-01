@@ -1,8 +1,5 @@
 #include "util.h"
 
-#include <QtCore/qmath.h>
-#include <Box2D/Box2D.h>
-
 float b2Util::b2Angle(const b2Vec2 &v1, const b2Vec2 &v2)
 {
     b2Vec2 toV2Vec = v1 - v2;
@@ -28,7 +25,28 @@ QPointF b2Util::qTopLeft(const b2Vec2 &vec, const QRectF &geometry, const qreal 
     return QPointF(newX, newY);
 }
 
-qreal b2Util::qAngle(qreal angle)
+qreal b2Util::qAngle(const qreal &angle)
 {
     return -(angle * 360.0) / (2 * b2_pi);
+}
+
+QColor b2Util::qColor(const b2Color &color)
+{
+    return QColor(color.r * 255, color.g * 255, color.b * 255);
+}
+
+QPointF b2Util::qPointF(const b2Vec2 &vec, const qreal &scaleRatio)
+{
+    return QPointF(vec.x * scaleRatio, -vec.y * scaleRatio);
+}
+
+QPolygonF b2Util::qPolygonF(const b2Vec2 *vertices, int32 vertexCount, const qreal &scaleRatio)
+{
+    QPolygonF polygon;
+    polygon.reserve(vertexCount);
+
+    for (int i = 0; i < vertexCount; ++i)
+        polygon.append(qPointF(vertices[i], scaleRatio));
+
+    return polygon;
 }

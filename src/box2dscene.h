@@ -5,6 +5,7 @@
 
 class b2World;
 class QuasiGame;
+class Box2DDebugDrawItem;
 
 class Box2DScene : public GameScene
 {
@@ -20,12 +21,15 @@ public:
 
     void componentComplete();
 
-public slots:
     void update(const long &delta);
+
+protected slots:
+    void onDebugChanged();
 
 private:
     b2World *m_world;
     QPointF m_gravity;
+    Box2DDebugDrawItem *m_debugDraw;
 };
 
 #endif /* _BOX2DSCENE_H_ */

@@ -35,6 +35,7 @@ GameScene::GameScene(QuasiGame *parent)
     , m_collisions(0)
     , m_viewport(0)
     , m_game(0)
+    , m_debug(false)
 {
     setVisible(false);
 }
@@ -159,4 +160,18 @@ QuasiGame *GameScene::game() const
 void GameScene::setGame(QuasiGame *game)
 {
     m_game = game;
+}
+
+bool GameScene::debug() const
+{
+    return m_debug;
+}
+
+void GameScene::setDebug(const bool &debug)
+{
+    if (m_debug != debug) {
+        m_debug = debug;
+
+        emit debugChanged();
+    }
 }

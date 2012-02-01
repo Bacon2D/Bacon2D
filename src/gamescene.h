@@ -18,6 +18,7 @@ class GameScene : public QQuickItem
     Q_PROPERTY(bool running READ running WRITE setRunning NOTIFY runningChanged)
     Q_PROPERTY(Viewport *viewport READ viewport WRITE setViewport NOTIFY viewportChanged)
     Q_PROPERTY(QuasiGame *game READ game WRITE setGame)
+    Q_PROPERTY(bool debug READ debug WRITE setDebug NOTIFY debugChanged)
 
 public:
     GameScene(QuasiGame *parent = 0);
@@ -33,6 +34,9 @@ public:
     QuasiGame *game() const;
     void setGame(QuasiGame *game);
 
+    bool debug() const;
+    void setDebug(const bool &debug);
+
     Q_INVOKABLE QList<QObject *> collidedItems(GameItem *gameItem) const;
 
 public slots:
@@ -41,6 +45,7 @@ public slots:
 signals:
     void runningChanged();
     void viewportChanged();
+    void debugChanged();
 
 private:
     static void append_gameItem(QDeclarativeListProperty<GameItem> *list, GameItem *gameItem);
@@ -53,6 +58,7 @@ protected:
     QVector<QVector<bool> > *m_collisions;
     Viewport *m_viewport;
     QuasiGame *m_game;
+    bool m_debug;
 };
 
 #endif /* _GAMESCENE_H_ */

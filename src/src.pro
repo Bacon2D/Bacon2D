@@ -35,7 +35,8 @@ HEADERS += gameitem.h \
            gamestaticbackground.h \
            gameanimatedbackground.h \
            util.h \
-           viewport.h
+           viewport.h \
+           box2ddebugdrawitem.h
 
 SOURCES += gameitem.cpp \
            gamescene.cpp \
@@ -57,7 +58,8 @@ SOURCES += gameitem.cpp \
            gamestaticbackground.cpp \
            gameanimatedbackground.cpp \
            util.cpp \
-           viewport.cpp
+           viewport.cpp \
+           box2ddebugdrawitem.cpp
 
 target.path += imports/QuasiGame
 

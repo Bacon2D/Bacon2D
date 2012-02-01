@@ -13,6 +13,8 @@ class Box2DBaseItem : public GameItem
 public:
     Box2DBaseItem(GameScene *parent = 0);
 
+    static float m_scaleRatio;
+
     bool initialized() const;
 
     virtual void initialize(b2World *world) = 0;
@@ -24,8 +26,6 @@ protected:
     virtual float b2Angle() const = 0;
 
 protected:
-    static float m_scaleRatio;
-
     bool m_initialized;
     bool m_synchronizing;
     bool m_synchronize;
