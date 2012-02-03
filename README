@@ -34,7 +34,7 @@ Available QMake parameters:
 * BUILD_EXAMPLES (Optional)
 	Use BUILD_EXAMPLES=1 to build usage examples.
 
-Sample build from Quasi's root source tree:
+Sample build from Quasi's root source tree (shadow build not supported yet):
 
 $ qmake QT5PATH=/opt/Qt5 BOX2DPATH=/usr BUILD_EXAMPLES=1
 $ make

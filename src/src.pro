@@ -62,8 +62,8 @@ SOURCES += gameitem.cpp \
            box2ddebugdrawitem.cpp
 
 target.path = $$QT5PATH/imports/QuasiGame
-target.files = qmldir
-target.files += qml/*
-target.files += $$OUT_PWD/imports/QuasiGame/*
 
-INSTALLS += target
+qmlpluginfiles.path = $$target.path
+qmlpluginfiles.files += $$OUT_PWD/imports/QuasiGame/*
+
+INSTALLS += target qmlpluginfiles
