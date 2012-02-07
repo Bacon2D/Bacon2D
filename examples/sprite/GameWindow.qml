@@ -28,35 +28,23 @@ QuasiGame {
                 SpriteAnimationItem {
                     name: "sliding"
 
-                    sprite: GameSprite {
-                        source: "sliding.png"
-                        frames: 4
-                    }
-
-                    spriteAnimation: SpriteAnimation {
-                        duration: 450
-                        loops: Animation.Infinite
-                    }
+                    source: "sliding.png"
+                    frames: 4
+                    duration: 400
+                    loops: Animation.Infinite
                 },
                 SpriteAnimationItem {
                     name: "jumping"
 
-                    sprite: GameSprite {
+                    source: "jumping.png"
+                    frames: 10
+                    duration: 600
+                    loops: 2
 
-                        source: "jumping.png"
-                        frames: 10
+                    onFinished: {
+                        spriteItem.animation = "sliding"
                     }
 
-                    spriteAnimation: SpriteAnimation {
-                        id: jumpingAnimation
-
-                        duration: 600
-                        loops: 2
-
-                        onFinished: {
-                            spriteItem.animation = "sliding"
-                        }
-                    }
                 }
             ]
         }

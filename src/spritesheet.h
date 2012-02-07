@@ -1,21 +1,18 @@
-#ifndef _GAMESPRITE_H_
-#define _GAMESPRITE_H_
+#ifndef _SPRITESHEET_H_
+#define _SPRITESHEET_H_
 
 #include <QtQuick/QQuickPaintedItem>
 
 class QPixmap;
 
-class GameSprite : public QQuickPaintedItem
+class SpriteSheet : public QQuickPaintedItem
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
-    Q_PROPERTY(int frames READ frames WRITE setFrames NOTIFY framesChanged)
     Q_PROPERTY(int frame READ frame WRITE setFrame NOTIFY frameChanged)
-    Q_PROPERTY(int initialFrame READ initialFrame WRITE setInitialFrame NOTIFY initialFrameChanged)
 
 public:
-    GameSprite(QQuickItem *parent = 0);
+    SpriteSheet(QQuickItem *parent = 0);
 
     QString source() const;
     void setSource(const QString &source);
@@ -49,4 +46,4 @@ private:
     int m_frameWidth;
 };
 
-#endif /* _GAMESPRITE_H_ */
+#endif /* _SPRITESHEET_H_ */

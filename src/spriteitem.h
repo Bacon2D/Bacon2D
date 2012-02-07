@@ -5,11 +5,9 @@
 #include <QStateMachine>
 
 #include "gameitem.h"
-#include "gamesprite.h"
-#include "spriteanimation.h"
-#include "spriteanimationitem.h"
 
 class GameScene;
+class SpriteAnimationItem;
 
 class SpriteItem : public GameItem
 {
@@ -17,8 +15,6 @@ class SpriteItem : public GameItem
 
     Q_PROPERTY(QDeclarativeListProperty<SpriteAnimationItem> animations READ animations)
     Q_PROPERTY(QString animation READ animation WRITE setAnimation NOTIFY animationChanged)
-    Q_PROPERTY(GameSprite *currentSprite READ currentSprite WRITE setCurrentSprite NOTIFY currentSpriteChanged)
-    Q_PROPERTY(SpriteAnimation *currentSpriteAnimation READ currentSpriteAnimation WRITE setCurrentSpriteAnimation NOTIFY currentSpriteAnimationChanged)
 
 public:
     SpriteItem(GameScene *parent = 0);
@@ -28,19 +24,11 @@ public:
     QString animation() const;
     void setAnimation(const QString &animation, const bool &force = false);
 
-    GameSprite *currentSprite() const;
-    void setCurrentSprite(GameSprite *currentSprite);
-
-    SpriteAnimation *currentSpriteAnimation() const;
-    void setCurrentSpriteAnimation(SpriteAnimation *currentSpriteAnimation);
-
 public slots:
     void initializeAnimation();
 
 signals:
     void animationChanged();
-    void currentSpriteChanged();
-    void currentSpriteAnimationChanged();
 
 private:
     void initializeMachine();
@@ -50,10 +38,8 @@ private:
 
     QStateMachine *m_stateMachine;
     QState *m_stateGroup;
-    QHash<QString, SpriteAnimationItem*> m_states;
+    QHash<QString, SpriteAnimationItem *> m_states;
     QString m_animation;
-    GameSprite *m_currentSprite;
-    SpriteAnimation *m_currentSpriteAnimation;
 };
 
 #endif /* _SPRITEITEM_H_ */

@@ -3,11 +3,11 @@
 #include "animationchangeevent.h"
 #include "spriteanimationitem.h"
 #include "spriteitem.h"
+#include "spritesheet.h"
 
-AnimationTransition::AnimationTransition(SpriteItem *spriteItem, SpriteAnimationItem *spriteAnimationItem)
+AnimationTransition::AnimationTransition(SpriteAnimationItem *spriteAnimationItem)
     : QAbstractTransition()
     , m_spriteAnimationItem(spriteAnimationItem)
-    , m_spriteItem(spriteItem)
 {
 }
 
@@ -23,6 +23,6 @@ bool AnimationTransition::eventTest(QEvent *e)
 
 void AnimationTransition::onTransition(QEvent *e)
 {
-    m_spriteItem->setCurrentSprite(m_spriteAnimationItem->sprite());
-    m_spriteItem->setCurrentSpriteAnimation(m_spriteAnimationItem->spriteAnimation());
+    m_spriteAnimationItem->spriteSheet()->setVisible(true);
+    m_spriteAnimationItem->setRunning(true);
 }

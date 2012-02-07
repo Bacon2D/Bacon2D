@@ -18,8 +18,7 @@ HEADERS += gameitem.h \
            gamescene.h \
            quasigame.h \
            quasigameplugins.h \
-           gamesprite.h \
-           spriteanimation.h \
+           spritesheet.h \
            spriteitem.h \
            spriteanimationitem.h \
            animationtransition.h \
@@ -42,8 +41,7 @@ SOURCES += gameitem.cpp \
            gamescene.cpp \
            quasigame.cpp \
            quasigameplugins.cpp \
-           gamesprite.cpp \
-           spriteanimation.cpp \
+           spritesheet.cpp \
            spriteitem.cpp \
            spriteanimationitem.cpp \
            animationtransition.cpp \

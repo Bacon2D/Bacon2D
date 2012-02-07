@@ -1,9 +1,9 @@
-#include "gamesprite.h"
+#include "spritesheet.h"
 
 #include <QtGui/QPixmap>
 #include <QtGui/QPainter>
 
-GameSprite::GameSprite(QQuickItem *parent)
+SpriteSheet::SpriteSheet(QQuickItem *parent)
     : QQuickPaintedItem(parent)
     , m_pixMap(0)
     , m_frames(0)
@@ -11,14 +11,15 @@ GameSprite::GameSprite(QQuickItem *parent)
     , m_initialFrame(0)
     , m_frameWidth(0)
 {
+    setVisible(false);
 }
 
-QString GameSprite::source() const
+QString SpriteSheet::source() const
 {
     return m_source;
 }
 
-void GameSprite::setSource(const QString &source)
+void SpriteSheet::setSource(const QString &source)
 {
     if (m_source != source) {
         if (m_pixMap)
@@ -37,7 +38,7 @@ void GameSprite::setSource(const QString &source)
     }
 }
 
-void GameSprite::paint(QPainter *painter)
+void SpriteSheet::paint(QPainter *painter)
 {
     if (m_pixMap) {
         if (!m_frames)
@@ -47,12 +48,12 @@ void GameSprite::paint(QPainter *painter)
     }
 }
 
-int GameSprite::frames() const
+int SpriteSheet::frames() const
 {
     return m_frames;
 }
 
-void GameSprite::setFrames(const int &frames)
+void SpriteSheet::setFrames(const int &frames)
 {
     if (m_frames != frames) {
         m_frames = frames;
@@ -66,14 +67,15 @@ void GameSprite::setFrames(const int &frames)
     }
 }
 
-int GameSprite::frame() const
+int SpriteSheet::frame() const
 {
     return m_frame;
 }
 
-void GameSprite::setFrame(const int &frame)
+void SpriteSheet::setFrame(const int &frame)
 {
-    if (m_frame != frame) {
+    if (m_frame != frame
+        && frame < m_frames) { //FIXME: using qt5 and non infinite animations, the property animation updates this value to m_frames, the max should be m_frames-1
         m_frame = frame;
 
         update();
@@ -82,21 +84,23 @@ void GameSprite::setFrame(const int &frame)
     }
 }
 
-void GameSprite::updateSizeInfo()
+void SpriteSheet::updateSizeInfo()
 {
     m_frameWidth = m_pixMap->width() / m_frames;
     setWidth(m_frameWidth);
     setHeight(m_pixMap->height());
 }
 
-int GameSprite::initialFrame() const
+int SpriteSheet::initialFrame() const
 {
     return m_initialFrame;
 }
 
-void GameSprite::setInitialFrame(const int &initialFrame)
+void SpriteSheet::setInitialFrame(const int &initialFrame)
 {
-    m_initialFrame = initialFrame;
+    if (m_initialFrame != initialFrame) {
+        m_initialFrame = initialFrame;
 
-    emit initialFrameChanged();
+        emit initialFrameChanged();
+    }
 }
