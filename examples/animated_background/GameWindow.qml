@@ -6,7 +6,6 @@ QuasiGame {
 
     width: 800
     height: 400
-    //height: 500
 
     currentScene: scene
 
@@ -19,17 +18,30 @@ QuasiGame {
         height: parent.height
 
         entities: [
-            AnimatedBackground {
-                id: backgroundItem
-
+            GameLayers {
                 anchors.fill: parent
+                tiled: true
+                tileWidth: 32
+                tileHeight: 32
+                //drawGrid: true // good for debug; default: false
+                gridColor: "green" // good for debug; default: red
 
-                source: "large_enough.png" // image source
-                updateInterval: 10 // time between updates; miliseconds
-                horizontalOffset: 10 // base horizontal offset, aka 'step'; there are no need of a signed value
-                direction: GameAnimatedBackground.Backward // direction of the background animation; Forward or Backward
-                type: GameAnimatedBackground.Infinite // type of animation; Infinite or Mirrored
+                layers: [
+                    AnimatedLayer {
+                        source: "large_enough.png" // image source
+                        factor: 1.0
+                        order: 1
 
+                        horizontalStep: 5 // base horizontal offset, aka 'step'; there are no need of a signed value
+                        direction: AnimatedLayer.Backward // direction of the background animation; Forward or Backward
+                        type: AnimatedLayer.Infinite // type of animation; Infinite or Mirrored
+                    },
+                    StaticLayer {
+                        source: "not_so_large2.png"
+                        factor: 1.0
+                        order: 2
+                    }
+                ]
             },
             QuasiSprite {
                 id: spriteItem
