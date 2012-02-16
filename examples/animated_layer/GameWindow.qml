@@ -20,26 +20,26 @@ QuasiGame {
         entities: [
             GameLayers {
                 anchors.fill: parent
-                tiled: true
+                drawType: Quasi.TiledDrawType
                 tileWidth: 32
                 tileHeight: 32
-                //drawGrid: true // good for debug; default: false
-                gridColor: "green" // good for debug; default: red
+                //drawGrid: true // nice for debug; default: false
+                gridColor: "green" // nice for debug; default: red
 
                 layers: [
                     AnimatedLayer {
                         source: "large_enough.png" // image source
                         factor: 1.0
-                        order: 1
+                        order: Quasi.BackgroundLayerOrdering_01
 
-                        horizontalStep: 5 // base horizontal offset, aka 'step'; there are no need of a signed value
-                        direction: AnimatedLayer.Backward // direction of the background animation; Forward or Backward
-                        type: AnimatedLayer.Infinite // type of animation; Infinite or Mirrored
+                        horizontalStep: 5 // base horizontal offset, aka 'step'; there are no need of a signed value as it will always get the positive value
+                        direction: Quasi.BackwardDirection // direction of the background animation; Forward or Backward
+                        type: Quasi.InfiniteType // type of animation; Infinite or Mirrored
                     },
                     StaticLayer {
                         source: "not_so_large2.png"
                         factor: 1.0
-                        order: 2
+                        order: Quasi.ForegroundLayerOrdering_01
                     }
                 ]
             },

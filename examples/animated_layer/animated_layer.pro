@@ -2,7 +2,7 @@ CONFIG += qt
 QT += quick
 
 TEMPLATE = app
-TARGET = animated_background
+TARGET = animated_layer
 DEPENDPATH += .
 INCLUDEPATH += .
 
