@@ -2,7 +2,7 @@ CONFIG += qt
 QT += quick
 
 TEMPLATE = app
-TARGET = static_background
+TARGET = static_layer
 DEPENDPATH += .
 INCLUDEPATH += .
 
