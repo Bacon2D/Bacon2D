@@ -11,21 +11,20 @@ QuasiGame {
 
     fps: 300
 
-
-    GameScene {
+    QuasiScene {
         id: scene
 
         width: parent.width
         height: parent.height
 
-        gameItems: SpriteItem {
+        entities: QuasiSprite {
             id: spriteItem
 
 
             animation: "sliding"
 
             animations: [
-                SpriteAnimationItem {
+                QuasiAnimation {
                     name: "sliding"
 
                     source: "sliding.png"
@@ -33,7 +32,7 @@ QuasiGame {
                     duration: 400
                     loops: Animation.Infinite
                 },
-                SpriteAnimationItem {
+                QuasiAnimation {
                     name: "jumping"
 
                     source: "jumping.png"

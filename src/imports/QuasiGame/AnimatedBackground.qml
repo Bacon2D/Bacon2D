@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import QuasiGame 1.0
 
-GameItem {
+QuasiEntity {
     id: backgroundItem
 
     objectName: "background"
@@ -12,9 +12,9 @@ GameItem {
 
     property int horizontalOffset: 0
 
-   updateScript: {
-       animatedBackground.horizontalOffset += horizontalOffset;
-   }
+    updateScript: {
+        animatedBackground.horizontalOffset += horizontalOffset;
+    }
 
     GameAnimatedBackground {
         id: animatedBackground

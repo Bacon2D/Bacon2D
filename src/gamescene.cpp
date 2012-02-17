@@ -9,7 +9,7 @@ void GameScene::append_gameItem(QDeclarativeListProperty<GameItem> *list, GameIt
     if (scene) {
         gameItem->setScene(scene);
         gameItem->setParentItem(scene);
-        scene->m_gameItems.append(gameItem);
+        scene->m_entities.append(gameItem);
     }
 
     if (gameItem->objectName() == QString("background")){
@@ -40,7 +40,7 @@ GameScene::GameScene(QuasiGame *parent)
     setVisible(false);
 }
 
-QDeclarativeListProperty<GameItem> GameScene::gameItems() const
+QDeclarativeListProperty<GameItem> GameScene::entities() const
 {
     return QDeclarativeListProperty<GameItem>(const_cast<GameScene *>(this), 0, &GameScene::append_gameItem);
 }
@@ -54,7 +54,7 @@ void GameScene::update(const long &delta)
 
     GameItem *item;
 
-    foreach (item, m_gameItems)
+    foreach (item, m_entities)
         item->update(delta);
 }
 
@@ -74,7 +74,7 @@ void GameScene::setRunning(const bool &running)
 
 void GameScene::checkCollisions()
 {
-    int itemCount = m_gameItems.count();
+    int itemCount = m_entities.count();
 
     if (!m_collisions || (m_collisions->count() != itemCount)) {
         if (m_collisions)
@@ -84,16 +84,16 @@ void GameScene::checkCollisions()
 
     GameItem *item, *otherItem;
 
-    foreach (item, m_gameItems)
+    foreach (item, m_entities)
         item->setCollided(false);
 
     for (int i = 0; i < itemCount; ++i) {
-        item = m_gameItems.at(i);
+        item = m_entities.at(i);
         for (int j = 0; j < itemCount; ++j) {
             if (i == j)
                 continue;
 
-            otherItem = m_gameItems.at(j);
+            otherItem = m_entities.at(j);
 
             bool collided = checkCollision(item, otherItem);
 
@@ -124,12 +124,12 @@ QList<QObject *> GameScene::collidedItems(GameItem *gameItem) const
     QList<QObject *> collidedItemsList;
 
     if (m_collisions) {
-        int index = m_gameItems.indexOf(gameItem);
+        int index = m_entities.indexOf(gameItem);
 
         if (index != -1) {
-            for (int i=0; i < m_gameItems.size(); ++i) {
+            for (int i=0; i < m_entities.size(); ++i) {
                 if (i != index && (*m_collisions)[index][i]) {
-                    collidedItemsList.append(m_gameItems.at(i));
+                    collidedItemsList.append(m_entities.at(i));
                 }
             }
         }

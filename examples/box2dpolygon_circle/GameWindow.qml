@@ -9,13 +9,13 @@ QuasiGame {
 
     currentScene: scene
 
-    Box2DScene {
+    QuasiPhysicsScene {
         id: scene
 
         anchors.fill: parent
 
-        gameItems: [
-            Box2DItem {
+        entities: [
+            QuasiBody {
                 id: mouseItem
 
                 width: 60
@@ -34,7 +34,7 @@ QuasiGame {
                 x: 200
                 y: 160
             },
-            Box2DItem {
+            QuasiBody {
                 id: box2ditem1
 
                 width: 50
@@ -45,7 +45,7 @@ QuasiGame {
                 restitution: 0.6
                 sleepingAllowed: false
 
-                shape: Box2DItem.Polygon // It can be Rectangle, Polygon or Circle; Default: Rectangle
+                shape: QuasiBody.Polygon // It can be Rectangle, Polygon or Circle; Default: Rectangle
                 // define vertices in the following format (in counter clockwise, only needed if shape == Rectangle):
                 // [[x0, y0], [x1, y1], [x2, y2], ..]
                 vertices: [[0, 0], [width, 0], [width / 2, height]]
@@ -58,11 +58,11 @@ QuasiGame {
                 x: 250
                 y: 0
             },
-            Box2DDistanceJointItem {
+            QuasiDistanceJoint {
                 box2ditemA: mouseItem
                 box2ditemB: box2ditem1
             },
-            Box2DItem {
+            QuasiBody {
                 id: box2ditem2
 
                 width: 100
@@ -73,7 +73,7 @@ QuasiGame {
                 restitution: 0.6
                 sleepingAllowed: false
 
-                shape: Box2DItem.Circle // It can be Rectangle, Polygon or Circle; Default: Rectangle
+                shape: QuasiBody.Circle // It can be Rectangle, Polygon or Circle; Default: Rectangle
 
                 Image {
                     source: "ball.png"
@@ -83,13 +83,13 @@ QuasiGame {
                 x: 400
                 y: 300
             },
-            Box2DMouseJointItem {
+            QuasiMouseJoint {
                 target: mouseItem
             },
-            Box2DItem {
+            QuasiBody {
                 id: ground
 
-                bodyType: Box2DItem.Static
+                bodyType: QuasiBody.Static
 
                 width: 790
                 height: 1
@@ -106,8 +106,8 @@ QuasiGame {
                 x: 0
                 y: 500
             },
-            Box2DItem {
-                bodyType: Box2DItem.Static
+            QuasiBody {
+                bodyType: QuasiBody.Static
 
                 width: 10
                 height: 10
@@ -120,8 +120,8 @@ QuasiGame {
                 x: 0
                 y: 0
             },
-            Box2DItem {
-                bodyType: Box2DItem.Static
+            QuasiBody {
+                bodyType: QuasiBody.Static
 
                 width: 10
                 height: 10
@@ -134,8 +134,8 @@ QuasiGame {
                 x: 790
                 y: 0
             },
-            Box2DItem {
-                bodyType: Box2DItem.Static
+            QuasiBody {
+                bodyType: QuasiBody.Static
 
                 width: 10
                 height: 10
@@ -148,8 +148,8 @@ QuasiGame {
                 x: 0
                 y: 590
             },
-            Box2DItem {
-                bodyType: Box2DItem.Static
+            QuasiBody {
+                bodyType: QuasiBody.Static
 
                 width: 10
                 height: 10

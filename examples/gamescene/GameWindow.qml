@@ -9,10 +9,10 @@ QuasiGame {
 
     currentScene: scene
 
-    GameScene {
+    QuasiScene {
         id: scene
 
-        gameItems: GameItem {
+        entities: QuasiEntity {
             updateScript: {
                 console.log("update")
             }

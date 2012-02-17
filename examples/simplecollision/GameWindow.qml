@@ -11,14 +11,14 @@ QuasiGame {
 
     fps: 300
 
-    GameScene {
+    QuasiScene {
         id: scene
 
         width: parent.width
         height: parent.height
 
-        gameItems: [
-            GameItem {
+        entities: [
+            QuasiEntity {
                 id: item
 
                 property string name: "RED"
@@ -55,7 +55,7 @@ QuasiGame {
                     }
                 }
             },
-            GameItem {
+            QuasiEntity {
                 id: item2
 
                 property string name: "BLUE"
@@ -79,7 +79,7 @@ QuasiGame {
                     color: item2.collided ? "green" : "blue"
                 }
             },
-            GameItem {
+            QuasiEntity {
                 id: item3
 
                 property string name: "YELLOW"
@@ -104,7 +104,7 @@ QuasiGame {
                     color: item3.collided ? "green" : "yellow"
                 }
             },
-            GameItem {
+            QuasiEntity {
                 id: item4
 
                 property string name: "GRAY"

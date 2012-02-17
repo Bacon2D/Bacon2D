@@ -11,13 +11,13 @@ QuasiGame {
 
     fps: 300
 
-    GameScene {
+    QuasiScene {
         id: scene
 
         width: parent.width
         height: parent.height
 
-        gameItems: [
+        entities: [
             StaticBackground {
                 id: backgroundItem
 
@@ -25,24 +25,28 @@ QuasiGame {
 
                 source: "not_so_large.png" // image source
             },
-            SpriteItem {
+            QuasiSprite {
                 id: spriteItem
 
                 y: 175
 
                 animation: "sliding"
 
-                animations: [
-                    SpriteAnimationItem {
-                        name: "sliding"
+                animations: QuasiAnimation {
+                    name: "sliding"
 
-                            source: "sliding.png"
-                            frames: 4
-                            duration: 450
-                            loops: Animation.Infinite
-                    }
-                ]
+                    source: "sliding.png"
+                    frames: 4
+                    duration: 450
+                    loops: Animation.Infinite
+                }
             }
         ]
     }
 }
+
+
+
+
+
+

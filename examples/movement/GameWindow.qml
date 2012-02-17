@@ -11,14 +11,13 @@ QuasiGame {
 
     fps: 300
 
-
-    GameScene {
+    QuasiScene {
         id: scene
 
         width: parent.width
         height: parent.height
 
-        gameItems: GameItem {
+        entities: QuasiEntity {
             id: item
 
             width: parent.width

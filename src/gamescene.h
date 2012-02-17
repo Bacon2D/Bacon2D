@@ -14,7 +14,7 @@ class GameScene : public QQuickItem
 {
     Q_OBJECT
 
-    Q_PROPERTY(QDeclarativeListProperty<GameItem> gameItems READ gameItems)
+    Q_PROPERTY(QDeclarativeListProperty<GameItem> entities READ entities)
     Q_PROPERTY(bool running READ running WRITE setRunning NOTIFY runningChanged)
     Q_PROPERTY(Viewport *viewport READ viewport WRITE setViewport NOTIFY viewportChanged)
     Q_PROPERTY(QuasiGame *game READ game WRITE setGame)
@@ -23,7 +23,7 @@ class GameScene : public QQuickItem
 public:
     GameScene(QuasiGame *parent = 0);
 
-    QDeclarativeListProperty<GameItem> gameItems() const;
+    QDeclarativeListProperty<GameItem> entities() const;
 
     bool running() const;
     void setRunning(const bool &running);
@@ -52,7 +52,7 @@ private:
     bool checkCollision(GameItem *item, GameItem *otherItem) const;
 
 protected:
-    QList<GameItem *> m_gameItems;
+    QList<GameItem *> m_entities;
     bool m_running;
     QVector<QVector<bool> > *m_collisions;
     Viewport *m_viewport;

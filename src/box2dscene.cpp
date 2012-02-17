@@ -50,7 +50,7 @@ void Box2DScene::update(const long &delta)
 
     GameItem *item;
 
-    foreach (item, m_gameItems) {
+    foreach (item, m_entities) {
         item->update(delta);
         if (Box2DBaseItem *box2DItem = dynamic_cast<Box2DBaseItem *>(item))
             box2DItem->synchronize();
@@ -64,7 +64,7 @@ void Box2DScene::componentComplete()
 {
     QQuickItem::componentComplete();
 
-    foreach (GameItem *item, m_gameItems) {
+    foreach (GameItem *item, m_entities) {
         if (Box2DBaseItem *box2DItem = dynamic_cast<Box2DBaseItem *>(item))
             box2DItem->initialize(m_world);
     }

@@ -9,11 +9,10 @@ QuasiGame {
 
     currentScene: scene
 
-
-    GameScene {
+    QuasiScene {
         id: scene
 
-        gameItems: GameItem {
+        entities: QuasiEntity {
             updateInterval: 1000
 
             updateScript: {
