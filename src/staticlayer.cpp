@@ -12,5 +12,7 @@ StaticLayer::~StaticLayer()
 void StaticLayer::paint(QPainter *painter)
 {
     drawPixmap();
-    painter->drawPixmap(0 * m_factor, 0, *m_currentPixmap);
+
+    if (m_currentPixmap)
+        painter->drawPixmap(0 * m_factor, 0, *m_currentPixmap);
 }

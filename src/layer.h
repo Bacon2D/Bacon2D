@@ -40,7 +40,6 @@ public:
     Quasi::LayerType type() const { return m_type; };
     void setType(const Quasi::LayerType &type);
 
-
     int tileHeight() const { return m_tileHeight; }
     void setTileHeight(const int &value);
 
@@ -60,7 +59,6 @@ public:
     void setGridColor(const QColor &color);
 
     int count() const;
-
 
     void drawPixmap();
     virtual void paint(QPainter *painter) { Q_UNUSED(painter) };

@@ -45,7 +45,6 @@ void AnimatedLayer::setDirection(const Quasi::LayerDirection &direction)
         else
             m_direction = direction;
 
-
         emit directionChanged();
     }
 }
@@ -53,5 +52,7 @@ void AnimatedLayer::setDirection(const Quasi::LayerDirection &direction)
 void AnimatedLayer::paint(QPainter *painter)
 {
     updateHorizontalStep();
-    painter->drawPixmap(m_currentHorizontalStep * m_direction * m_factor, 0, *m_currentPixmap);
+
+    if (m_currentPixmap)
+        painter->drawPixmap(m_currentHorizontalStep * m_direction * m_factor, 0, *m_currentPixmap);
 }

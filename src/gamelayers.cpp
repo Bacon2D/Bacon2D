@@ -16,9 +16,6 @@ GameLayers::GameLayers(GameScene *parent)
       , m_totalColumns(0)
       , m_drawType(Quasi::TiledDrawType)
 {
-    //connect(this, SIGNAL(widthChanged()), this, SLOT(updateTiles()));
-    //connect(this, SIGNAL(heightChanged()), this, SLOT(updateTiles()));
-
     // control variables
     m_drawGrid = false;
     m_gridColor = Qt::red;
@@ -31,48 +28,31 @@ QDeclarativeListProperty<Layer> GameLayers::layers() const
 
 GameLayers::~GameLayers()
 {
+    m_layers.clear();
 }
 
 void GameLayers::setTileHeight(const int &value)
 {
-    if (value != m_tileHeight){
+    if (value != m_tileHeight)
         m_tileHeight = value;
-
-        // TODO
-        /*if (m_tileWidth != 0 && m_tileHeight != 0) {
-        //if (m_tileWidth != 0 && m_tileHeight != 0 && m_source != QString()){
-            //updateTiles();
-            //emit tilesChanged();
-        }*/
-    }
 }
 
 void GameLayers::setTileWidth(const int &value)
 {
-    if (value != m_tileWidth){
+    if (value != m_tileWidth)
         m_tileWidth = value;
-
-        // TODO
-        /*if (m_tileWidth != 0 && m_tileHeight != 0) {
-        //if (m_tileWidth != 0 && m_tileHeight != 0 && m_source != QString()){
-            //updateTiles();
-            //emit tilesChanged();
-        }*/
-    }
 }
 
 void GameLayers::setDrawGrid(bool draw)
 {
-    if (draw != m_drawGrid){
+    if (draw != m_drawGrid)
         m_drawGrid = draw;
-    }
 }
 
 void GameLayers::setGridColor(const QColor &color)
 {
-    if (color != m_gridColor){
+    if (color != m_gridColor)
         m_gridColor = color;
-    }
 }
 
 //! Stores the layer type
@@ -96,15 +76,14 @@ Quasi::DrawType GameLayers::drawType() const
 
 void GameLayers::update(const long &delta)
 {
-    Layer *layer;
-
-    foreach (layer, m_layers){
-        if (layer->boundingRect() == QRectF()){
+    foreach (Layer *layer, m_layers) {
+        // If the layer isn't initialized, set their properties
+        if (layer->boundingRect() == QRectF()) {
             layer->setDrawType(m_drawType);
             layer->setTileWidth(m_tileWidth);
             layer->setTileHeight(m_tileHeight);
             layer->setWidth(width());
-            layer->setHeight(height());
+            layer->setHeight(height()); // TODO HUGE memory consumption after setting width and height
 
             layer->setDrawGrid(m_drawGrid);
             layer->setGridColor(m_gridColor);

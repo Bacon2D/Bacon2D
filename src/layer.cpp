@@ -1,6 +1,7 @@
 #include <QPainter>
 
 #include "layer.h"
+#include <QDebug>
 
 //! Class constructor
 Layer::Layer(QQuickItem *parent)
@@ -22,6 +23,7 @@ Layer::Layer(QQuickItem *parent)
 Layer::~Layer()
 {
     m_pixmaps.clear();
+    m_mirroredTiles.clear();
 }
 
 //! Stores the source path for the image
@@ -118,7 +120,7 @@ void Layer::setTileHeight(const int &value)
         // TODO
         if (m_tileWidth != 0 && m_tileHeight != 0) {
         //if (m_tileWidth != 0 && m_tileHeight != 0 && m_source != QString()){
-            updateTiles();
+            //updateTiles();
             emit tilesChanged();
         }
     }
@@ -132,7 +134,7 @@ void Layer::setTileWidth(const int &value)
         // TODO
         if (m_tileWidth != 0 && m_tileHeight != 0) {
         //if (m_tileWidth != 0 && m_tileHeight != 0 && m_source != QString()){
-            updateTiles();
+            //updateTiles();
             emit tilesChanged();
         }
     }
@@ -148,6 +150,7 @@ int Layer::addTile(const QPixmap &pix)
 {
     if (m_drawType == Quasi::TiledDrawType){
         m_pixmaps.append(pix);
+
         return m_pixmaps.size();
     }
 
@@ -175,6 +178,7 @@ int Layer::setPixmap(const QPixmap &pix)
 {
     if (m_drawType != Quasi::TiledDrawType){
         m_pixmaps.insert(0, pix);
+
         return 1;
     }
 
@@ -193,16 +197,14 @@ QPixmap Layer::getPixmap() const
 
 void Layer::setDrawGrid(bool draw)
 {
-    if (draw != m_drawGrid){
+    if (draw != m_drawGrid)
         m_drawGrid = draw;
-    }
 }
 
 void Layer::setGridColor(const QColor &color)
 {
-    if (color != m_gridColor){
+    if (color != m_gridColor)
         m_gridColor = color;
-    }
 }
 
 //! Gets the tiles pixmap list size
@@ -223,7 +225,7 @@ void Layer::updateTiles()
     QPixmap pix(source()); // TODO
 
     // XXX not tiled
-    if (m_drawType != Quasi::TiledDrawType){
+    if (m_drawType != Quasi::TiledDrawType) {
         setPixmap(pix);
     } else {
         if (pix.width() < boundingRect().width()){
@@ -281,13 +283,16 @@ void Layer::updateTiles()
 
 void Layer::drawPixmap()
 {
+    if ((boundingRect().width() == 0) || (boundingRect().height() == 0))
+        return;
+
     // TODO caching
     // TODO Forward
     if (m_currentPixmap)
         delete m_currentPixmap;
 
     // XXX not tiled
-    if (m_drawType != Quasi::TiledDrawType){
+    if (m_drawType != Quasi::TiledDrawType) {
         m_currentPixmap = new QPixmap(getPixmap());
 
         return;
@@ -327,7 +332,7 @@ void Layer::drawPixmap()
                 startJ = j = halfDraw ? currentOffset : 0;
             }
 
-            if (counter >= colsToDraw * m_numRows){ // well done
+            if (counter >= colsToDraw * m_numRows) { // well done
                 completed = true;
 
                 m_columnOffset += m_numColumns;
@@ -338,7 +343,7 @@ void Layer::drawPixmap()
 
                 m_shouldMirror = false;
             } else {
-                for (i = 0; i < m_numRows; i++){
+                for (i = 0; i < m_numRows; i++) {
                     for (j = startJ; j < maxJ + startJ; j++) {
                         index = ((i * m_totalColumns) + (j - startJ) + currentOffset) % count();
 
