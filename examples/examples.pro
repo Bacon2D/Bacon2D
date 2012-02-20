@@ -1,6 +1,6 @@
 TEMPLATE = subdirs
 
-SUBDIRS += animated_background \
+SUBDIRS += animated_layer \
            box2dpolygon_circle \
            box2dscene \
            gamescene \
@@ -8,5 +8,5 @@ SUBDIRS += animated_background \
            movement \
            simplecollision \
            sprite \
-           static_background \
+           static_layer \
            updateInterval
