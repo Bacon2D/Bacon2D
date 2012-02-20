@@ -18,17 +18,17 @@ QuasiGame {
         height: parent.height
 
         entities: [
-            GameLayers {
+            QuasiLayers {
                 anchors.fill: parent
                 drawType: Quasi.PlaneDrawType
 
                 layers: [
-                    StaticLayer {
+                    QuasiStaticLayer {
                         source: "not_so_large.png" // image source
                         factor: 1.0
                         order: Quasi.BackgroundLayerOrdering_01
                     },
-                    StaticLayer {
+                    QuasiStaticLayer {
                         source: "not_so_large2.png"
                         factor: 1.0
                         order: Quasi.ForegroundLayerOrdering_01

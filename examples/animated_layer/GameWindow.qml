@@ -18,7 +18,7 @@ QuasiGame {
         height: parent.height
 
         entities: [
-            GameLayers {
+            QuasiLayers {
                 anchors.fill: parent
                 drawType: Quasi.TiledDrawType
                 tileWidth: 32
@@ -27,7 +27,7 @@ QuasiGame {
                 gridColor: "green" // nice for debug; default: red
 
                 layers: [
-                    AnimatedLayer {
+                    QuasiAnimatedLayer {
                         source: "large_enough.png" // image source
                         factor: 1.0
                         order: Quasi.BackgroundLayerOrdering_01
@@ -36,7 +36,7 @@ QuasiGame {
                         direction: Quasi.BackwardDirection // direction of the background animation; Forward or Backward
                         type: Quasi.InfiniteType // type of animation; Infinite or Mirrored
                     },
-                    StaticLayer {
+                    QuasiStaticLayer {
                         source: "not_so_large2.png"
                         factor: 1.0
                         order: Quasi.ForegroundLayerOrdering_01

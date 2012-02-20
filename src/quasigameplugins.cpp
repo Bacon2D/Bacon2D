@@ -27,10 +27,10 @@ void QuasiGamePlugins::registerTypes(const char *uri)
     qmlRegisterType<Box2DItem>("QuasiGame", 1, 0, "QuasiBody");
     qmlRegisterType<Box2DDistanceJointItem>("QuasiGame", 1, 0, "QuasiDistanceJoint");
     qmlRegisterType<Box2DMouseJointItem>("QuasiGame", 1, 0, "QuasiMouseJoint");
-    qmlRegisterType<GameLayers>("QuasiGame", 1, 0, "GameLayers");
-    qmlRegisterType<Layer>("QuasiGame", 1, 0, "Layer");
-    qmlRegisterType<StaticLayer>("QuasiGame", 1, 0, "StaticLayer");
-    qmlRegisterType<AnimatedLayer>("QuasiGame", 1, 0, "AnimatedLayer");
+    qmlRegisterType<GameLayers>("QuasiGame", 1, 0, "QuasiLayers");
+    qmlRegisterType<Layer>("QuasiGame", 1, 0, "Layer"); // this is neede for any sort of Layers
+    qmlRegisterType<StaticLayer>("QuasiGame", 1, 0, "QuasiStaticLayer");
+    qmlRegisterType<AnimatedLayer>("QuasiGame", 1, 0, "QuasiAnimatedLayer");
     qmlRegisterType<Viewport>("QuasiGame", 1, 0, "QuasiViewport");
 }
 
