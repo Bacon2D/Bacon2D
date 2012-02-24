@@ -16,7 +16,7 @@ Layer::Layer(QQuickItem *parent)
       , m_tileWidth(32)
       , m_tileHeight(32)
 {
-    setZ(Quasi::BackgroundLayerOrdering_01);
+    setZ(Quasi::InteractionLayerOrdering_01);
 }
 
 //! Class destructor
