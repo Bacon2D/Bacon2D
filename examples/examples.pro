@@ -6,6 +6,7 @@ SUBDIRS += animated_layer \
            gamescene \
            gamewindow \
            movement \
+           parallax_layers \
            simplecollision \
            sprite \
            static_layer \
