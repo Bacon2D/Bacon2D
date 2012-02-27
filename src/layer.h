@@ -15,7 +15,7 @@ class Layer: public QQuickPaintedItem
     Q_OBJECT
 
     Q_PROPERTY(QString source READ source WRITE setSource)
-    Q_PROPERTY(float factor READ factor WRITE setFactor)
+    Q_PROPERTY(qreal factor READ factor WRITE setFactor)
     Q_PROPERTY(Quasi::Ordering order READ order WRITE setOrder)
     Q_PROPERTY(Quasi::LayerType type READ type WRITE setType NOTIFY typeChanged)
 
@@ -31,8 +31,8 @@ public:
     void setDrawType(Quasi::DrawType drawType);
     Quasi::DrawType drawType() const;
 
-    void setFactor(float factor);
-    float factor() const;
+    void setFactor(qreal factor);
+    qreal factor() const;
 
     void setOrder(Quasi::Ordering order);
     Quasi::Ordering order() const;
@@ -80,7 +80,7 @@ protected:
     int m_totalColumns;
     int m_totalRows;
 
-    float m_factor;
+    qreal m_factor;
 
 private:
     QList<QPixmap> m_pixmaps; // can be a list of tiles or a single image

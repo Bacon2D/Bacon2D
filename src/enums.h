@@ -20,7 +20,7 @@ public:
         MirroredType
     };
 
-    // used on Layer
+    // Used on Layer
     enum LayerDirection {
         BackwardDirection = 0, // -1 returns undefined on QML :(
         ForwardDirection = 1
@@ -42,14 +42,20 @@ public:
         InteractionLayerOrdering_01 = 4,
         InteractionLayerOrdering_02 = 5,
         InteractionLayerOrdering_03 = 6,
-        // These enums defines the z order of the game items
-        ItemOrdering_01 = 4,
-        ItemOrdering_02 = 5,
-        ItemOrdering_03 = 6,
+        // These enums defines the z order of the game entities
+        EntityOrdering_01 = InteractionLayerOrdering_01,
+        EntityOrdering_02 = InteractionLayerOrdering_02,
+        EntityOrdering_03 = InteractionLayerOrdering_03,
         // These enums defines the z order of the foreground layers
         ForegroundLayerOrdering_01 = 7,
         ForegroundLayerOrdering_02 = 8,
         ForegroundLayerOrdering_03 = 9
+    };
+
+    // Internal use onlu, not exported to QML
+    enum Internal {
+        // Box2D debug mode
+        MaxOrdering = 9999
     };
 };
 

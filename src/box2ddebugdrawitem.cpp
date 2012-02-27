@@ -5,6 +5,7 @@
 
 #include <Box2D/Box2D.h>
 
+#include "enums.h"
 #include "box2dscene.h"
 #include "box2dbaseitem.h"
 #include "util.h"
@@ -22,7 +23,7 @@ Box2DDebugDrawItem::Box2DDebugDrawItem(Box2DScene *parent)
              | e_pairBit
              | e_centerOfMassBit);
 
-    setZ(10); // FIXME: find another way to do this
+    setZ(Quasi::MaxOrdering);
 }
 
 void Box2DDebugDrawItem::draw()

@@ -12,7 +12,7 @@ AnimatedLayer::~AnimatedLayer()
 {
 }
 
-void AnimatedLayer::setHorizontalStep(const int &step)
+void AnimatedLayer::setHorizontalStep(const qreal &step)
 {
     int temp = step;
     if (temp < 0)
@@ -29,7 +29,7 @@ void AnimatedLayer::updateHorizontalStep()
 {
     m_currentHorizontalStep += m_horizontalStep;
 
-    if (m_currentHorizontalStep >= boundingRect().width()){
+    if (m_currentHorizontalStep * m_factor >= boundingRect().width()){
         drawPixmap();
         m_currentHorizontalStep = 0;
     }

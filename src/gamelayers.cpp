@@ -83,7 +83,7 @@ void GameLayers::update(const long &delta)
             layer->setTileWidth(m_tileWidth);
             layer->setTileHeight(m_tileHeight);
             layer->setWidth(width());
-            layer->setHeight(height()); // TODO HUGE memory consumption after setting width and height
+            layer->setHeight(height());
 
             layer->setDrawGrid(m_drawGrid);
             layer->setGridColor(m_gridColor);

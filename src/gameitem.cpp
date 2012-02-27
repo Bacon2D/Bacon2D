@@ -2,6 +2,7 @@
 
 #include <QDeclarativeExpression>
 
+#include "enums.h"
 #include "quasigame.h"
 #include "gamescene.h"
 
@@ -12,7 +13,7 @@ GameItem::GameItem(GameScene *parent)
     , m_collided(false)
     , m_scene(0)
 {
-    setZ(1);
+    setZ(Quasi::EntityOrdering_01);
 }
 
 void GameItem::update(const long &delta)

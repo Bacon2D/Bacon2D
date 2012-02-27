@@ -2,7 +2,9 @@
 
 #include "layer.h"
 #include <QDebug>
+#include <QDeclarativeProperty>
 
+class QQuickItemLayer;
 //! Class constructor
 Layer::Layer(QQuickItem *parent)
     : QQuickPaintedItem(parent)
@@ -17,6 +19,9 @@ Layer::Layer(QQuickItem *parent)
       , m_tileHeight(32)
 {
     setZ(Quasi::InteractionLayerOrdering_01);
+
+    // this activates the item layered mode
+    QDeclarativeProperty(this, "layer.enabled").write(true);
 }
 
 //! Class destructor
@@ -68,7 +73,7 @@ Quasi::DrawType Layer::drawType() const
 /*!
  * \param factor the factor value
  */
-void Layer::setFactor(float factor)
+void Layer::setFactor(qreal factor)
 {
     if (m_factor != factor)
         m_factor = factor;
@@ -78,7 +83,7 @@ void Layer::setFactor(float factor)
 /*!
  * \return layer update factor
  */
-float Layer::factor() const
+qreal Layer::factor() const
 {
     return m_factor;
 }
@@ -278,7 +283,7 @@ void Layer::updateTiles()
     }
 
     drawPixmap();
-    update();
+    //update();
 }
 
 void Layer::drawPixmap()
