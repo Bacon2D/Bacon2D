@@ -78,6 +78,17 @@ void GameItem::setCollided(const bool &collided)
     }
 }
 
+Quasi::Ordering GameItem::order() const
+{
+    return (Quasi::Ordering)z();
+}
+
+void GameItem::setOrder(Quasi::Ordering order)
+{
+    if (z() != order)
+        setZ(order);
+}
+
 QList<QObject *> GameItem::collidedItems() const
 {
     GameScene *scene = qobject_cast<GameScene *>(parent());

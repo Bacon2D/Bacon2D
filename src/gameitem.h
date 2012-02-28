@@ -5,6 +5,8 @@
 #include <QtQuick/QQuickItem>
 #include <QDeclarativeScriptString>
 
+#include "enums.h"
+
 class QDeclarativeExpression;
 class QuasiGame;
 class GameScene;
@@ -16,6 +18,7 @@ class GameItem : public QQuickItem
     Q_PROPERTY(QDeclarativeScriptString updateScript READ updateScript WRITE setUpdateScript NOTIFY updateScriptChanged)
     Q_PROPERTY(int updateInterval READ updateInterval WRITE setUpdateInterval NOTIFY updateIntervalChanged)
     Q_PROPERTY(bool collided READ collided WRITE setCollided NOTIFY collidedChanged)
+    Q_PROPERTY(Quasi::Ordering order READ order WRITE setOrder)
     Q_PROPERTY(QuasiGame *game READ game)
 
 public:
@@ -29,6 +32,9 @@ public:
 
     bool collided() const;
     void setCollided(const bool &collided);
+
+    Quasi::Ordering order() const;
+    void setOrder(Quasi::Ordering order);
 
     Q_INVOKABLE QList<QObject *> collidedItems() const;
 
