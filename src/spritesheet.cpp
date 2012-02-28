@@ -2,6 +2,7 @@
 
 #include <QtGui/QPixmap>
 #include <QtGui/QPainter>
+#include <QDeclarativeProperty>
 
 SpriteSheet::SpriteSheet(QQuickItem *parent)
     : QQuickPaintedItem(parent)
@@ -12,6 +13,8 @@ SpriteSheet::SpriteSheet(QQuickItem *parent)
     , m_frameWidth(0)
 {
     setVisible(false);
+
+    QDeclarativeProperty(this, "layer.enabled").write(true);
 }
 
 QString SpriteSheet::source() const
