@@ -10,4 +10,5 @@ SUBDIRS += animated_layer \
            simplecollision \
            sprite \
            static_layer \
-           updateInterval
+           updateInterval \
+           manysprites
