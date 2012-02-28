@@ -45,7 +45,7 @@ QuasiGame {
                 restitution: 0.6
                 sleepingAllowed: false
 
-                shape: QuasiBody.Polygon // It can be Rectangle, Polygon or Circle; Default: Rectangle
+                shape: Quasi.PolygonBodyShape // It can be RectangleBodyShape (default), PolygonBodyShape or CircleBodyShape
                 // define vertices in the following format (in counter clockwise, only needed if shape == Rectangle):
                 // [[x0, y0], [x1, y1], [x2, y2], ..]
                 vertices: [[0, 0], [width, 0], [width / 2, height]]
@@ -73,7 +73,7 @@ QuasiGame {
                 restitution: 0.6
                 sleepingAllowed: false
 
-                shape: QuasiBody.Circle // It can be Rectangle, Polygon or Circle; Default: Rectangle
+                shape: Quasi.CircleBodyShape // It can be RectangleBodyShape (default), PolygonBodyShape or CircleBodyShape
 
                 Image {
                     source: "ball.png"
@@ -89,7 +89,7 @@ QuasiGame {
             QuasiBody {
                 id: ground
 
-                bodyType: QuasiBody.Static
+                bodyType: Quasi.StaticBodyType
 
                 width: 790
                 height: 1
@@ -107,7 +107,7 @@ QuasiGame {
                 y: 500
             },
             QuasiBody {
-                bodyType: QuasiBody.Static
+                bodyType: Quasi.StaticBodyType
 
                 width: 10
                 height: 10
@@ -121,7 +121,7 @@ QuasiGame {
                 y: 0
             },
             QuasiBody {
-                bodyType: QuasiBody.Static
+                bodyType: Quasi.StaticBodyType
 
                 width: 10
                 height: 10
@@ -135,7 +135,7 @@ QuasiGame {
                 y: 0
             },
             QuasiBody {
-                bodyType: QuasiBody.Static
+                bodyType: Quasi.StaticBodyType
 
                 width: 10
                 height: 10
@@ -149,7 +149,7 @@ QuasiGame {
                 y: 590
             },
             QuasiBody {
-                bodyType: QuasiBody.Static
+                bodyType: Quasi.StaticBodyType
 
                 width: 10
                 height: 10

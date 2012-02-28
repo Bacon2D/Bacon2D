@@ -91,7 +91,7 @@ QuasiGame {
             QuasiBody {
                 id: ground
 
-                bodyType: QuasiBody.Static
+                bodyType: Quasi.StaticBodyType
 
                 width: 790
                 height: 1
@@ -109,7 +109,7 @@ QuasiGame {
                 y: 500
             },
             QuasiBody {
-                bodyType: QuasiBody.Static
+                bodyType: Quasi.StaticBodyType
 
                 width: 10
                 height: 10
@@ -123,7 +123,7 @@ QuasiGame {
                 y: 0
             },
             QuasiBody {
-                bodyType: QuasiBody.Static
+                bodyType: Quasi.StaticBodyType
 
                 width: 10
                 height: 10
@@ -137,7 +137,7 @@ QuasiGame {
                 y: 0
             },
             QuasiBody {
-                bodyType: QuasiBody.Static
+                bodyType: Quasi.StaticBodyType
 
                 width: 10
                 height: 10
@@ -151,7 +151,7 @@ QuasiGame {
                 y: 590
             },
             QuasiBody {
-                bodyType: QuasiBody.Static
+                bodyType: Quasi.StaticBodyType
 
                 width: 10
                 height: 10

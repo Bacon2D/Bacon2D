@@ -9,8 +9,8 @@ Box2DItem::Box2DItem(GameScene *parent)
     , m_body(0)
     , m_linearDamping(0.0f)
     , m_angularDamping(0.0f)
-    , m_bodyType(Dynamic)
-    , m_shape(Rectangle)
+    , m_bodyType(Quasi::DynamicBodyType)
+    , m_shape(Quasi::RectangleBodyShape)
     , m_bullet(false)
     , m_sleepingAllowed(true)
     , m_fixedRotation(false)
@@ -64,11 +64,11 @@ void Box2DItem::initialize(b2World *world)
     b2Shape *shape;
 
     switch (m_shape){
-        case Rectangle:
+        case Quasi::RectangleBodyShape:
             shape = new b2PolygonShape;
             ((b2PolygonShape*)shape)->SetAsBox(width() / m_scaleRatio / 2.0, height() / m_scaleRatio / 2.0);
             break;
-        case Polygon:
+        case Quasi::PolygonBodyShape:
             {
                 // TODO: check for b2_maxPolygonVertices
                 int i;
@@ -87,7 +87,7 @@ void Box2DItem::initialize(b2World *world)
                 ((b2PolygonShape*)shape)->Set(vertices, m_vertices.length());
             }
             break;
-        case Circle:
+        case Quasi::CircleBodyShape:
             shape = new b2CircleShape;
             ((b2CircleShape*)shape)->m_radius = width() / m_scaleRatio / 2.0f;
             break;
@@ -146,12 +146,12 @@ void Box2DItem::setAngularDamping(const qreal &angularDamping)
     }
 }
 
-Box2DItem::Shape Box2DItem::shape() const
+Quasi::BodyShape Box2DItem::shape() const
 {
     return m_shape;
 }
 
-void Box2DItem::setShape(const Shape &shape)
+void Box2DItem::setShape(const Quasi::BodyShape &shape)
 {
     if (m_shape != shape) {
         m_shape = shape;
@@ -161,12 +161,12 @@ void Box2DItem::setShape(const Shape &shape)
     }
 }
 
-Box2DItem::BodyType Box2DItem::bodyType() const
+Quasi::BodyType Box2DItem::bodyType() const
 {
     return m_bodyType;
 }
 
-void Box2DItem::setBodyType(const BodyType &bodyType)
+void Box2DItem::setBodyType(const Quasi::BodyType &bodyType)
 {
     if (m_bodyType != bodyType) {
         m_bodyType = bodyType;

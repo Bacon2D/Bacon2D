@@ -11,6 +11,8 @@ class Quasi : public QObject {
         LayerDirection
         DrawType
         Ordering
+        BodyShape
+        BodyType
     )
 
 public:
@@ -50,6 +52,21 @@ public:
         ForegroundLayerOrdering_01 = 7,
         ForegroundLayerOrdering_02 = 8,
         ForegroundLayerOrdering_03 = 9
+    };
+
+    // Enums for the Box2D body shapes
+    enum BodyShape {
+        RectangleBodyShape,
+        PolygonBodyShape,
+        CircleBodyShape
+    };
+
+
+    // Enums for the Box2D body types
+    enum BodyType {
+        StaticBodyType,
+        KinematicBodyType,
+        DynamicBodyType
     };
 
     // Internal use onlu, not exported to QML

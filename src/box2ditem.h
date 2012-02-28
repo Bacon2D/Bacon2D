@@ -3,6 +3,7 @@
 
 #include "box2dbaseitem.h"
 #include "gameitem.h"
+#include "enums.h"
 
 class GameScene;
 class b2World;
@@ -13,11 +14,10 @@ class Box2DItem : public Box2DBaseItem
 {
     Q_OBJECT
 
-    Q_ENUMS(BodyType Shape)
     Q_PROPERTY(qreal linearDamping READ linearDamping WRITE setLinearDamping NOTIFY linearDampingChanged)
     Q_PROPERTY(qreal angularDamping READ angularDamping WRITE setAngularDamping NOTIFY angularDampingChanged)
-    Q_PROPERTY(BodyType bodyType READ bodyType WRITE setBodyType NOTIFY bodyTypeChanged)
-    Q_PROPERTY(Shape shape READ shape WRITE setShape NOTIFY shapeChanged)
+    Q_PROPERTY(Quasi::BodyType bodyType READ bodyType WRITE setBodyType NOTIFY bodyTypeChanged)
+    Q_PROPERTY(Quasi::BodyShape shape READ shape WRITE setShape NOTIFY shapeChanged)
     Q_PROPERTY(bool bullet READ bullet WRITE setBullet NOTIFY bulletChanged)
     Q_PROPERTY(bool sleepingAllowed READ sleepingAllowed WRITE setSleepingAllowed NOTIFY sleepingAllowedChanged)
     Q_PROPERTY(bool fixedRotation READ fixedRotation WRITE setFixedRotation NOTIFY fixedRotationChanged)
@@ -28,17 +28,6 @@ class Box2DItem : public Box2DBaseItem
     Q_PROPERTY(QVariantList vertices READ vertices WRITE setVertices NOTIFY verticesChanged)
 
 public:
-    enum BodyType {
-        Static,
-        Kinematic,
-        Dynamic
-    };
-    enum Shape {
-        Rectangle,
-        Polygon,
-        Circle
-    };
-
     Box2DItem(GameScene *parent = 0);
 
     b2Body *body() const;
@@ -49,11 +38,11 @@ public:
     qreal angularDamping() const;
     void setAngularDamping(const qreal &angularDamping);
 
-    BodyType bodyType() const;
-    void setBodyType(const BodyType &bodyType);
+    Quasi::BodyType bodyType() const;
+    void setBodyType(const Quasi::BodyType &bodyType);
 
-    Shape shape() const;
-    void setShape(const Shape &shape);
+    Quasi::BodyShape shape() const;
+    void setShape(const Quasi::BodyShape &shape);
 
     bool bullet() const;
     void setBullet(const bool &bullet);
@@ -113,8 +102,8 @@ private:
     b2Body *m_body;
     qreal m_linearDamping;
     qreal m_angularDamping;
-    BodyType m_bodyType;
-    Shape m_shape;
+    Quasi::BodyType m_bodyType;
+    Quasi::BodyShape m_shape;
     bool m_bullet;
     bool m_sleepingAllowed;
     bool m_fixedRotation;
