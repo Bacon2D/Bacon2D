@@ -24,6 +24,7 @@ QuasiGame {
                 drawType: Quasi.TiledDrawType // XXX: There are some problems with Quasi.PLaneDrawType
                 tileWidth: 40
                 tileHeight: 40
+                //drawGrid: true // nice for debug; default: false
 
                 layers: [
                     QuasiAnimatedLayer {

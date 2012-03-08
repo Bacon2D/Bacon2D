@@ -5,7 +5,7 @@ QuasiGame {
     id: game
 
     width: 800
-    height: 400
+    height: 385
 
     currentScene: scene
 
@@ -24,7 +24,7 @@ QuasiGame {
                 tileWidth: 32 // width of each tile when using 'TiledDrawType' as drawing type; default: 32
                 tileHeight: 32 // height of each tile when using 'TiledDrawType' as drawing type; default: 32
                 //drawGrid: true // nice for debug; default: false
-                gridColor: "green" // nice for debug; default: red
+                //gridColor: "green" // nice for debug; default: red
 
                 layers: [
                     QuasiAnimatedLayer {
