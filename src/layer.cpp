@@ -11,12 +11,14 @@ Layer::Layer(QQuickItem *parent)
       , m_drawType(Quasi::TiledDrawType)
       , m_factor(1.0)
       , m_type(Quasi::InfiniteType)
+      , m_direction((Quasi::LayerDirection)-1) // Backward
       , m_areaToDraw(2.0)
       , m_columnOffset(0)
       , m_drawingMirrored(false)
       , m_shouldMirror(false)
       , m_tileWidth(32)
       , m_tileHeight(32)
+      , m_latestPoint(0)///
 {
     setZ(Quasi::InteractionLayerOrdering_01);
 
@@ -67,6 +69,18 @@ void Layer::setDrawType(Quasi::DrawType drawType)
 Quasi::DrawType Layer::drawType() const
 {
     return m_drawType;
+}
+
+void Layer::setDirection(const Quasi::LayerDirection &direction)
+{
+    if (direction != m_direction){
+        if (direction == Quasi::BackwardDirection)
+            m_direction = (Quasi::LayerDirection)-1; // insane black magic
+        else
+            m_direction = direction;
+
+        emit directionChanged();
+    }
 }
 
 //! Stores the layer update factor
@@ -221,6 +235,78 @@ int Layer::count() const
     return m_pixmaps.size();
 }
 
+void Layer::generateOffsets()
+{
+    bool completed = false;
+    int start = 0;
+    int step = m_numColumns;
+    int max = m_totalColumns;
+    int count = 0;
+    int maxCount = step * (int)m_areaToDraw;
+    bool first = true;
+    Offsets::OffsetsList firstPoint;
+
+    while (!completed) {
+        Offsets::OffsetsList offsetsList;
+
+        int tamanho;
+        int fim = 0;
+        bool finish = false;
+
+        while (count < maxCount) {
+            fim = (start + step) % max;
+
+            if (fim - start > 0) {
+                tamanho = step;
+                count += tamanho;
+
+                // TODO check this comparison. Is it really needed?
+                if (finish || count != maxCount) {
+                    offsetsList.append(Offsets(start, tamanho));
+
+                    if (!finish)
+                        start = fim;
+                    finish = false;
+                } else {
+                    offsetsList.append(Offsets(start, tamanho));
+                }
+            } else {
+                int oldStart = start;
+                tamanho = max - start;
+                count += tamanho;
+
+                offsetsList.append(Offsets(start, tamanho));
+
+                tamanho = step - tamanho;
+                start = 0;
+                count += tamanho;
+
+                if (tamanho != 0) {
+                    offsetsList.append(Offsets(0, tamanho));
+                }
+
+                if (count <= maxCount / 2) {
+                    start = tamanho;
+                    finish = true;
+                } else
+                    start = oldStart;
+            }
+        }
+
+        count = 0;
+
+        if (offsetsList == firstPoint)
+            completed = true;
+        else
+            m_offsets.append(offsetsList);
+
+        if (first) {
+            firstPoint = offsetsList;
+            first = false;
+        }
+    }
+}
+
 void Layer::updateTiles()
 {
     if ((boundingRect().width() == 0) || (boundingRect().height() == 0))
@@ -233,7 +319,7 @@ void Layer::updateTiles()
     if (m_drawType != Quasi::TiledDrawType) {
         setPixmap(pix);
     } else {
-        if (pix.width() < boundingRect().width()){
+        if (pix.width() < boundingRect().width()) {
             QPixmap temp(boundingRect().width(), boundingRect().height());
             QPainter p(&temp);
                 p.drawTiledPixmap(boundingRect(), pix, QPoint(0,0));
@@ -282,8 +368,36 @@ void Layer::updateTiles()
         }
     }
 
+    generateOffsets();
     drawPixmap();
-    //update();
+}
+
+QPixmap Layer::generatePartialPixmap(int startPoint, int size)
+{
+    QPixmap temp(m_tileWidth * size, boundingRect().height());
+
+    QPainter p(&temp);
+        int i, j;
+        int index = 0;
+        for (i = 0; i < m_numRows; i++) {
+            for (j = 0; j < size; j++) {
+                index = ((i * m_totalColumns) + (j + startPoint));
+
+                if (m_drawingMirrored)
+                    p.drawPixmap(j * m_tileWidth, i * m_tileHeight, m_mirroredTiles.at(index));
+                else
+                    p.drawPixmap(j * m_tileWidth, i * m_tileHeight, getTile(index));
+
+                // just draw a grid
+                if (m_drawGrid) {
+                    p.setPen(m_gridColor);
+                    p.drawRect(j * m_tileWidth, i * m_tileHeight, m_tileWidth, m_tileHeight);
+                }
+            }
+        }
+    p.end();
+
+    return temp;
 }
 
 void Layer::drawPixmap()
@@ -291,7 +405,6 @@ void Layer::drawPixmap()
     if ((boundingRect().width() == 0) || (boundingRect().height() == 0))
         return;
 
-    // TODO caching
     // TODO Forward
     if (m_currentPixmap)
         delete m_currentPixmap;
@@ -306,68 +419,26 @@ void Layer::drawPixmap()
     m_currentPixmap = new QPixmap(boundingRect().width() * m_areaToDraw, boundingRect().height());
 
     QPainter p(m_currentPixmap);
-        bool completed = false;
-        int i = 0, j = 0, index = 0;
-        int startJ = 0;
-        int maxJ = (m_numColumns * m_areaToDraw) - m_columnOffset;
-        int counter = 0;
-        int adder = 0;
-        int currentOffset = m_columnOffset;
+        int xPoint = 0;
+        for (int i = 0; i < m_offsets[m_columnOffset].size(); i++) {
+            Offsets offset = m_offsets[m_columnOffset].at(i);
 
-        bool halfDraw = false;
-        int colsToDraw = m_numColumns * m_areaToDraw;
-
-        do {
-            if (adder > 0) {
-                maxJ = adder;
-                adder = 0;
-                currentOffset = 0;
-                startJ = j;
-
-                if (m_type == Quasi::MirroredType)
-                    m_drawingMirrored = !m_drawingMirrored;
-
-                m_shouldMirror = true;
-            } else if (currentOffset + colsToDraw >= m_totalColumns) {
-                maxJ = m_totalColumns - currentOffset;
-                adder = colsToDraw - maxJ;
-                startJ = j = halfDraw ? currentOffset : 0;
-            } else {
-                maxJ = m_totalColumns - currentOffset;
-                startJ = j = halfDraw ? currentOffset : 0;
-            }
-
-            if (counter >= colsToDraw * m_numRows) { // well done
-                completed = true;
-
-                m_columnOffset += m_numColumns;
-                if (m_columnOffset >= m_totalColumns)
-                    m_columnOffset = m_columnOffset - m_totalColumns;
-                else if (m_type == Quasi::MirroredType && m_shouldMirror)
-                    m_drawingMirrored = !m_drawingMirrored;
-
+            if (((m_type == Quasi::MirroredType) && (i != 0) && (offset.point() - m_latestPoint < 0)) ||
+                m_shouldMirror) {
+                m_drawingMirrored = !m_drawingMirrored;
                 m_shouldMirror = false;
-            } else {
-                for (i = 0; i < m_numRows; i++) {
-                    for (j = startJ; j < maxJ + startJ; j++) {
-                        index = ((i * m_totalColumns) + (j - startJ) + currentOffset) % count();
-
-                        if (m_drawingMirrored) {
-                            p.drawPixmap(j * m_tileWidth, i * m_tileHeight, m_mirroredTiles.at(index));
-                        } else {
-                            p.drawPixmap(j * m_tileWidth, i * m_tileHeight, getTile(index));
-                        }
-
-                        // just draw a grid
-                        if (m_drawGrid) {
-                            p.setPen(m_gridColor);
-                            p.drawRect(j * m_tileWidth, i * m_tileHeight, m_tileWidth, m_tileHeight);
-                        }
-
-                        counter++;
-                    }
-                }
             }
-        } while (!completed);
+
+            QPixmap pix = generatePartialPixmap(offset.point(), offset.size());
+            p.drawPixmap(xPoint, 0, pix);
+
+            xPoint += pix.width();
+            m_latestPoint = offset.point();
+
+            if ((m_type == Quasi::MirroredType) && (i == m_offsets[m_columnOffset].size() - 1) && (offset.size() < m_numColumns))
+                m_shouldMirror = true;
+        }
+
+        m_columnOffset = (m_columnOffset + 1) % m_offsets.size();
     p.end();
 }

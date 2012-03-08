@@ -9,6 +9,41 @@
 #include "gameitem.h"
 #include "enums.h"
 
+class Offsets {
+public:
+    typedef QList<Offsets> OffsetsList;
+
+    Offsets() { m_point = m_size = 0; }
+    Offsets(int point, int size)
+    {
+        m_point = point;
+        m_size = size;
+    }
+    ~Offsets() {}
+
+    int point() const { return m_point; }
+    void setPoint(int point)
+    {
+        if (point != m_point)
+            m_point = point;
+    }
+
+    int size() const { return m_size; }
+    void setSize(int size)
+    {
+        if (size != m_size)
+            m_size = size;
+    }
+    bool operator==(const Offsets &other) const {
+        return ((this->point() == other.point())
+                && (this->size() == other.size()));
+    }
+
+private:
+    int m_point;
+    int m_size;
+};
+
 //! A layer class
 class Layer: public QQuickPaintedItem
 {
@@ -18,6 +53,7 @@ class Layer: public QQuickPaintedItem
     Q_PROPERTY(qreal factor READ factor WRITE setFactor)
     Q_PROPERTY(Quasi::Ordering order READ order WRITE setOrder)
     Q_PROPERTY(Quasi::LayerType type READ type WRITE setType NOTIFY typeChanged)
+    Q_PROPERTY(Quasi::LayerDirection direction READ direction WRITE setDirection NOTIFY directionChanged)
 
 public:
     typedef QList<Layer *> LayerList; //! A layer list based on QList
@@ -39,6 +75,9 @@ public:
 
     Quasi::LayerType type() const { return m_type; };
     void setType(const Quasi::LayerType &type);
+
+    Quasi::LayerDirection direction() const { return m_direction; };
+    void setDirection(const Quasi::LayerDirection &direction);
 
     int tileHeight() const { return m_tileHeight; }
     void setTileHeight(const int &value);
@@ -69,9 +108,11 @@ public slots:
 signals:
     void tilesChanged();
     void typeChanged();
+    void directionChanged();
 
 protected:
     QPixmap *m_currentPixmap;
+    Quasi::LayerDirection m_direction;
 
     int m_tileWidth;
     int m_tileHeight;
@@ -83,6 +124,10 @@ protected:
     qreal m_factor;
 
 private:
+    QPixmap generatePartialPixmap(int startPoint, int size);
+    void generateOffsets();
+
+    QList<Offsets::OffsetsList> m_offsets;
     QList<QPixmap> m_pixmaps; // can be a list of tiles or a single image
     QList<QPixmap> m_mirroredTiles;
 
@@ -94,6 +139,7 @@ private:
     int m_columnOffset;
     bool m_drawingMirrored;
     bool m_shouldMirror;
+    int m_latestPoint;///
 
     bool m_drawGrid;
     QColor m_gridColor;

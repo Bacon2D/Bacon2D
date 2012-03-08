@@ -4,7 +4,6 @@ AnimatedLayer::AnimatedLayer(Layer *parent)
     : Layer(parent)
       , m_horizontalStep(0)
       , m_currentHorizontalStep(0)
-      , m_direction((Quasi::LayerDirection)-1) // Backward
 {
 }
 
@@ -25,6 +24,7 @@ void AnimatedLayer::setHorizontalStep(const qreal &step)
     }
 }
 
+#include <QDebug>
 void AnimatedLayer::updateHorizontalStep()
 {
     m_currentHorizontalStep += m_horizontalStep;
@@ -35,18 +35,6 @@ void AnimatedLayer::updateHorizontalStep()
     }
 
     //update(); // XXX with this we get super velocity plus no flick, but more CPU consumption too =/
-}
-
-void AnimatedLayer::setDirection(const Quasi::LayerDirection &direction)
-{
-    if (direction != m_direction){
-        if (direction == Quasi::BackwardDirection)
-            m_direction = (Quasi::LayerDirection)-1; // insane black magic
-        else
-            m_direction = direction;
-
-        emit directionChanged();
-    }
 }
 
 void AnimatedLayer::paint(QPainter *painter)
