@@ -25,7 +25,7 @@ void GameLayers::append_layer(QDeclarativeListProperty<Layer> *list, Layer *laye
 {
     GameLayers *layers = qobject_cast<GameLayers *>(list->object);
     if (layers) {
-        layer->setParentItem((QQuickItem*)layers->parent());
+        layer->setParentItem((QuasiDeclarativeItem *)layers->parent());
         layers->m_layers.append(layer);
     }
 }

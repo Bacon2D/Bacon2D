@@ -25,8 +25,6 @@
 #include "box2dscene.h"
 #include "box2ditem.h"
 
-#include <QCursor>
-#include <QQuickCanvas>
 #include <Box2D/Box2D.h>
 
 Box2DMouseJointItem::Box2DMouseJointItem(GameScene *parent)

@@ -22,11 +22,13 @@
 #ifndef _LAYER_H_
 #define _LAYER_H_
 
+#include <QtCore/qglobal.h>
+
 #include <QList>
 #include <QPixmap>
 #include <QString>
-#include <QtQuick/QQuickPaintedItem>
 
+#include "quasipainteditem.h"
 #include "gameitem.h"
 #include "enums.h"
 
@@ -66,20 +68,20 @@ private:
 };
 
 //! A layer class
-class Layer: public QQuickPaintedItem
+class Layer: public QuasiPaintedItem
 {
     Q_OBJECT
 
     Q_PROPERTY(QString source READ source WRITE setSource)
     Q_PROPERTY(qreal factor READ factor WRITE setFactor)
     Q_PROPERTY(Quasi::Ordering order READ order WRITE setOrder)
-    Q_PROPERTY(Quasi::LayerType type READ type WRITE setType NOTIFY typeChanged)
+    Q_PROPERTY(Quasi::LayerType layerType READ layerType WRITE setLayerType NOTIFY layerTypeChanged)
     Q_PROPERTY(Quasi::LayerDirection direction READ direction WRITE setDirection NOTIFY directionChanged)
 
 public:
     typedef QList<Layer *> LayerList; //! A layer list based on QList
 
-    Layer(QQuickItem *parent = 0);
+    Layer(QuasiDeclarativeItem *parent = 0);
     ~Layer();
 
     void setSource(const QString &source);
@@ -94,8 +96,8 @@ public:
     void setOrder(Quasi::Ordering order);
     Quasi::Ordering order() const;
 
-    Quasi::LayerType type() const { return m_type; };
-    void setType(const Quasi::LayerType &type);
+    Quasi::LayerType layerType() const { return m_type; };
+    void setLayerType(const Quasi::LayerType &type);
 
     Quasi::LayerDirection direction() const { return m_direction; };
     void setDirection(const Quasi::LayerDirection &direction);
@@ -118,18 +120,17 @@ public:
     int count() const;
 
     void drawPixmap();
-    virtual void paint(QPainter *painter) { Q_UNUSED(painter) };
 
 public slots:
     virtual void updateTiles();
 
 signals:
     void tilesChanged();
-    void typeChanged();
     void directionChanged();
+    void layerTypeChanged();
 
 protected:
-    QPixmap *m_currentPixmap;
+    QImage *m_currentImage;
     Quasi::LayerDirection m_direction;
 
     int m_tileWidth;

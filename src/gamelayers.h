@@ -24,7 +24,6 @@
 
 #include <QList>
 #include <QString>
-#include <QtQuick/QQuickPaintedItem>
 
 #include "layer.h"
 #include "enums.h"

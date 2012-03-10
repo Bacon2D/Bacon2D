@@ -28,13 +28,17 @@
 #include "gamescene.h"
 
 GameItem::GameItem(GameScene *parent)
-    : QQuickItem((QQuickItem *)parent)
+    : QuasiDeclarativeItem(parent)
     , m_expression(0)
     , m_updateInterval(0)
     , m_collided(false)
     , m_scene(0)
 {
+#if QT_VERSION >= 0x050000
     setZ(Quasi::EntityOrdering_01);
+#else
+    setZValue(Quasi::EntityOrdering_01);
+#endif
 }
 
 void GameItem::update(const long &delta)
@@ -46,7 +50,12 @@ void GameItem::update(const long &delta)
             m_expression->evaluate();
     }
 
-    foreach (QQuickItem *child, childItems())
+#if QT_VERSION >= 0x050000
+    QQuickItem *child;
+#else
+    QGraphicsItem *child;
+#endif
+    foreach (child, childItems())
         if (GameItem *item = dynamic_cast<GameItem *>(child)) {
             item->update(delta);
         }
@@ -101,13 +110,22 @@ void GameItem::setCollided(const bool &collided)
 
 Quasi::Ordering GameItem::order() const
 {
+#if QT_VERSION >= 0x050000
     return (Quasi::Ordering)z();
+#else
+    return (Quasi::Ordering)zValue();
+#endif
 }
 
 void GameItem::setOrder(Quasi::Ordering order)
 {
+#if QT_VERSION >= 0x050000
     if (z() != order)
         setZ(order);
+#else
+    if (zValue() != order)
+        setZValue(order);
+#endif
 }
 
 QList<QObject *> GameItem::collidedItems() const

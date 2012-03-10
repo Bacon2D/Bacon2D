@@ -83,7 +83,7 @@ void Box2DScene::update(const long &delta)
 
 void Box2DScene::componentComplete()
 {
-    QQuickItem::componentComplete();
+    QuasiDeclarativeItem::componentComplete();
 
     foreach (GameItem *item, m_entities) {
         if (Box2DBaseItem *box2DItem = dynamic_cast<Box2DBaseItem *>(item))

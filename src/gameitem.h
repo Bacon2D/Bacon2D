@@ -22,17 +22,19 @@
 #ifndef _GAMEITEM_H_
 #define _GAMEITEM_H_
 
+#include <QtCore/qglobal.h>
+
 #include <QTime>
-#include <QtQuick/QQuickItem>
 #include <QDeclarativeScriptString>
 
+#include "quasideclarativeitem.h"
 #include "enums.h"
 
 class QDeclarativeExpression;
 class QuasiGame;
 class GameScene;
 
-class GameItem : public QQuickItem
+class GameItem : public QuasiDeclarativeItem
 {
     Q_OBJECT
 

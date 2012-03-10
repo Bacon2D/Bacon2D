@@ -24,14 +24,14 @@
 
 #include <QtCore/QList>
 #include <QtCore/QVector>
-#include <QtQuick/QQuickItem>
 
+#include "quasideclarativeitem.h"
 #include "gameitem.h"
 
 class QuasiGame;
 class Viewport;
 
-class GameScene : public QQuickItem
+class GameScene : public QuasiDeclarativeItem
 {
     Q_OBJECT
 

@@ -19,42 +19,49 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _ANIMATEDLAYER_H_
-#define _ANIMATEDLAYER_H_
+#ifndef _QUASIPAINTEDITEM_H_
+#define _QUASIPAINTEDITEM_H_
 
 #include <QtCore/qglobal.h>
-#include <QtGui/QPixmap>
-#include <QtGui/QPainter>
-
-#include "layer.h"
-
-class AnimatedLayer : public Layer
-{
-    Q_OBJECT
-
-    Q_PROPERTY(qreal horizontalStep READ horizontalStep WRITE setHorizontalStep NOTIFY horizontalStepChanged)
-
-public:
-    AnimatedLayer(Layer *parent = 0);
-    ~AnimatedLayer();
-
-    qreal horizontalStep() const { return m_horizontalStep; };
-    void setHorizontalStep(const qreal &step);
 
 #if QT_VERSION >= 0x050000
-    void paint(QPainter *painter);
+#include <QtQuick/QQuickPaintedItem>
 #else
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+#include <QtDeclarative/QDeclarativeItem>
 #endif
 
-signals:
-    void horizontalStepChanged();
+#include "quasideclarativeitem.h"
 
-private:
-    void updateHorizontalStep();
+class QuasiPaintedItem
+#if QT_VERSION >= 0x050000
+    : public QQuickPaintedItem
+#else
+    : public QDeclarativeItem
+#endif
+{
+public:
+    QuasiPaintedItem(QuasiDeclarativeItem *parent = 0)
+#if QT_VERSION >= 0x050000
+        : QQuickPaintedItem(parent) {}
+#else
+        : QDeclarativeItem(parent)
+    {
+        setFlag(ItemHasNoContents, false);
+    }
+#endif
 
-    qreal m_horizontalStep;
-    qreal m_currentHorizontalStep;
+#if QT_VERSION >= 0x050000
+    virtual void paint(QPainter *painter) { Q_UNUSED(painter); };
+#else
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0)
+    {
+        Q_UNUSED(painter);
+        Q_UNUSED(option);
+        Q_UNUSED(widget);
+    };
+#endif
+
+    virtual ~QuasiPaintedItem() {}
 };
 
-#endif /* _ANIMATEDLAYER_H_ */
+#endif /* _QUASIPAINTEDITEM_H_ */

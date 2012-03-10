@@ -19,42 +19,32 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _ANIMATEDLAYER_H_
-#define _ANIMATEDLAYER_H_
+#ifndef _QUASIDECLARATIVEITEM_H_
+#define _QUASIDECLARATIVEITEM_H_
 
 #include <QtCore/qglobal.h>
-#include <QtGui/QPixmap>
-#include <QtGui/QPainter>
-
-#include "layer.h"
-
-class AnimatedLayer : public Layer
-{
-    Q_OBJECT
-
-    Q_PROPERTY(qreal horizontalStep READ horizontalStep WRITE setHorizontalStep NOTIFY horizontalStepChanged)
-
-public:
-    AnimatedLayer(Layer *parent = 0);
-    ~AnimatedLayer();
-
-    qreal horizontalStep() const { return m_horizontalStep; };
-    void setHorizontalStep(const qreal &step);
 
 #if QT_VERSION >= 0x050000
-    void paint(QPainter *painter);
+#include <QtQuick/QQuickItem>
 #else
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+#include <QtDeclarative/QDeclarativeItem>
 #endif
 
-signals:
-    void horizontalStepChanged();
-
-private:
-    void updateHorizontalStep();
-
-    qreal m_horizontalStep;
-    qreal m_currentHorizontalStep;
+class QuasiDeclarativeItem
+#if QT_VERSION >= 0x050000
+    : public QQuickItem
+#else
+    : public QDeclarativeItem
+#endif
+{
+public:
+    QuasiDeclarativeItem(QuasiDeclarativeItem *parent = 0)
+#if QT_VERSION >= 0x050000
+        : QQuickItem(parent) {}
+#else
+        : QDeclarativeItem(parent) {}
+#endif
+    virtual ~QuasiDeclarativeItem() {}
 };
 
-#endif /* _ANIMATEDLAYER_H_ */
+#endif /* _QUASIDECLARATIVEITEM_H_ */

@@ -22,8 +22,6 @@
 #ifndef _VIEWPORT_H_
 #define _VIEWPORT_H_
 
-#include <QtQuick/QQuickItem>
-
 #include "gameitem.h"
 
 class Viewport : public GameItem

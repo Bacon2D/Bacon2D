@@ -25,8 +25,8 @@
 #include <QtGui/QPainter>
 #include <QDeclarativeProperty>
 
-SpriteSheet::SpriteSheet(QQuickItem *parent)
-    : QQuickPaintedItem(parent)
+SpriteSheet::SpriteSheet(QuasiDeclarativeItem *parent)
+    : QuasiPaintedItem(parent)
     , m_pixMap(0)
     , m_frames(0)
     , m_frame(0)
@@ -62,7 +62,11 @@ void SpriteSheet::setSource(const QString &source)
     }
 }
 
+#if QT_VERSION >= 0x050000
 void SpriteSheet::paint(QPainter *painter)
+#else
+void SpriteSheet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+#endif
 {
     if (m_pixMap) {
         if (!m_frames)

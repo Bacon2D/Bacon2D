@@ -22,6 +22,8 @@
 #ifndef _BOX2DDISTANCEJOINTITEM_H_
 #define _BOX2DDISTANCEJOINTITEM_H_
 
+#include <QtCore/qglobal.h>
+
 #include "box2djointitem.h"
 
 class b2DistanceJoint;
@@ -44,7 +46,11 @@ public:
     float length() const;
 
 protected:
+#if QT_VERSION >= 0x050000
     void itemChange(ItemChange change, const ItemChangeData &data);
+#else
+    QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+#endif
 
 signals:
     void lengthChanged();

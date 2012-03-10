@@ -123,7 +123,12 @@ void Box2DItem::initialize(b2World *world)
 
     m_fixture = m_body->CreateFixture(&fixtureDef);
 
-    foreach (QQuickItem *item, childItems()) {
+#if QT_VERSION >= 0x050000
+    QQuickItem *item;
+#else
+    QGraphicsItem *item;
+#endif
+    foreach (item, childItems()) {
         if (Box2DBaseItem *box2DItem = dynamic_cast<Box2DBaseItem *>(item))
             box2DItem->initialize(world);
     }
@@ -165,17 +170,17 @@ void Box2DItem::setAngularDamping(const qreal &angularDamping)
     }
 }
 
-Quasi::BodyShape Box2DItem::shape() const
+Quasi::BodyShape Box2DItem::shapeGeometry() const
 {
     return m_shape;
 }
 
-void Box2DItem::setShape(const Quasi::BodyShape &shape)
+void Box2DItem::setShapeGeometry(const Quasi::BodyShape &shape)
 {
     if (m_shape != shape) {
         m_shape = shape;
 
-        emit shapeChanged();
+        emit shapeGeometryChanged();
         // XXX needs additional treatment?
     }
 }
@@ -347,7 +352,11 @@ void Box2DItem::geometryChanged(const QRectF &newGeometry,
         }
     }
 
+#if QT_VERSION >= 0x050000
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
+#else
+    QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
+#endif
 }
 
 QVariantList Box2DItem::vertices() const

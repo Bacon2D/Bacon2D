@@ -21,7 +21,6 @@
 
 #include "box2ddebugdrawitem.h"
 
-#include <QQuickItem>
 #include <QPainter>
 
 #include <Box2D/Box2D.h>
@@ -32,7 +31,7 @@
 #include "util.h"
 
 Box2DDebugDrawItem::Box2DDebugDrawItem(Box2DScene *parent)
-    : QQuickPaintedItem((QQuickItem *)parent)
+    : QuasiPaintedItem(parent)
     , b2Draw()
     , m_painter(0)
     , m_scene(parent)
@@ -44,7 +43,11 @@ Box2DDebugDrawItem::Box2DDebugDrawItem(Box2DScene *parent)
              | e_pairBit
              | e_centerOfMassBit);
 
+#if QT_VERSION >= 0x050000
     setZ(Quasi::MaxOrdering);
+#else
+    setZValue(Quasi::MaxOrdering);
+#endif
 }
 
 void Box2DDebugDrawItem::draw()
@@ -125,7 +128,11 @@ void Box2DDebugDrawItem::DrawTransform(const b2Transform &xf)
     Q_UNUSED(xf)
 }
 
+#if QT_VERSION >= 0x050000
 void Box2DDebugDrawItem::paint(QPainter *painter)
+#else
+void Box2DDebugDrawItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+#endif
 {
     m_painter = painter;
 

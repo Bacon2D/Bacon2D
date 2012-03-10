@@ -34,7 +34,7 @@ void GameScene::append_gameItem(QDeclarativeListProperty<GameItem> *list, GameIt
 }
 
 GameScene::GameScene(QuasiGame *parent)
-    : QQuickItem(parent)
+    : QuasiDeclarativeItem(parent)
     , m_running(false)
     , m_collisions(0)
     , m_viewport(0)

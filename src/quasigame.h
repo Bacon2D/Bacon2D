@@ -22,13 +22,15 @@
 #ifndef _QUASIGAME_H_
 #define _QUASIGAME_H_
 
+#include <QtCore/qglobal.h>
+
 #include <QtCore/QTime>
-#include <QtQuick/QQuickItem>
+#include "quasideclarativeitem.h"
 
 class GameScene;
 class Viewport;
 
-class QuasiGame : public QQuickItem
+class QuasiGame : public QuasiDeclarativeItem
 {
     Q_OBJECT
 
@@ -39,7 +41,7 @@ class QuasiGame : public QQuickItem
     Q_PROPERTY(QPointF mouse READ mouse)
 
 public:
-    QuasiGame(QQuickItem *parent = 0);
+    QuasiGame(QuasiDeclarativeItem *parent = 0);
 
     GameScene *currentScene() const;
     void setCurrentScene(GameScene *currentScene);

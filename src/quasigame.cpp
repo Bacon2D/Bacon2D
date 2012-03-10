@@ -21,14 +21,19 @@
 
 #include "quasigame.h"
 
+#if QT_VERSION >= 0x050000
 #include <QQuickCanvas>
+#else
+#include <QApplication>
+#endif
+
 #include <QCursor>
 
 #include "gamescene.h"
 #include "viewport.h"
 
-QuasiGame::QuasiGame(QQuickItem *parent)
-    : QQuickItem(parent)
+QuasiGame::QuasiGame(QuasiDeclarativeItem *parent)
+    : QuasiDeclarativeItem(parent)
     , m_currentScene(0)
     , m_fps(DEFAULT_FPS)
     , m_viewport(0)
@@ -112,5 +117,15 @@ void QuasiGame::update()
 
 QPointF QuasiGame::mouse() const
 {
-    return m_currentScene->mapFromItem(this, canvas()->mapFromGlobal(QCursor::pos()));
+#if QT_VERSION >= 0x050000
+    return canvas()->mapFromGlobal(QCursor::pos());
+#else
+    QPoint pos = QCursor::pos();
+    QWidget *widget = QApplication::widgetAt(pos);
+
+    if (widget)
+        return widget->mapFromGlobal(pos);
+    else
+        return QPointF();
+#endif
 }

@@ -25,10 +25,9 @@
 
 #include "layer.h"
 
-class QQuickItemLayer;
 //! Class constructor
-Layer::Layer(QQuickItem *parent)
-    : QQuickPaintedItem(parent)
+Layer::Layer(QuasiDeclarativeItem *parent)
+    : QuasiPaintedItem(parent)
       , m_drawType(Quasi::TiledDrawType)
       , m_factor(1.0)
       , m_type(Quasi::InfiniteType)
@@ -41,7 +40,11 @@ Layer::Layer(QQuickItem *parent)
       , m_tileHeight(32)
       , m_latestPoint(0)
 {
+#if QT_VERSION >= 0x050000
     setZ(Quasi::InteractionLayerOrdering_01);
+#else
+    setZValue(Quasi::InteractionLayerOrdering_01);
+#endif
 
     // this activates the item layered mode
     QDeclarativeProperty(this, "layer.enabled").write(true);
@@ -129,8 +132,13 @@ qreal Layer::factor() const
  */
 void Layer::setOrder(Quasi::Ordering order)
 {
+#if QT_VERSION >= 0x050000
     if (z() != order)
         setZ(order);
+#else
+    if (zValue() != order)
+        setZValue(order);
+#endif
 }
 
 //! Gets the layer z order
@@ -139,15 +147,19 @@ void Layer::setOrder(Quasi::Ordering order)
  */
 Quasi::Ordering Layer::order() const
 {
+#if QT_VERSION >= 0x050000
     return (Quasi::Ordering)z();
+#else
+    return (Quasi::Ordering)zValue();
+#endif
 }
 
-void Layer::setType(const Quasi::LayerType &type)
+void Layer::setLayerType(const Quasi::LayerType &type)
 {
     if (type != m_type){
         m_type = type;
 
-        emit typeChanged();
+        emit layerTypeChanged();
     }
 }
 
@@ -408,12 +420,12 @@ void Layer::drawPixmap()
         return;
 
     // TODO Forward
-    if (m_currentPixmap)
-        delete m_currentPixmap;
+    if (m_currentImage)
+        delete m_currentImage;
 
-    m_currentPixmap = new QPixmap(boundingRect().width() * m_areaToDraw, boundingRect().height());
+    m_currentImage = new QImage(boundingRect().width() * m_areaToDraw, boundingRect().height(), QImage::Format_ARGB32_Premultiplied);
 
-    QPainter p(m_currentPixmap);
+    QPainter p(m_currentImage);
         int xPoint = 0;
         for (int i = 0; i < m_offsets[m_columnOffset].size(); i++) {
             Offsets offset = m_offsets[m_columnOffset].at(i);

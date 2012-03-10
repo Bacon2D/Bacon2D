@@ -22,9 +22,9 @@
 #include "staticlayer.h"
 
 StaticLayer::StaticLayer(Layer *parent)
-    : Layer(parent)
-      , m_globalXPos(0.0)
-      , m_localXPos(0.0)
+    : Layer((QuasiDeclarativeItem *)parent)
+    , m_globalXPos(0.0)
+    , m_localXPos(0.0)
 {
 }
 
@@ -45,8 +45,12 @@ void StaticLayer::moveX(qreal value)
     }
 }
 
+#if QT_VERSION >= 0x050000
 void StaticLayer::paint(QPainter *painter)
+#else
+void StaticLayer::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+#endif
 {
-    if (m_currentPixmap)
-        painter->drawPixmap(m_localXPos * m_factor, 0, *m_currentPixmap);
+    if (m_currentImage)
+        painter->drawImage(m_localXPos * m_factor, 0, *m_currentImage);
 }

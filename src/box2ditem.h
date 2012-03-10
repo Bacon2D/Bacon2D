@@ -22,6 +22,8 @@
 #ifndef _BOX2DITEN_H_
 #define _BOX2DITEN_H_
 
+#include <QtCore/qglobal.h>
+
 #include "box2dbaseitem.h"
 #include "gameitem.h"
 #include "enums.h"
@@ -38,7 +40,7 @@ class Box2DItem : public Box2DBaseItem
     Q_PROPERTY(qreal linearDamping READ linearDamping WRITE setLinearDamping NOTIFY linearDampingChanged)
     Q_PROPERTY(qreal angularDamping READ angularDamping WRITE setAngularDamping NOTIFY angularDampingChanged)
     Q_PROPERTY(Quasi::BodyType bodyType READ bodyType WRITE setBodyType NOTIFY bodyTypeChanged)
-    Q_PROPERTY(Quasi::BodyShape shape READ shape WRITE setShape NOTIFY shapeChanged)
+    Q_PROPERTY(Quasi::BodyShape shapeGeometry READ shapeGeometry WRITE setShapeGeometry NOTIFY shapeGeometryChanged)
     Q_PROPERTY(bool bullet READ bullet WRITE setBullet NOTIFY bulletChanged)
     Q_PROPERTY(bool sleepingAllowed READ sleepingAllowed WRITE setSleepingAllowed NOTIFY sleepingAllowedChanged)
     Q_PROPERTY(bool fixedRotation READ fixedRotation WRITE setFixedRotation NOTIFY fixedRotationChanged)
@@ -62,8 +64,8 @@ public:
     Quasi::BodyType bodyType() const;
     void setBodyType(const Quasi::BodyType &bodyType);
 
-    Quasi::BodyShape shape() const;
-    void setShape(const Quasi::BodyShape &shape);
+    Quasi::BodyShape shapeGeometry() const;
+    void setShapeGeometry(const Quasi::BodyShape &shape);
 
     bool bullet() const;
     void setBullet(const bool &bullet);
@@ -109,7 +111,7 @@ signals:
     void linearDampingChanged();
     void angularDampingChanged();
     void bodyTypeChanged();
-    void shapeChanged();
+    void shapeGeometryChanged();
     void bulletChanged();
     void sleepingAllowedChanged();
     void fixedRotationChanged();

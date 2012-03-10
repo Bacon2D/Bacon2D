@@ -22,7 +22,7 @@
 #include "animatedlayer.h"
 
 AnimatedLayer::AnimatedLayer(Layer *parent)
-    : Layer(parent)
+    : Layer((QuasiDeclarativeItem *)parent)
       , m_horizontalStep(0)
       , m_currentHorizontalStep(0)
 {
@@ -62,10 +62,14 @@ void AnimatedLayer::updateHorizontalStep()
     //update(); // XXX with this we get super velocity plus no flick, but more CPU consumption too =/
 }
 
+#if QT_VERSION >= 0x050000
 void AnimatedLayer::paint(QPainter *painter)
+#else
+void AnimatedLayer::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+#endif
 {
     updateHorizontalStep();
 
-    if (m_currentPixmap)
-        painter->drawPixmap(m_currentHorizontalStep * m_direction * m_factor, 0, *m_currentPixmap);
+    if (m_currentImage)
+        painter->drawImage(m_currentHorizontalStep * m_direction * m_factor, 0, *m_currentImage);
 }

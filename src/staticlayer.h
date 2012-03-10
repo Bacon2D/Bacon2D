@@ -22,6 +22,8 @@
 #ifndef _STATICLAYER_H_
 #define _STATICLAYER_H_
 
+#include <QtCore/qglobal.h>
+
 #include <QtGui/QPixmap>
 #include <QtGui/QPainter>
 
@@ -38,7 +40,11 @@ public:
     Q_INVOKABLE void moveX(qreal value);
     // XXX moveY
 
+#if QT_VERSION >= 0x050000
     void paint(QPainter *painter);
+#else
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+#endif
 
 private:
     QList<QPixmap> m_mirroredTiles; // XXX

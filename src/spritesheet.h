@@ -22,18 +22,20 @@
 #ifndef _SPRITESHEET_H_
 #define _SPRITESHEET_H_
 
-#include <QtQuick/QQuickPaintedItem>
+#include <QtCore/qglobal.h>
+
+#include "quasipainteditem.h"
 
 class QPixmap;
 
-class SpriteSheet : public QQuickPaintedItem
+class SpriteSheet : public QuasiPaintedItem
 {
     Q_OBJECT
 
     Q_PROPERTY(int frame READ frame WRITE setFrame NOTIFY frameChanged)
 
 public:
-    SpriteSheet(QQuickItem *parent = 0);
+    SpriteSheet(QuasiDeclarativeItem *parent = 0);
 
     QString source() const;
     void setSource(const QString &source);
@@ -47,7 +49,11 @@ public:
     int initialFrame() const;
     void setInitialFrame(const int &initialFrame);
 
+#if QT_VERSION >= 0x050000
     void paint(QPainter *painter);
+#else
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+#endif
 
 signals:
     void sourceChanged();

@@ -1,6 +1,6 @@
 TEMPLATE = lib
 CONFIG += qt plugin
-QT += quick
+QT += declarative quick #FIXME find a way to check for qt version to include declarative or quick
 
 TARGET = quasigameplugins
 
@@ -14,7 +14,9 @@ INCLUDEPATH += .
 INCLUDEPATH += $$BOX2DPATH/include
 LIBS += -L$$BOX2DPATH/lib -lBox2D
 
-HEADERS += gameitem.h \
+HEADERS += quasideclarativeitem.h \
+           quasipainteditem.h \
+           gameitem.h \
            gamescene.h \
            quasigame.h \
            quasigameplugins.h \

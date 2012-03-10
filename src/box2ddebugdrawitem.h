@@ -23,21 +23,25 @@
 #define _BOX2DDEBUGDRAWITEM_H_
 
 #include <QtCore/qglobal.h>
-#include <QtQuick/QQuickPaintedItem>
-
 #include <Box2D/Box2D.h>
+
+#include "quasipainteditem.h"
 
 class QPainter;
 class Box2DScene;
 
-class Box2DDebugDrawItem : public QQuickPaintedItem, public b2Draw
+class Box2DDebugDrawItem : public QuasiPaintedItem, public b2Draw
 {
     Q_OBJECT
 
 public:
     Box2DDebugDrawItem(Box2DScene *parent = 0);
 
+#if QT_VERSION >= 0x050000
     void paint(QPainter *painter);
+#else
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+#endif
 
     void DrawPolygon(const b2Vec2 *vertices, int32 vertexCount, const b2Color &color);
     void DrawSolidPolygon(const b2Vec2 *vertices, int32 vertexCount, const b2Color &color);
