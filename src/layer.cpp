@@ -1,8 +1,8 @@
+#include <QDebug>
 #include <QPainter>
+#include <QDeclarativeProperty>
 
 #include "layer.h"
-#include <QDebug>
-#include <QDeclarativeProperty>
 
 class QQuickItemLayer;
 //! Class constructor
@@ -18,7 +18,7 @@ Layer::Layer(QQuickItem *parent)
       , m_shouldMirror(false)
       , m_tileWidth(32)
       , m_tileHeight(32)
-      , m_latestPoint(0)///
+      , m_latestPoint(0)
 {
     setZ(Quasi::InteractionLayerOrdering_01);
 
@@ -133,29 +133,27 @@ void Layer::setType(const Quasi::LayerType &type)
 
 void Layer::setTileHeight(const int &value)
 {
+    if (m_drawType == Quasi::PlaneDrawType)
+        return;
+
     if (value != m_tileHeight){
         m_tileHeight = value;
 
-        // TODO
-        if (m_tileWidth != 0 && m_tileHeight != 0) {
-        //if (m_tileWidth != 0 && m_tileHeight != 0 && m_source != QString()){
-            //updateTiles();
+        if (m_tileWidth != 0 && m_tileHeight != 0)
             emit tilesChanged();
-        }
     }
 }
 
 void Layer::setTileWidth(const int &value)
 {
+    if (m_drawType == Quasi::PlaneDrawType)
+        return;
+
     if (value != m_tileWidth){
         m_tileWidth = value;
 
-        // TODO
-        if (m_tileWidth != 0 && m_tileHeight != 0) {
-        //if (m_tileWidth != 0 && m_tileHeight != 0 && m_source != QString()){
-            //updateTiles();
+        if (m_tileWidth != 0 && m_tileHeight != 0)
             emit tilesChanged();
-        }
     }
 }
 
@@ -163,55 +161,22 @@ void Layer::setTileWidth(const int &value)
 /*!
  * \param pix the pixmap to append on the list
  * \return the list actual size or -1 if the layer can not accept tiled pixmaps
- * \sa setPixmap()
  */
 int Layer::addTile(const QPixmap &pix)
 {
-    if (m_drawType == Quasi::TiledDrawType){
-        m_pixmaps.append(pix);
+    m_pixmaps.append(pix);
 
-        return m_pixmaps.size();
-    }
-
-    return -1;
+    return m_pixmaps.size();
 }
 
 //! Gets a tile from the list
 /*!
  * \param pos the tile position on the list
  * \return the tile pixmap of position pos on the list or null, if none
- * \sa getPixmap()
  */
 QPixmap Layer::getTile(int pos) const
 {
     return m_pixmaps.at(pos);
-}
-
-//! Stores a pixmap on the list (this will the only pixmap on the list)
-/*!
- * \param pix the pixmao to store on the list
- * \return 1 if ok, -1 if the layer accept only tiled pixmaps
- * \sa addTile()
- */
-int Layer::setPixmap(const QPixmap &pix)
-{
-    if (m_drawType != Quasi::TiledDrawType){
-        m_pixmaps.insert(0, pix);
-
-        return 1;
-    }
-
-    return -1;
-}
-
-//! Gets the pixmap stored on the list
-/*!
- * \return the stored pixmap (full lenght), or null if none
- * \sa getTile()
- */
-QPixmap Layer::getPixmap() const
-{
-    return m_pixmaps.at(0);
 }
 
 void Layer::setDrawGrid(bool draw)
@@ -315,55 +280,63 @@ void Layer::updateTiles()
     // TODO create enums to define image aspect, auto tile, etc...
     QPixmap pix(source()); // TODO
 
-    // XXX not tiled
-    if (m_drawType != Quasi::TiledDrawType) {
-        setPixmap(pix);
-    } else {
-        if (pix.width() < boundingRect().width()) {
-            QPixmap temp(boundingRect().width(), boundingRect().height());
+    if (m_drawType == Quasi::PlaneDrawType) {
+        m_tileWidth = width();
+        m_tileHeight = height();
+
+        if (pix.width() % (int)width() != 0) {
+            // XXX create some log system?
+            qCritical() << QString("Quasi>>Image \'%1\' doesn't contains a proper size... CROPPING!").arg(source());
+
+            int newWidth = pix.width() - (pix.width() % (int)width());
+            pix = pix.copy(0, 0, newWidth, height());
+        }
+    }
+
+    if (pix.width() < boundingRect().width()) {
+        QPixmap temp(boundingRect().width(), boundingRect().height());
+        QPainter p(&temp);
+            p.drawTiledPixmap(boundingRect(), pix, QPoint(0,0));
+        p.end();
+
+        pix = temp;
+    }
+
+    QPixmap mirrored;
+    if (m_type == Quasi::MirroredType){
+        QImage image = pix.toImage();
+
+        mirrored = QPixmap::fromImage(image.mirrored(true, false));
+    }
+
+    // visible tiles
+    m_numColumns = boundingRect().width() / m_tileWidth;
+    m_numRows = boundingRect().height() / m_tileHeight;
+
+    // total of columns and rows
+    m_totalColumns = pix.width() / m_tileWidth;
+    m_totalRows = pix.height() / m_tileHeight;
+
+    int i, j;
+    for (i = 0; i < m_totalRows; i++) {
+        for (j = 0; j < m_totalColumns; j++){
+            QPixmap temp(m_tileWidth, m_tileHeight);
+
             QPainter p(&temp);
-                p.drawTiledPixmap(boundingRect(), pix, QPoint(0,0));
+                p.setCompositionMode(QPainter::CompositionMode_Source);
+                p.drawPixmap(0, 0, m_tileWidth, m_tileHeight,
+                        pix, j * m_tileWidth, i * m_tileHeight, m_tileWidth, m_tileHeight);
             p.end();
 
-            pix = temp;
-        }
+            addTile(temp);
 
-        QPixmap mirrored;
-        if (m_type == Quasi::MirroredType){
-            QImage image = pix.toImage();
-
-            mirrored = QPixmap::fromImage(image.mirrored(true, false));
-        }
-
-        // visible tiles
-        m_numColumns = boundingRect().width() / m_tileWidth;
-        m_numRows = boundingRect().height() / m_tileHeight;
-
-        // total of columns and rows
-        m_totalColumns = pix.width() / m_tileWidth;
-        m_totalRows = pix.height() / m_tileHeight;
-
-        int i, j;
-        for (i = 0; i < m_totalRows; i++) {
-            for (j = 0; j < m_totalColumns; j++){
-                QPixmap temp(m_tileWidth, m_tileHeight);
-
+            if (m_type == Quasi::MirroredType) {
                 QPainter p(&temp);
-                    p.setCompositionMode(QPainter::CompositionMode_Source);
                     p.drawPixmap(0, 0, m_tileWidth, m_tileHeight,
-                            pix, j * m_tileWidth, i * m_tileHeight, m_tileWidth, m_tileHeight);
+                            mirrored, j * m_tileWidth, i * m_tileHeight, m_tileWidth, m_tileHeight);
                 p.end();
 
-                addTile(temp);
-
-                if (m_type == Quasi::MirroredType) {
-                    QPainter p(&temp);
-                        p.drawPixmap(0, 0, m_tileWidth, m_tileHeight,
-                                mirrored, j * m_tileWidth, i * m_tileHeight, m_tileWidth, m_tileHeight);
-                    p.end();
-
-                    m_mirroredTiles.append(temp);
-                }
+                m_mirroredTiles.append(temp);
             }
         }
     }
@@ -383,12 +356,20 @@ QPixmap Layer::generatePartialPixmap(int startPoint, int size)
             for (j = 0; j < size; j++) {
                 index = ((i * m_totalColumns) + (j + startPoint));
 
-                if (m_drawingMirrored)
-                    p.drawPixmap(j * m_tileWidth, i * m_tileHeight, m_mirroredTiles.at(index));
-                else
-                    p.drawPixmap(j * m_tileWidth, i * m_tileHeight, getTile(index));
-
+                // TODO improve comparison
+                if (m_direction == Quasi::ForwardDirection) {
+                    if (m_drawingMirrored)
+                        p.drawPixmap(j * m_tileWidth, i * m_tileHeight, getTile(index));
+                    else
+                        p.drawPixmap(j * m_tileWidth, i * m_tileHeight, m_mirroredTiles.at(index));
+                } else {
+                    if (m_drawingMirrored)
+                        p.drawPixmap(j * m_tileWidth, i * m_tileHeight, m_mirroredTiles.at(index));
+                    else
+                        p.drawPixmap(j * m_tileWidth, i * m_tileHeight, getTile(index));
+                }
                 // just draw a grid
+                // XXX chech the possibility of drawn it only on a debug mode
                 if (m_drawGrid) {
                     p.setPen(m_gridColor);
                     p.drawRect(j * m_tileWidth, i * m_tileHeight, m_tileWidth, m_tileHeight);
@@ -409,13 +390,6 @@ void Layer::drawPixmap()
     if (m_currentPixmap)
         delete m_currentPixmap;
 
-    // XXX not tiled
-    if (m_drawType != Quasi::TiledDrawType) {
-        m_currentPixmap = new QPixmap(getPixmap());
-
-        return;
-    }
-
     m_currentPixmap = new QPixmap(boundingRect().width() * m_areaToDraw, boundingRect().height());
 
     QPainter p(m_currentPixmap);
@@ -423,8 +397,9 @@ void Layer::drawPixmap()
         for (int i = 0; i < m_offsets[m_columnOffset].size(); i++) {
             Offsets offset = m_offsets[m_columnOffset].at(i);
 
-            if (((m_type == Quasi::MirroredType) && (i != 0) && (offset.point() - m_latestPoint < 0)) ||
-                m_shouldMirror) {
+            if (((m_type == Quasi::MirroredType) && (i != 0)
+                    && (offset.point() - m_latestPoint < 0))
+                    || m_shouldMirror) {
                 m_drawingMirrored = !m_drawingMirrored;
                 m_shouldMirror = false;
             }
@@ -435,10 +410,15 @@ void Layer::drawPixmap()
             xPoint += pix.width();
             m_latestPoint = offset.point();
 
-            if ((m_type == Quasi::MirroredType) && (i == m_offsets[m_columnOffset].size() - 1) && (offset.size() < m_numColumns))
+            if ((m_type == Quasi::MirroredType)
+                    && (i == m_offsets[m_columnOffset].size() - 1)
+                    && (offset.size() < m_numColumns))
                 m_shouldMirror = true;
         }
 
-        m_columnOffset = (m_columnOffset + 1) % m_offsets.size();
+        if (m_direction == Quasi::ForwardDirection)
+            m_columnOffset = (m_columnOffset - 1 < 0) ? m_offsets.size() - 1 : m_columnOffset - 1;
+        else
+            m_columnOffset = (m_columnOffset + 1) % m_offsets.size();
     p.end();
 }

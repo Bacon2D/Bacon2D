@@ -11,8 +11,8 @@ void GameLayers::append_layer(QDeclarativeListProperty<Layer> *list, Layer *laye
 
 GameLayers::GameLayers(GameScene *parent)
     : GameItem(parent)
-      , m_tileWidth(0)
-      , m_tileHeight(0)
+      , m_tileWidth(32)
+      , m_tileHeight(32)
       , m_totalColumns(0)
       , m_drawType(Quasi::TiledDrawType)
 {

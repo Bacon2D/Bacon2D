@@ -24,14 +24,18 @@ void AnimatedLayer::setHorizontalStep(const qreal &step)
     }
 }
 
-#include <QDebug>
 void AnimatedLayer::updateHorizontalStep()
 {
     m_currentHorizontalStep += m_horizontalStep;
 
-    if (m_currentHorizontalStep * m_factor >= boundingRect().width()){
+    if ((m_direction != Quasi::ForwardDirection) &&
+            (m_currentHorizontalStep * m_factor >= boundingRect().width())) {
         drawPixmap();
         m_currentHorizontalStep = 0;
+    } else if ((m_direction == Quasi::ForwardDirection) &&
+            (m_currentHorizontalStep * m_factor >= 0)) {
+        drawPixmap();
+        m_currentHorizontalStep = -width();
     }
 
     //update(); // XXX with this we get super velocity plus no flick, but more CPU consumption too =/

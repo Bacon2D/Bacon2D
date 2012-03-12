@@ -88,9 +88,6 @@ public:
     int addTile(const QPixmap &pix);
     QPixmap getTile(int pos) const;
 
-    int setPixmap(const QPixmap &pix);
-    QPixmap getPixmap() const;
-
     bool drawGrid() const { return m_drawGrid; }
     void setDrawGrid(bool draw);
 
