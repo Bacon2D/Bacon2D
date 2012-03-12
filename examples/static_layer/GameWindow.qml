@@ -24,6 +24,8 @@ QuasiGame {
 
                 layers: [
                     QuasiStaticLayer {
+                        id: layer
+
                         source: "not_so_large.png" // image source
                         //factor: 1.0 // updating factor of this layer, useful when using multiple layers; default: 1.0
                         /* layer ordering, set how the layers will be presented when rendering
@@ -54,6 +56,18 @@ QuasiGame {
                     frames: 4
                     duration: 450
                     loops: Animation.Infinite
+                }
+
+                focus: true
+                Keys.onPressed: {
+                    switch (event.key) {
+                        case Qt.Key_Left:
+                            layer.moveX(50);
+                            break;
+                        case Qt.Key_Right:
+                            layer.moveX(-50);
+                            break;
+                    }
                 }
             }
         ]
