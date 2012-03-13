@@ -1,8 +1,11 @@
 TEMPLATE = lib
 CONFIG += qt plugin
-QT += declarative quick #FIXME find a way to check for qt version to include declarative or quick
+
+contains(QT_VERSION, ^5.*) QT += quick
+else: QT += declarative
 
 TARGET = quasigameplugins
+TARGETPATH = QuasiGame
 
 DESTDIR = $$PWD/imports/QuasiGame
 OBJECTS_DIR = tmp
@@ -62,7 +65,8 @@ SOURCES += gameitem.cpp \
            viewport.cpp \
            box2ddebugdrawitem.cpp
 
-target.path = $$QT5PATH/imports/QuasiGame
+!isEmpty(QTPATH): target.path = $$QTPATH/imports/$$TARGETPATH
+else: target.path = $$[QT_INSTALL_IMPORTS]/$$TARGETPATH
 
 qmlpluginfiles.path = $$target.path
 qmlpluginfiles.files += $$OUT_PWD/imports/QuasiGame/*
