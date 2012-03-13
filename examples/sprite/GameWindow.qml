@@ -30,8 +30,6 @@ QuasiGame {
 
     currentScene: scene
 
-    fps: 300
-
     QuasiScene {
         id: scene
 
