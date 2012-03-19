@@ -17,6 +17,20 @@ b2Vec2 b2Util::b2Center(const b2Vec2 &v1, const b2Vec2 &v2)
                   (v1.y + v2.y) / 2.0f);
 }
 
+b2Vec2 *b2Util::b2Vertices(const QVariantList &vertices, const QRectF &geometry, const qreal &scaleRatio)
+{
+    b2Vec2 *vec= new b2Vec2[vertices.length()];
+
+    for (int i = 0; i < vertices.length(); i++){
+        QVariantList temp = vertices.at(i).toList();
+
+        const float x = temp.at(0).toFloat() - geometry.width() / 2.0;
+        const float y = temp.at(1).toFloat() - geometry.height() / 2.0;
+        vec[i].Set(x / scaleRatio, y / scaleRatio);
+    }
+    return vec;
+}
+
 QPointF b2Util::qTopLeft(const b2Vec2 &vec, const QRectF &geometry, const qreal &scaleRatio)
 {
     const qreal newX = vec.x * scaleRatio - geometry.width() / 2.0;

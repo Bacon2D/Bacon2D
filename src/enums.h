@@ -58,7 +58,8 @@ public:
     enum BodyShape {
         RectangleBodyShape,
         PolygonBodyShape,
-        CircleBodyShape
+        CircleBodyShape,
+        ChainBodyShape
     };
 
 

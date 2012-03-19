@@ -1,6 +1,7 @@
 #include "box2ditem.h"
 
 #include "box2dscene.h"
+#include "util.h"
 
 #include <Box2D/Box2D.h>
 
@@ -71,17 +72,7 @@ void Box2DItem::initialize(b2World *world)
         case Quasi::PolygonBodyShape:
             {
                 // TODO: check for b2_maxPolygonVertices
-                int i;
-                b2Vec2 *vertices = new b2Vec2[m_vertices.length()];
-
-                for (i = 0; i < m_vertices.length(); i++){
-                    QVariantList temp = m_vertices.at(i).toList();
-
-                    const float x = temp.at(0).toFloat() - (width() / 2);
-                    const float y = temp.at(1).toFloat() - (height() / 2);
-                    vertices[i].Set(x / m_scaleRatio, y / m_scaleRatio);
-
-                }
+                b2Vec2 *vertices = b2Util::b2Vertices(m_vertices, boundingRect(), m_scaleRatio);
 
                 shape = new b2PolygonShape;
                 ((b2PolygonShape*)shape)->Set(vertices, m_vertices.length());
@@ -90,6 +81,13 @@ void Box2DItem::initialize(b2World *world)
         case Quasi::CircleBodyShape:
             shape = new b2CircleShape;
             ((b2CircleShape*)shape)->m_radius = width() / m_scaleRatio / 2.0f;
+            break;
+        case Quasi::ChainBodyShape:
+            {
+                b2Vec2 *vertices = b2Util::b2Vertices(m_vertices, boundingRect(), m_scaleRatio);
+                shape = new b2ChainShape; //TODO: create a way to decide to use CreateChain or CreateLoop
+                ((b2ChainShape*)shape)->CreateChain(vertices, m_vertices.length());
+            }
             break;
         default:
             // TODO error handling
