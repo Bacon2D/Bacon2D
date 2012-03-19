@@ -27,6 +27,7 @@
 
 #include "quasideclarativeitem.h"
 #include "gameitem.h"
+#include "gamelayers.h"
 
 class QuasiGame;
 class Viewport;
@@ -63,6 +64,8 @@ public:
     QuasiGame *game() const;
     void setGame(QuasiGame *game);
 
+    GameLayers *gameLayers() const;
+
     bool debug() const;
     void setDebug(const bool &debug);
 
@@ -90,6 +93,7 @@ protected:
     QVector<QVector<bool> > *m_collisions;
     Viewport *m_viewport;
     QuasiGame *m_game;
+    GameLayers *m_gameLayers;
     bool m_debug;
 };
 

@@ -36,7 +36,6 @@ QuasiGame::QuasiGame(QuasiDeclarativeItem *parent)
     : QuasiDeclarativeItem(parent)
     , m_currentScene(0)
     , m_fps(DEFAULT_FPS)
-    , m_viewport(0)
     , m_timerId(0)
 {
     m_gameTime.start();
@@ -65,6 +64,7 @@ void QuasiGame::setCurrentScene(GameScene *currentScene) {
             m_currentScene->setGame(this);
 
             if ((m_viewport = m_currentScene->viewport())) {
+                m_viewport->setParent(this);
                 m_viewport->setParentItem(this);
                 m_viewport->setScene(m_currentScene);
                 m_viewport->setWidth(width());
@@ -131,3 +131,19 @@ QPointF QuasiGame::mouse()
         return m_mousePos;
 #endif
 }
+
+#if QT_VERSION < 0x050000
+// this function is needed on Qt4 to fix viewport's width and height
+void QuasiGame::componentComplete()
+{
+    if (m_viewport && m_currentScene) {
+        m_viewport->setWidth(width());
+        m_viewport->setHeight(height());
+        m_viewport->setContentWidth(m_currentScene->width());
+        m_viewport->setContentHeight(m_currentScene->height());
+        m_viewport->updateMaxOffsets();
+    }
+
+    QDeclarativeItem::componentComplete();
+}
+#endif

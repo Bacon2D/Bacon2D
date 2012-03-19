@@ -20,6 +20,7 @@
  */
 
 #include "gamelayers.h"
+#include "staticlayer.h"
 
 #if QT_VERSION >= 0x050000
 void GameLayers::append_layer(QQmlListProperty<Layer> *list, Layer *layer)
@@ -40,7 +41,12 @@ GameLayers::GameLayers(GameScene *parent)
     , m_tileHeight(32)
     , m_totalColumns(0)
     , m_drawType(Quasi::TiledDrawType)
+    , m_xOffset(0)
+    , m_yOffset(0)
 {
+    connect(this, SIGNAL(xOffsetChanged()), this, SLOT(changeXOffset()));
+    connect(this, SIGNAL(yOffsetChanged()), this, SLOT(changeYOffset()));
+
     // control variables
     m_drawGrid = false;
     m_gridColor = Qt::red;
@@ -63,16 +69,34 @@ GameLayers::~GameLayers()
     m_layers.clear();
 }
 
-void GameLayers::setTileHeight(const int &value)
+void GameLayers::setTileHeight(const int &tileHeight)
 {
-    if (value != m_tileHeight)
-        m_tileHeight = value;
+    if (m_tileHeight != tileHeight)
+        m_tileHeight = tileHeight;
 }
 
-void GameLayers::setTileWidth(const int &value)
+void GameLayers::setTileWidth(const int &tileWidth)
 {
-    if (value != m_tileWidth)
-        m_tileWidth = value;
+    if (m_tileWidth != tileWidth)
+        m_tileWidth = tileWidth;
+}
+
+void GameLayers::setXOffset(const qreal &xOffset)
+{
+    if (m_xOffset != xOffset) {
+        m_xOffset = xOffset;
+
+        emit xOffsetChanged();
+    }
+}
+
+void GameLayers::setYOffset(const qreal &yOffset)
+{
+    if (m_yOffset != yOffset) {
+        m_yOffset = yOffset;
+
+        emit yOffsetChanged();
+    }
 }
 
 void GameLayers::setDrawGrid(bool draw)
@@ -116,8 +140,8 @@ void GameLayers::update(const long &delta)
             layer->setDrawType(m_drawType);
             layer->setTileWidth(m_tileWidth);
             layer->setTileHeight(m_tileHeight);
-            layer->setWidth(width());
-            layer->setHeight(height());
+            layer->setWidth(parentItem()->parentItem()->width()); // grandpa?
+            layer->setHeight(parentItem()->parentItem()->height()); // grandpa!
 
             layer->setDrawGrid(m_drawGrid);
             layer->setGridColor(m_gridColor);
@@ -126,5 +150,27 @@ void GameLayers::update(const long &delta)
         }
 
         layer->update();
+    }
+}
+
+void GameLayers::changeXOffset()
+{
+    foreach (Layer *layer, m_layers) {
+        layer->setX(m_xOffset);
+
+        StaticLayer *sl = qobject_cast<StaticLayer *>(layer);
+        if (sl)
+            sl->moveX(m_xOffset);
+    }
+}
+
+void GameLayers::changeYOffset()
+{
+    foreach (Layer *layer, m_layers) {
+        layer->setY(m_xOffset);
+
+        StaticLayer *sl = qobject_cast<StaticLayer *>(layer);
+        if (sl)
+            sl->moveY(m_yOffset);
     }
 }

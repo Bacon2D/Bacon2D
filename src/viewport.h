@@ -22,6 +22,10 @@
 #ifndef _VIEWPORT_H_
 #define _VIEWPORT_H_
 
+#include <QtCore/QPropertyAnimation>
+#include <QtCore/QEasingCurve>
+#include <QtCore/QParallelAnimationGroup>
+
 #include "gameitem.h"
 
 class Viewport : public GameItem
@@ -32,6 +36,7 @@ class Viewport : public GameItem
     Q_PROPERTY(float yOffset READ yOffset WRITE setYOffset NOTIFY yOffsetChanged)
     Q_PROPERTY(float contentWidth READ contentWidth WRITE setContentWidth NOTIFY contentWidthChanged)
     Q_PROPERTY(float contentHeight READ contentHeight WRITE setContentHeight NOTIFY contentHeightChanged)
+    Q_PROPERTY(int animationDuration READ animationDuration WRITE setAnimationDuration NOTIFY animationDurationChanged)
 
 public:
     Viewport(GameScene *parent = 0);
@@ -48,6 +53,9 @@ public:
     float contentHeight() const;
     void setContentHeight(const float &contentHeight);
 
+    int animationDuration() const;
+    void setAnimationDuration(const int &animationDuration);
+
     void updateMaxOffsets();
 
     void setScene(GameScene *scene);
@@ -60,8 +68,10 @@ signals:
     void yOffsetChanged();
     void contentWidthChanged();
     void contentHeightChanged();
+    void animationDurationChanged();
 
 private:
+    QEasingCurve m_animationEasingCurve; // TODO expose property?
     float m_xOffset;
     float m_yOffset;
     float m_contentWidth;
@@ -69,6 +79,10 @@ private:
     float m_maxXOffset;
     float m_maxYOffset;
     GameScene *m_scene;
+
+    QParallelAnimationGroup *m_xGroupAnimation;
+    QParallelAnimationGroup *m_yGroupAnimation;
+    int m_animationDuration;
 };
 
 #endif /* _VIEWPORT_H_ */

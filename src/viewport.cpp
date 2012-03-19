@@ -20,11 +20,11 @@
  */
 
 #include "viewport.h"
-
 #include "gamescene.h"
 
 Viewport::Viewport(GameScene *parent)
     : GameItem(parent)
+    , m_animationEasingCurve(QEasingCurve::Linear)
     , m_xOffset(0.0f)
     , m_yOffset(0.0f)
     , m_contentWidth(0.0f)
@@ -32,8 +32,10 @@ Viewport::Viewport(GameScene *parent)
     , m_maxXOffset(0.0f)
     , m_maxYOffset(0.0f)
     , m_scene(parent)
+    , m_animationDuration(100)
 {
-    setClip(true);
+    m_xGroupAnimation = new QParallelAnimationGroup(this);
+    m_yGroupAnimation = new QParallelAnimationGroup(this);
 }
 
 float Viewport::xOffset()
@@ -45,11 +47,33 @@ void Viewport::setXOffset(float xOffset)
 {
     xOffset = qBound<float>(0.0f, xOffset, m_maxXOffset);
 
+    // TODO create a heuristic function to calculate the animation duration
+    // when m_animationDuration < 0, according to this delta
+    // (bigger delta -> bigger animation duration)
+    //qreal delta = qAbs(m_xOffset - xOffset);
+
     if (m_xOffset != xOffset) {
         m_xOffset = xOffset;
 
-        if (m_scene)
-            m_scene->setX(-m_xOffset);
+        if (m_scene){
+            m_xGroupAnimation->clear();
+
+            QPropertyAnimation *xAnim = new QPropertyAnimation(m_scene, "x");
+            xAnim->setDuration(m_animationDuration); // TODO set duration according the offset value
+            xAnim->setEasingCurve(m_animationEasingCurve);
+            xAnim->setStartValue(m_scene->x());
+            xAnim->setEndValue(-m_xOffset);
+            m_xGroupAnimation->addAnimation(xAnim);
+
+            QPropertyAnimation *xLayerAnimation = new QPropertyAnimation(m_scene->gameLayers(), "xOffset"); // TODO
+            xLayerAnimation->setDuration(m_animationDuration); // TODO
+            xLayerAnimation->setEasingCurve(m_animationEasingCurve);
+            xLayerAnimation->setStartValue(m_scene->gameLayers()->xOffset());
+            xLayerAnimation->setEndValue(m_xOffset);
+            m_xGroupAnimation->addAnimation(xLayerAnimation);
+
+            m_xGroupAnimation->start();
+        }
 
         emit xOffsetChanged();
     }
@@ -67,8 +91,25 @@ void Viewport::setYOffset(float yOffset)
     if (m_yOffset != yOffset) {
         m_yOffset = yOffset;
 
-        if (m_scene)
-            m_scene->setY(-m_yOffset);
+        if (m_scene){
+            m_yGroupAnimation->clear();
+
+            QPropertyAnimation *yAnim = new QPropertyAnimation(m_scene, "y");
+            yAnim->setDuration(m_animationDuration); // TODO set duration according the offset value
+            yAnim->setEasingCurve(m_animationEasingCurve);
+            yAnim->setStartValue(m_scene->y());
+            yAnim->setEndValue(-m_yOffset);
+            m_yGroupAnimation->addAnimation(yAnim);
+
+            QPropertyAnimation *yLayerAnimation = new QPropertyAnimation(m_scene->gameLayers(), "yOffset"); // TODO
+            yLayerAnimation->setDuration(m_animationDuration); // TODO
+            yLayerAnimation->setEasingCurve(m_animationEasingCurve);
+            yLayerAnimation->setStartValue(m_scene->gameLayers()->yOffset());
+            yLayerAnimation->setEndValue(m_yOffset);
+            m_yGroupAnimation->addAnimation(yLayerAnimation);
+
+            m_yGroupAnimation->start();
+        }
 
         emit yOffsetChanged();
     }
@@ -76,12 +117,12 @@ void Viewport::setYOffset(float yOffset)
 
 void Viewport::hScroll(float step)
 {
-    setXOffset(m_xOffset + step);
+    setXOffset(step);
 }
 
 void Viewport::vScroll(float step)
 {
-    setYOffset(m_yOffset + step);
+    setYOffset(step);
 }
 
 float Viewport::contentWidth() const
@@ -109,6 +150,20 @@ void Viewport::setContentHeight(const float &contentHeight)
         m_contentHeight = contentHeight;
 
         emit contentHeightChanged();
+    }
+}
+
+int Viewport::animationDuration() const
+{
+    return m_animationDuration;
+}
+
+void Viewport::setAnimationDuration(const int &animationDuration)
+{
+    if (m_animationDuration != animationDuration) {
+        m_animationDuration = animationDuration;
+
+        emit animationDurationChanged();
     }
 }
 

@@ -20,8 +20,8 @@
  */
 
 #include "gamescene.h"
-
 #include "quasigame.h"
+#include "gamelayers.h"
 
 #if QT_VERSION >= 0x050000
 void GameScene::append_gameItem(QQmlListProperty<GameItem> *list, GameItem *gameItem)
@@ -34,6 +34,10 @@ void GameScene::append_gameItem(QDeclarativeListProperty<GameItem> *list, GameIt
         gameItem->setScene(scene);
         gameItem->setParentItem(scene);
         scene->m_entities.append(gameItem);
+
+        GameLayers *gameLayers = qobject_cast<GameLayers *>(gameItem);
+        if (gameLayers)
+            scene->m_gameLayers = gameLayers;
     }
 }
 
@@ -175,6 +179,11 @@ QuasiGame *GameScene::game() const
 void GameScene::setGame(QuasiGame *game)
 {
     m_game = game;
+}
+
+GameLayers *GameScene::gameLayers() const
+{
+    return m_gameLayers;
 }
 
 bool GameScene::debug() const

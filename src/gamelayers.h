@@ -41,13 +41,15 @@ class GameLayers : public GameItem
     Q_PROPERTY(Quasi::DrawType drawType READ drawType WRITE setDrawType)
     Q_PROPERTY(int tileHeight READ tileHeight WRITE setTileHeight)
     Q_PROPERTY(int tileWidth READ tileWidth WRITE setTileWidth)
+    Q_PROPERTY(qreal xOffset READ xOffset WRITE setXOffset NOTIFY xOffsetChanged)
+    Q_PROPERTY(qreal yOffset READ yOffset WRITE setYOffset NOTIFY yOffsetChanged)
 
     Q_PROPERTY(bool drawGrid READ drawGrid WRITE setDrawGrid)
     Q_PROPERTY(QColor gridColor READ gridColor WRITE setGridColor)
 
 public:
     GameLayers(GameScene *parent = 0);
-    virtual ~GameLayers();
+    ~GameLayers();
 
 #if QT_VERSION >= 0x050000
     QQmlListProperty<Layer> layers() const;
@@ -59,10 +61,16 @@ public:
     Quasi::DrawType drawType() const;
 
     int tileHeight() const { return m_tileHeight; }
-    void setTileHeight(const int &value);
+    void setTileHeight(const int &tileHeight);
 
     int tileWidth() const { return m_tileWidth; }
-    void setTileWidth(const int &value);
+    void setTileWidth(const int &tileWidth);
+
+    qreal xOffset() const { return m_xOffset; }
+    void setXOffset(const qreal &xOffset);
+
+    qreal yOffset() const { return m_yOffset; }
+    void setYOffset(const qreal &yOffset);
 
     bool drawGrid() const { return m_drawGrid; }
     void setDrawGrid(bool draw);
@@ -71,6 +79,14 @@ public:
     void setGridColor(const QColor &color);
 
     void update(const long &delta);
+
+signals:
+    void xOffsetChanged();
+    void yOffsetChanged();
+
+public slots:
+    void changeXOffset();
+    void changeYOffset();
 
 private:
 
@@ -85,8 +101,10 @@ private:
     int m_totalColumns;
     int m_totalRows;
     Quasi::DrawType m_drawType;
-
     Layer::LayerList m_layers;
+
+    qreal m_xOffset;
+    qreal m_yOffset;
 
     bool m_drawGrid;
     QColor m_gridColor;

@@ -25,24 +25,41 @@ StaticLayer::StaticLayer(Layer *parent)
     : Layer((QuasiDeclarativeItem *)parent)
     , m_globalXPos(0.0)
     , m_localXPos(0.0)
+    , m_localYPos(0.0)
 {
 }
 
 StaticLayer::~StaticLayer()
 {
 }
-void StaticLayer::moveX(qreal value)
-{
-    m_globalXPos += value; // XXX should multiply by -1??
-    m_localXPos += value;
 
-    if (m_localXPos > 0) {
-        drawPixmap();
-        m_localXPos =  -width() + value;
-    } else if (m_localXPos * m_factor <= -width()) {
-        drawPixmap();
-        m_localXPos = 0;
+// move to a X value
+void StaticLayer::moveX(const qreal &x)
+{
+    qreal newValue = x * m_factor;
+    qreal delta = m_globalXPos + newValue;
+
+    m_globalXPos = newValue * -1;
+    m_localXPos -= delta;
+
+    if (m_localXPos <= -width()) {
+            drawPixmap();
+            m_localXPos =  width() + m_localXPos;
+    } else if (m_localXPos >= 0) {
+        if (m_globalXPos != 0) {
+            drawPixmap();
+            m_localXPos =  -width() + m_localXPos;
+        } else
+            m_localXPos = 0;
     }
+}
+
+#include <QDebug>
+void StaticLayer::moveY(const qreal &y)
+{
+    Q_UNUSED(y);
+    // TODO
+    qDebug() << "I WILL KILL YOUR WHOLE FAMILY!!";
 }
 
 #if QT_VERSION >= 0x050000
@@ -55,5 +72,5 @@ void StaticLayer::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     Q_UNUSED(widget)
 #endif
     if (m_currentImage)
-        painter->drawImage(m_localXPos * m_factor, 0, *m_currentImage);
+        painter->drawImage(m_localXPos, 0, *m_currentImage);
 }

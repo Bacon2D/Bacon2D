@@ -36,8 +36,8 @@ public:
     StaticLayer(Layer *parent = 0);
     ~StaticLayer();
 
-    Q_INVOKABLE void moveX(qreal value);
-    // XXX moveY
+    void moveX(const qreal &x);
+    void moveY(const qreal &y);
 
 #if QT_VERSION >= 0x050000
     void paint(QPainter *painter);
@@ -48,7 +48,9 @@ public:
 private:
     QList<QPixmap> m_mirroredTiles; // XXX
     qreal m_globalXPos; // global positioning
+    qreal m_globalYPos;
     qreal m_localXPos; // local positioning
+    qreal m_localYPos;
 };
 
 #endif /* _STATICLAYER_H_ */

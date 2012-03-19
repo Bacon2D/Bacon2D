@@ -50,6 +50,9 @@ public:
     void setFps(const int &fps);
 
     QPointF mouse();
+#if QT_VERSION < 0x050000
+    virtual void componentComplete();
+#endif
 
 protected:
     void timerEvent(QTimerEvent *event);
