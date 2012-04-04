@@ -6,13 +6,14 @@ A simple Qt-based 2D game engine.
 
 1.1) Dependencies
 
-* Qt5
-	https://qt.gitorious.org/qt/qt5
+* Qt4.x or Qt5
+  	Qt4 download: http://qt.nokia.com/downloads/
+  	Qt5 source repository: https://qt.gitorious.org/qt/qt5
 
 * Box2D >= 2.2.1
 	http://box2d.org
 
-We strongly recommend you to install Qt5 to a different prefix from Qt4.
+If you are using Qt5, we strongly recommend you to install Qt5 to a different prefix from Qt4.
 If you have Qt4 installed at /usr, we suggest one of the following prefixes:
 
 * /opt/Qt5
@@ -22,9 +23,10 @@ If you have Qt4 installed at /usr, we suggest one of the following prefixes:
 
 Available QMake parameters:
 
-* QT5PATH (Optional)
-	Prefix where Qt5 has been installed. It is required to install
+* QTPATH (Optional)
+	Prefix where Qt has been installed. It is required to install
 	Quasi's QML import plugin and related files.
+	The default path is /usr/lib/qt
 
 * BOX2DPATH (Optional)
 	Path to Box2D installation. If your Linux distro packaging system
@@ -36,7 +38,7 @@ Available QMake parameters:
 
 Sample build from Quasi's root source tree (shadow build not supported yet):
 
-$ qmake QT5PATH=/opt/Qt5 BOX2DPATH=/usr BUILD_EXAMPLES=1
+$ qmake QTPATH=/opt/Qt5 BOX2DPATH=/usr BUILD_EXAMPLES=1
 $ make
 $ sudo make install
 
@@ -45,7 +47,7 @@ $ sudo make install
 2. Examples
 ===========
 
-If you have installed the QML plugin to the proper Qt5 import directory,
+If you have installed the QML plugin to the proper Qt import directory,
 you can run the examples directly from their specific build directories.
 
 Example:
