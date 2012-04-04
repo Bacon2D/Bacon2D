@@ -1,9 +1,11 @@
 CONFIG += qt
-QT += quick
+
+contains(QT_VERSION, ^5.*) QT += quick
+else: QT += declarative
 
 TEMPLATE = app
 TARGET = box2dscene
 DEPENDPATH += .
 INCLUDEPATH += .
 
-SOURCES += main.cpp
+SOURCES += ../launcher/main.cpp

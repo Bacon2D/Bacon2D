@@ -19,18 +19,30 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
+#include <QtCore/qglobal.h>
+
+#if QT_VERSION >= 0x050000
 #include <QGuiApplication>
 #include <QQuickView>
-#include <QDeclarativeEngine>
+#else
+#include <QtGui/QApplication>
+#include <QtDeclarative/QDeclarativeView>
+#endif
+
 #include <QDir>
+#include <QDeclarativeEngine>
 
 int main(int argc, char *argv[]) {
     QByteArray data = "1";
     qputenv("QML_IMPORT_TRACE", data);
 
+#if QT_VERSION >= 0x050000
     QGuiApplication app(argc, argv);
-
     QQuickView view;
+#else
+    QApplication app(argc, argv);
+    QDeclarativeView view;
+#endif
 
     view.engine()->addImportPath("../../imports");
 
