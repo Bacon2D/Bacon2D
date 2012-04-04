@@ -66,7 +66,7 @@ QuasiGame {
                 restitution: 0.6
                 sleepingAllowed: false
 
-                shape: Quasi.PolygonBodyShape // It can be RectangleBodyShape (default), PolygonBodyShape or CircleBodyShape
+                shapeGeometry: Quasi.PolygonBodyShape // It can be RectangleBodyShape (default), PolygonBodyShape or CircleBodyShape
                 // define vertices in the following format (in counter clockwise, only needed if shape == Rectangle):
                 // [[x0, y0], [x1, y1], [x2, y2], ..]
                 vertices: [[0, 0], [width, 0], [width / 2, height]]
@@ -94,7 +94,7 @@ QuasiGame {
                 restitution: 0.6
                 sleepingAllowed: false
 
-                shape: Quasi.CircleBodyShape // It can be RectangleBodyShape (default), PolygonBodyShape or CircleBodyShape
+                shapeGeometry: Quasi.CircleBodyShape // It can be RectangleBodyShape (default), PolygonBodyShape or CircleBodyShape
 
                 Image {
                     source: "ball.png"
