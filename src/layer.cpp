@@ -21,7 +21,7 @@
 
 #include <QDebug>
 #include <QPainter>
-#include <QDeclarativeProperty>
+#include <QQmlProperty>
 
 #include "layer.h"
 
@@ -47,7 +47,7 @@ Layer::Layer(QuasiDeclarativeItem *parent)
 #endif
 
     // this activates the item layered mode
-    QDeclarativeProperty(this, "layer.enabled").write(true);
+    QQmlProperty(this, "layer.enabled").write(true);
 }
 
 //! Class destructor

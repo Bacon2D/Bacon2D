@@ -34,13 +34,13 @@ class SpriteItem : public GameItem
 {
     Q_OBJECT
 
-    Q_PROPERTY(QDeclarativeListProperty<SpriteAnimationItem> animations READ animations)
+    Q_PROPERTY(QQmlListProperty<SpriteAnimationItem> animations READ animations)
     Q_PROPERTY(QString animation READ animation WRITE setAnimation NOTIFY animationChanged)
 
 public:
     SpriteItem(GameScene *parent = 0);
 
-    QDeclarativeListProperty<SpriteAnimationItem> animations() const;
+    QQmlListProperty<SpriteAnimationItem> animations() const;
 
     QString animation() const;
     void setAnimation(const QString &animation, const bool &force = false);
@@ -55,7 +55,7 @@ private:
     void initializeMachine();
 
 private:
-    static void append_animation(QDeclarativeListProperty<SpriteAnimationItem> *list, SpriteAnimationItem *animation);
+    static void append_animation(QQmlListProperty<SpriteAnimationItem> *list, SpriteAnimationItem *animation);
 
     QStateMachine *m_stateMachine;
     QState *m_stateGroup;

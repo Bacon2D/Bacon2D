@@ -23,7 +23,7 @@
 
 #include <QtGui/QPixmap>
 #include <QtGui/QPainter>
-#include <QDeclarativeProperty>
+#include <QtQml/QQmlProperty>
 
 SpriteSheet::SpriteSheet(QuasiDeclarativeItem *parent)
     : QuasiPaintedItem(parent)
@@ -35,7 +35,7 @@ SpriteSheet::SpriteSheet(QuasiDeclarativeItem *parent)
 {
     setVisible(false);
 
-    QDeclarativeProperty(this, "layer.enabled").write(true);
+    QQmlProperty(this, "layer.enabled").write(true);
 }
 
 QString SpriteSheet::source() const

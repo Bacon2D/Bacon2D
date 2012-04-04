@@ -25,12 +25,13 @@
 #include <QtCore/qglobal.h>
 
 #include <QTime>
-#include <QDeclarativeScriptString>
+#include <QtQuick/QQuickItem>
+#include <QQmlScriptString>
 
 #include "quasideclarativeitem.h"
 #include "enums.h"
 
-class QDeclarativeExpression;
+class QQmlExpression;
 class QuasiGame;
 class GameScene;
 
@@ -38,7 +39,7 @@ class GameItem : public QuasiDeclarativeItem
 {
     Q_OBJECT
 
-    Q_PROPERTY(QDeclarativeScriptString updateScript READ updateScript WRITE setUpdateScript NOTIFY updateScriptChanged)
+    Q_PROPERTY(QQmlScriptString updateScript READ updateScript WRITE setUpdateScript NOTIFY updateScriptChanged)
     Q_PROPERTY(int updateInterval READ updateInterval WRITE setUpdateInterval NOTIFY updateIntervalChanged)
     Q_PROPERTY(bool collided READ collided WRITE setCollided NOTIFY collidedChanged)
     Q_PROPERTY(Quasi::Ordering order READ order WRITE setOrder)
@@ -47,8 +48,8 @@ class GameItem : public QuasiDeclarativeItem
 public:
     GameItem(GameScene *parent = 0);
 
-    QDeclarativeScriptString updateScript() const;
-    void setUpdateScript(const QDeclarativeScriptString &updateScript);
+    QQmlScriptString updateScript() const;
+    void setUpdateScript(const QQmlScriptString &updateScript);
 
     int updateInterval() const;
     void setUpdateInterval(const int &updateInterval);
@@ -74,8 +75,8 @@ signals:
     void collidedChanged();
 
 private:
-    QDeclarativeScriptString m_updateScript;
-    QDeclarativeExpression *m_expression;
+    QQmlScriptString m_updateScript;
+    QQmlExpression *m_expression;
     int m_updateInterval;
     QTime m_updateTime;
     bool m_collided;

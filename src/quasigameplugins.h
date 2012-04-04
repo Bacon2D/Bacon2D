@@ -22,9 +22,9 @@
 #ifndef _QUASIGAMEPLUGINS_H_
 #define _QUASIGAMEPLUGINS_H_
 
-#include <QtDeclarative/QDeclarativeExtensionPlugin>
+#include <QtQml/QQmlExtensionPlugin>
 
-class QuasiGamePlugins : public  QDeclarativeExtensionPlugin
+class QuasiGamePlugins : public QQmlExtensionPlugin
 {
     Q_OBJECT
 

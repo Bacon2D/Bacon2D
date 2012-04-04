@@ -23,7 +23,7 @@
 
 #include "quasigame.h"
 
-void GameScene::append_gameItem(QDeclarativeListProperty<GameItem> *list, GameItem *gameItem)
+void GameScene::append_gameItem(QQmlListProperty<GameItem> *list, GameItem *gameItem)
 {
     GameScene *scene = qobject_cast<GameScene *>(list->object);
     if (scene) {
@@ -44,9 +44,9 @@ GameScene::GameScene(QuasiGame *parent)
     setVisible(false);
 }
 
-QDeclarativeListProperty<GameItem> GameScene::entities() const
+QQmlListProperty<GameItem> GameScene::entities() const
 {
-    return QDeclarativeListProperty<GameItem>(const_cast<GameScene *>(this), 0, &GameScene::append_gameItem);
+    return QQmlListProperty<GameItem>(const_cast<GameScene *>(this), 0, &GameScene::append_gameItem);
 }
 
 void GameScene::update(const long &delta)

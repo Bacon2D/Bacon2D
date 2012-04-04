@@ -35,7 +35,7 @@ class GameScene : public QuasiDeclarativeItem
 {
     Q_OBJECT
 
-    Q_PROPERTY(QDeclarativeListProperty<GameItem> entities READ entities)
+    Q_PROPERTY(QQmlListProperty<GameItem> entities READ entities)
     Q_PROPERTY(bool running READ running WRITE setRunning NOTIFY runningChanged)
     Q_PROPERTY(Viewport *viewport READ viewport WRITE setViewport NOTIFY viewportChanged)
     Q_PROPERTY(QuasiGame *game READ game WRITE setGame)
@@ -44,7 +44,7 @@ class GameScene : public QuasiDeclarativeItem
 public:
     GameScene(QuasiGame *parent = 0);
 
-    QDeclarativeListProperty<GameItem> entities() const;
+    QQmlListProperty<GameItem> entities() const;
 
     bool running() const;
     void setRunning(const bool &running);
@@ -68,7 +68,7 @@ signals:
     void debugChanged();
 
 private:
-    static void append_gameItem(QDeclarativeListProperty<GameItem> *list, GameItem *gameItem);
+    static void append_gameItem(QQmlListProperty<GameItem> *list, GameItem *gameItem);
     void checkCollisions();
     bool checkCollision(GameItem *item, GameItem *otherItem) const;
 

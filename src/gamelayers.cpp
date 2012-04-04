@@ -21,7 +21,7 @@
 
 #include "gamelayers.h"
 
-void GameLayers::append_layer(QDeclarativeListProperty<Layer> *list, Layer *layer)
+void GameLayers::append_layer(QQmlListProperty<Layer> *list, Layer *layer)
 {
     GameLayers *layers = qobject_cast<GameLayers *>(list->object);
     if (layers) {
@@ -42,9 +42,9 @@ GameLayers::GameLayers(GameScene *parent)
     m_gridColor = Qt::red;
 }
 
-QDeclarativeListProperty<Layer> GameLayers::layers() const
+QQmlListProperty<Layer> GameLayers::layers() const
 {
-    return QDeclarativeListProperty<Layer>(const_cast<GameLayers *>(this), 0, &GameLayers::append_layer);
+    return QQmlListProperty<Layer>(const_cast<GameLayers *>(this), 0, &GameLayers::append_layer);
 }
 
 GameLayers::~GameLayers()

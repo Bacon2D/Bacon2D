@@ -33,7 +33,7 @@ class GameLayers : public GameItem
 {
     Q_OBJECT
 
-    Q_PROPERTY(QDeclarativeListProperty<Layer> layers READ layers)
+    Q_PROPERTY(QQmlListProperty<Layer> layers READ layers)
     Q_PROPERTY(Quasi::DrawType drawType READ drawType WRITE setDrawType)
     Q_PROPERTY(int tileHeight READ tileHeight WRITE setTileHeight)
     Q_PROPERTY(int tileWidth READ tileWidth WRITE setTileWidth)
@@ -45,7 +45,7 @@ public:
     GameLayers(GameScene *parent = 0);
     virtual ~GameLayers();
 
-    QDeclarativeListProperty<Layer> layers() const;
+    QQmlListProperty<Layer> layers() const;
 
     void setDrawType(Quasi::DrawType drawType);
     Quasi::DrawType drawType() const;
@@ -65,7 +65,7 @@ public:
     void update(const long &delta);
 
 private:
-    static void append_layer(QDeclarativeListProperty<Layer> *list, Layer *layer);
+    static void append_layer(QQmlListProperty<Layer> *list, Layer *layer);
 
     int m_tileWidth;
     int m_tileHeight;

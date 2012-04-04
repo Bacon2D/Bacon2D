@@ -21,7 +21,7 @@
 
 #include "gameitem.h"
 
-#include <QDeclarativeExpression>
+#include <QQmlExpression>
 
 #include "enums.h"
 #include "quasigame.h"
@@ -61,12 +61,12 @@ void GameItem::update(const long &delta)
         }
 }
 
-QDeclarativeScriptString GameItem::updateScript() const
+QQmlScriptString GameItem::updateScript() const
 {
     return m_updateScript;
 }
 
-void GameItem::setUpdateScript(const QDeclarativeScriptString &updateScript)
+void GameItem::setUpdateScript(const QQmlScriptString &updateScript)
 {
     if (m_updateScript.script() != updateScript.script()) {
         m_updateScript = updateScript;
@@ -74,7 +74,7 @@ void GameItem::setUpdateScript(const QDeclarativeScriptString &updateScript)
         if (m_expression)
             delete m_expression;
 
-        m_expression = new QDeclarativeExpression(m_updateScript.context(), m_updateScript.scopeObject(), m_updateScript.script());
+        m_expression = new QQmlExpression(m_updateScript.context(), m_updateScript.scopeObject(), m_updateScript.script());
 
         emit updateScriptChanged();
     }

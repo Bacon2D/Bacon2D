@@ -27,7 +27,7 @@
 #include "animationchangeevent.h"
 #include "animationtransition.h"
 
-void SpriteItem::append_animation(QDeclarativeListProperty<SpriteAnimationItem> *list, SpriteAnimationItem *animation)
+void SpriteItem::append_animation(QQmlListProperty<SpriteAnimationItem> *list, SpriteAnimationItem *animation)
 {
     SpriteItem *spriteItem = qobject_cast<SpriteItem *>(list->object);
 
@@ -44,9 +44,9 @@ SpriteItem::SpriteItem(GameScene *parent)
 {
 }
 
-QDeclarativeListProperty<SpriteAnimationItem> SpriteItem::animations() const
+QQmlListProperty<SpriteAnimationItem> SpriteItem::animations() const
 {
-    return QDeclarativeListProperty<SpriteAnimationItem>(const_cast<SpriteItem *>(this), 0, &SpriteItem::append_animation);
+    return QQmlListProperty<SpriteAnimationItem>(const_cast<SpriteItem *>(this), 0, &SpriteItem::append_animation);
 }
 
 QString SpriteItem::animation() const
