@@ -26,18 +26,18 @@
 #include "layer.h"
 
 //! Class constructor
-Layer::Layer(QuasiDeclarativeItem *parent)
+Layer::Layer(QQuickItem *parent)
     : QuasiPaintedItem(parent)
-      , m_drawType(Quasi::TiledDrawType)
-      , m_factor(1.0)
-      , m_type(Quasi::InfiniteType)
       , m_direction((Quasi::LayerDirection)-1) // Backward
+      , m_tileWidth(32)
+      , m_tileHeight(32)
+      , m_factor(1.0)
+      , m_drawType(Quasi::TiledDrawType)
+      , m_type(Quasi::InfiniteType)
       , m_areaToDraw(2.0)
       , m_columnOffset(0)
       , m_drawingMirrored(false)
       , m_shouldMirror(false)
-      , m_tileWidth(32)
-      , m_tileHeight(32)
       , m_latestPoint(0)
 {
 #if QT_VERSION >= 0x050000
