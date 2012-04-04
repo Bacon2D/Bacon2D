@@ -21,16 +21,16 @@
 
 #include "quasigame.h"
 
-#if QT_VERSION >= 0x050000
-#include <QQuickCanvas>
-#else
-#include <QApplication>
-#endif
-
-#include <QCursor>
-
 #include "gamescene.h"
 #include "viewport.h"
+
+#if QT_VERSION >= 0x050000
+#include <QtQuick/QQuickCanvas>
+#else
+#include <QtGui/QApplication>
+#endif
+
+#include <QtGui/QCursor>
 
 QuasiGame::QuasiGame(QuasiDeclarativeItem *parent)
     : QuasiDeclarativeItem(parent)

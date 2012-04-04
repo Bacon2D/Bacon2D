@@ -22,16 +22,20 @@
 #ifndef _GAMEITEM_H_
 #define _GAMEITEM_H_
 
-#include <QtCore/qglobal.h>
-
-#include <QTime>
-#include <QtQuick/QQuickItem>
-#include <QQmlScriptString>
-
-#include "quasideclarativeitem.h"
 #include "enums.h"
+#include "quasideclarativeitem.h"
 
+#include <QtCore/QtGlobal>
+#include <QtCore/QTime>
+
+#if QT_VERSION >= 0x050000
+#include <QtQml/QQmlScriptString>
 class QQmlExpression;
+#else
+#include <QtDeclarative/QDeclarativeScriptString>
+class QDeclarativeExpression;
+#endif
+
 class QuasiGame;
 class GameScene;
 
@@ -39,7 +43,11 @@ class GameItem : public QuasiDeclarativeItem
 {
     Q_OBJECT
 
+#if QT_VERSION >= 0x050000
     Q_PROPERTY(QQmlScriptString updateScript READ updateScript WRITE setUpdateScript NOTIFY updateScriptChanged)
+#else
+    Q_PROPERTY(QDeclarativeScriptString updateScript READ updateScript WRITE setUpdateScript NOTIFY updateScriptChanged)
+#endif
     Q_PROPERTY(int updateInterval READ updateInterval WRITE setUpdateInterval NOTIFY updateIntervalChanged)
     Q_PROPERTY(bool collided READ collided WRITE setCollided NOTIFY collidedChanged)
     Q_PROPERTY(Quasi::Ordering order READ order WRITE setOrder)
@@ -48,8 +56,13 @@ class GameItem : public QuasiDeclarativeItem
 public:
     GameItem(GameScene *parent = 0);
 
+#if QT_VERSION >= 0x050000
     QQmlScriptString updateScript() const;
     void setUpdateScript(const QQmlScriptString &updateScript);
+#else
+    QDeclarativeScriptString updateScript() const;
+    void setUpdateScript(const QDeclarativeScriptString &updateScript);
+#endif
 
     int updateInterval() const;
     void setUpdateInterval(const int &updateInterval);
@@ -75,8 +88,13 @@ signals:
     void collidedChanged();
 
 private:
+#if QT_VERSION >= 0x050000
     QQmlScriptString m_updateScript;
     QQmlExpression *m_expression;
+#else
+    QDeclarativeScriptString m_updateScript;
+    QDeclarativeExpression *m_expression;
+#endif
     int m_updateInterval;
     QTime m_updateTime;
     bool m_collided;

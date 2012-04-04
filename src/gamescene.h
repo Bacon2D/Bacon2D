@@ -35,7 +35,11 @@ class GameScene : public QuasiDeclarativeItem
 {
     Q_OBJECT
 
+#if QT_VERSION >= 0x050000
     Q_PROPERTY(QQmlListProperty<GameItem> entities READ entities)
+#else
+    Q_PROPERTY(QDeclarativeListProperty<GameItem> entities READ entities)
+#endif
     Q_PROPERTY(bool running READ running WRITE setRunning NOTIFY runningChanged)
     Q_PROPERTY(Viewport *viewport READ viewport WRITE setViewport NOTIFY viewportChanged)
     Q_PROPERTY(QuasiGame *game READ game WRITE setGame)
@@ -44,7 +48,11 @@ class GameScene : public QuasiDeclarativeItem
 public:
     GameScene(QuasiGame *parent = 0);
 
+#if QT_VERSION >= 0x050000
     QQmlListProperty<GameItem> entities() const;
+#else
+    QDeclarativeListProperty<GameItem> entities() const;
+#endif
 
     bool running() const;
     void setRunning(const bool &running);
@@ -68,7 +76,11 @@ signals:
     void debugChanged();
 
 private:
+#if QT_VERSION >= 0x050000
     static void append_gameItem(QQmlListProperty<GameItem> *list, GameItem *gameItem);
+#else
+    static void append_gameItem(QDeclarativeListProperty<GameItem> *list, GameItem *gameItem);
+#endif
     void checkCollisions();
     bool checkCollision(GameItem *item, GameItem *otherItem) const;
 

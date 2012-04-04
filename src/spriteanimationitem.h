@@ -22,12 +22,10 @@
 #ifndef _SPRITEANIMATIONITEM_H_
 #define _SPRITEANIMATIONITEM_H_
 
-#include <QState>
+#include <QtCore/QState>
 
 class SpriteSheet;
 class QPropertyAnimation;
-
-class SpriteSheet;
 
 class SpriteAnimationItem : public QState
 {

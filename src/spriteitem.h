@@ -22,10 +22,10 @@
 #ifndef _SPRITEITEM_H_
 #define _SPRITEITEM_H_
 
-#include <QHash>
-#include <QStateMachine>
-
 #include "gameitem.h"
+
+#include <QtCore/QHash>
+#include <QtCore/QStateMachine>
 
 class GameScene;
 class SpriteAnimationItem;
@@ -34,13 +34,21 @@ class SpriteItem : public GameItem
 {
     Q_OBJECT
 
+#if QT_VERSION >= 0x050000
     Q_PROPERTY(QQmlListProperty<SpriteAnimationItem> animations READ animations)
+#else
+    Q_PROPERTY(QDeclarativeListProperty<SpriteAnimationItem> animations READ animations)
+#endif
     Q_PROPERTY(QString animation READ animation WRITE setAnimation NOTIFY animationChanged)
 
 public:
     SpriteItem(GameScene *parent = 0);
 
+#if QT_VERSION >= 0x050000
     QQmlListProperty<SpriteAnimationItem> animations() const;
+#else
+    QDeclarativeListProperty<SpriteAnimationItem> animations() const;
+#endif
 
     QString animation() const;
     void setAnimation(const QString &animation, const bool &force = false);
@@ -55,7 +63,11 @@ private:
     void initializeMachine();
 
 private:
+#if QT_VERSION >= 0x050000
     static void append_animation(QQmlListProperty<SpriteAnimationItem> *list, SpriteAnimationItem *animation);
+#else
+    static void append_animation(QDeclarativeListProperty<SpriteAnimationItem> *list, SpriteAnimationItem *animation);
+#endif
 
     QStateMachine *m_stateMachine;
     QState *m_stateGroup;

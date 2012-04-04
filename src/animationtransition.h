@@ -22,7 +22,7 @@
 #ifndef _ANIMATIONTRANSITION_H_
 #define _ANIMATIONTRANSITION_H_
 
-#include <QAbstractTransition>
+#include <QtCore/QAbstractTransition>
 
 class SpriteAnimationItem;
 

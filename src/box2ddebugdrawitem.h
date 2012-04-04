@@ -22,10 +22,11 @@
 #ifndef _BOX2DDEBUGDRAWITEM_H_
 #define _BOX2DDEBUGDRAWITEM_H_
 
-#include <QtCore/qglobal.h>
+#include "quasipainteditem.h"
+
 #include <Box2D/Box2D.h>
 
-#include "quasipainteditem.h"
+#include <QtCore/QtGlobal>
 
 class QPainter;
 class Box2DScene;

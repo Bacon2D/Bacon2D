@@ -22,12 +22,11 @@
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
-#include <QtCore>
-#include <QColor>
-#include <QPolygonF>
-#include <QPointF>
-
 #include <Box2D/Box2D.h>
+
+#include <QtCore/QtCore>
+#include <QtGui/QColor>
+#include <QtGui/QPolygonF>
 
 namespace b2Util
 {

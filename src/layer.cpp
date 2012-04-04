@@ -19,35 +19,36 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#include <QDebug>
-#include <QPainter>
-#include <QQmlProperty>
-
 #include "layer.h"
 
+#include <QtCore/QDebug>
+#include <QtGui/QPainter>
+#if QT_VERSION >= 0x050000
+#include <QtQml/QQmlProperty>
+#endif
+
 //! Class constructor
-Layer::Layer(QQuickItem *parent)
+Layer::Layer(QuasiDeclarativeItem *parent)
     : QuasiPaintedItem(parent)
-      , m_direction((Quasi::LayerDirection)-1) // Backward
-      , m_tileWidth(32)
-      , m_tileHeight(32)
-      , m_factor(1.0)
-      , m_drawType(Quasi::TiledDrawType)
-      , m_type(Quasi::InfiniteType)
-      , m_areaToDraw(2.0)
-      , m_columnOffset(0)
-      , m_drawingMirrored(false)
-      , m_shouldMirror(false)
-      , m_latestPoint(0)
+    , m_direction((Quasi::LayerDirection)-1) // Backward
+    , m_tileWidth(32)
+    , m_tileHeight(32)
+    , m_factor(1.0)
+    , m_drawType(Quasi::TiledDrawType)
+    , m_type(Quasi::InfiniteType)
+    , m_areaToDraw(2.0)
+    , m_columnOffset(0)
+    , m_drawingMirrored(false)
+    , m_shouldMirror(false)
+    , m_latestPoint(0)
 {
 #if QT_VERSION >= 0x050000
     setZ(Quasi::InteractionLayerOrdering_01);
+    // this activates the item layered mode
+    QQmlProperty(this, "layer.enabled").write(true);
 #else
     setZValue(Quasi::InteractionLayerOrdering_01);
 #endif
-
-    // this activates the item layered mode
-    QQmlProperty(this, "layer.enabled").write(true);
 }
 
 //! Class destructor

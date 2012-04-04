@@ -21,7 +21,11 @@
 
 #include "gamelayers.h"
 
+#if QT_VERSION >= 0x050000
 void GameLayers::append_layer(QQmlListProperty<Layer> *list, Layer *layer)
+#else
+void GameLayers::append_layer(QDeclarativeListProperty<Layer> *list, Layer *layer)
+#endif
 {
     GameLayers *layers = qobject_cast<GameLayers *>(list->object);
     if (layers) {
@@ -32,20 +36,27 @@ void GameLayers::append_layer(QQmlListProperty<Layer> *list, Layer *layer)
 
 GameLayers::GameLayers(GameScene *parent)
     : GameItem(parent)
-      , m_tileWidth(32)
-      , m_tileHeight(32)
-      , m_totalColumns(0)
-      , m_drawType(Quasi::TiledDrawType)
+    , m_tileWidth(32)
+    , m_tileHeight(32)
+    , m_totalColumns(0)
+    , m_drawType(Quasi::TiledDrawType)
 {
     // control variables
     m_drawGrid = false;
     m_gridColor = Qt::red;
 }
 
+#if QT_VERSION >= 0x050000
 QQmlListProperty<Layer> GameLayers::layers() const
 {
     return QQmlListProperty<Layer>(const_cast<GameLayers *>(this), 0, &GameLayers::append_layer);
 }
+#else
+QDeclarativeListProperty<Layer> GameLayers::layers() const
+{
+    return QDeclarativeListProperty<Layer>(const_cast<GameLayers *>(this), 0, &GameLayers::append_layer);
+}
+#endif
 
 GameLayers::~GameLayers()
 {

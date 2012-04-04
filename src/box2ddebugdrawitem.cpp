@@ -21,14 +21,14 @@
 
 #include "box2ddebugdrawitem.h"
 
-#include <QPainter>
+#include "box2dbaseitem.h"
+#include "box2dscene.h"
+#include "enums.h"
+#include "util.h"
 
 #include <Box2D/Box2D.h>
 
-#include "enums.h"
-#include "box2dscene.h"
-#include "box2dbaseitem.h"
-#include "util.h"
+#include <QtGui/QPainter>
 
 Box2DDebugDrawItem::Box2DDebugDrawItem(Box2DScene *parent)
     : QuasiPaintedItem(parent)

@@ -22,9 +22,9 @@
 #ifndef _SPRITESHEET_H_
 #define _SPRITESHEET_H_
 
-#include <QtCore/qglobal.h>
-
 #include "quasipainteditem.h"
+
+#include <QtCore/QtGlobal>
 
 class QPixmap;
 

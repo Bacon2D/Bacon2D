@@ -22,7 +22,7 @@
 #ifndef _ENUMS_H_
 #define _ENUMS_H_
 
-#include <QObject>
+#include <QtCore/QObject>
 
 class Quasi : public QObject {
     Q_OBJECT

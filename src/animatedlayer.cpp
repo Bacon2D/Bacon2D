@@ -23,8 +23,8 @@
 
 AnimatedLayer::AnimatedLayer(Layer *parent)
     : Layer((QuasiDeclarativeItem *)parent)
-      , m_horizontalStep(0)
-      , m_currentHorizontalStep(0)
+    , m_horizontalStep(0)
+    , m_currentHorizontalStep(0)
 {
 }
 

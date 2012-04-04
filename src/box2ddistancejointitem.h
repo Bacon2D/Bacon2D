@@ -22,9 +22,9 @@
 #ifndef _BOX2DDISTANCEJOINTITEM_H_
 #define _BOX2DDISTANCEJOINTITEM_H_
 
-#include <QtCore/qglobal.h>
-
 #include "box2djointitem.h"
+
+#include <QtCore/QtGlobal>
 
 class b2DistanceJoint;
 

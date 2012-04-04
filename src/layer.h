@@ -22,15 +22,13 @@
 #ifndef _LAYER_H_
 #define _LAYER_H_
 
-#include <QtCore/qglobal.h>
-
-#include <QList>
-#include <QPixmap>
-#include <QString>
-
-#include "quasipainteditem.h"
-#include "gameitem.h"
 #include "enums.h"
+#include "gameitem.h"
+#include "quasipainteditem.h"
+
+#include <QtCore/QList>
+#include <QtCore/QString>
+#include <QtGui/QPixmap>
 
 class Offsets {
 public:

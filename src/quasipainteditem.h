@@ -22,7 +22,7 @@
 #ifndef _QUASIPAINTEDITEM_H_
 #define _QUASIPAINTEDITEM_H_
 
-#include <QtCore/qglobal.h>
+#include <QtCore/QtGlobal>
 
 #if QT_VERSION >= 0x050000
 #include <QtQuick/QQuickPaintedItem>

@@ -21,11 +21,15 @@
 
 #include "gameitem.h"
 
-#include <QQmlExpression>
-
 #include "enums.h"
-#include "quasigame.h"
 #include "gamescene.h"
+#include "quasigame.h"
+
+#if QT_VERSION >= 0x050000
+#include <QtQml/QQmlExpression>
+#else
+#include <QtDeclarative/QDeclarativeExpression>
+#endif
 
 GameItem::GameItem(GameScene *parent)
     : QuasiDeclarativeItem(parent)
@@ -61,12 +65,20 @@ void GameItem::update(const long &delta)
         }
 }
 
+#if QT_VERSION >= 0x050000
 QQmlScriptString GameItem::updateScript() const
+#else
+QDeclarativeScriptString GameItem::updateScript() const
+#endif
 {
     return m_updateScript;
 }
 
+#if QT_VERSION >= 0x050000
 void GameItem::setUpdateScript(const QQmlScriptString &updateScript)
+#else
+void GameItem::setUpdateScript(const QDeclarativeScriptString &updateScript)
+#endif
 {
     if (m_updateScript.script() != updateScript.script()) {
         m_updateScript = updateScript;
@@ -74,7 +86,11 @@ void GameItem::setUpdateScript(const QQmlScriptString &updateScript)
         if (m_expression)
             delete m_expression;
 
+#if QT_VERSION >= 0x050000
         m_expression = new QQmlExpression(m_updateScript.context(), m_updateScript.scopeObject(), m_updateScript.script());
+#else
+        m_expression = new QDeclarativeExpression(m_updateScript.context(), m_updateScript.scopeObject(), m_updateScript.script());
+#endif
 
         emit updateScriptChanged();
     }

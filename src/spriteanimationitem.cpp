@@ -21,9 +21,9 @@
 
 #include "spriteanimationitem.h"
 
-#include <QPropertyAnimation>
-
 #include "spritesheet.h"
+
+#include <QtCore/QPropertyAnimation>
 
 SpriteAnimationItem::SpriteAnimationItem(QState *parent)
     : QState(parent)

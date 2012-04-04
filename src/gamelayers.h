@@ -22,18 +22,22 @@
 #ifndef _GAMELAYERS_H_
 #define _GAMELAYERS_H_
 
-#include <QList>
-#include <QString>
-
-#include "layer.h"
 #include "enums.h"
 #include "gameitem.h"
+#include "layer.h"
+
+#include <QtCore/QList>
+#include <QtCore/QString>
 
 class GameLayers : public GameItem
 {
     Q_OBJECT
 
+#if QT_VERSION >= 0x050000
     Q_PROPERTY(QQmlListProperty<Layer> layers READ layers)
+#else
+    Q_PROPERTY(QDeclarativeListProperty<Layer> layers READ layers)
+#endif
     Q_PROPERTY(Quasi::DrawType drawType READ drawType WRITE setDrawType)
     Q_PROPERTY(int tileHeight READ tileHeight WRITE setTileHeight)
     Q_PROPERTY(int tileWidth READ tileWidth WRITE setTileWidth)
@@ -45,7 +49,11 @@ public:
     GameLayers(GameScene *parent = 0);
     virtual ~GameLayers();
 
+#if QT_VERSION >= 0x050000
     QQmlListProperty<Layer> layers() const;
+#else
+    QDeclarativeListProperty<Layer> layers() const;
+#endif
 
     void setDrawType(Quasi::DrawType drawType);
     Quasi::DrawType drawType() const;
@@ -65,7 +73,12 @@ public:
     void update(const long &delta);
 
 private:
+
+#if QT_VERSION >= 0x050000
     static void append_layer(QQmlListProperty<Layer> *list, Layer *layer);
+#else
+    static void append_layer(QDeclarativeListProperty<Layer> *list, Layer *layer);
+#endif
 
     int m_tileWidth;
     int m_tileHeight;

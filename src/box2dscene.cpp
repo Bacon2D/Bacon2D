@@ -21,10 +21,10 @@
 
 #include "box2dscene.h"
 
-#include "quasigame.h"
-#include "box2ditem.h"
 #include "box2dbaseitem.h"
 #include "box2ddebugdrawitem.h"
+#include "box2ditem.h"
+#include "quasigame.h"
 #include "viewport.h"
 
 #include <Box2D/Box2D.h>

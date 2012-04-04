@@ -21,18 +21,18 @@
 
 #include "quasigameplugins.h"
 
-#include "quasigame.h"
-#include "gamescene.h"
+#include "animatedlayer.h"
+#include "box2ddistancejointitem.h"
+#include "box2ditem.h"
+#include "box2dscene.h"
+#include "box2dmousejointitem.h"
 #include "gameitem.h"
+#include "gamelayers.h"
+#include "gamescene.h"
 #include "spriteanimationitem.h"
 #include "spriteitem.h"
-#include "box2dscene.h"
-#include "box2ditem.h"
-#include "box2ddistancejointitem.h"
-#include "box2dmousejointitem.h"
-#include "gamelayers.h"
 #include "staticlayer.h"
-#include "animatedlayer.h"
+#include "quasigame.h"
 #include "viewport.h"
 
 void QuasiGamePlugins::registerTypes(const char *uri)

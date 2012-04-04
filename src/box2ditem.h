@@ -19,14 +19,14 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _BOX2DITEN_H_
-#define _BOX2DITEN_H_
-
-#include <QtCore/qglobal.h>
+#ifndef _BOX2DITEM_H_
+#define _BOX2DITEM_H_
 
 #include "box2dbaseitem.h"
-#include "gameitem.h"
 #include "enums.h"
+#include "gameitem.h"
+
+#include <QtCore/QtGlobal>
 
 class GameScene;
 class b2World;
@@ -138,4 +138,4 @@ private:
     QVariantList m_vertices;
 };
 
-#endif /* _BOX2DITEN_H_ */
+#endif /* _BOX2DITEM_H_ */

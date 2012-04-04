@@ -22,9 +22,17 @@
 #ifndef _QUASIGAMEPLUGINS_H_
 #define _QUASIGAMEPLUGINS_H_
 
+#include <QtCore/QtGlobal>
+
+#if QT_VERSION >= 0x050000
 #include <QtQml/QQmlExtensionPlugin>
 
 class QuasiGamePlugins : public QQmlExtensionPlugin
+#else
+#include <QtDeclarative/QDeclarativeExtensionPlugin>
+
+class QuasiGamePlugins : public QDeclarativeExtensionPlugin
+#endif
 {
     Q_OBJECT
 

@@ -22,10 +22,9 @@
 #ifndef _QUASIGAME_H_
 #define _QUASIGAME_H_
 
-#include <QtCore/qglobal.h>
+#include "quasideclarativeitem.h"
 
 #include <QtCore/QTime>
-#include "quasideclarativeitem.h"
 
 class GameScene;
 class Viewport;

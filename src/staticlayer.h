@@ -22,12 +22,11 @@
 #ifndef _STATICLAYER_H_
 #define _STATICLAYER_H_
 
-#include <QtCore/qglobal.h>
+#include "layer.h"
 
+#include <QtCore/QtGlobal>
 #include <QtGui/QPixmap>
 #include <QtGui/QPainter>
-
-#include "layer.h"
 
 class StaticLayer : public Layer
 {

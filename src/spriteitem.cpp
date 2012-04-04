@@ -27,7 +27,11 @@
 #include "animationchangeevent.h"
 #include "animationtransition.h"
 
+#if QT_VERSION >= 0x050000
 void SpriteItem::append_animation(QQmlListProperty<SpriteAnimationItem> *list, SpriteAnimationItem *animation)
+#else
+void SpriteItem::append_animation(QDeclarativeListProperty<SpriteAnimationItem> *list, SpriteAnimationItem *animation)
+#endif
 {
     SpriteItem *spriteItem = qobject_cast<SpriteItem *>(list->object);
 
@@ -44,10 +48,17 @@ SpriteItem::SpriteItem(GameScene *parent)
 {
 }
 
+#if QT_VERSION >= 0x050000
 QQmlListProperty<SpriteAnimationItem> SpriteItem::animations() const
 {
     return QQmlListProperty<SpriteAnimationItem>(const_cast<SpriteItem *>(this), 0, &SpriteItem::append_animation);
 }
+#else
+QDeclarativeListProperty<SpriteAnimationItem> SpriteItem::animations() const
+{
+    return QDeclarativeListProperty<SpriteAnimationItem>(const_cast<SpriteItem *>(this), 0, &SpriteItem::append_animation);
+}
+#endif
 
 QString SpriteItem::animation() const
 {

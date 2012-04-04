@@ -21,11 +21,13 @@
 
 #include "box2dmousejointitem.h"
 
-#include "quasigame.h"
-#include "box2dscene.h"
 #include "box2ditem.h"
+#include "box2dscene.h"
+#include "quasigame.h"
 
 #include <Box2D/Box2D.h>
+
+#include <QtGui/QCursor>
 
 Box2DMouseJointItem::Box2DMouseJointItem(GameScene *parent)
     : Box2DBaseItem(parent)

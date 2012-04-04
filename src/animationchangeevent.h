@@ -22,7 +22,7 @@
 #ifndef _ANIMATIONCHANGEEVENT_H_
 #define _ANIMATIONCHANGEEVENT_H_
 
-#include <QEvent>
+#include <QtCore/QEvent>
 
 class AnimationChangeEvent : public QEvent
 {
