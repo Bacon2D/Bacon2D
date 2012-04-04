@@ -63,7 +63,7 @@ QuasiGame {
 
                         horizontalStep: 5 // base horizontal offset, aka 'step'. There are no need of a signed value as it will always get the positive value; default: 0, i.e., no movement at all
                         direction: Quasi.BackwardDirection // direction of the background animation; ForwardDirection or BackwardDirection (default)
-                        type: Quasi.InfiniteType // type of animation; MirroredType or InfiniteType (default)
+                        layerType: Quasi.InfiniteType // type of animation; MirroredType or InfiniteType (default)
                     }
                 ]
             },

@@ -52,7 +52,7 @@ QuasiGame {
                         order: Quasi.BackgroundLayerOrdering_01
 
                         horizontalStep: 1
-                        type: Quasi.MirroredType
+                        layerType: Quasi.MirroredType
                     },
                     QuasiAnimatedLayer {
                         source: "images/planet.png"
@@ -60,7 +60,7 @@ QuasiGame {
                         order: Quasi.BackgroundLayerOrdering_02
 
                         horizontalStep: 1
-                        type: Quasi.InfiniteType
+                        layerType: Quasi.InfiniteType
                     },
                     QuasiAnimatedLayer {
                         source: "images/stars.png"
@@ -68,7 +68,7 @@ QuasiGame {
                         order: Quasi.ForegroundLayerOrdering_01
 
                         horizontalStep: 1
-                        type: Quasi.InfiniteType
+                        layerType: Quasi.InfiniteType
                     },
                     QuasiAnimatedLayer {
                         source: "images/moon.png"
@@ -76,7 +76,7 @@ QuasiGame {
                         order: Quasi.ForegroundLayerOrdering_02
 
                         horizontalStep: 1
-                        type: Quasi.InfiniteType
+                        layerType: Quasi.InfiniteType
                     }
                 ]
             },
