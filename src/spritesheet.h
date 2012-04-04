@@ -49,6 +49,12 @@ public:
     int initialFrame() const;
     void setInitialFrame(const int &initialFrame);
 
+    bool verticalMirror() const;
+    void setVerticalMirror(const bool &verticalMirror);
+
+    bool horizontalMirror() const;
+    void setHorizontalMirror(const bool &horizontalMirror);
+
 #if QT_VERSION >= 0x050000
     void paint(QPainter *painter);
 #else
@@ -71,6 +77,9 @@ private:
     int m_frame;
     int m_initialFrame;
     int m_frameWidth;
+    int m_vertical;
+    int m_horizontal;
+    bool m_mirror;
 };
 
 #endif /* _SPRITESHEET_H_ */

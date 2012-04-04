@@ -45,6 +45,8 @@ SpriteItem::SpriteItem(GameScene *parent)
     : GameItem(parent)
     , m_stateMachine(0)
     , m_stateGroup(0)
+    , m_verticalMirror(false)
+    , m_horizontalMirror(false)
 {
 }
 
@@ -109,4 +111,38 @@ void SpriteItem::initializeAnimation()
 {
     if (m_animation != QString())
         setAnimation(m_animation, true);
+}
+
+bool SpriteItem::verticalMirror() const
+{
+    return m_verticalMirror;
+}
+
+void SpriteItem::setVerticalMirror(const bool &verticalMirror)
+{
+    if (m_verticalMirror != verticalMirror) {
+        m_verticalMirror = verticalMirror;
+
+        foreach (SpriteAnimationItem *animation, m_states.values())
+            animation->setVerticalMirror(m_verticalMirror);
+
+        emit verticalMirrorChanged();
+    }
+}
+
+bool SpriteItem::horizontalMirror() const
+{
+    return m_horizontalMirror;
+}
+
+void SpriteItem::setHorizontalMirror(const bool &horizontalMirror)
+{
+    if (m_horizontalMirror != horizontalMirror) {
+        m_horizontalMirror = horizontalMirror;
+
+        foreach (SpriteAnimationItem *animation, m_states.values())
+            animation->setHorizontalMirror(m_horizontalMirror);
+
+        emit horizontalMirrorChanged();
+    }
 }

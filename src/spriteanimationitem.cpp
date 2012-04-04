@@ -163,3 +163,23 @@ void SpriteAnimationItem::setDuration(const int &duration)
         emit durationChanged();
     }
 }
+
+bool SpriteAnimationItem::verticalMirror() const
+{
+    return m_spriteSheet->verticalMirror();
+}
+
+void SpriteAnimationItem::setVerticalMirror(const bool &verticalMirror)
+{
+    m_spriteSheet->setVerticalMirror(verticalMirror);
+}
+
+bool SpriteAnimationItem::horizontalMirror() const
+{
+    return m_spriteSheet->horizontalMirror();
+}
+
+void SpriteAnimationItem::setHorizontalMirror(const bool &horizontalMirror)
+{
+    m_spriteSheet->setHorizontalMirror(horizontalMirror);
+}

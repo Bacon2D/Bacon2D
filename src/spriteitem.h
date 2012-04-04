@@ -40,6 +40,8 @@ class SpriteItem : public GameItem
     Q_PROPERTY(QDeclarativeListProperty<SpriteAnimationItem> animations READ animations)
 #endif
     Q_PROPERTY(QString animation READ animation WRITE setAnimation NOTIFY animationChanged)
+    Q_PROPERTY(bool verticalMirror READ verticalMirror WRITE setVerticalMirror NOTIFY verticalMirrorChanged)
+    Q_PROPERTY(bool horizontalMirror READ horizontalMirror WRITE setHorizontalMirror NOTIFY horizontalMirrorChanged)
 
 public:
     SpriteItem(GameScene *parent = 0);
@@ -53,11 +55,19 @@ public:
     QString animation() const;
     void setAnimation(const QString &animation, const bool &force = false);
 
+    bool verticalMirror() const;
+    void setVerticalMirror(const bool &verticalMirror);
+
+    bool horizontalMirror() const;
+    void setHorizontalMirror(const bool &horizontalMirror);
+
 public slots:
     void initializeAnimation();
 
 signals:
     void animationChanged();
+    void verticalMirrorChanged();
+    void horizontalMirrorChanged();
 
 private:
     void initializeMachine();
@@ -73,6 +83,8 @@ private:
     QState *m_stateGroup;
     QHash<QString, SpriteAnimationItem *> m_states;
     QString m_animation;
+    bool m_verticalMirror;
+    bool m_horizontalMirror;
 };
 
 #endif /* _SPRITEITEM_H_ */

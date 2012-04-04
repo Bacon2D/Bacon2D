@@ -35,6 +35,9 @@ SpriteSheet::SpriteSheet(QuasiDeclarativeItem *parent)
     , m_frame(0)
     , m_initialFrame(0)
     , m_frameWidth(0)
+    , m_vertical(1)
+    , m_horizontal(1)
+    , m_mirror(false)
 {
     setVisible(false);
 
@@ -80,7 +83,13 @@ void SpriteSheet::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
         if (!m_frames)
             painter->drawPixmap(0, 0, *m_pixMap);
         else
-            painter->drawPixmap(0, 0, *m_pixMap, (m_frame * m_frameWidth), 0, m_frameWidth, m_pixMap->height());
+            if (m_mirror)
+                painter->drawPixmap(0, 0,
+                        m_pixMap->transformed(QTransform().scale(m_horizontal, m_vertical),
+                        Qt::FastTransformation), (m_frame * m_frameWidth), 0, m_frameWidth,
+                        m_pixMap->height());
+            else
+                painter->drawPixmap(0, 0, *m_pixMap, (m_frame * m_frameWidth), 0, m_frameWidth, m_pixMap->height());
     }
 }
 
@@ -139,4 +148,30 @@ void SpriteSheet::setInitialFrame(const int &initialFrame)
 
         emit initialFrameChanged();
     }
+}
+
+bool SpriteSheet::verticalMirror() const
+{
+    return m_vertical == -1;
+}
+
+void SpriteSheet::setVerticalMirror(const bool &verticalMirror)
+{
+    m_vertical = (verticalMirror) ? -1 : 1;
+
+    if (m_vertical == -1 || m_horizontal == -1)
+        m_mirror = true;
+}
+
+bool SpriteSheet::horizontalMirror() const
+{
+    return m_horizontal == -1;
+}
+
+void SpriteSheet::setHorizontalMirror(const bool &horizontalMirror)
+{
+    m_horizontal = (horizontalMirror) ? -1 : 1;
+
+    if (m_vertical == -1 || m_horizontal == -1)
+        m_mirror = true;
 }

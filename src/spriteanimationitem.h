@@ -71,6 +71,12 @@ public:
     int duration() const;
     void setDuration(const int &duration);
 
+    bool verticalMirror() const;
+    void setVerticalMirror(const bool &verticalMirror);
+
+    bool horizontalMirror() const;
+    void setHorizontalMirror(const bool &horizontalMirror);
+
     SpriteSheet *spriteSheet();
 
 signals:
