@@ -29,6 +29,7 @@ SpriteAnimationItem::SpriteAnimationItem(QState *parent)
     : QState(parent)
     , m_spriteSheet(new SpriteSheet)
     , m_spriteAnimation(new QPropertyAnimation(this))
+    , m_inverse(false)
 {
     connect(m_spriteSheet, SIGNAL(sourceChanged()), this, SIGNAL(sourceChanged()));
     connect(m_spriteSheet, SIGNAL(frameChanged()), this, SIGNAL(frameChanged()));
@@ -161,6 +162,28 @@ void SpriteAnimationItem::setDuration(const int &duration)
         m_spriteAnimation->setDuration(duration);
 
         emit durationChanged();
+    }
+}
+
+bool SpriteAnimationItem::inverse() const
+{
+    return m_inverse;
+}
+
+void SpriteAnimationItem::setInverse(const bool &inverse)
+{
+    if (m_inverse != inverse) {
+        m_inverse = inverse;
+
+        if (m_inverse) {
+            m_spriteAnimation->setStartValue(frames());
+            m_spriteAnimation->setEndValue(0);
+        } else {
+            m_spriteAnimation->setStartValue(0);
+            m_spriteAnimation->setEndValue(frames());
+        }
+
+        emit inverseChanged();
     }
 }
 

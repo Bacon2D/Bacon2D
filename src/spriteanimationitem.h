@@ -23,6 +23,7 @@
 #define _SPRITEANIMATIONITEM_H_
 
 #include <QtCore/QState>
+#include <QtCore/QPropertyAnimation>
 
 class SpriteSheet;
 class QPropertyAnimation;
@@ -40,6 +41,7 @@ class SpriteAnimationItem : public QState
     Q_PROPERTY(int loops READ loops WRITE setLoops NOTIFY loopsChanged)
     Q_PROPERTY(bool visible READ visible WRITE setVisible NOTIFY visibleChanged)
     Q_PROPERTY(int duration READ duration WRITE setDuration NOTIFY durationChanged)
+    Q_PROPERTY(bool inverse READ inverse WRITE setInverse NOTIFY inverseChanged)
 
 public:
     SpriteAnimationItem(QState *parent = 0);
@@ -71,6 +73,9 @@ public:
     int duration() const;
     void setDuration(const int &duration);
 
+    bool inverse() const;
+    void setInverse(const bool &inverse);
+
     bool verticalMirror() const;
     void setVerticalMirror(const bool &verticalMirror);
 
@@ -88,12 +93,14 @@ signals:
     void initialFrameChanged();
     void visibleChanged();
     void durationChanged();
+    void inverseChanged();
     void finished();
 
 private:
     QString m_name;
     SpriteSheet *m_spriteSheet;
     QPropertyAnimation *m_spriteAnimation;
+    bool m_inverse;
 };
 
 #endif /* _SPRITEANIMATIONITEM_H_ */
