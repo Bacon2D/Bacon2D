@@ -117,17 +117,17 @@ void QuasiGame::update()
         m_viewport->update(elapsedTime);
 }
 
-QPointF QuasiGame::mouse() const
+QPointF QuasiGame::mouse()
 {
 #if QT_VERSION >= 0x050000
     return canvas()->mapFromGlobal(QCursor::pos());
 #else
-    QPoint pos = QCursor::pos();
-    QWidget *widget = QApplication::widgetAt(pos);
+    m_mousePos = QCursor::pos();
+    QWidget *widget = QApplication::widgetAt(m_mousePos);
 
     if (widget)
-        return widget->mapFromGlobal(pos);
+        return widget->mapFromGlobal(m_mousePos);
     else
-        return QPointF();
+        return m_mousePos;
 #endif
 }

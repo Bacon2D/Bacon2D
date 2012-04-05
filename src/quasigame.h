@@ -25,6 +25,7 @@
 #include "quasideclarativeitem.h"
 
 #include <QtCore/QTime>
+#include <QtCore/QtGlobal>
 
 class GameScene;
 class Viewport;
@@ -48,7 +49,7 @@ public:
     int fps() const;
     void setFps(const int &fps);
 
-    QPointF mouse() const;
+    QPointF mouse();
 
 protected:
     void timerEvent(QTimerEvent *event);
@@ -64,6 +65,9 @@ private:
     int m_fps;
     Viewport *m_viewport;
     int m_timerId;
+#if QT_VERSION < 0x050000
+    QPoint m_mousePos;
+#endif
 };
 
 #endif /* _QUASIGAME_H_ */
