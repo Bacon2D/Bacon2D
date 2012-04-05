@@ -19,18 +19,19 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#include <QtCore/qglobal.h>
+#include <QtCore/QtGlobal>
 
 #if QT_VERSION >= 0x050000
-#include <QGuiApplication>
-#include <QQuickView>
+#include <QtGui/QGuiApplication>
+#include <QtQuick/QQuickView>
+#include <QtQml/QQmlEngine>
 #else
 #include <QtGui/QApplication>
 #include <QtDeclarative/QDeclarativeView>
+#include <QtDeclarative/QDeclarativeEngine>
 #endif
 
-#include <QDir>
-#include <QDeclarativeEngine>
+#include <QtCore/QDir>
 
 int main(int argc, char *argv[]) {
     QByteArray data = "1";
