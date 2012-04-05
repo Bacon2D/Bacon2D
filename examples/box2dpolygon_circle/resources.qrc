@@ -1,0 +1,7 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file>GameWindow.qml</file>
+    <file>triangle.png</file>
+    <file>ball.png</file>
+</qresource>
+</RCC>

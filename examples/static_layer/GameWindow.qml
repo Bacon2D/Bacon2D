@@ -19,9 +19,6 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-import QtQuick 2.0
-import QuasiGame 1.0
-
 QuasiGame {
     id: game
 
@@ -45,7 +42,7 @@ QuasiGame {
                     QuasiStaticLayer {
                         id: layer
 
-                        source: "not_so_large.png" // image source
+                        source: ":/not_so_large.png" // image source
                         //factor: 1.0 // updating factor of this layer, useful when using multiple layers; default: 1.0
                         /* layer ordering, set how the layers will be presented when rendering
                          * possible values, splited in three main areas:
@@ -71,7 +68,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "sliding"
 
-                    source: "sliding.png"
+                    source: ":/sliding.png"
                     frames: 4
                     duration: 450
                     loops: Animation.Infinite

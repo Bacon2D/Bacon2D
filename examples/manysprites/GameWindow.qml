@@ -19,9 +19,6 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-import QtQuick 2.0
-import QuasiGame 1.0
-
 QuasiGame {
     id: game
 
@@ -46,7 +43,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 400
                     loops: Animation.Infinite
@@ -61,7 +58,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -76,7 +73,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -91,7 +88,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -106,7 +103,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -121,7 +118,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -136,7 +133,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -151,7 +148,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -166,7 +163,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -181,7 +178,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -196,7 +193,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -211,7 +208,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -226,7 +223,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -241,7 +238,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -256,7 +253,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -271,7 +268,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -286,7 +283,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -301,7 +298,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -316,7 +313,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -331,7 +328,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -346,7 +343,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -361,7 +358,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -376,7 +373,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -391,7 +388,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -406,7 +403,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -421,7 +418,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -436,7 +433,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -451,7 +448,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -466,7 +463,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -481,7 +478,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -496,7 +493,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -511,7 +508,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -526,7 +523,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -541,7 +538,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -556,7 +553,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -571,7 +568,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -586,7 +583,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -601,7 +598,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -616,7 +613,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -631,7 +628,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -646,7 +643,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -661,7 +658,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -676,7 +673,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -691,7 +688,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -706,7 +703,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -721,7 +718,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -736,7 +733,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -751,7 +748,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -766,7 +763,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -781,7 +778,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -796,7 +793,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -811,7 +808,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -826,7 +823,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -841,7 +838,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -856,7 +853,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -871,7 +868,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -886,7 +883,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -901,7 +898,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -916,7 +913,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -931,7 +928,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -946,7 +943,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -961,7 +958,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -976,7 +973,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -991,7 +988,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1006,7 +1003,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1021,7 +1018,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1036,7 +1033,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1051,7 +1048,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1066,7 +1063,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1081,7 +1078,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1096,7 +1093,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1111,7 +1108,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1126,7 +1123,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1141,7 +1138,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1156,7 +1153,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1171,7 +1168,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1186,7 +1183,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1201,7 +1198,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1216,7 +1213,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1231,7 +1228,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1246,7 +1243,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1261,7 +1258,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1276,7 +1273,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1291,7 +1288,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1306,7 +1303,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1321,7 +1318,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1336,7 +1333,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1351,7 +1348,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1366,7 +1363,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1381,7 +1378,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1396,7 +1393,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1411,7 +1408,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1426,7 +1423,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1441,7 +1438,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1456,7 +1453,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1471,7 +1468,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1486,7 +1483,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1501,7 +1498,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1516,7 +1513,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite
@@ -1531,7 +1528,7 @@ QuasiGame {
                 animations: QuasiAnimation {
                     name: "explosion"
 
-                    source: "explosion.png"
+                    source: ":/explosion.png"
                     frames: 4
                     duration: 300 + Math.random() * 100
                     loops: Animation.Infinite

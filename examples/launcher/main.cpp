@@ -19,21 +19,24 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#include <QtCore/QtGlobal>
+#include "launcher.h"
+
+#include <QtCore/qglobal.h>
 
 #if QT_VERSION >= 0x050000
 #include <QtGui/QGuiApplication>
-#include <QtQuick/QQuickView>
+#include <QtQml/QQmlContext>
 #include <QtQml/QQmlEngine>
+#include <QtQuick/QQuickView>
 #else
 #include <QtGui/QApplication>
+#include <QtDeclarative/QDeclarativeContext>
 #include <QtDeclarative/QDeclarativeView>
 #include <QtDeclarative/QDeclarativeEngine>
 #endif
 
-#include <QtCore/QDir>
-
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     QByteArray data = "1";
     qputenv("QML_IMPORT_TRACE", data);
 
@@ -45,9 +48,17 @@ int main(int argc, char *argv[]) {
     QDeclarativeView view;
 #endif
 
+    Launcher launcher;
+
+    view.engine()->rootContext()->setContextProperty("launcher", &launcher);
     view.engine()->addImportPath("../../imports");
 
-    view.setSource(QUrl::fromLocalFile("GameWindow.qml"));
+#if QT_VERSION >= 0x050000
+    view.setSource(QUrl("qrc:/main-qt5.qml"));
+#else
+    view.setSource(QUrl("qrc:/main-qt4.qml"));
+#endif
+
     view.show();
 
     return app.exec();

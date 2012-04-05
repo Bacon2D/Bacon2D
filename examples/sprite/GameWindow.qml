@@ -19,9 +19,6 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-import QtQuick 2.0
-import QuasiGame 1.0
-
 QuasiGame {
     id: game
 
@@ -46,7 +43,7 @@ QuasiGame {
                 QuasiAnimation {
                     name: "sliding"
 
-                    source: "sliding.png"
+                    source: ":/sliding.png"
                     frames: 4
                     duration: 400
                     loops: Animation.Infinite
@@ -54,7 +51,7 @@ QuasiGame {
                 QuasiAnimation {
                     name: "jumping"
 
-                    source: "jumping.png"
+                    source: ":/jumping.png"
                     frames: 10
                     duration: 600
                     loops: 2

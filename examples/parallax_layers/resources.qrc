@@ -1,0 +1,10 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file>GameWindow.qml</file>
+    <file>images/moon.png</file>
+    <file>images/planet.png</file>
+    <file>images/rocketship.png</file>
+    <file>images/space.png</file>
+    <file>images/stars.png</file>
+</qresource>
+</RCC>

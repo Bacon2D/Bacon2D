@@ -19,7 +19,6 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-import QtQuick 2.0
 import QuasiGame 1.0
 
 QuasiGame {
@@ -55,11 +54,11 @@ QuasiGame {
 
                 layers: [
                     QuasiStaticLayer {
-                        source: "images/layer_01.png"
+                        source: ":/images/layer_01.png"
                         order: Quasi.BackgroundLayerOrdering_01
                     },
                     QuasiStaticLayer {
-                        source: "images/layer_02.png"
+                        source: ":/images/layer_02.png"
                         factor: 1.1
                         order: Quasi.ForegroundLayerOrdering_01
                     }
@@ -77,7 +76,7 @@ QuasiGame {
                     QuasiAnimation {
                         name: "moving"
 
-                        source: "images/moving.png"
+                        source: ":/images/moving.png"
                         frames: 20
                         duration: 450
                         loops: Animation.Infinite
@@ -86,7 +85,7 @@ QuasiGame {
                     QuasiAnimation {
                         name: "stopped"
 
-                        source: "images/stopped.png"
+                        source: ":/images/stopped.png"
                         frames: 7
                         duration: 5000
                         loops: Animation.Infinite

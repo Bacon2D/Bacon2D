@@ -19,9 +19,6 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-import QtQuick 2.0
-import QuasiGame 1.0
-
 QuasiGame {
     id: game
 
@@ -72,7 +69,7 @@ QuasiGame {
                 vertices: [[0, 0], [width, 0], [width / 2, height]]
 
                 Image {
-                    source: "triangle.png"
+                    source: ":/triangle.png"
                     anchors.fill: parent
                 }
 
@@ -97,7 +94,7 @@ QuasiGame {
                 shapeGeometry: Quasi.CircleBodyShape // It can be RectangleBodyShape (default), PolygonBodyShape or CircleBodyShape
 
                 Image {
-                    source: "ball.png"
+                    source: ":/ball.png"
                     anchors.fill: parent
                 }
 

@@ -1,0 +1,7 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file>main-qt4.qml</file>
+    <file>main-qt5.qml</file>
+    <file>main.js</file>
+</qresource>
+</RCC>

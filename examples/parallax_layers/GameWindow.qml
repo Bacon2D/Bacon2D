@@ -19,9 +19,6 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-import QtQuick 2.0
-import QuasiGame 1.0
-
 QuasiGame {
     id: game
 
@@ -47,7 +44,7 @@ QuasiGame {
 
                 layers: [
                     QuasiAnimatedLayer {
-                        source: "images/space.png"
+                        source: ":/images/space.png"
                         factor: 0.3
                         order: Quasi.BackgroundLayerOrdering_01
 
@@ -55,7 +52,7 @@ QuasiGame {
                         layerType: Quasi.MirroredType
                     },
                     QuasiAnimatedLayer {
-                        source: "images/planet.png"
+                        source: ":/images/planet.png"
                         factor: 0.5
                         order: Quasi.BackgroundLayerOrdering_02
 
@@ -63,7 +60,7 @@ QuasiGame {
                         layerType: Quasi.InfiniteType
                     },
                     QuasiAnimatedLayer {
-                        source: "images/stars.png"
+                        source: ":/images/stars.png"
                         factor: 1.1
                         order: Quasi.ForegroundLayerOrdering_01
 
@@ -71,7 +68,7 @@ QuasiGame {
                         layerType: Quasi.InfiniteType
                     },
                     QuasiAnimatedLayer {
-                        source: "images/moon.png"
+                        source: ":/images/moon.png"
                         factor: 1.2
                         order: Quasi.ForegroundLayerOrdering_02
 
@@ -97,7 +94,7 @@ QuasiGame {
                 Image {
                     id: shipImage
 
-                    source: "images/rocketship.png"
+                    source: ":/images/rocketship.png"
                 }
 
                 focus: true
