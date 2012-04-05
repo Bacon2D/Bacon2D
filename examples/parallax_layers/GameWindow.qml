@@ -27,6 +27,18 @@ QuasiGame {
 
     currentScene: scene
 
+    fps: 300
+
+    function toLeft() {
+        shipImage.mirror = true;
+        layers.direction = Quasi.ForwardDirection;
+    }
+
+    function toRight() {
+        shipImage.mirror = false;
+        layers.direction = Quasi.BackwardDirection;
+    }
+
     QuasiScene {
         id: scene
 
@@ -35,12 +47,16 @@ QuasiGame {
 
         entities: [
             QuasiLayers {
+                id: layers
+
                 // TODO: make 'horizontalStep' a property from QuasiLayers, not QuasiAnimatedLayer?
                 anchors.fill: parent
                 drawType: Quasi.TiledDrawType // XXX: There are some problems with Quasi.PLaneDrawType
                 tileWidth: 40
                 tileHeight: 40
                 //drawGrid: true // nice for debug; default: false
+
+                property variant direction: Quasi.BackwardDirection
 
                 layers: [
                     QuasiAnimatedLayer {
@@ -50,6 +66,7 @@ QuasiGame {
 
                         horizontalStep: 1
                         layerType: Quasi.MirroredType
+                        direction: layers.direction
                     },
                     QuasiAnimatedLayer {
                         source: ":/images/planet.png"
@@ -58,6 +75,7 @@ QuasiGame {
 
                         horizontalStep: 1
                         layerType: Quasi.InfiniteType
+                        direction: layers.direction
                     },
                     QuasiAnimatedLayer {
                         source: ":/images/stars.png"
@@ -66,6 +84,7 @@ QuasiGame {
 
                         horizontalStep: 1
                         layerType: Quasi.InfiniteType
+                        direction: layers.direction
                     },
                     QuasiAnimatedLayer {
                         source: ":/images/moon.png"
@@ -74,6 +93,7 @@ QuasiGame {
 
                         horizontalStep: 1
                         layerType: Quasi.InfiniteType
+                        direction: layers.direction
                     }
                 ]
             },
@@ -101,9 +121,11 @@ QuasiGame {
                 Keys.onPressed: {
                     switch (event.key) {
                         case Qt.Key_Left:
+                            toLeft();
                             ship.x -= 5;
                             break;
                         case Qt.Key_Right:
+                            toRight();
                             ship.x += 5;
                             break;
                         case Qt.Key_Down:
