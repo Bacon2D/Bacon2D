@@ -97,6 +97,11 @@ void SpriteItem::initializeMachine()
         AnimationTransition *transition = new AnimationTransition(animation);
         animation->setParent(m_stateGroup);
         animation->addTransition(transition);
+
+        if (width() == 0 || height() == 0) {
+            setWidth(animation->spriteSheet()->width());
+            setHeight(animation->spriteSheet()->height());
+        }
     }
 
     m_stateMachine->addState(m_stateGroup);
