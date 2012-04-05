@@ -83,7 +83,7 @@ void Box2DItem::initialize(b2World *world)
 
     m_body = world->CreateBody(&bodyDef);
 
-    b2Shape *shape;
+    b2Shape *shape = 0;
 
     switch (m_shape){
         case Quasi::RectangleBodyShape:

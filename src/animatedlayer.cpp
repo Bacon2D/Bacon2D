@@ -64,10 +64,13 @@ void AnimatedLayer::updateHorizontalStep()
 
 #if QT_VERSION >= 0x050000
 void AnimatedLayer::paint(QPainter *painter)
+{
 #else
 void AnimatedLayer::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-#endif
 {
+    Q_UNUSED(option)
+    Q_UNUSED(widget)
+#endif
     updateHorizontalStep();
 
     if (m_currentImage)

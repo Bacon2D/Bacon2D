@@ -44,6 +44,8 @@ bool AnimationTransition::eventTest(QEvent *e)
 
 void AnimationTransition::onTransition(QEvent *e)
 {
+    Q_UNUSED(e)
+
     m_spriteAnimationItem->spriteSheet()->setVisible(true);
     m_spriteAnimationItem->setRunning(true);
 }

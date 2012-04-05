@@ -103,6 +103,8 @@ void QuasiGame::setFps(const int &fps)
 
 void QuasiGame::timerEvent(QTimerEvent *event)
 {
+    Q_UNUSED(event)
+
     update();
 }
 

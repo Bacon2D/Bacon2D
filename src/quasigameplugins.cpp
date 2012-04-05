@@ -37,6 +37,8 @@
 
 void QuasiGamePlugins::registerTypes(const char *uri)
 {
+    Q_UNUSED(uri)
+
     qmlRegisterUncreatableType<Quasi>("QuasiGame", 1, 0, "Quasi", "Exporting Quasi enums to QML");
 
     qmlRegisterType<QuasiGame>("QuasiGame", 1, 0, "QuasiGame");

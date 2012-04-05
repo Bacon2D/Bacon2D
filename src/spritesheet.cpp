@@ -69,10 +69,13 @@ void SpriteSheet::setSource(const QString &source)
 
 #if QT_VERSION >= 0x050000
 void SpriteSheet::paint(QPainter *painter)
+{
 #else
 void SpriteSheet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-#endif
 {
+    Q_UNUSED(option)
+    Q_UNUSED(widget)
+#endif
     if (m_pixMap) {
         if (!m_frames)
             painter->drawPixmap(0, 0, *m_pixMap);

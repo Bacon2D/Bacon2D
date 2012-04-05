@@ -47,10 +47,13 @@ void StaticLayer::moveX(qreal value)
 
 #if QT_VERSION >= 0x050000
 void StaticLayer::paint(QPainter *painter)
+{
 #else
 void StaticLayer::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-#endif
 {
+    Q_UNUSED(option)
+    Q_UNUSED(widget)
+#endif
     if (m_currentImage)
         painter->drawImage(m_localXPos * m_factor, 0, *m_currentImage);
 }

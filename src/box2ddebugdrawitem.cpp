@@ -130,10 +130,13 @@ void Box2DDebugDrawItem::DrawTransform(const b2Transform &xf)
 
 #if QT_VERSION >= 0x050000
 void Box2DDebugDrawItem::paint(QPainter *painter)
+{
 #else
 void Box2DDebugDrawItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-#endif
 {
+    Q_UNUSED(option)
+    Q_UNUSED(widget)
+#endif
     m_painter = painter;
 
     draw();

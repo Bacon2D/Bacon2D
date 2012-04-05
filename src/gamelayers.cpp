@@ -108,6 +108,8 @@ Quasi::DrawType GameLayers::drawType() const
 
 void GameLayers::update(const long &delta)
 {
+    Q_UNUSED(delta)
+
     foreach (Layer *layer, m_layers) {
         // If the layer isn't initialized, set their properties
         if (layer->boundingRect() == QRectF()) {
