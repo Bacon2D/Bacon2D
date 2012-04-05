@@ -106,7 +106,9 @@ void GameItem::setUpdateInterval(const int &updateInterval)
     if (m_updateInterval != updateInterval) {
         m_updateInterval = updateInterval;
 
-        emit updateScriptChanged();
+        emit updateIntervalChanged();
+
+        m_updateTime.restart();
     }
 }
 
