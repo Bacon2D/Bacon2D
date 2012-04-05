@@ -46,7 +46,6 @@ public:
 #endif
 
 private:
-    QList<QPixmap> m_mirroredTiles; // XXX
     qreal m_globalXPos; // global positioning
     qreal m_globalYPos;
     qreal m_localXPos; // local positioning

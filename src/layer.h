@@ -145,8 +145,7 @@ private:
     void generateOffsets();
 
     QList<Offsets::OffsetsList> m_offsets;
-    QList<QPixmap> m_pixmaps; // can be a list of tiles or a single image
-    QList<QPixmap> m_mirroredTiles;
+    QList<QPixmap> m_pixmaps;
 
     QString m_source;
     Quasi::DrawType m_drawType;
@@ -154,9 +153,7 @@ private:
 
     const float m_areaToDraw;
     int m_columnOffset;
-    bool m_drawingMirrored;
-    bool m_shouldMirror;
-    int m_latestPoint;///
+    int m_latestPoint;
 
     bool m_drawGrid;
     QColor m_gridColor;

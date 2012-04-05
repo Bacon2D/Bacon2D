@@ -38,8 +38,6 @@ Layer::Layer(QuasiDeclarativeItem *parent)
     , m_type(Quasi::InfiniteType)
     , m_areaToDraw(2.0)
     , m_columnOffset(0)
-    , m_drawingMirrored(false)
-    , m_shouldMirror(false)
     , m_latestPoint(0)
 {
 #if QT_VERSION >= 0x050000
@@ -55,7 +53,6 @@ Layer::Layer(QuasiDeclarativeItem *parent)
 Layer::~Layer()
 {
     m_pixmaps.clear();
-    m_mirroredTiles.clear();
 }
 
 //! Stores the source path for the image
@@ -103,6 +100,9 @@ void Layer::setDirection(const Quasi::LayerDirection &direction)
             m_direction = (Quasi::LayerDirection)-1; // insane black magic
         else
             m_direction = direction;
+
+        if (m_offsets.count() != 0)
+            m_columnOffset = (m_columnOffset + 2) % m_offsets.size();
 
         emit directionChanged();
     }
@@ -336,11 +336,16 @@ void Layer::updateTiles()
         pix = temp;
     }
 
-    QPixmap mirrored;
     if (m_type == Quasi::MirroredType){
-        QImage image = pix.toImage();
+        QPixmap temp(pix.width() * 2, pix.height());
 
-        mirrored = QPixmap::fromImage(image.mirrored(true, false));
+        QPainter p(&temp);
+            p.drawPixmap(0, 0, pix.width(), pix.height(), pix);
+            p.drawPixmap(pix.width(), 0, pix.width(), pix.height(),
+                        pix.transformed(QTransform().scale(-1, 1), Qt::FastTransformation));
+        p.end();
+
+        pix = temp;
     }
 
     // visible tiles
@@ -363,15 +368,6 @@ void Layer::updateTiles()
             p.end();
 
             addTile(temp);
-
-            if (m_type == Quasi::MirroredType) {
-                QPainter p(&temp);
-                    p.drawPixmap(0, 0, m_tileWidth, m_tileHeight,
-                            mirrored, j * m_tileWidth, i * m_tileHeight, m_tileWidth, m_tileHeight);
-                p.end();
-
-                m_mirroredTiles.append(temp);
-            }
         }
     }
 
@@ -390,18 +386,8 @@ QPixmap Layer::generatePartialPixmap(int startPoint, int size)
             for (j = 0; j < size; j++) {
                 index = ((i * m_totalColumns) + (j + startPoint));
 
-                // TODO improve comparison
-                if (m_direction == Quasi::ForwardDirection) {
-                    if (m_drawingMirrored)
-                        p.drawPixmap(j * m_tileWidth, i * m_tileHeight, getTile(index));
-                    else
-                        p.drawPixmap(j * m_tileWidth, i * m_tileHeight, m_mirroredTiles.at(index));
-                } else {
-                    if (m_drawingMirrored)
-                        p.drawPixmap(j * m_tileWidth, i * m_tileHeight, m_mirroredTiles.at(index));
-                    else
-                        p.drawPixmap(j * m_tileWidth, i * m_tileHeight, getTile(index));
-                }
+                p.drawPixmap(j * m_tileWidth, i * m_tileHeight, getTile(index));
+
                 // just draw a grid
                 // XXX chech the possibility of drawn it only on a debug mode
                 if (m_drawGrid) {
@@ -420,7 +406,6 @@ void Layer::drawPixmap()
     if ((boundingRect().width() == 0) || (boundingRect().height() == 0))
         return;
 
-    // TODO Forward
     if (m_currentImage)
         delete m_currentImage;
 
@@ -431,23 +416,11 @@ void Layer::drawPixmap()
         for (int i = 0; i < m_offsets[m_columnOffset].size(); i++) {
             Offsets offset = m_offsets[m_columnOffset].at(i);
 
-            if (((m_type == Quasi::MirroredType) && (i != 0)
-                    && (offset.point() - m_latestPoint < 0))
-                    || m_shouldMirror) {
-                m_drawingMirrored = !m_drawingMirrored;
-                m_shouldMirror = false;
-            }
-
             QPixmap pix = generatePartialPixmap(offset.point(), offset.size());
             p.drawPixmap(xPoint, 0, pix);
 
             xPoint += pix.width();
             m_latestPoint = offset.point();
-
-            if ((m_type == Quasi::MirroredType)
-                    && (i == m_offsets[m_columnOffset].size() - 1)
-                    && (offset.size() < m_numColumns))
-                m_shouldMirror = true;
         }
 
         if (m_direction == Quasi::ForwardDirection)
