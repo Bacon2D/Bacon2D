@@ -36,9 +36,10 @@ Available QMake parameters:
 * BUILD_EXAMPLES (Optional)
 	Use BUILD_EXAMPLES=1 to build usage examples.
 
-Sample build from Quasi's root source tree (shadow build not supported yet):
+Sample build from Quasi's root source tree:
 
-$ qmake QTPATH=/opt/Qt5 BOX2DPATH=/usr BUILD_EXAMPLES=1
+$ mkdir build && cd build
+$ qmake QTPATH=/opt/Qt5 BOX2DPATH=/usr BUILD_EXAMPLES=1 ..
 $ make
 $ sudo make install
 
@@ -52,10 +53,10 @@ you can run the examples directly from their specific build directories.
 
 Example:
 
-$ cd $(QUASI_SOURCE_TREE)/examples/box2dpolygon_circle/
+$ cd $(QUASI_BUILD_TREE)/examples/box2dpolygon_circle/
 $ ./box2dpolygon_circle
 
 If Quasi QML plugin was not installed you need first to export QML_IMPORT_PATH
 environment variable:
 
-$ export QML_IMPORT_PATH=$(QUASI_SOURCE_TREE)/src/imports
+$ export QML_IMPORT_PATH=$(QUASI_BUILD_TREE)/src/imports

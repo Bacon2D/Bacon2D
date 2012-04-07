@@ -7,7 +7,7 @@ else: QT += declarative
 TARGET = quasigameplugins
 TARGETPATH = QuasiGame
 
-DESTDIR = $$PWD/imports/QuasiGame
+DESTDIR = $$OUT_PWD/imports/QuasiGame
 OBJECTS_DIR = tmp
 MOC_DIR = tmp
 
@@ -65,10 +65,14 @@ SOURCES += gameitem.cpp \
            viewport.cpp \
            box2ddebugdrawitem.cpp
 
+QMAKE_POST_LINK = $$QMAKE_COPY $$PWD/qmldir $$OUT_PWD/imports/QuasiGame
+
 !isEmpty(QTPATH): target.path = $$QTPATH/imports/$$TARGETPATH
 else: target.path = $$[QT_INSTALL_IMPORTS]/$$TARGETPATH
 
 qmlpluginfiles.path = $$target.path
-qmlpluginfiles.files += $$OUT_PWD/imports/QuasiGame/*
+qmlpluginfiles.files += \
+    $$PWD/qmldir \
+    $$OUT_PWD/imports/QuasiGame/*
 
 INSTALLS += target qmlpluginfiles
