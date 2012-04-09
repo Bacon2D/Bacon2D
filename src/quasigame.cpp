@@ -76,6 +76,7 @@ void QuasiGame::setCurrentScene(GameScene *currentScene) {
 
                 m_currentScene->setParentItem(m_viewport);
             } else {
+                m_currentScene->setParent(this);
                 m_currentScene->setParentItem(this);
             }
 
