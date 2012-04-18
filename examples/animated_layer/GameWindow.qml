@@ -71,7 +71,7 @@ QuasiGame {
 
                 animation: "sliding"
 
-                animations: QuasiAnimation {
+                animations: QuasiSpriteAnimation {
                     name: "sliding"
 
                     source: ":/sliding.png"

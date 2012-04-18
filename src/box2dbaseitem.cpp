@@ -27,8 +27,8 @@
 
 float Box2DBaseItem::m_scaleRatio = 32.0f;
 
-Box2DBaseItem::Box2DBaseItem(GameScene *parent )
-    : GameItem(parent)
+Box2DBaseItem::Box2DBaseItem(Scene *parent )
+    : Entity(parent)
     , m_initialized(false)
     , m_synchronizing(false)
     , m_synchronize(true)

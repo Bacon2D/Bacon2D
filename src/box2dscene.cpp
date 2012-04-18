@@ -24,13 +24,13 @@
 #include "box2dbaseitem.h"
 #include "box2ddebugdrawitem.h"
 #include "box2ditem.h"
-#include "quasigame.h"
+#include "game.h"
 #include "viewport.h"
 
 #include <Box2D/Box2D.h>
 
-Box2DScene::Box2DScene(QuasiGame *parent)
-    : GameScene(parent)
+Box2DScene::Box2DScene(Game *parent)
+    : Scene(parent)
     , m_world(0)
     , m_gravity(qreal(0), qreal(-10))
     , m_debugDraw(0)
@@ -64,12 +64,12 @@ void Box2DScene::update(const long &delta)
     if (!m_running)
         return;
 
-    GameScene::update(delta);
+    Scene::update(delta);
 
     // TODO crete properties for this arguments
     m_world->Step(1.0f / 60.0f, 10, 10);
 
-    GameItem *item;
+    Entity *item;
 
     foreach (item, m_entities) {
         item->update(delta);
@@ -85,7 +85,7 @@ void Box2DScene::componentComplete()
 {
     QuasiDeclarativeItem::componentComplete();
 
-    foreach (GameItem *item, m_entities) {
+    foreach (Entity *item, m_entities) {
         if (Box2DBaseItem *box2DItem = dynamic_cast<Box2DBaseItem *>(item))
             box2DItem->initialize(m_world);
     }

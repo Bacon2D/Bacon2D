@@ -22,11 +22,11 @@
 #include "animationtransition.h"
 
 #include "animationchangeevent.h"
-#include "spriteanimationitem.h"
-#include "spriteitem.h"
+#include "spriteanimation.h"
+#include "sprite.h"
 #include "spritesheet.h"
 
-AnimationTransition::AnimationTransition(SpriteAnimationItem *spriteAnimationItem)
+AnimationTransition::AnimationTransition(SpriteAnimation *spriteAnimationItem)
     : QAbstractTransition()
     , m_spriteAnimationItem(spriteAnimationItem)
 {

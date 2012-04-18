@@ -26,7 +26,7 @@
 
 #include <Box2D/Box2D.h>
 
-Box2DDistanceJointItem::Box2DDistanceJointItem(GameScene *parent)
+Box2DDistanceJointItem::Box2DDistanceJointItem(Scene *parent)
     : Box2DJointItem(parent)
     , m_joint(0)
 {

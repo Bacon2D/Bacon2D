@@ -40,7 +40,7 @@ QuasiGame {
             animation: "sliding"
 
             animations: [
-                QuasiAnimation {
+                QuasiSpriteAnimation {
                     name: "sliding"
 
                     source: ":/sliding.png"
@@ -48,7 +48,7 @@ QuasiGame {
                     duration: 400
                     loops: Animation.Infinite
                 },
-                QuasiAnimation {
+                QuasiSpriteAnimation {
                     name: "jumping"
 
                     source: ":/jumping.png"

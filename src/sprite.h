@@ -19,37 +19,37 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _SPRITEITEM_H_
-#define _SPRITEITEM_H_
+#ifndef _SPRITE_H_
+#define _SPRITE_H_
 
-#include "gameitem.h"
+#include "entity.h"
 
 #include <QtCore/QHash>
 #include <QtCore/QStateMachine>
 
-class GameScene;
-class SpriteAnimationItem;
+class Scene;
+class SpriteAnimation;
 
-class SpriteItem : public GameItem
+class Sprite : public Entity
 {
     Q_OBJECT
 
 #if QT_VERSION >= 0x050000
-    Q_PROPERTY(QQmlListProperty<SpriteAnimationItem> animations READ animations)
+    Q_PROPERTY(QQmlListProperty<SpriteAnimation> animations READ animations)
 #else
-    Q_PROPERTY(QDeclarativeListProperty<SpriteAnimationItem> animations READ animations)
+    Q_PROPERTY(QDeclarativeListProperty<SpriteAnimation> animations READ animations)
 #endif
     Q_PROPERTY(QString animation READ animation WRITE setAnimation NOTIFY animationChanged)
     Q_PROPERTY(bool verticalMirror READ verticalMirror WRITE setVerticalMirror NOTIFY verticalMirrorChanged)
     Q_PROPERTY(bool horizontalMirror READ horizontalMirror WRITE setHorizontalMirror NOTIFY horizontalMirrorChanged)
 
 public:
-    SpriteItem(GameScene *parent = 0);
+    Sprite(Scene *parent = 0);
 
 #if QT_VERSION >= 0x050000
-    QQmlListProperty<SpriteAnimationItem> animations() const;
+    QQmlListProperty<SpriteAnimation> animations() const;
 #else
-    QDeclarativeListProperty<SpriteAnimationItem> animations() const;
+    QDeclarativeListProperty<SpriteAnimation> animations() const;
 #endif
 
     QString animation() const;
@@ -74,17 +74,17 @@ private:
 
 private:
 #if QT_VERSION >= 0x050000
-    static void append_animation(QQmlListProperty<SpriteAnimationItem> *list, SpriteAnimationItem *animation);
+    static void append_animation(QQmlListProperty<SpriteAnimation> *list, SpriteAnimation *animation);
 #else
-    static void append_animation(QDeclarativeListProperty<SpriteAnimationItem> *list, SpriteAnimationItem *animation);
+    static void append_animation(QDeclarativeListProperty<SpriteAnimation> *list, SpriteAnimation *animation);
 #endif
 
     QStateMachine *m_stateMachine;
     QState *m_stateGroup;
-    QHash<QString, SpriteAnimationItem *> m_states;
+    QHash<QString, SpriteAnimation *> m_states;
     QString m_animation;
     bool m_verticalMirror;
     bool m_horizontalMirror;
 };
 
-#endif /* _SPRITEITEM_H_ */
+#endif /* _SPRITE_H_ */

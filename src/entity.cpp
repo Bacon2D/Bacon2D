@@ -19,11 +19,11 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#include "gameitem.h"
+#include "entity.h"
 
 #include "enums.h"
-#include "gamescene.h"
-#include "quasigame.h"
+#include "scene.h"
+#include "game.h"
 
 #if QT_VERSION >= 0x050000
 #include <QtQml/QQmlExpression>
@@ -31,7 +31,7 @@
 #include <QtDeclarative/QDeclarativeExpression>
 #endif
 
-GameItem::GameItem(GameScene *parent)
+Entity::Entity(Scene *parent)
     : QuasiDeclarativeItem(parent)
     , m_expression(0)
     , m_updateInterval(0)
@@ -45,7 +45,7 @@ GameItem::GameItem(GameScene *parent)
 #endif
 }
 
-void GameItem::update(const long &delta)
+void Entity::update(const long &delta)
 {
     if ((m_updateInterval && m_updateTime.elapsed() >= m_updateInterval)
         || !m_updateInterval) {
@@ -60,24 +60,24 @@ void GameItem::update(const long &delta)
     QGraphicsItem *child;
 #endif
     foreach (child, childItems())
-        if (GameItem *item = dynamic_cast<GameItem *>(child)) {
+        if (Entity *item = dynamic_cast<Entity *>(child)) {
             item->update(delta);
         }
 }
 
 #if QT_VERSION >= 0x050000
-QQmlScriptString GameItem::updateScript() const
+QQmlScriptString Entity::updateScript() const
 #else
-QDeclarativeScriptString GameItem::updateScript() const
+QDeclarativeScriptString Entity::updateScript() const
 #endif
 {
     return m_updateScript;
 }
 
 #if QT_VERSION >= 0x050000
-void GameItem::setUpdateScript(const QQmlScriptString &updateScript)
+void Entity::setUpdateScript(const QQmlScriptString &updateScript)
 #else
-void GameItem::setUpdateScript(const QDeclarativeScriptString &updateScript)
+void Entity::setUpdateScript(const QDeclarativeScriptString &updateScript)
 #endif
 {
     if (m_updateScript.script() != updateScript.script()) {
@@ -96,12 +96,12 @@ void GameItem::setUpdateScript(const QDeclarativeScriptString &updateScript)
     }
 }
 
-int GameItem::updateInterval() const
+int Entity::updateInterval() const
 {
     return m_updateInterval;
 }
 
-void GameItem::setUpdateInterval(const int &updateInterval)
+void Entity::setUpdateInterval(const int &updateInterval)
 {
     if (m_updateInterval != updateInterval) {
         m_updateInterval = updateInterval;
@@ -112,12 +112,12 @@ void GameItem::setUpdateInterval(const int &updateInterval)
     }
 }
 
-bool GameItem::collided() const
+bool Entity::collided() const
 {
     return m_collided;
 }
 
-void GameItem::setCollided(const bool &collided)
+void Entity::setCollided(const bool &collided)
 {
     if (m_collided != collided) {
         m_collided = collided;
@@ -126,7 +126,7 @@ void GameItem::setCollided(const bool &collided)
     }
 }
 
-Quasi::Ordering GameItem::order() const
+Quasi::Ordering Entity::order() const
 {
 #if QT_VERSION >= 0x050000
     return (Quasi::Ordering)z();
@@ -135,7 +135,7 @@ Quasi::Ordering GameItem::order() const
 #endif
 }
 
-void GameItem::setOrder(Quasi::Ordering order)
+void Entity::setOrder(Quasi::Ordering order)
 {
 #if QT_VERSION >= 0x050000
     if (z() != order)
@@ -146,24 +146,24 @@ void GameItem::setOrder(Quasi::Ordering order)
 #endif
 }
 
-QList<QObject *> GameItem::collidedItems() const
+QList<QObject *> Entity::collidedItems() const
 {
-    GameScene *scene = qobject_cast<GameScene *>(parent());
+    Scene *scene = qobject_cast<Scene *>(parent());
 
-    return scene->collidedItems(const_cast<GameItem *>(this));
+    return scene->collidedItems(const_cast<Entity *>(this));
 }
 
-GameScene *GameItem::scene() const
+Scene *Entity::scene() const
 {
     return m_scene;
 }
 
-void GameItem::setScene(GameScene *scene)
+void Entity::setScene(Scene *scene)
 {
     m_scene = scene;
 }
 
-QuasiGame *GameItem::game() const
+Game *Entity::game() const
 {
     if (m_scene)
         return m_scene->game();

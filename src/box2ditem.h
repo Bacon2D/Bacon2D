@@ -24,11 +24,11 @@
 
 #include "box2dbaseitem.h"
 #include "enums.h"
-#include "gameitem.h"
+#include "entity.h"
 
 #include <QtCore/QtGlobal>
 
-class GameScene;
+class Scene;
 class b2World;
 class b2Body;
 class b2Fixture;
@@ -51,7 +51,7 @@ class Box2DItem : public Box2DBaseItem
     Q_PROPERTY(QVariantList vertices READ vertices WRITE setVertices NOTIFY verticesChanged)
 
 public:
-    Box2DItem(GameScene *parent = 0);
+    Box2DItem(Scene *parent = 0);
 
     b2Body *body() const;
 

@@ -19,9 +19,9 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#include "quasigame.h"
+#include "game.h"
 
-#include "gamescene.h"
+#include "scene.h"
 #include "viewport.h"
 
 #if QT_VERSION >= 0x050000
@@ -32,7 +32,7 @@
 
 #include <QtGui/QCursor>
 
-QuasiGame::QuasiGame(QuasiDeclarativeItem *parent)
+Game::Game(QuasiDeclarativeItem *parent)
     : QuasiDeclarativeItem(parent)
     , m_currentScene(0)
     , m_fps(60)
@@ -42,12 +42,12 @@ QuasiGame::QuasiGame(QuasiDeclarativeItem *parent)
     m_timerId = startTimer(1000 / m_fps);
 }
 
-GameScene *QuasiGame::currentScene() const
+Scene *Game::currentScene() const
 {
     return m_currentScene;
 }
 
-void QuasiGame::setCurrentScene(GameScene *currentScene)
+void Game::setCurrentScene(Scene *currentScene)
 {
     if (m_currentScene != currentScene) {
         if (m_currentScene) {
@@ -90,12 +90,12 @@ void QuasiGame::setCurrentScene(GameScene *currentScene)
     }
 }
 
-int QuasiGame::fps() const
+int Game::fps() const
 {
     return m_fps;
 }
 
-void QuasiGame::setFps(const int &fps)
+void Game::setFps(const int &fps)
 {
     if (m_fps != fps) {
         m_fps = fps;
@@ -104,14 +104,14 @@ void QuasiGame::setFps(const int &fps)
     }
 }
 
-void QuasiGame::timerEvent(QTimerEvent *event)
+void Game::timerEvent(QTimerEvent *event)
 {
     Q_UNUSED(event)
 
     update();
 }
 
-void QuasiGame::update()
+void Game::update()
 {
     long elapsedTime = m_gameTime.restart();
     if (m_currentScene)
@@ -120,7 +120,7 @@ void QuasiGame::update()
         m_viewport->update(elapsedTime);
 }
 
-QPointF QuasiGame::mouse()
+QPointF Game::mouse()
 {
 #if QT_VERSION >= 0x050000
     return canvas()->mapFromGlobal(QCursor::pos());
@@ -137,7 +137,7 @@ QPointF QuasiGame::mouse()
 
 #if QT_VERSION < 0x050000
 // this function is needed on Qt4 to fix viewport's width and height
-void QuasiGame::componentComplete()
+void Game::componentComplete()
 {
     if (m_viewport && m_currentScene) {
         m_viewport->setWidth(width());

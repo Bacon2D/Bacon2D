@@ -19,30 +19,30 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _QUASIGAME_H_
-#define _QUASIGAME_H_
+#ifndef _GAME_H_
+#define _GAME_H_
 
 #include "quasideclarativeitem.h"
 
 #include <QtCore/QTime>
 #include <QtCore/QtGlobal>
 
-class GameScene;
+class Scene;
 class Viewport;
 
-class QuasiGame : public QuasiDeclarativeItem
+class Game : public QuasiDeclarativeItem
 {
     Q_OBJECT
 
-    Q_PROPERTY(GameScene *currentScene READ currentScene WRITE setCurrentScene NOTIFY currentSceneChanged)
+    Q_PROPERTY(Scene *currentScene READ currentScene WRITE setCurrentScene NOTIFY currentSceneChanged)
     Q_PROPERTY(int fps READ fps WRITE setFps NOTIFY fpsChanged)
     Q_PROPERTY(QPointF mouse READ mouse)
 
 public:
-    QuasiGame(QuasiDeclarativeItem *parent = 0);
+    Game(QuasiDeclarativeItem *parent = 0);
 
-    GameScene *currentScene() const;
-    void setCurrentScene(GameScene *currentScene);
+    Scene *currentScene() const;
+    void setCurrentScene(Scene *currentScene);
 
     int fps() const;
     void setFps(const int &fps);
@@ -61,7 +61,7 @@ signals:
     void fpsChanged();
 
 private:
-    GameScene *m_currentScene;
+    Scene *m_currentScene;
     QTime m_gameTime;
     int m_fps;
     Viewport *m_viewport;
@@ -71,4 +71,4 @@ private:
 #endif
 };
 
-#endif /* _QUASIGAME_H_ */
+#endif /* _GAME_H_ */

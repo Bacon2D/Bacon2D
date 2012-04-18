@@ -26,7 +26,7 @@
 
 #include <Box2D/Box2D.h>
 
-Box2DItem::Box2DItem(GameScene *parent)
+Box2DItem::Box2DItem(Scene *parent)
     : Box2DBaseItem(parent)
     , m_body(0)
     , m_linearDamping(0.0f)

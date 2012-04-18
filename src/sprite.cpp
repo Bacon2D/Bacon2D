@@ -19,21 +19,21 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#include "spriteitem.h"
+#include "sprite.h"
 
-#include "gamescene.h"
+#include "scene.h"
 #include "spritesheet.h"
-#include "spriteanimationitem.h"
+#include "spriteanimation.h"
 #include "animationchangeevent.h"
 #include "animationtransition.h"
 
 #if QT_VERSION >= 0x050000
-void SpriteItem::append_animation(QQmlListProperty<SpriteAnimationItem> *list, SpriteAnimationItem *animation)
+void Sprite::append_animation(QQmlListProperty<SpriteAnimation> *list, SpriteAnimation *animation)
 #else
-void SpriteItem::append_animation(QDeclarativeListProperty<SpriteAnimationItem> *list, SpriteAnimationItem *animation)
+void Sprite::append_animation(QDeclarativeListProperty<SpriteAnimation> *list, SpriteAnimation *animation)
 #endif
 {
-    SpriteItem *spriteItem = qobject_cast<SpriteItem *>(list->object);
+    Sprite *spriteItem = qobject_cast<Sprite *>(list->object);
 
     if (spriteItem) {
         spriteItem->m_states.insert(animation->name(), animation);
@@ -41,8 +41,8 @@ void SpriteItem::append_animation(QDeclarativeListProperty<SpriteAnimationItem> 
     }
 }
 
-SpriteItem::SpriteItem(GameScene *parent)
-    : GameItem(parent)
+Sprite::Sprite(Scene *parent)
+    : Entity(parent)
     , m_stateMachine(0)
     , m_stateGroup(0)
     , m_verticalMirror(false)
@@ -51,27 +51,27 @@ SpriteItem::SpriteItem(GameScene *parent)
 }
 
 #if QT_VERSION >= 0x050000
-QQmlListProperty<SpriteAnimationItem> SpriteItem::animations() const
+QQmlListProperty<SpriteAnimation> Sprite::animations() const
 {
-    return QQmlListProperty<SpriteAnimationItem>(const_cast<SpriteItem *>(this), 0, &SpriteItem::append_animation);
+    return QQmlListProperty<SpriteAnimation>(const_cast<Sprite *>(this), 0, &Sprite::append_animation);
 }
 #else
-QDeclarativeListProperty<SpriteAnimationItem> SpriteItem::animations() const
+QDeclarativeListProperty<SpriteAnimation> Sprite::animations() const
 {
-    return QDeclarativeListProperty<SpriteAnimationItem>(const_cast<SpriteItem *>(this), 0, &SpriteItem::append_animation);
+    return QDeclarativeListProperty<SpriteAnimation>(const_cast<Sprite *>(this), 0, &Sprite::append_animation);
 }
 #endif
 
-QString SpriteItem::animation() const
+QString Sprite::animation() const
 {
     return m_animation;
 }
 
-void SpriteItem::setAnimation(const QString &animation, const bool &force)
+void Sprite::setAnimation(const QString &animation, const bool &force)
 {
     if (force || (m_animation != animation)) {
         if (m_animation != QString()) {
-            SpriteAnimationItem *animationItem = m_states[m_animation];
+            SpriteAnimation *animationItem = m_states[m_animation];
             animationItem->setRunning(false);
             animationItem->setVisible(false);
         }
@@ -87,12 +87,12 @@ void SpriteItem::setAnimation(const QString &animation, const bool &force)
     }
 }
 
-void SpriteItem::initializeMachine()
+void Sprite::initializeMachine()
 {
     m_stateMachine= new QStateMachine;
     m_stateGroup = new QState(QState::ParallelStates);
 
-    SpriteAnimationItem *animation;
+    SpriteAnimation *animation;
     foreach (animation, m_states.values()) {
         AnimationTransition *transition = new AnimationTransition(animation);
         animation->setParent(m_stateGroup);
@@ -112,40 +112,40 @@ void SpriteItem::initializeMachine()
     m_stateMachine->start();
 }
 
-void SpriteItem::initializeAnimation()
+void Sprite::initializeAnimation()
 {
     if (m_animation != QString())
         setAnimation(m_animation, true);
 }
 
-bool SpriteItem::verticalMirror() const
+bool Sprite::verticalMirror() const
 {
     return m_verticalMirror;
 }
 
-void SpriteItem::setVerticalMirror(const bool &verticalMirror)
+void Sprite::setVerticalMirror(const bool &verticalMirror)
 {
     if (m_verticalMirror != verticalMirror) {
         m_verticalMirror = verticalMirror;
 
-        foreach (SpriteAnimationItem *animation, m_states.values())
+        foreach (SpriteAnimation *animation, m_states.values())
             animation->setVerticalMirror(m_verticalMirror);
 
         emit verticalMirrorChanged();
     }
 }
 
-bool SpriteItem::horizontalMirror() const
+bool Sprite::horizontalMirror() const
 {
     return m_horizontalMirror;
 }
 
-void SpriteItem::setHorizontalMirror(const bool &horizontalMirror)
+void Sprite::setHorizontalMirror(const bool &horizontalMirror)
 {
     if (m_horizontalMirror != horizontalMirror) {
         m_horizontalMirror = horizontalMirror;
 
-        foreach (SpriteAnimationItem *animation, m_states.values())
+        foreach (SpriteAnimation *animation, m_states.values())
             animation->setHorizontalMirror(m_horizontalMirror);
 
         emit horizontalMirrorChanged();

@@ -19,24 +19,24 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#include "gamelayers.h"
+#include "layers.h"
 #include "staticlayer.h"
 
 #if QT_VERSION >= 0x050000
-void GameLayers::append_layer(QQmlListProperty<Layer> *list, Layer *layer)
+void Layers::append_layer(QQmlListProperty<Layer> *list, Layer *layer)
 #else
-void GameLayers::append_layer(QDeclarativeListProperty<Layer> *list, Layer *layer)
+void Layers::append_layer(QDeclarativeListProperty<Layer> *list, Layer *layer)
 #endif
 {
-    GameLayers *layers = qobject_cast<GameLayers *>(list->object);
+    Layers *layers = qobject_cast<Layers *>(list->object);
     if (layers) {
         layer->setParentItem((QuasiDeclarativeItem *)layers->parent());
         layers->m_layers.append(layer);
     }
 }
 
-GameLayers::GameLayers(GameScene *parent)
-    : GameItem(parent)
+Layers::Layers(Scene *parent)
+    : Entity(parent)
     , m_tileWidth(32)
     , m_tileHeight(32)
     , m_totalColumns(0)
@@ -53,35 +53,35 @@ GameLayers::GameLayers(GameScene *parent)
 }
 
 #if QT_VERSION >= 0x050000
-QQmlListProperty<Layer> GameLayers::layers() const
+QQmlListProperty<Layer> Layers::layers() const
 {
-    return QQmlListProperty<Layer>(const_cast<GameLayers *>(this), 0, &GameLayers::append_layer);
+    return QQmlListProperty<Layer>(const_cast<Layers *>(this), 0, &Layers::append_layer);
 }
 #else
-QDeclarativeListProperty<Layer> GameLayers::layers() const
+QDeclarativeListProperty<Layer> Layers::layers() const
 {
-    return QDeclarativeListProperty<Layer>(const_cast<GameLayers *>(this), 0, &GameLayers::append_layer);
+    return QDeclarativeListProperty<Layer>(const_cast<Layers *>(this), 0, &Layers::append_layer);
 }
 #endif
 
-GameLayers::~GameLayers()
+Layers::~Layers()
 {
     m_layers.clear();
 }
 
-void GameLayers::setTileHeight(const int &tileHeight)
+void Layers::setTileHeight(const int &tileHeight)
 {
     if (m_tileHeight != tileHeight)
         m_tileHeight = tileHeight;
 }
 
-void GameLayers::setTileWidth(const int &tileWidth)
+void Layers::setTileWidth(const int &tileWidth)
 {
     if (m_tileWidth != tileWidth)
         m_tileWidth = tileWidth;
 }
 
-void GameLayers::setXOffset(const qreal &xOffset)
+void Layers::setXOffset(const qreal &xOffset)
 {
     if (m_xOffset != xOffset) {
         m_xOffset = xOffset;
@@ -90,7 +90,7 @@ void GameLayers::setXOffset(const qreal &xOffset)
     }
 }
 
-void GameLayers::setYOffset(const qreal &yOffset)
+void Layers::setYOffset(const qreal &yOffset)
 {
     if (m_yOffset != yOffset) {
         m_yOffset = yOffset;
@@ -99,13 +99,13 @@ void GameLayers::setYOffset(const qreal &yOffset)
     }
 }
 
-void GameLayers::setDrawGrid(bool draw)
+void Layers::setDrawGrid(bool draw)
 {
     if (draw != m_drawGrid)
         m_drawGrid = draw;
 }
 
-void GameLayers::setGridColor(const QColor &color)
+void Layers::setGridColor(const QColor &color)
 {
     if (color != m_gridColor)
         m_gridColor = color;
@@ -115,7 +115,7 @@ void GameLayers::setGridColor(const QColor &color)
 /*!
  * \param drawType can be Tiled (default) or Plane
  */
-void GameLayers::setDrawType(Quasi::DrawType drawType)
+void Layers::setDrawType(Quasi::DrawType drawType)
 {
     if (m_drawType != drawType)
         m_drawType = drawType;
@@ -125,12 +125,12 @@ void GameLayers::setDrawType(Quasi::DrawType drawType)
 /*!
  * \return Tiled or Plane according the layer draw type
  */
-Quasi::DrawType GameLayers::drawType() const
+Quasi::DrawType Layers::drawType() const
 {
     return m_drawType;
 }
 
-void GameLayers::update(const long &delta)
+void Layers::update(const long &delta)
 {
     Q_UNUSED(delta)
 
@@ -153,7 +153,7 @@ void GameLayers::update(const long &delta)
     }
 }
 
-void GameLayers::changeXOffset()
+void Layers::changeXOffset()
 {
     foreach (Layer *layer, m_layers) {
         layer->setX(m_xOffset);
@@ -164,7 +164,7 @@ void GameLayers::changeXOffset()
     }
 }
 
-void GameLayers::changeYOffset()
+void Layers::changeYOffset()
 {
     foreach (Layer *layer, m_layers) {
         layer->setY(m_xOffset);

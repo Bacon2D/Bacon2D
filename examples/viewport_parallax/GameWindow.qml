@@ -73,7 +73,7 @@ QuasiGame {
                 animation: "stopped"
 
                 animations: [
-                    QuasiAnimation {
+                    QuasiSpriteAnimation {
                         name: "moving"
 
                         source: ":/images/moving.png"
@@ -82,7 +82,7 @@ QuasiGame {
                         loops: Animation.Infinite
                         inverse: gameSprite.horizontalMirror
                     },
-                    QuasiAnimation {
+                    QuasiSpriteAnimation {
                         name: "stopped"
 
                         source: ":/images/stopped.png"

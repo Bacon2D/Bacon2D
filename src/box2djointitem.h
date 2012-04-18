@@ -23,7 +23,7 @@
 #define _BOX2DJOINTITEM_H_
 
 #include "box2dbaseitem.h"
-#include "gameitem.h"
+#include "entity.h"
 
 class Box2DItem;
 
@@ -36,7 +36,7 @@ class Box2DJointItem : public Box2DBaseItem
     Q_PROPERTY(bool collideConnected READ collideConnected WRITE setCollideConnected NOTIFY collideConnectedChanged)
 
 public:
-    Box2DJointItem(GameScene *parent = 0);
+    Box2DJointItem(Scene *parent = 0);
 
     Box2DItem *box2ditemA() const;
     void setBox2ditemA(Box2DItem *box2ditemA);

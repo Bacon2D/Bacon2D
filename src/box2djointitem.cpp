@@ -23,7 +23,7 @@
 
 #include "box2ditem.h"
 
-Box2DJointItem::Box2DJointItem(GameScene *parent)
+Box2DJointItem::Box2DJointItem(Scene *parent)
     : Box2DBaseItem(parent)
     , m_box2ditemA(0)
     , m_box2ditemB(0)

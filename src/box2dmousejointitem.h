@@ -36,7 +36,7 @@ class Box2DMouseJointItem : public Box2DBaseItem
     Q_PROPERTY(float maxForce READ maxForce WRITE setMaxForce NOTIFY maxForceChanged)
 
 public:
-    Box2DMouseJointItem(GameScene *parent = 0);
+    Box2DMouseJointItem(Scene *parent = 0);
 
     Box2DItem *target() const;
     void setTarget(Box2DItem *target);

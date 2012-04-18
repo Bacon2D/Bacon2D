@@ -19,19 +19,19 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _QUASIGAMEPLUGINS_H_
-#define _QUASIGAMEPLUGINS_H_
+#ifndef _PLUGINS_H_
+#define _PLUGINS_H_
 
 #include <QtCore/QtGlobal>
 
 #if QT_VERSION >= 0x050000
 #include <QtQml/QQmlExtensionPlugin>
 
-class QuasiGamePlugins : public QQmlExtensionPlugin
+class Plugins : public QQmlExtensionPlugin
 #else
 #include <QtDeclarative/QDeclarativeExtensionPlugin>
 
-class QuasiGamePlugins : public QDeclarativeExtensionPlugin
+class Plugins : public QDeclarativeExtensionPlugin
 #endif
 {
     Q_OBJECT
@@ -40,5 +40,5 @@ public:
     void registerTypes(const char *uri);
 };
 
-#endif /* _QUASIGAMEPLUGINS_H_ */
+#endif /* _PLUGINS_H_ */
 

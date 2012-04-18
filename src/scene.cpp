@@ -19,29 +19,30 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#include "gamescene.h"
-#include "quasigame.h"
-#include "gamelayers.h"
+#include "scene.h"
+
+#include "game.h"
+#include "layers.h"
 
 #if QT_VERSION >= 0x050000
-void GameScene::append_gameItem(QQmlListProperty<GameItem> *list, GameItem *gameItem)
+void Scene::append_gameItem(QQmlListProperty<Entity> *list, Entity *gameItem)
 #else
-void GameScene::append_gameItem(QDeclarativeListProperty<GameItem> *list, GameItem *gameItem)
+void Scene::append_gameItem(QDeclarativeListProperty<Entity> *list, Entity *gameItem)
 #endif
 {
-    GameScene *scene = qobject_cast<GameScene *>(list->object);
+    Scene *scene = qobject_cast<Scene *>(list->object);
     if (scene) {
         gameItem->setScene(scene);
         gameItem->setParentItem(scene);
         scene->m_entities.append(gameItem);
 
-        GameLayers *gameLayers = qobject_cast<GameLayers *>(gameItem);
+        Layers *gameLayers = qobject_cast<Layers *>(gameItem);
         if (gameLayers)
             scene->m_gameLayers = gameLayers;
     }
 }
 
-GameScene::GameScene(QuasiGame *parent)
+Scene::Scene(Game *parent)
     : QuasiDeclarativeItem(parent)
     , m_running(false)
     , m_collisions(0)
@@ -53,36 +54,36 @@ GameScene::GameScene(QuasiGame *parent)
 }
 
 #if QT_VERSION >= 0x050000
-QQmlListProperty<GameItem> GameScene::entities() const
+QQmlListProperty<Entity> Scene::entities() const
 {
-    return QQmlListProperty<GameItem>(const_cast<GameScene *>(this), 0, &GameScene::append_gameItem);
+    return QQmlListProperty<Entity>(const_cast<Scene *>(this), 0, &Scene::append_gameItem);
 }
 #else
-QDeclarativeListProperty<GameItem> GameScene::entities() const
+QDeclarativeListProperty<Entity> Scene::entities() const
 {
-    return QDeclarativeListProperty<GameItem>(const_cast<GameScene *>(this), 0, &GameScene::append_gameItem);
+    return QDeclarativeListProperty<Entity>(const_cast<Scene *>(this), 0, &Scene::append_gameItem);
 }
 #endif
 
-void GameScene::update(const long &delta)
+void Scene::update(const long &delta)
 {
     if (!m_running) // TODO: stop Qt animations as well
         return;
 
     checkCollisions();
 
-    GameItem *item;
+    Entity *item;
 
     foreach (item, m_entities)
         item->update(delta);
 }
 
-bool GameScene::running() const
+bool Scene::running() const
 {
     return m_running;
 }
 
-void GameScene::setRunning(const bool &running)
+void Scene::setRunning(const bool &running)
 {
     if (m_running != running) {
         m_running = running;
@@ -91,7 +92,7 @@ void GameScene::setRunning(const bool &running)
     }
 }
 
-void GameScene::checkCollisions()
+void Scene::checkCollisions()
 {
     int itemCount = m_entities.count();
 
@@ -101,7 +102,7 @@ void GameScene::checkCollisions()
         m_collisions = new QVector<QVector<bool> >(itemCount, QVector<bool>(itemCount));
     }
 
-    GameItem *item, *otherItem;
+    Entity *item, *otherItem;
 
     foreach (item, m_entities)
         item->setCollided(false);
@@ -125,7 +126,7 @@ void GameScene::checkCollisions()
     }
 }
 
-bool GameScene::checkCollision(GameItem *item, GameItem *otherItem) const
+bool Scene::checkCollision(Entity *item, Entity *otherItem) const
 {
     QRectF itemRect = item->boundingRect();
     QRectF otherItemRect = otherItem->boundingRect();
@@ -138,7 +139,7 @@ bool GameScene::checkCollision(GameItem *item, GameItem *otherItem) const
            || otherItemRect.contains(itemRect);
 }
 
-QList<QObject *> GameScene::collidedItems(GameItem *gameItem) const
+QList<QObject *> Scene::collidedItems(Entity *gameItem) const
 {
     QList<QObject *> collidedItemsList;
 
@@ -157,12 +158,12 @@ QList<QObject *> GameScene::collidedItems(GameItem *gameItem) const
     return collidedItemsList;
 }
 
-Viewport *GameScene::viewport() const
+Viewport *Scene::viewport() const
 {
     return m_viewport;
 }
 
-void GameScene::setViewport(Viewport *viewport)
+void Scene::setViewport(Viewport *viewport)
 {
     if (m_viewport != viewport) {
         m_viewport = viewport;
@@ -171,27 +172,27 @@ void GameScene::setViewport(Viewport *viewport)
     }
 }
 
-QuasiGame *GameScene::game() const
+Game *Scene::game() const
 {
     return m_game;
 }
 
-void GameScene::setGame(QuasiGame *game)
+void Scene::setGame(Game *game)
 {
     m_game = game;
 }
 
-GameLayers *GameScene::gameLayers() const
+Layers *Scene::gameLayers() const
 {
     return m_gameLayers;
 }
 
-bool GameScene::debug() const
+bool Scene::debug() const
 {
     return m_debug;
 }
 
-void GameScene::setDebug(const bool &debug)
+void Scene::setDebug(const bool &debug)
 {
     if (m_debug != debug) {
         m_debug = debug;

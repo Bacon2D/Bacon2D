@@ -26,9 +26,9 @@
 #include <QtCore/QEasingCurve>
 #include <QtCore/QParallelAnimationGroup>
 
-#include "gameitem.h"
+#include "entity.h"
 
-class Viewport : public GameItem
+class Viewport : public Entity
 {
     Q_OBJECT
 
@@ -39,7 +39,7 @@ class Viewport : public GameItem
     Q_PROPERTY(int animationDuration READ animationDuration WRITE setAnimationDuration NOTIFY animationDurationChanged)
 
 public:
-    Viewport(GameScene *parent = 0);
+    Viewport(Scene *parent = 0);
 
     float xOffset();
     void setXOffset(float xOffset);
@@ -58,7 +58,7 @@ public:
 
     void updateMaxOffsets();
 
-    void setScene(GameScene *scene);
+    void setScene(Scene *scene);
 
     Q_INVOKABLE void hScroll(float step);
     Q_INVOKABLE void vScroll(float step);
@@ -78,7 +78,7 @@ private:
     float m_contentHeight;
     float m_maxXOffset;
     float m_maxYOffset;
-    GameScene *m_scene;
+    Scene *m_scene;
 
     QParallelAnimationGroup *m_xGroupAnimation;
     QParallelAnimationGroup *m_yGroupAnimation;

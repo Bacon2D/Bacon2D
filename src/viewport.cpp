@@ -20,10 +20,10 @@
  */
 
 #include "viewport.h"
-#include "gamescene.h"
+#include "scene.h"
 
-Viewport::Viewport(GameScene *parent)
-    : GameItem(parent)
+Viewport::Viewport(Scene *parent)
+    : Entity(parent)
     , m_animationEasingCurve(QEasingCurve::Linear)
     , m_xOffset(0.0f)
     , m_yOffset(0.0f)
@@ -167,7 +167,7 @@ void Viewport::setAnimationDuration(const int &animationDuration)
     }
 }
 
-void Viewport::setScene(GameScene *scene)
+void Viewport::setScene(Scene *scene)
 {
     m_scene = scene;
 }

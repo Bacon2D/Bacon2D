@@ -4,7 +4,7 @@ CONFIG += qt plugin
 contains(QT_VERSION, ^5.*) QT += quick
 else: QT += declarative
 
-TARGET = quasigameplugins
+TARGET = plugins
 TARGETPATH = QuasiGame
 
 DESTDIR = $$OUT_PWD/imports/QuasiGame
@@ -19,13 +19,13 @@ LIBS += -L$$BOX2DPATH/lib -lBox2D
 
 HEADERS += quasideclarativeitem.h \
            quasipainteditem.h \
-           gameitem.h \
-           gamescene.h \
-           quasigame.h \
-           quasigameplugins.h \
+           entity.h \
+           scene.h \
+           game.h \
+           plugins.h \
            spritesheet.h \
-           spriteitem.h \
-           spriteanimationitem.h \
+           sprite.h \
+           spriteanimation.h \
            animationtransition.h \
            animationchangeevent.h \
            box2dscene.h \
@@ -37,19 +37,19 @@ HEADERS += quasideclarativeitem.h \
            layer.h \
            staticlayer.h \
            animatedlayer.h \
-           gamelayers.h \
+           layers.h \
            util.h \
            viewport.h \
            box2ddebugdrawitem.h \
            enums.h
 
-SOURCES += gameitem.cpp \
-           gamescene.cpp \
-           quasigame.cpp \
-           quasigameplugins.cpp \
+SOURCES += entity.cpp \
+           scene.cpp \
+           game.cpp \
+           plugins.cpp \
            spritesheet.cpp \
-           spriteitem.cpp \
-           spriteanimationitem.cpp \
+           sprite.cpp \
+           spriteanimation.cpp \
            animationtransition.cpp \
            box2dscene.cpp \
            box2ditem.cpp \
@@ -60,7 +60,7 @@ SOURCES += gameitem.cpp \
            layer.cpp \
            animatedlayer.cpp \
            staticlayer.cpp \
-           gamelayers.cpp \
+           layers.cpp \
            util.cpp \
            viewport.cpp \
            box2ddebugdrawitem.cpp

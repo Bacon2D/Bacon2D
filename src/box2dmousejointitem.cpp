@@ -23,13 +23,13 @@
 
 #include "box2ditem.h"
 #include "box2dscene.h"
-#include "quasigame.h"
+#include "game.h"
 
 #include <Box2D/Box2D.h>
 
 #include <QtGui/QCursor>
 
-Box2DMouseJointItem::Box2DMouseJointItem(GameScene *parent)
+Box2DMouseJointItem::Box2DMouseJointItem(Scene *parent)
     : Box2DBaseItem(parent)
     , m_target(0)
     , m_collideConnected(true)
@@ -98,7 +98,7 @@ void Box2DMouseJointItem::update(const long &delta)
     if (!m_joint)
         return;
 
-    GameItem::update(delta);
+    Entity::update(delta);
 
     QPointF mousePos = game()->mouse();
     m_joint->SetTarget(b2Vec2(mousePos.x() / m_scaleRatio, -mousePos.y() / m_scaleRatio));

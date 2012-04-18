@@ -22,17 +22,17 @@
 #ifndef _BOX2DBASEITEM_H_
 #define _BOX2DBASEITEM_H_
 
-#include "gameitem.h"
+#include "entity.h"
 
 class b2World;
 struct b2Vec2;
 
-class Box2DBaseItem : public GameItem
+class Box2DBaseItem : public Entity
 {
     Q_OBJECT
 
 public:
-    Box2DBaseItem(GameScene *parent = 0);
+    Box2DBaseItem(Scene *parent = 0);
 
     static float m_scaleRatio;
 

@@ -24,18 +24,18 @@
 
 #include <QtCore/QAbstractTransition>
 
-class SpriteAnimationItem;
+class SpriteAnimation;
 
 class AnimationTransition : public QAbstractTransition
 {
 public:
-    AnimationTransition(SpriteAnimationItem *spriteAnimationItem);
+    AnimationTransition(SpriteAnimation *spriteAnimationItem);
 
     virtual bool eventTest(QEvent *e);
     virtual void onTransition(QEvent *e);
 
 private:
-    SpriteAnimationItem *m_spriteAnimationItem;
+    SpriteAnimation *m_spriteAnimationItem;
 };
 
 #endif /* _ANIMATIONTRANSITION_H_ */

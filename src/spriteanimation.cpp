@@ -19,13 +19,13 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#include "spriteanimationitem.h"
+#include "spriteanimation.h"
 
 #include "spritesheet.h"
 
 #include <QtCore/QPropertyAnimation>
 
-SpriteAnimationItem::SpriteAnimationItem(QState *parent)
+SpriteAnimation::SpriteAnimation(QState *parent)
     : QState(parent)
     , m_spriteSheet(new SpriteSheet)
     , m_spriteAnimation(new QPropertyAnimation(this))
@@ -43,22 +43,22 @@ SpriteAnimationItem::SpriteAnimationItem(QState *parent)
     m_spriteAnimation->setStartValue(0);
 }
 
-QString SpriteAnimationItem::name() const
+QString SpriteAnimation::name() const
 {
     return m_name;
 }
 
-void SpriteAnimationItem::setName(const QString &name)
+void SpriteAnimation::setName(const QString &name)
 {
     m_name = name;
 }
 
-bool SpriteAnimationItem::running() const
+bool SpriteAnimation::running() const
 {
     return m_spriteAnimation->state() == QAbstractAnimation::Running;
 }
 
-void SpriteAnimationItem::setRunning(const bool &running)
+void SpriteAnimation::setRunning(const bool &running)
 {
     bool currentState = m_spriteAnimation->state() == QAbstractAnimation::Running;
 
@@ -72,12 +72,12 @@ void SpriteAnimationItem::setRunning(const bool &running)
     }
 }
 
-int SpriteAnimationItem::loops() const
+int SpriteAnimation::loops() const
 {
     return m_spriteAnimation->loopCount();
 }
 
-void SpriteAnimationItem::setLoops(const int &loops)
+void SpriteAnimation::setLoops(const int &loops)
 {
     int currentState = m_spriteAnimation->loopCount();
 
@@ -88,54 +88,54 @@ void SpriteAnimationItem::setLoops(const int &loops)
     }
 }
 
-QString SpriteAnimationItem::source() const
+QString SpriteAnimation::source() const
 {
     return m_spriteSheet->source();
 }
 
-void SpriteAnimationItem::setSource(const QString &source)
+void SpriteAnimation::setSource(const QString &source)
 {
     m_spriteSheet->setSource(source);
 }
 
-int SpriteAnimationItem::frames() const
+int SpriteAnimation::frames() const
 {
     return m_spriteSheet->frames();
 }
 
-void SpriteAnimationItem::setFrames(const int &frames)
+void SpriteAnimation::setFrames(const int &frames)
 {
     m_spriteSheet->setFrames(frames);
     m_spriteAnimation->setEndValue(frames);
 }
 
-int SpriteAnimationItem::frame() const
+int SpriteAnimation::frame() const
 {
     return m_spriteSheet->frame();
 }
 
-void SpriteAnimationItem::setFrame(const int &frame)
+void SpriteAnimation::setFrame(const int &frame)
 {
     m_spriteSheet->setFrame(frame);
 }
 
-int SpriteAnimationItem::initialFrame() const
+int SpriteAnimation::initialFrame() const
 {
     return m_spriteSheet->initialFrame();
 }
 
-void SpriteAnimationItem::setInitialFrame(const int &initialFrame)
+void SpriteAnimation::setInitialFrame(const int &initialFrame)
 {
     m_spriteSheet->setInitialFrame(initialFrame);
     m_spriteAnimation->setStartValue(initialFrame);
 }
 
-bool SpriteAnimationItem::visible() const
+bool SpriteAnimation::visible() const
 {
     return m_spriteSheet->isVisible();
 }
 
-void SpriteAnimationItem::setVisible(const bool &visible)
+void SpriteAnimation::setVisible(const bool &visible)
 {
     bool currentState = m_spriteSheet->isVisible();
     if (currentState != visible) {
@@ -145,17 +145,17 @@ void SpriteAnimationItem::setVisible(const bool &visible)
     }
 }
 
-SpriteSheet *SpriteAnimationItem::spriteSheet()
+SpriteSheet *SpriteAnimation::spriteSheet()
 {
     return m_spriteSheet;
 }
 
-int SpriteAnimationItem::duration() const
+int SpriteAnimation::duration() const
 {
     return m_spriteAnimation->duration();
 }
 
-void SpriteAnimationItem::setDuration(const int &duration)
+void SpriteAnimation::setDuration(const int &duration)
 {
     int currentState = m_spriteAnimation->duration();
     if (currentState != duration) {
@@ -165,12 +165,12 @@ void SpriteAnimationItem::setDuration(const int &duration)
     }
 }
 
-bool SpriteAnimationItem::inverse() const
+bool SpriteAnimation::inverse() const
 {
     return m_inverse;
 }
 
-void SpriteAnimationItem::setInverse(const bool &inverse)
+void SpriteAnimation::setInverse(const bool &inverse)
 {
     if (m_inverse != inverse) {
         m_inverse = inverse;
@@ -187,22 +187,22 @@ void SpriteAnimationItem::setInverse(const bool &inverse)
     }
 }
 
-bool SpriteAnimationItem::verticalMirror() const
+bool SpriteAnimation::verticalMirror() const
 {
     return m_spriteSheet->verticalMirror();
 }
 
-void SpriteAnimationItem::setVerticalMirror(const bool &verticalMirror)
+void SpriteAnimation::setVerticalMirror(const bool &verticalMirror)
 {
     m_spriteSheet->setVerticalMirror(verticalMirror);
 }
 
-bool SpriteAnimationItem::horizontalMirror() const
+bool SpriteAnimation::horizontalMirror() const
 {
     return m_spriteSheet->horizontalMirror();
 }
 
-void SpriteAnimationItem::setHorizontalMirror(const bool &horizontalMirror)
+void SpriteAnimation::setHorizontalMirror(const bool &horizontalMirror)
 {
     m_spriteSheet->setHorizontalMirror(horizontalMirror);
 }

@@ -22,18 +22,18 @@
 #ifndef _BOX2DSCENE_H_
 #define _BOX2DSCENE_H_
 
-#include "gamescene.h"
+#include "scene.h"
 
 class b2World;
-class QuasiGame;
+class Game;
 class Box2DDebugDrawItem;
 
-class Box2DScene : public GameScene
+class Box2DScene : public Scene
 {
     Q_OBJECT
 
 public:
-    Box2DScene(QuasiGame *parent = 0);
+    Box2DScene(Game *parent = 0);
 
     b2World *world() const;
 

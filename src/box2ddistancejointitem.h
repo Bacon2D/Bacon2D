@@ -35,7 +35,7 @@ class Box2DDistanceJointItem : public Box2DJointItem
     Q_PROPERTY(float length READ length NOTIFY lengthChanged)
 
 public:
-    Box2DDistanceJointItem(GameScene *parent = 0);
+    Box2DDistanceJointItem(Scene *parent = 0);
 
     void initialize(b2World *world);
 

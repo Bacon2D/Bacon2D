@@ -23,7 +23,7 @@
 #define _LAYER_H_
 
 #include "enums.h"
-#include "gameitem.h"
+#include "entity.h"
 #include "quasipainteditem.h"
 
 #include <QtCore/QList>

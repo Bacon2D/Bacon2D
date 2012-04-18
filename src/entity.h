@@ -19,8 +19,8 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _GAMEITEM_H_
-#define _GAMEITEM_H_
+#ifndef _ENTITY_H_
+#define _ENTITY_H_
 
 #include "enums.h"
 #include "quasideclarativeitem.h"
@@ -36,10 +36,10 @@ class QQmlExpression;
 class QDeclarativeExpression;
 #endif
 
-class QuasiGame;
-class GameScene;
+class Game;
+class Scene;
 
-class GameItem : public QuasiDeclarativeItem
+class Entity : public QuasiDeclarativeItem
 {
     Q_OBJECT
 
@@ -51,10 +51,10 @@ class GameItem : public QuasiDeclarativeItem
     Q_PROPERTY(int updateInterval READ updateInterval WRITE setUpdateInterval NOTIFY updateIntervalChanged)
     Q_PROPERTY(bool collided READ collided WRITE setCollided NOTIFY collidedChanged)
     Q_PROPERTY(Quasi::Ordering order READ order WRITE setOrder)
-    Q_PROPERTY(QuasiGame *game READ game)
+    Q_PROPERTY(Game *game READ game)
 
 public:
-    GameItem(GameScene *parent = 0);
+    Entity(Scene *parent = 0);
 
 #if QT_VERSION >= 0x050000
     QQmlScriptString updateScript() const;
@@ -75,10 +75,10 @@ public:
 
     Q_INVOKABLE QList<QObject *> collidedItems() const;
 
-    GameScene *scene() const;
-    void setScene(GameScene *scene);
+    Scene *scene() const;
+    void setScene(Scene *scene);
 
-    QuasiGame *game() const;
+    Game *game() const;
 
     virtual void update(const long &delta);
 
@@ -98,7 +98,7 @@ private:
     int m_updateInterval;
     QTime m_updateTime;
     bool m_collided;
-    GameScene *m_scene;
+    Scene *m_scene;
 };
 
-#endif /* _GAMEITEM_H_ */
+#endif /* _ENTITY_H_ */

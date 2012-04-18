@@ -19,40 +19,40 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _GAMESCENE_H_
-#define _GAMESCENE_H_
+#ifndef _SCENE_H_
+#define _SCENE_H_
+
+#include "entity.h"
+#include "layers.h"
+#include "quasideclarativeitem.h"
 
 #include <QtCore/QList>
 #include <QtCore/QVector>
 
-#include "quasideclarativeitem.h"
-#include "gameitem.h"
-#include "gamelayers.h"
-
-class QuasiGame;
+class Game;
 class Viewport;
 
-class GameScene : public QuasiDeclarativeItem
+class Scene : public QuasiDeclarativeItem
 {
     Q_OBJECT
 
 #if QT_VERSION >= 0x050000
-    Q_PROPERTY(QQmlListProperty<GameItem> entities READ entities)
+    Q_PROPERTY(QQmlListProperty<Entity> entities READ entities)
 #else
-    Q_PROPERTY(QDeclarativeListProperty<GameItem> entities READ entities)
+    Q_PROPERTY(QDeclarativeListProperty<Entity> entities READ entities)
 #endif
     Q_PROPERTY(bool running READ running WRITE setRunning NOTIFY runningChanged)
     Q_PROPERTY(Viewport *viewport READ viewport WRITE setViewport NOTIFY viewportChanged)
-    Q_PROPERTY(QuasiGame *game READ game WRITE setGame)
+    Q_PROPERTY(Game *game READ game WRITE setGame)
     Q_PROPERTY(bool debug READ debug WRITE setDebug NOTIFY debugChanged)
 
 public:
-    GameScene(QuasiGame *parent = 0);
+    Scene(Game *parent = 0);
 
 #if QT_VERSION >= 0x050000
-    QQmlListProperty<GameItem> entities() const;
+    QQmlListProperty<Entity> entities() const;
 #else
-    QDeclarativeListProperty<GameItem> entities() const;
+    QDeclarativeListProperty<Entity> entities() const;
 #endif
 
     bool running() const;
@@ -61,15 +61,15 @@ public:
     Viewport *viewport() const;
     void setViewport(Viewport *viewport);
 
-    QuasiGame *game() const;
-    void setGame(QuasiGame *game);
+    Game *game() const;
+    void setGame(Game *game);
 
-    GameLayers *gameLayers() const;
+    Layers *gameLayers() const;
 
     bool debug() const;
     void setDebug(const bool &debug);
 
-    Q_INVOKABLE QList<QObject *> collidedItems(GameItem *gameItem) const;
+    Q_INVOKABLE QList<QObject *> collidedItems(Entity *gameItem) const;
 
     virtual void update(const long &delta);
 
@@ -80,21 +80,21 @@ signals:
 
 private:
 #if QT_VERSION >= 0x050000
-    static void append_gameItem(QQmlListProperty<GameItem> *list, GameItem *gameItem);
+    static void append_gameItem(QQmlListProperty<Entity> *list, Entity *gameItem);
 #else
-    static void append_gameItem(QDeclarativeListProperty<GameItem> *list, GameItem *gameItem);
+    static void append_gameItem(QDeclarativeListProperty<Entity> *list, Entity *gameItem);
 #endif
     void checkCollisions();
-    bool checkCollision(GameItem *item, GameItem *otherItem) const;
+    bool checkCollision(Entity *item, Entity *otherItem) const;
 
 protected:
-    QList<GameItem *> m_entities;
+    QList<Entity *> m_entities;
     bool m_running;
     QVector<QVector<bool> > *m_collisions;
     Viewport *m_viewport;
-    QuasiGame *m_game;
-    GameLayers *m_gameLayers;
+    Game *m_game;
+    Layers *m_gameLayers;
     bool m_debug;
 };
 
-#endif /* _GAMESCENE_H_ */
+#endif /* _SCENE_H_ */

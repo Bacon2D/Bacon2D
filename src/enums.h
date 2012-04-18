@@ -49,7 +49,7 @@ public:
         ForwardDirection = 1
     };
 
-    // Used on GameLayers
+    // Used on Layers
     enum DrawType {
         PlaneDrawType,
         TiledDrawType

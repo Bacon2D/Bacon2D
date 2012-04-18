@@ -19,17 +19,17 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _GAMELAYERS_H_
-#define _GAMELAYERS_H_
+#ifndef _LAYERS_H_
+#define _LAYERS_H_
 
 #include "enums.h"
-#include "gameitem.h"
+#include "entity.h"
 #include "layer.h"
 
 #include <QtCore/QList>
 #include <QtCore/QString>
 
-class GameLayers : public GameItem
+class Layers : public Entity
 {
     Q_OBJECT
 
@@ -48,8 +48,8 @@ class GameLayers : public GameItem
     Q_PROPERTY(QColor gridColor READ gridColor WRITE setGridColor)
 
 public:
-    GameLayers(GameScene *parent = 0);
-    ~GameLayers();
+    Layers(Scene *parent = 0);
+    ~Layers();
 
 #if QT_VERSION >= 0x050000
     QQmlListProperty<Layer> layers() const;
@@ -110,4 +110,4 @@ private:
     QColor m_gridColor;
 };
 
-#endif /* _GAMELAYERS_H_ */
+#endif /* _LAYERS_H_ */

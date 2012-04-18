@@ -19,8 +19,8 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _SPRITEANIMATIONITEM_H_
-#define _SPRITEANIMATIONITEM_H_
+#ifndef _SPRITEANIMATION_H_
+#define _SPRITEANIMATION_H_
 
 #include <QtCore/QState>
 #include <QtCore/QPropertyAnimation>
@@ -28,7 +28,7 @@
 class SpriteSheet;
 class QPropertyAnimation;
 
-class SpriteAnimationItem : public QState
+class SpriteAnimation : public QState
 {
     Q_OBJECT
 
@@ -44,7 +44,7 @@ class SpriteAnimationItem : public QState
     Q_PROPERTY(bool inverse READ inverse WRITE setInverse NOTIFY inverseChanged)
 
 public:
-    SpriteAnimationItem(QState *parent = 0);
+    SpriteAnimation(QState *parent = 0);
 
     QString name() const;
     void setName(const QString &name);
@@ -103,4 +103,4 @@ private:
     bool m_inverse;
 };
 
-#endif /* _SPRITEANIMATIONITEM_H_ */
+#endif /* _SPRITEANIMATION_H_ */

@@ -35,7 +35,7 @@ QuasiGame {
         QuasiSprite {
             animation: "explosion"
 
-            animations: QuasiAnimation {
+            animations: QuasiSpriteAnimation {
                 name: "explosion"
                 source: ":/explosion.png"
                 frames: 4
