@@ -55,7 +55,7 @@ void Viewport::setXOffset(float xOffset)
     if (m_xOffset != xOffset) {
         m_xOffset = xOffset;
 
-        if (m_scene){
+        if (m_scene) {
             m_xGroupAnimation->clear();
 
             QPropertyAnimation *xAnim = new QPropertyAnimation(m_scene, "x");
@@ -91,7 +91,7 @@ void Viewport::setYOffset(float yOffset)
     if (m_yOffset != yOffset) {
         m_yOffset = yOffset;
 
-        if (m_scene){
+        if (m_scene) {
             m_yGroupAnimation->clear();
 
             QPropertyAnimation *yAnim = new QPropertyAnimation(m_scene, "y");

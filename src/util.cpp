@@ -42,7 +42,7 @@ b2Vec2 *b2Util::b2Vertices(const QVariantList &vertices, const QRectF &geometry,
 {
     b2Vec2 *vec= new b2Vec2[vertices.length()];
 
-    for (int i = 0; i < vertices.length(); i++){
+    for (int i = 0; i < vertices.length(); i++) {
         QVariantList temp = vertices.at(i).toList();
 
         const float x = temp.at(0).toFloat() - geometry.width() / 2.0;

@@ -34,8 +34,6 @@ class QuasiGame : public QuasiDeclarativeItem
 {
     Q_OBJECT
 
-    enum { DEFAULT_FPS = 60 };
-
     Q_PROPERTY(GameScene *currentScene READ currentScene WRITE setCurrentScene NOTIFY currentSceneChanged)
     Q_PROPERTY(int fps READ fps WRITE setFps NOTIFY fpsChanged)
     Q_PROPERTY(QPointF mouse READ mouse)

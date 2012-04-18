@@ -38,7 +38,7 @@ void AnimatedLayer::setHorizontalStep(const qreal &step)
     if (temp < 0)
         temp *= -1;
 
-    if (temp != m_horizontalStep){
+    if (temp != m_horizontalStep) {
         m_horizontalStep = temp;
 
         emit horizontalStepChanged();

@@ -85,7 +85,7 @@ void Box2DItem::initialize(b2World *world)
 
     b2Shape *shape = 0;
 
-    switch (m_shape){
+    switch (m_shape) {
         case Quasi::RectangleBodyShape:
             shape = new b2PolygonShape;
             ((b2PolygonShape*)shape)->SetAsBox(width() / m_scaleRatio / 2.0, height() / m_scaleRatio / 2.0);

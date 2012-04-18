@@ -35,18 +35,20 @@
 QuasiGame::QuasiGame(QuasiDeclarativeItem *parent)
     : QuasiDeclarativeItem(parent)
     , m_currentScene(0)
-    , m_fps(DEFAULT_FPS)
+    , m_fps(60)
     , m_timerId(0)
 {
     m_gameTime.start();
     m_timerId = startTimer(1000 / m_fps);
 }
 
-GameScene *QuasiGame::currentScene() const {
+GameScene *QuasiGame::currentScene() const
+{
     return m_currentScene;
 }
 
-void QuasiGame::setCurrentScene(GameScene *currentScene) {
+void QuasiGame::setCurrentScene(GameScene *currentScene)
+{
     if (m_currentScene != currentScene) {
         if (m_currentScene) {
             if (m_viewport) {

@@ -95,7 +95,7 @@ Quasi::DrawType Layer::drawType() const
 
 void Layer::setDirection(const Quasi::LayerDirection &direction)
 {
-    if (direction != m_direction){
+    if (direction != m_direction) {
         if (direction == Quasi::BackwardDirection)
             m_direction = (Quasi::LayerDirection)-1; // insane black magic
         else
@@ -157,7 +157,7 @@ Quasi::Ordering Layer::order() const
 
 void Layer::setLayerType(const Quasi::LayerType &type)
 {
-    if (type != m_type){
+    if (type != m_type) {
         m_type = type;
 
         emit layerTypeChanged();
@@ -170,7 +170,7 @@ void Layer::setTileHeight(const int &value)
     if (m_drawType == Quasi::PlaneDrawType)
         return;
 
-    if (value != m_tileHeight){
+    if (value != m_tileHeight) {
         m_tileHeight = value;
 
         if (m_tileWidth != 0 && m_tileHeight != 0)
@@ -183,7 +183,7 @@ void Layer::setTileWidth(const int &value)
     if (m_drawType == Quasi::PlaneDrawType)
         return;
 
-    if (value != m_tileWidth){
+    if (value != m_tileWidth) {
         m_tileWidth = value;
 
         if (m_tileWidth != 0 && m_tileHeight != 0)
@@ -336,7 +336,7 @@ void Layer::updateTiles()
         pix = temp;
     }
 
-    if (m_type == Quasi::MirroredType){
+    if (m_type == Quasi::MirroredType) {
         QPixmap temp(pix.width() * 2, pix.height());
 
         QPainter p(&temp);
@@ -358,7 +358,7 @@ void Layer::updateTiles()
 
     int i, j;
     for (i = 0; i < m_totalRows; i++) {
-        for (j = 0; j < m_totalColumns; j++){
+        for (j = 0; j < m_totalColumns; j++) {
             QPixmap temp(m_tileWidth, m_tileHeight);
 
             QPainter p(&temp);
