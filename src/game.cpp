@@ -36,6 +36,7 @@ Game::Game(QuasiDeclarativeItem *parent)
     : QuasiDeclarativeItem(parent)
     , m_currentScene(0)
     , m_fps(60)
+    , m_viewport(0)
     , m_timerId(0)
 {
     m_gameTime.start();
