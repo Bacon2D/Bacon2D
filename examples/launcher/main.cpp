@@ -35,6 +35,10 @@
 #include <QtDeclarative/QDeclarativeEngine>
 #endif
 
+#ifdef QT_OPENGL_LIB
+#include <QtOpenGL/QGLWidget>
+#endif
+
 int main(int argc, char *argv[])
 {
     QByteArray data = "1";
@@ -57,6 +61,10 @@ int main(int argc, char *argv[])
     view.setSource(QUrl("qrc:/main-qt5.qml"));
 #else
     view.setSource(QUrl("qrc:/main-qt4.qml"));
+#endif
+
+#ifdef QT_OPENGL_LIB
+    view.setViewport(new QGLWidget);
 #endif
 
     view.show();

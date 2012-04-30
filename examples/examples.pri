@@ -1,7 +1,14 @@
 CONFIG += qt
 
-contains(QT_VERSION, ^5.*) QT += quick
-else: QT += declarative
+contains(QT_VERSION, ^5.*) {
+    QT += quick
+} else {
+    QT += declarative
+}
+
+contains(USE_OPENGL, 1) {
+    QT += opengl
+}
 
 TEMPLATE = app
 
