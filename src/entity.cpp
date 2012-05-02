@@ -24,19 +24,14 @@
 #include "enums.h"
 #include "scene.h"
 #include "game.h"
-
-#if QT_VERSION >= 0x050000
-#include <QtQml/QQmlExpression>
-#else
-#include <QtDeclarative/QDeclarativeExpression>
-#endif
+#include "behavior.h"
 
 Entity::Entity(Scene *parent)
     : QuasiDeclarativeItem(parent)
-    , m_expression(0)
     , m_updateInterval(0)
     , m_collided(false)
     , m_scene(0)
+    , m_behavior(0)
 {
 #if QT_VERSION >= 0x050000
     setZ(Quasi::EntityOrdering_01);
@@ -50,8 +45,11 @@ void Entity::update(const long &delta)
     if ((m_updateInterval && m_updateTime.elapsed() >= m_updateInterval)
         || !m_updateInterval) {
         m_updateTime.restart();
-        if (m_expression)
-            m_expression->evaluate();
+        if (m_behavior) {
+            m_behavior->setEntity(this);
+            m_behavior->update(delta);
+            m_behavior->setEntity(0);
+        }
     }
 
 #if QT_VERSION >= 0x050000
@@ -63,37 +61,6 @@ void Entity::update(const long &delta)
         if (Entity *item = dynamic_cast<Entity *>(child)) {
             item->update(delta);
         }
-}
-
-#if QT_VERSION >= 0x050000
-QQmlScriptString Entity::updateScript() const
-#else
-QDeclarativeScriptString Entity::updateScript() const
-#endif
-{
-    return m_updateScript;
-}
-
-#if QT_VERSION >= 0x050000
-void Entity::setUpdateScript(const QQmlScriptString &updateScript)
-#else
-void Entity::setUpdateScript(const QDeclarativeScriptString &updateScript)
-#endif
-{
-    if (m_updateScript.script() != updateScript.script()) {
-        m_updateScript = updateScript;
-
-        if (m_expression)
-            delete m_expression;
-
-#if QT_VERSION >= 0x050000
-        m_expression = new QQmlExpression(m_updateScript.context(), m_updateScript.scopeObject(), m_updateScript.script());
-#else
-        m_expression = new QDeclarativeExpression(m_updateScript.context(), m_updateScript.scopeObject(), m_updateScript.script());
-#endif
-
-        emit updateScriptChanged();
-    }
 }
 
 int Entity::updateInterval() const
@@ -168,4 +135,18 @@ Game *Entity::game() const
     if (m_scene)
         return m_scene->game();
     return 0;
+}
+
+Behavior *Entity::behavior() const
+{
+    return m_behavior;
+}
+
+void Entity::setBehavior(Behavior *behavior)
+{
+    if (m_behavior == behavior)
+        return;
+
+    m_behavior = behavior;
+    emit behaviorChanged();
 }

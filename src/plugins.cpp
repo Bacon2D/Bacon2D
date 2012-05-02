@@ -34,6 +34,8 @@
 #include "staticlayer.h"
 #include "game.h"
 #include "viewport.h"
+#include "behavior.h"
+#include "scriptbehavior.h"
 
 void Plugins::registerTypes(const char *uri)
 {
@@ -41,6 +43,7 @@ void Plugins::registerTypes(const char *uri)
 
     qmlRegisterUncreatableType<Quasi>("QuasiGame", 1, 0, "Quasi", "Exporting Quasi enums to QML");
     qmlRegisterUncreatableType<Layer>("QuasiGame", 1, 0, "Layer", "Registering Layer as we use it on QuasiLayers");
+    qmlRegisterUncreatableType<Behavior>("QuasiGame", 1, 0, "QuasiBehavior", "Don't use QuasiBehavior directly, use one specialized behavior class");
 
     qmlRegisterType<Game>("QuasiGame", 1, 0, "QuasiGame");
     qmlRegisterType<Scene>("QuasiGame", 1, 0, "QuasiScene");
@@ -55,6 +58,7 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<StaticLayer>("QuasiGame", 1, 0, "QuasiStaticLayer");
     qmlRegisterType<AnimatedLayer>("QuasiGame", 1, 0, "QuasiAnimatedLayer");
     qmlRegisterType<Viewport>("QuasiGame", 1, 0, "QuasiViewport");
+    qmlRegisterType<ScriptBehavior>("QuasiGame", 1, 0, "QuasiScriptBehavior");
 }
 
 Q_EXPORT_PLUGIN2(QuasiGame, Plugins);
