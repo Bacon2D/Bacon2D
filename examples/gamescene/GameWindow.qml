@@ -31,8 +31,8 @@ QuasiGame {
         id: scene
 
         entities: QuasiEntity {
-            updateScript: {
-                console.log("update")
+            behavior: QuasiScriptBehavior {
+                script: console.log("update")
             }
         }
     }

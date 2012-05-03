@@ -27,6 +27,26 @@ QuasiGame {
 
     currentScene: scene
 
+    QuasiScriptBehavior {
+        id: sideScrollBehavior
+
+        script: {
+            var newPos = entity.x + entity.scrollStep
+            entity.x = newPos > scene.width ? 0 : newPos
+            entity.x = entity.x < 0 ? scene.width : entity.x
+        }
+    }
+
+    QuasiScriptBehavior {
+        id: verticalScrollBehavior
+
+        script: {
+            var newPos = entity.y + entity.scrollStep
+            entity.y = newPos > scene.height ? 0 : newPos
+            entity.y = entity.y < 0 ? scene.height : entity.y
+        }
+    }
+
     QuasiScene {
         id: scene
 
@@ -38,6 +58,7 @@ QuasiGame {
                 id: item
 
                 property string name: "RED"
+                property int scrollStep: 2
 
                 width: rect.width
                 height: rect.height
@@ -45,10 +66,7 @@ QuasiGame {
 
                 updateInterval: 10
 
-                updateScript: {
-                    var newPos = item.x + 2
-                    item.x = newPos > parent.width ? 0 : newPos
-                }
+                behavior: sideScrollBehavior
 
                 Rectangle {
                     id: rect
@@ -75,6 +93,7 @@ QuasiGame {
                 id: item2
 
                 property string name: "BLUE"
+                property int scrollStep: -2
 
                 width: rect2.width
                 height: rect2.height
@@ -82,10 +101,7 @@ QuasiGame {
 
                 updateInterval: 10
 
-                updateScript: {
-                    var newPos = item2.x - 2
-                    item2.x = newPos < 0 ? parent.width : newPos
-                }
+                behavior: sideScrollBehavior
 
                 Rectangle {
                     id: rect2
@@ -99,6 +115,7 @@ QuasiGame {
                 id: item3
 
                 property string name: "YELLOW"
+                property int scrollStep: 2
 
                 width: rect3.width
                 height: rect3.height
@@ -107,10 +124,7 @@ QuasiGame {
 
                 updateInterval: 10
 
-                updateScript: {
-                    var newPos = item3.y + 2
-                    item3.y = newPos > parent.height ? 0 : newPos
-                }
+                behavior: verticalScrollBehavior
 
                 Rectangle {
                     id: rect3
@@ -124,6 +138,7 @@ QuasiGame {
                 id: item4
 
                 property string name: "GRAY"
+                property int scrollStep: -2
 
                 width: rect4.width
                 height: rect4.height
@@ -132,10 +147,7 @@ QuasiGame {
 
                 updateInterval: 10
 
-                updateScript: {
-                    var newPos = item4.y - 2
-                    item4.y = newPos < 0 ? parent.height : newPos
-                }
+                behavior: verticalScrollBehavior
 
                 Rectangle {
                     id: rect4

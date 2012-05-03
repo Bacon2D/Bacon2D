@@ -34,18 +34,18 @@ QuasiGame {
         height: parent.height
 
         entities: QuasiEntity {
-            id: item
-
             width: parent.width
             height: parent.height
 
             updateInterval: 50
 
-            updateScript: {
-                var newPos = item.x + 5
-                item.x = newPos > parent.width ? 0 : newPos
+            behavior: QuasiScriptBehavior {
+                script: {
+                    var newPos = entity.x + 5
+                    entity.x = newPos > parent.width ? 0 : newPos
 
-                console.log("update: x -> ", item.x)
+                    console.log("update: x -> ", entity.x)
+                }
             }
 
             Rectangle {

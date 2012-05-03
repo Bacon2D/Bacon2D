@@ -33,8 +33,8 @@ QuasiGame {
         entities: QuasiEntity {
             updateInterval: 1000
 
-            updateScript: {
-                console.log("update")
+            behavior: QuasiScriptBehavior {
+                script: console.log("update")
             }
 
             Rectangle {
