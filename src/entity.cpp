@@ -40,7 +40,7 @@ Entity::Entity(Scene *parent)
 #endif
 }
 
-void Entity::update(const long &delta)
+void Entity::update(const int &delta)
 {
     if ((m_updateInterval && m_updateTime.elapsed() >= m_updateInterval)
         || !m_updateInterval) {

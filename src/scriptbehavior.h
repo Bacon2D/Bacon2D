@@ -49,7 +49,7 @@ public:
     QDeclarativeScriptString script() const;
     void setScript(const QDeclarativeScriptString &script);
 #endif
-    void update(const long &delta);
+    void update(const int &delta);
 
 signals:
     void scriptChanged();

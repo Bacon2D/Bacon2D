@@ -64,7 +64,7 @@ public:
     Behavior *behavior() const;
     void setBehavior(Behavior *behavior);
 
-    virtual void update(const long &delta);
+    virtual void update(const int &delta);
 
 signals:
     void updateIntervalChanged();

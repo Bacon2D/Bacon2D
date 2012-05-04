@@ -78,7 +78,7 @@ public:
     QColor gridColor() const { return m_gridColor; }
     void setGridColor(const QColor &color);
 
-    void update(const long &delta);
+    void update(const int &delta);
 
 signals:
     void xOffsetChanged();

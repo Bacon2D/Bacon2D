@@ -130,7 +130,7 @@ Quasi::DrawType Layers::drawType() const
     return m_drawType;
 }
 
-void Layers::update(const long &delta)
+void Layers::update(const int &delta)
 {
     Q_UNUSED(delta)
 

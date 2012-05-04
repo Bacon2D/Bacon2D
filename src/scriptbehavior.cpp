@@ -33,7 +33,7 @@ ScriptBehavior::ScriptBehavior(QObject *parent)
 {
 }
 
-void ScriptBehavior::update(const long &delta) {
+void ScriptBehavior::update(const int &delta) {
     // pass delta to the script
     if (m_expression)
         m_expression->evaluate();

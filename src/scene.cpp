@@ -65,7 +65,7 @@ QDeclarativeListProperty<Entity> Scene::entities() const
 }
 #endif
 
-void Scene::update(const long &delta)
+void Scene::update(const int &delta)
 {
     if (!m_running) // TODO: stop Qt animations as well
         return;

@@ -59,7 +59,7 @@ QPointF Box2DScene::gravity() const
     return m_gravity;
 }
 
-void Box2DScene::update(const long &delta)
+void Box2DScene::update(const int &delta)
 {
     if (!m_running)
         return;

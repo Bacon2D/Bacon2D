@@ -38,7 +38,7 @@ public:
     Entity *entity() const;
     void setEntity(Entity *entity);
 
-    virtual void update(const long &delta) { Q_UNUSED(delta);  }
+    virtual void update(const int &delta) { Q_UNUSED(delta);  }
 
 private:
     Entity *m_entity;

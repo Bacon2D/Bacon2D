@@ -42,7 +42,7 @@ public:
 
     void componentComplete();
 
-    void update(const long &delta);
+    void update(const int &delta);
 
 protected slots:
     void onDebugChanged();

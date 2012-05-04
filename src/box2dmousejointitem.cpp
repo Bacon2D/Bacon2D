@@ -93,7 +93,7 @@ void Box2DMouseJointItem::initialize(b2World *world)
     m_initialized = true;
 }
 
-void Box2DMouseJointItem::update(const long &delta)
+void Box2DMouseJointItem::update(const int &delta)
 {
     if (!m_joint)
         return;

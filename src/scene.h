@@ -71,7 +71,7 @@ public:
 
     Q_INVOKABLE QList<QObject *> collidedItems(Entity *gameItem) const;
 
-    virtual void update(const long &delta);
+    virtual void update(const int &delta);
 
 signals:
     void runningChanged();

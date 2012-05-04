@@ -49,7 +49,7 @@ public:
 
     void initialize(b2World *world);
 
-    void update(const long &delta);
+    void update(const int &delta);
 
     b2Vec2 b2TransformOrigin() const;
 
