@@ -12,4 +12,5 @@ SUBDIRS += animated_layer \
            static_layer \
            updateInterval \
            manysprites \
-           viewport_parallax
+           viewport_parallax \
+	   behaviorchange
