@@ -26,6 +26,7 @@
 Behavior::Behavior(QObject *parent)
     : QObject(parent)
     , m_entity(0)
+    , m_delta(0)
 {
 }
 
@@ -37,4 +38,14 @@ Entity *Behavior::entity() const
 void Behavior::setEntity(Entity *entity)
 {
     m_entity = entity;
+}
+
+int Behavior::delta() const
+{
+    return m_delta;
+}
+
+void Behavior::setDelta(int delta)
+{
+    m_delta = delta;
 }

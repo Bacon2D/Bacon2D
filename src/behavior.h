@@ -31,6 +31,7 @@ class Behavior : public QObject
     Q_OBJECT
 
     Q_PROPERTY(Entity *entity READ entity)
+    Q_PROPERTY(int delta READ delta)
 
 public:
     Behavior(QObject *parent = 0);
@@ -38,10 +39,14 @@ public:
     Entity *entity() const;
     void setEntity(Entity *entity);
 
+    void setDelta(int delta);
+    int delta() const;
+
     virtual void update(const int &delta) { Q_UNUSED(delta);  }
 
 private:
     Entity *m_entity;
+    int m_delta;
 };
 
 #endif /* _BEHAVIOR_H_ */

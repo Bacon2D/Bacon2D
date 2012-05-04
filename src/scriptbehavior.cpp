@@ -34,9 +34,11 @@ ScriptBehavior::ScriptBehavior(QObject *parent)
 }
 
 void ScriptBehavior::update(const int &delta) {
-    // pass delta to the script
-    if (m_expression)
+    Q_UNUSED(delta);
+
+    if (m_expression) {
         m_expression->evaluate();
+    }
 }
 
 #if QT_VERSION >= 0x050000
