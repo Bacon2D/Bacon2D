@@ -37,6 +37,10 @@
 #include "viewport.h"
 #include "behavior.h"
 #include "scriptbehavior.h"
+#include "shape.h"
+#include "rectangle.h"
+#include "fill.h"
+#include "colorfill.h"
 
 void Plugins::registerTypes(const char *uri)
 {
@@ -44,8 +48,10 @@ void Plugins::registerTypes(const char *uri)
 
     qmlRegisterUncreatableType<Quasi>("QuasiGame", 1, 0, "Quasi", "Exporting Quasi enums to QML");
     qmlRegisterUncreatableType<Layer>("QuasiGame", 1, 0, "Layer", "Registering Layer as we use it on QuasiLayers");
-    qmlRegisterUncreatableType<Behavior>("QuasiGame", 1, 0, "QuasiBehavior", "Don't use QuasiBehavior directly, use one specialized behavior class");
     qmlRegisterUncreatableType<Box2DContact>("QuasiGame", 1, 0, "Contact", "This type is used to control scene's (pre)contact event");
+    qmlRegisterUncreatableType<Behavior>("QuasiGame", 1, 0, "QuasiBehavior", "Don't use QuasiBehavior directly, use one specialized behavior");
+    qmlRegisterUncreatableType<Shape>("QuasiGame", 1, 0, "QuasiShape", "Don't use QuasiShape directly, use one specialized shape");
+    qmlRegisterUncreatableType<Fill>("QuasiGame", 1, 0, "QuasiFill", "Don't use QuasiFill directly, use one specialized fill");
 
     qmlRegisterType<Game>("QuasiGame", 1, 0, "QuasiGame");
     qmlRegisterType<Scene>("QuasiGame", 1, 0, "QuasiScene");
@@ -61,6 +67,8 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<AnimatedLayer>("QuasiGame", 1, 0, "QuasiAnimatedLayer");
     qmlRegisterType<Viewport>("QuasiGame", 1, 0, "QuasiViewport");
     qmlRegisterType<ScriptBehavior>("QuasiGame", 1, 0, "QuasiScriptBehavior");
+    qmlRegisterType<Rectangle>("QuasiGame", 1, 0, "QuasiRectangle");
+    qmlRegisterType<ColorFill>("QuasiGame", 1, 0, "QuasiColorFill");
 }
 
 Q_EXPORT_PLUGIN2(QuasiGame, Plugins);
