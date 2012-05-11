@@ -49,7 +49,8 @@ HEADERS += quasideclarativeitem.h \
            fill.h \
            colorfill.h \
            shape.h \
-           rectangle.h
+           rectangle.h \
+           triangle.h
 
 SOURCES += entity.cpp \
            scene.cpp \
