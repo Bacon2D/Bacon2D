@@ -44,6 +44,7 @@
 #include "triangle.h"
 #include "polygon.h"
 #include "circle.h"
+#include "line.h"
 
 void Plugins::registerTypes(const char *uri)
 {
@@ -75,6 +76,7 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<Triangle>("QuasiGame", 1, 0, "QuasiTriangle");
     qmlRegisterType<Polygon>("QuasiGame", 1, 0, "QuasiPolygon");
     qmlRegisterType<Circle>("QuasiGame", 1, 0, "QuasiCircle");
+    qmlRegisterType<Line>("QuasiGame", 1, 0, "QuasiLine");
 }
 
 Q_EXPORT_PLUGIN2(QuasiGame, Plugins);
