@@ -69,10 +69,12 @@ void Box2DScene::update(const int &delta)
     // TODO crete properties for this arguments
     m_world->Step(1.0f / 60.0f, 10, 10);
 
-    Entity *item;
-
-    foreach (item, m_entities) {
-        item->update(delta);
+#if QT_VERSION >= 0x050000
+    QQuickItem *item;
+#else
+    QGraphicsItem *item;
+#endif
+    foreach (item, childItems()) {
         if (Box2DBaseItem *box2DItem = dynamic_cast<Box2DBaseItem *>(item))
             box2DItem->synchronize();
     }

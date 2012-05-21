@@ -72,10 +72,15 @@ void Scene::update(const int &delta)
 
     checkCollisions();
 
-    Entity *item;
-
-    foreach (item, m_entities)
-        item->update(delta);
+#if QT_VERSION >= 0x050000
+    QQuickItem *item;
+#else
+    QGraphicsItem *item;
+#endif
+    foreach (item, childItems()) {
+        if (Entity *entity = dynamic_cast<Entity *>(item))
+            entity->update(delta);
+    }
 }
 
 bool Scene::running() const
