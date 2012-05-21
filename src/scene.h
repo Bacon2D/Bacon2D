@@ -26,8 +26,15 @@
 #include "layers.h"
 #include "quasideclarativeitem.h"
 
+#include <QtCore/QtGlobal>
 #include <QtCore/QList>
 #include <QtCore/QVector>
+
+#if QT_VERSION >= 0x050000
+#include <QtQml/QQmlComponent>
+#else
+#include <QtDeclarative/QDeclarativeComponent>
+#endif
 
 class Game;
 class Viewport;
@@ -72,6 +79,12 @@ public:
     Q_INVOKABLE QList<QObject *> collidedItems(Entity *gameItem) const;
 
     virtual void update(const int &delta);
+
+#if QT_VERSION >= 0x050000
+    Q_INVOKABLE virtual QObject *createEntity(QQmlComponent *component);
+#else
+    Q_INVOKABLE virtual QObject *createEntity(QDeclarativeComponent *component);
+#endif
 
 signals:
     void runningChanged();

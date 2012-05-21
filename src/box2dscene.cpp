@@ -114,3 +114,18 @@ void Box2DScene::onDebugChanged()
         m_debugDraw->setHeight(height());
     }
 }
+
+#if QT_VERSION >= 0x050000
+QObject *Box2DScene::createEntity(QQmlComponent *component)
+#else
+QObject *Box2DScene::createEntity(QDeclarativeComponent *component)
+#endif
+{
+    QObject *object = Scene::createEntity(component);
+
+    if (Box2DBaseItem *box2DItem = dynamic_cast<Box2DBaseItem *>(object)) {
+        box2DItem->initialize(m_world);
+    }
+
+    return object;
+}

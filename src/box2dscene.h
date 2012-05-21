@@ -24,6 +24,8 @@
 
 #include "scene.h"
 
+#include <QtCore/QtGlobal>
+
 class b2World;
 class Game;
 class Box2DDebugDrawItem;
@@ -43,6 +45,12 @@ public:
     void componentComplete();
 
     void update(const int &delta);
+
+#if QT_VERSION >= 0x050000
+    Q_INVOKABLE QObject *createEntity(QQmlComponent *component);
+#else
+    Q_INVOKABLE QObject *createEntity(QDeclarativeComponent *component);
+#endif
 
 protected slots:
     void onDebugChanged();

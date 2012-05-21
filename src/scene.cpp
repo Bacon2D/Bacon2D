@@ -24,6 +24,14 @@
 #include "game.h"
 #include "layers.h"
 
+#include <QtCore/QtGlobal>
+
+#if QT_VERSION >= 0x050000
+#include <QtQml/QQmlEngine>
+#else
+#include <QtDeclarative/QDeclarativeEngine>
+#endif
+
 #if QT_VERSION >= 0x050000
 void Scene::append_gameItem(QQmlListProperty<Entity> *list, Entity *gameItem)
 #else
@@ -204,4 +212,25 @@ void Scene::setDebug(const bool &debug)
 
         emit debugChanged();
     }
+}
+
+#if QT_VERSION >= 0x050000
+QObject *Scene::createEntity(QQmlComponent *component)
+{
+    QQmlContext *context = QQmlEngine::contextForObject(this);
+#else
+QObject *Scene::createEntity(QDeclarativeComponent *component)
+{
+    QDeclarativeContext *context = QDeclarativeEngine::contextForObject(this);
+#endif
+
+    QObject *object = component->beginCreate(context);
+    object->setParent(this);
+
+    if (Entity *entity = dynamic_cast<Entity *>(object))
+        entity->setParentItem(this);
+
+    component->completeCreate();
+
+    return object;
 }
