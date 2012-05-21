@@ -30,7 +30,8 @@ QuasiGame {
     QuasiPhysicsScene {
         id: scene
 
-        anchors.fill: parent
+        width: parent.width
+        height: parent.height
 
         entities: [
             QuasiBody {
@@ -39,9 +40,9 @@ QuasiGame {
                 width: 60
                 height: 60
 
-                friction: 0.3
-                density: 50
-                restitution: 0.6
+                friction: 0.3 + Math.random() * 1.0
+                density: 5 + Math.random() * 10
+                restitution: 0.6 + Math.random() * 1.0
                 sleepingAllowed: false
 
                 Rectangle {
@@ -51,57 +52,6 @@ QuasiGame {
 
                 x: 200
                 y: 160
-            },
-            QuasiBody {
-                id: box2ditem1
-
-                width: 50
-                height: 50
-
-                friction: 0.3
-                density: 50
-                restitution: 0.6
-                sleepingAllowed: false
-
-                Rectangle {
-                    color: "red"
-                    anchors.fill: parent
-                }
-
-                x: 250
-                y: 0
-            },
-            QuasiDistanceJoint {
-                id: distJoint
-
-                box2ditemA: mouseItem
-                box2ditemB: box2ditem1
-
-                Rectangle {
-                    width: 5
-                    radius: 5
-                    height: distJoint.length
-                    color: "yellow"
-                }
-            },
-            QuasiBody {
-                id: box2ditem2
-
-                width: 100
-                height: 100
-
-                friction: 0.3
-                density: 50
-                restitution: 0.6
-                sleepingAllowed: false
-
-                Rectangle {
-                    color: "blue"
-                    anchors.fill: parent
-                }
-
-                x: 400
-                y: 300
             },
             QuasiMouseJoint {
                 target: mouseItem
@@ -115,7 +65,7 @@ QuasiGame {
                 height: 1
 
                 friction: 0.3
-                density: 5
+                density: 50
                 restitution: 0.6
 
                 Rectangle {
@@ -125,74 +75,48 @@ QuasiGame {
 
                 x: 0
                 y: 500
-            },
-            QuasiBody {
-                bodyType: Quasi.StaticBodyType
-
-                width: 10
-                height: 10
-
-                Rectangle {
-                    color: "black"
-                    anchors.fill: parent
-                }
-
-                x: 0
-                y: 0
-            },
-            QuasiBody {
-                bodyType: Quasi.StaticBodyType
-
-                width: 10
-                height: 10
-
-                Rectangle {
-                    color: "black"
-                    anchors.fill: parent
-                }
-
-                x: 790
-                y: 0
-            },
-            QuasiBody {
-                bodyType: Quasi.StaticBodyType
-
-                width: 10
-                height: 10
-
-                Rectangle {
-                    color: "black"
-                    anchors.fill: parent
-                }
-
-                x: 0
-                y: 590
-            },
-            QuasiBody {
-                bodyType: Quasi.StaticBodyType
-
-                width: 10
-                height: 10
-
-                Rectangle {
-                    color: "black"
-                    anchors.fill: parent
-                }
-
-                x: 790
-                y: 590
             }
         ]
     }
 
-   /* MouseArea {
-        anchors.fill: parent
-        onClicked: {
-            box2ditem2.applyLinearImpulse(
-            Qt.point(100 * (mouseX - box2ditem2.x),
-            100 * (mouseY - box2ditem2.y)),
-            Qt.point(box2ditem2.x, box2ditem2.y))
-        }
-    }*/
+    Component {
+        id: bodyComponent
 
+        QuasiBody {
+            width: 10 + Math.random() * 90
+            height:10 + Math.random() * 90
+
+            x: Math.random() * scene.width
+            y: 200 + Math.random() * -scene.height
+
+
+            friction: 0.3
+            density: 5
+            restitution: 0.6
+            sleepingAllowed: false
+
+            Rectangle {
+                anchors.fill: parent
+
+                color: "red"
+            }
+        }
+    }
+
+    Timer {
+        interval: 500; running: true; repeat: true
+        onTriggered: scene.createEntity(bodyComponent)
+    }
+
+    Component.onCompleted: {
+        for (var i = 0; i < 10; i++) {
+            scene.createEntity(bodyComponent)
+        }
+    }
+
+    MouseArea {
+        anchors.fill: parent
+
+        onClicked: scene.createEntity(bodyComponent)
+    }
 }
