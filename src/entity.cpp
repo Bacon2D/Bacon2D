@@ -114,13 +114,6 @@ void Entity::setOrder(Quasi::Ordering order)
 #endif
 }
 
-QList<QObject *> Entity::collidedItems() const
-{
-    Scene *scene = qobject_cast<Scene *>(parent());
-
-    return scene->collidedItems(const_cast<Entity *>(this));
-}
-
 Scene *Entity::scene() const
 {
     return m_scene;

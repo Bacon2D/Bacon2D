@@ -54,8 +54,6 @@ public:
     Quasi::Ordering order() const;
     void setOrder(Quasi::Ordering order);
 
-    Q_INVOKABLE QList<QObject *> collidedItems() const;
-
     Scene *scene() const;
     void setScene(Scene *scene);
 

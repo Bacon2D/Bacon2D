@@ -32,28 +32,9 @@
 #include <QtDeclarative/QDeclarativeEngine>
 #endif
 
-#if QT_VERSION >= 0x050000
-void Scene::append_gameItem(QQmlListProperty<Entity> *list, Entity *gameItem)
-#else
-void Scene::append_gameItem(QDeclarativeListProperty<Entity> *list, Entity *gameItem)
-#endif
-{
-    Scene *scene = qobject_cast<Scene *>(list->object);
-    if (scene) {
-        gameItem->setScene(scene);
-        gameItem->setParentItem(scene);
-        scene->m_entities.append(gameItem);
-
-        Layers *gameLayers = qobject_cast<Layers *>(gameItem);
-        if (gameLayers)
-            scene->m_gameLayers = gameLayers;
-    }
-}
-
 Scene::Scene(Game *parent)
     : QuasiDeclarativeItem(parent)
     , m_running(false)
-    , m_collisions(0)
     , m_viewport(0)
     , m_game(0)
     , m_debug(false)
@@ -61,24 +42,10 @@ Scene::Scene(Game *parent)
     setVisible(false);
 }
 
-#if QT_VERSION >= 0x050000
-QQmlListProperty<Entity> Scene::entities() const
-{
-    return QQmlListProperty<Entity>(const_cast<Scene *>(this), 0, &Scene::append_gameItem);
-}
-#else
-QDeclarativeListProperty<Entity> Scene::entities() const
-{
-    return QDeclarativeListProperty<Entity>(const_cast<Scene *>(this), 0, &Scene::append_gameItem);
-}
-#endif
-
 void Scene::update(const int &delta)
 {
     if (!m_running) // TODO: stop Qt animations as well
         return;
-
-    checkCollisions();
 
 #if QT_VERSION >= 0x050000
     QQuickItem *item;
@@ -103,72 +70,6 @@ void Scene::setRunning(const bool &running)
 
         emit runningChanged();
     }
-}
-
-void Scene::checkCollisions()
-{
-    int itemCount = m_entities.count();
-
-    if (!m_collisions || (m_collisions->count() != itemCount)) {
-        if (m_collisions)
-            delete [] m_collisions;
-        m_collisions = new QVector<QVector<bool> >(itemCount, QVector<bool>(itemCount));
-    }
-
-    Entity *item, *otherItem;
-
-    foreach (item, m_entities)
-        item->setCollided(false);
-
-    for (int i = 0; i < itemCount; ++i) {
-        item = m_entities.at(i);
-        for (int j = 0; j < itemCount; ++j) {
-            if (i == j)
-                continue;
-
-            otherItem = m_entities.at(j);
-
-            bool collided = checkCollision(item, otherItem);
-
-            item->setCollided(item->collided() ? true : collided);
-            otherItem->setCollided(otherItem->collided() ? true : collided);
-
-            (*m_collisions)[i][j] = collided;
-            (*m_collisions)[j][i] = collided;
-        }
-    }
-}
-
-bool Scene::checkCollision(Entity *item, Entity *otherItem) const
-{
-    QRectF itemRect = item->boundingRect();
-    QRectF otherItemRect = otherItem->boundingRect();
-
-    itemRect.moveTo(item->x(), item->y());
-    otherItemRect.moveTo(otherItem->x(), otherItem->y());
-
-    return itemRect.intersects(otherItemRect)
-           || itemRect.contains(otherItemRect)
-           || otherItemRect.contains(itemRect);
-}
-
-QList<QObject *> Scene::collidedItems(Entity *gameItem) const
-{
-    QList<QObject *> collidedItemsList;
-
-    if (m_collisions) {
-        int index = m_entities.indexOf(gameItem);
-
-        if (index != -1) {
-            for (int i=0; i < m_entities.size(); ++i) {
-                if (i != index && (*m_collisions)[index][i]) {
-                    collidedItemsList.append(m_entities.at(i));
-                }
-            }
-        }
-    }
-
-    return collidedItemsList;
 }
 
 Viewport *Scene::viewport() const
@@ -227,10 +128,31 @@ QObject *Scene::createEntity(QDeclarativeComponent *component)
     QObject *object = component->beginCreate(context);
     object->setParent(this);
 
-    if (Entity *entity = dynamic_cast<Entity *>(object))
+    if (Entity *entity = dynamic_cast<Entity *>(object)) {
         entity->setParentItem(this);
+        entity->setScene(this);
+    }
 
     component->completeCreate();
 
     return object;
+}
+
+void Scene::componentComplete()
+{
+#if QT_VERSION >= 0x050000
+    QQuickItem *item;
+#else
+    QGraphicsItem *item;
+#endif
+    foreach (item, childItems()) {
+        if (Entity *entity = dynamic_cast<Entity *>(item)) {
+            entity->setParent(this);
+            entity->setParentItem(this);
+            entity->setScene(this);
+
+            if (Layers *gameLayers = qobject_cast<Layers *>(entity))
+                m_gameLayers = gameLayers;
+        }
+    }
 }

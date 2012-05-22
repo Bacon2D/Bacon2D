@@ -85,9 +85,14 @@ void Box2DScene::update(const int &delta)
 
 void Box2DScene::componentComplete()
 {
-    QuasiDeclarativeItem::componentComplete();
+    Scene::componentComplete();
 
-    foreach (Entity *item, m_entities) {
+#if QT_VERSION >= 0x050000
+    QQuickItem *item;
+#else
+    QGraphicsItem *item;
+#endif
+    foreach (item, childItems()) {
         if (Box2DBaseItem *box2DItem = dynamic_cast<Box2DBaseItem *>(item))
             box2DItem->initialize(m_world);
     }
