@@ -39,10 +39,11 @@ QuasiGame {
             width: 60
             height: 60
 
-            friction: 0.3 + Math.random() * 1.0
-            density: 5 + Math.random() * 10
-            restitution: 0.6 + Math.random() * 1.0
+            friction: 0.3
+            density: 5
+            restitution: 0.6
             sleepingAllowed: false
+
 
             Rectangle {
                 color: "green"
@@ -90,9 +91,9 @@ QuasiGame {
             y: 200 + Math.random() * -scene.height
 
 
-            friction: 0.3
-            density: 5
-            restitution: 0.6
+            friction: 0.3 + Math.random() * 1.0
+            density: 5 + Math.random() * 10
+            restitution: 0.5 + Math.random() * 0.5
             sleepingAllowed: false
 
             Rectangle {
@@ -105,18 +106,18 @@ QuasiGame {
 
     Timer {
         interval: 500; running: true; repeat: true
-        onTriggered: scene.createEntity(bodyComponent)
+        onTriggered: bodyComponent.createObject(scene)
     }
 
     Component.onCompleted: {
         for (var i = 0; i < 10; i++) {
-            scene.createEntity(bodyComponent)
+            bodyComponent.createObject(scene)
         }
     }
 
     MouseArea {
         anchors.fill: parent
 
-        onClicked: scene.createEntity(bodyComponent)
+        onClicked: bodyComponent.createObject(scene)
     }
 }
