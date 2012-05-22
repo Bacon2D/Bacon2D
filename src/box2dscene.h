@@ -47,9 +47,9 @@ public:
     void update(const int &delta);
 
 #if QT_VERSION >= 0x050000
-    Q_INVOKABLE QObject *createEntity(QQmlComponent *component);
+    virtual void itemChange(ItemChange change, const ItemChangeData &data);
 #else
-    Q_INVOKABLE QObject *createEntity(QDeclarativeComponent *component);
+    virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 #endif
 
 protected slots:

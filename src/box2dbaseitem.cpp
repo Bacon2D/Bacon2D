@@ -32,6 +32,7 @@ Box2DBaseItem::Box2DBaseItem(Scene *parent )
     , m_initialized(false)
     , m_synchronizing(false)
     , m_synchronize(true)
+    , m_world(0)
 {
 }
 
@@ -60,4 +61,9 @@ void Box2DBaseItem::synchronize()
 
         m_synchronizing = false;
     }
+}
+
+void Box2DBaseItem::setWorld(b2World *world)
+{
+    m_world = world;
 }

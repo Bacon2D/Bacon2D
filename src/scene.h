@@ -67,13 +67,7 @@ public:
 
     virtual void update(const int &delta);
 
-    void componentComplete();
-
-#if QT_VERSION >= 0x050000
-    Q_INVOKABLE virtual QObject *createEntity(QQmlComponent *component);
-#else
-    Q_INVOKABLE virtual QObject *createEntity(QDeclarativeComponent *component);
-#endif
+    virtual void componentComplete();
 
 signals:
     void runningChanged();

@@ -47,7 +47,7 @@ public:
     float maxForce() const;
     void setMaxForce(const float &maxForce);
 
-    void initialize(b2World *world);
+    void initialize();
 
     void update(const int &delta);
 

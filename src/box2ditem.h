@@ -91,11 +91,13 @@ public:
     QVariantList vertices() const;
     void setVertices(const QVariantList &vertices);
 
-    void initialize(b2World *world);
+    void initialize();
 
     b2Vec2 b2TransformOrigin() const;
 
     float b2Angle() const;
+
+    void componentComplete();
 
     Q_INVOKABLE void applyTorque(const float &torque);
     Q_INVOKABLE void applyLinearImpulse(const QPointF &impulse, const QPointF &point);

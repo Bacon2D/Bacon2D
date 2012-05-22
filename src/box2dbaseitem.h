@@ -36,9 +36,10 @@ public:
 
     static float m_scaleRatio;
 
-    bool initialized() const;
+    void setWorld(b2World *world);
 
-    virtual void initialize(b2World *world) = 0;
+    bool initialized() const;
+    virtual void initialize() = 0;
 
     void synchronize();
 
@@ -50,6 +51,7 @@ protected:
     bool m_initialized;
     bool m_synchronizing;
     bool m_synchronize;
+    b2World *m_world;
 };
 
 #endif /* _BOX2DBASEITEM_H_ */

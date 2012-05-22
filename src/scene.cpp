@@ -115,29 +115,6 @@ void Scene::setDebug(const bool &debug)
     }
 }
 
-#if QT_VERSION >= 0x050000
-QObject *Scene::createEntity(QQmlComponent *component)
-{
-    QQmlContext *context = QQmlEngine::contextForObject(this);
-#else
-QObject *Scene::createEntity(QDeclarativeComponent *component)
-{
-    QDeclarativeContext *context = QDeclarativeEngine::contextForObject(this);
-#endif
-
-    QObject *object = component->beginCreate(context);
-    object->setParent(this);
-
-    if (Entity *entity = dynamic_cast<Entity *>(object)) {
-        entity->setParentItem(this);
-        entity->setScene(this);
-    }
-
-    component->completeCreate();
-
-    return object;
-}
-
 void Scene::componentComplete()
 {
 #if QT_VERSION >= 0x050000
@@ -155,4 +132,6 @@ void Scene::componentComplete()
                 m_gameLayers = gameLayers;
         }
     }
+
+    QuasiDeclarativeItem::componentComplete();
 }

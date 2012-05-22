@@ -69,16 +69,17 @@ void Box2DMouseJointItem::setMaxForce(const float &maxForce)
     }
 }
 
-void Box2DMouseJointItem::initialize(b2World *world)
+void Box2DMouseJointItem::initialize()
 {
-    if (m_initialized || !m_target)
+    if (m_initialized || !m_target || !m_world)
         return;
 
-    if (!m_target->initialized())
-        m_target->initialize(world);
+    if (!m_target->initialized()) {
+        m_target->initialize();
+    }
 
     b2BodyDef groundBodyDef; // dummy body
-    b2Body *groundBody = world->CreateBody(&groundBodyDef);
+    b2Body *groundBody = m_world->CreateBody(&groundBodyDef);
 
     b2MouseJointDef jointDef;
 
@@ -88,7 +89,7 @@ void Box2DMouseJointItem::initialize(b2World *world)
     jointDef.target = m_target->body()->GetWorldCenter();
     jointDef.maxForce = m_maxForce * m_target->body()->GetMass();
 
-    m_joint = static_cast<b2MouseJoint *>(world->CreateJoint(&jointDef));
+    m_joint = static_cast<b2MouseJoint *>(m_world->CreateJoint(&jointDef));
 
     m_initialized = true;
 }

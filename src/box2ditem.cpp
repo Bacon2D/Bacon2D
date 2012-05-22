@@ -64,9 +64,9 @@ void Box2DItem::onRotationChanged()
  *
  * https://gitorious.org/qml-box2d/qml-box2d
  */
-void Box2DItem::initialize(b2World *world)
+void Box2DItem::initialize()
 {
-    if (m_initialized)
+    if (m_initialized || !m_world)
         return;
 
     b2BodyDef bodyDef;
@@ -81,7 +81,7 @@ void Box2DItem::initialize(b2World *world)
     bodyDef.allowSleep = m_sleepingAllowed;
     bodyDef.fixedRotation = m_fixedRotation;
 
-    m_body = world->CreateBody(&bodyDef);
+    m_body = m_world->CreateBody(&bodyDef);
 
     b2Shape *shape = 0;
 
@@ -130,7 +130,7 @@ void Box2DItem::initialize(b2World *world)
 #endif
     foreach (item, childItems()) {
         if (Box2DBaseItem *box2DItem = dynamic_cast<Box2DBaseItem *>(item))
-            box2DItem->initialize(world);
+            box2DItem->initialize();
     }
 
     m_initialized = true;
@@ -388,4 +388,10 @@ float Box2DItem::b2Angle() const
     if (m_body)
         angle = m_body->GetAngle();
     return angle;
+}
+
+void Box2DItem::componentComplete()
+{
+    if (!m_initialized)
+        initialize();
 }

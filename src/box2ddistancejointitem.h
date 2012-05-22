@@ -37,7 +37,7 @@ class Box2DDistanceJointItem : public Box2DJointItem
 public:
     Box2DDistanceJointItem(Scene *parent = 0);
 
-    void initialize(b2World *world);
+    void initialize();
 
     b2Vec2 b2TransformOrigin() const;
 

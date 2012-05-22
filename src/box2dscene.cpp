@@ -85,22 +85,24 @@ void Box2DScene::update(const int &delta)
 
 void Box2DScene::componentComplete()
 {
-    Scene::componentComplete();
-
 #if QT_VERSION >= 0x050000
     QQuickItem *item;
 #else
     QGraphicsItem *item;
 #endif
     foreach (item, childItems()) {
-        if (Box2DBaseItem *box2DItem = dynamic_cast<Box2DBaseItem *>(item))
-            box2DItem->initialize(m_world);
+        if (Box2DBaseItem *box2DItem = dynamic_cast<Box2DBaseItem *>(item)) {
+            box2DItem->setWorld(m_world);
+            box2DItem->initialize();
+        }
     }
 
     if (m_debugDraw) {
         m_debugDraw->setWidth(width());
         m_debugDraw->setHeight(height());
     }
+
+    Scene::componentComplete();
 }
 
 void Box2DScene::onDebugChanged()
@@ -121,16 +123,25 @@ void Box2DScene::onDebugChanged()
 }
 
 #if QT_VERSION >= 0x050000
-QObject *Box2DScene::createEntity(QQmlComponent *component)
+void Box2DScene::itemChange(ItemChange change, const ItemChangeData &data)
 #else
-QObject *Box2DScene::createEntity(QDeclarativeComponent *component)
+QVariant Box2DScene::itemChange(GraphicsItemChange change, const QVariant &value)
 #endif
 {
-    QObject *object = Scene::createEntity(component);
-
-    if (Box2DBaseItem *box2DItem = dynamic_cast<Box2DBaseItem *>(object)) {
-        box2DItem->initialize(m_world);
+    if (isComponentComplete() && change == ItemChildAddedChange) {
+#if QT_VERSION >= 0x050000
+        QQuickItem *child = data.item;
+#else
+        QGraphicsItem *child = value.value<QGraphicsItem *>();
+#endif
+        if (Box2DItem *box2DItem = dynamic_cast<Box2DItem *>(child)) {
+            box2DItem->setWorld(m_world);
+        }
     }
 
-    return object;
+#if QT_VERSION >= 0x050000
+    Scene::itemChange(change, data);
+#else
+    return Scene::itemChange(change, value);
+#endif
 }
