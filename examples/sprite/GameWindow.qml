@@ -33,7 +33,7 @@ QuasiGame {
         width: parent.width
         height: parent.height
 
-        entities: QuasiSprite {
+        QuasiSprite {
             id: spriteItem
 
 

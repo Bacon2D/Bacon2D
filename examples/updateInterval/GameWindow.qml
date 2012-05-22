@@ -30,7 +30,7 @@ QuasiGame {
     QuasiScene {
         id: scene
 
-        entities: QuasiEntity {
+        QuasiEntity {
             updateInterval: 1000
 
             behavior: QuasiScriptBehavior {

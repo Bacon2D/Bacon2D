@@ -33,7 +33,7 @@ QuasiGame {
         width: parent.width
         height: parent.height
 
-        entities: QuasiEntity {
+        QuasiEntity {
             width: parent.width
             height: parent.height
 

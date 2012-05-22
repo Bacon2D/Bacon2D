@@ -33,50 +33,50 @@ QuasiGame {
         width: parent.width
         height: parent.height
 
-        entities: [
-            QuasiBody {
-                id: mouseItem
+        QuasiBody {
+            id: mouseItem
 
-                width: 60
-                height: 60
+            width: 60
+            height: 60
 
-                friction: 0.3 + Math.random() * 1.0
-                density: 5 + Math.random() * 10
-                restitution: 0.6 + Math.random() * 1.0
-                sleepingAllowed: false
+            friction: 0.3 + Math.random() * 1.0
+            density: 5 + Math.random() * 10
+            restitution: 0.6 + Math.random() * 1.0
+            sleepingAllowed: false
 
-                Rectangle {
-                    color: "green"
-                    anchors.fill: parent
-                }
-
-                x: 200
-                y: 160
-            },
-            QuasiMouseJoint {
-                target: mouseItem
-            },
-            QuasiBody {
-                id: ground
-
-                bodyType: Quasi.StaticBodyType
-
-                width: 790
-                height: 1
-
-                friction: 0.3
-                density: 50
-                restitution: 0.6
-
-                Rectangle {
-                    color: "green"
-                    anchors.fill: parent
-                }
-
-                x: 0
-                y: 500
+            Rectangle {
+                color: "green"
+                anchors.fill: parent
             }
-        ]
+
+            x: 200
+            y: 160
+        }
+
+        QuasiMouseJoint {
+            target: mouseItem
+        }
+
+        QuasiBody {
+            id: ground
+
+            bodyType: Quasi.StaticBodyType
+
+            width: 790
+            height: 1
+
+            friction: 0.3
+            density: 50
+            restitution: 0.6
+
+            Rectangle {
+                color: "green"
+                anchors.fill: parent
+            }
+
+            x: 0
+            y: 500
+        }
     }
 
     Component {

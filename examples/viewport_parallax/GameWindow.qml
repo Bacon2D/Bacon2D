@@ -47,54 +47,54 @@ QuasiGame {
         width: parent.width * 10
         height: parent.height
 
-        entities: [
-            QuasiLayers {
-                anchors.fill: parent
-                drawType: Quasi.PlaneDrawType
+        QuasiLayers {
+            anchors.fill: parent
+            drawType: Quasi.PlaneDrawType
 
-                layers: [
-                    QuasiStaticLayer {
-                        source: ":/images/layer_01.png"
-                        order: Quasi.BackgroundLayerOrdering_01
-                    },
-                    QuasiStaticLayer {
-                        source: ":/images/layer_02.png"
-                        factor: 1.1
-                        order: Quasi.ForegroundLayerOrdering_01
-                    }
-                ]
-            },
-            QuasiSprite {
-                id: gameSprite
+            layers: [
+                QuasiStaticLayer {
+                    source: ":/images/layer_01.png"
+                    order: Quasi.BackgroundLayerOrdering_01
+                },
+                QuasiStaticLayer {
+                    source: ":/images/layer_02.png"
+                    factor: 1.1
+                    order: Quasi.ForegroundLayerOrdering_01
+                }
+            ]
+        }
 
-                x: 10
-                y: 420
+        QuasiSprite {
+            id: gameSprite
 
-                animation: "stopped"
+            x: 10
+            y: 420
 
-                animations: [
-                    QuasiSpriteAnimation {
-                        name: "moving"
+            animation: "stopped"
 
-                        source: ":/images/moving.png"
-                        frames: 20
-                        duration: 450
-                        loops: Animation.Infinite
-                        inverse: gameSprite.horizontalMirror
-                    },
-                    QuasiSpriteAnimation {
-                        name: "stopped"
+            animations: [
+                QuasiSpriteAnimation {
+                    name: "moving"
 
-                        source: ":/images/stopped.png"
-                        frames: 7
-                        duration: 5000
-                        loops: Animation.Infinite
-                    }
-                ]
+                    source: ":/images/moving.png"
+                    frames: 20
+                    duration: 450
+                    loops: Animation.Infinite
+                    inverse: gameSprite.horizontalMirror
+                },
+                QuasiSpriteAnimation {
+                    name: "stopped"
 
-                order: Quasi.InteractionLayerOrdering_01
-            }
-        ]
+                    source: ":/images/stopped.png"
+                    frames: 7
+                    duration: 5000
+                    loops: Animation.Infinite
+                }
+            ]
+
+            order: Quasi.InteractionLayerOrdering_01
+        }
+
         viewport: QuasiViewport {
             id: gameViewport
 

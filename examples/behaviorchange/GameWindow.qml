@@ -53,7 +53,7 @@ QuasiGame {
         width: parent.width
         height: parent.height
 
-        entities: QuasiEntity {
+        QuasiEntity {
             id: square
             property int scrollStep: 3
 

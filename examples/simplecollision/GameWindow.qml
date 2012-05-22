@@ -53,110 +53,111 @@ QuasiGame {
         width: parent.width
         height: parent.height
 
-        entities: [
-            QuasiEntity {
-                id: item
+        QuasiEntity {
+            id: item
 
-                property string name: "RED"
-                property int scrollStep: 2
+            property string name: "RED"
+            property int scrollStep: 2
 
-                width: rect.width
-                height: rect.height
-                x: 0
+            width: rect.width
+            height: rect.height
+            x: 0
 
-                updateInterval: 10
+            updateInterval: 10
 
-                behavior: sideScrollBehavior
+            behavior: sideScrollBehavior
 
-                Rectangle {
-                    id: rect
-                    width: 50
-                    height: 50
+            Rectangle {
+                id: rect
+                width: 50
+                height: 50
 
-                    color: item.collided ? "green" : "red"
-                }
+                color: item.collided ? "green" : "red"
+            }
 
-                onCollidedChanged: {
-                    if (collided) {
-                        console.log("red collided with:")
-                        var collidedList = item.collidedItems()
-                        console.log(collidedList)
-                        for (var i=0; i< collidedList.length; ++i) {
-                            var gameItem = collidedList[i]
-                            console.log(gameItem)
-                            console.log(gameItem.name)
-                        }
+            onCollidedChanged: {
+                if (collided) {
+                    console.log("red collided with:")
+                    var collidedList = item.collidedItems()
+                    console.log(collidedList)
+                    for (var i=0; i< collidedList.length; ++i) {
+                        var gameItem = collidedList[i]
+                        console.log(gameItem)
+                        console.log(gameItem.name)
                     }
                 }
-            },
-            QuasiEntity {
-                id: item2
-
-                property string name: "BLUE"
-                property int scrollStep: -2
-
-                width: rect2.width
-                height: rect2.height
-                x: parent.width
-
-                updateInterval: 10
-
-                behavior: sideScrollBehavior
-
-                Rectangle {
-                    id: rect2
-                    width: 50
-                    height: 50
-
-                    color: item2.collided ? "green" : "blue"
-                }
-            },
-            QuasiEntity {
-                id: item3
-
-                property string name: "YELLOW"
-                property int scrollStep: 2
-
-                width: rect3.width
-                height: rect3.height
-                x: parent.width / 2
-                y: 0
-
-                updateInterval: 10
-
-                behavior: verticalScrollBehavior
-
-                Rectangle {
-                    id: rect3
-                    width: 50
-                    height: 50
-
-                    color: item3.collided ? "green" : "yellow"
-                }
-            },
-            QuasiEntity {
-                id: item4
-
-                property string name: "GRAY"
-                property int scrollStep: -2
-
-                width: rect4.width
-                height: rect4.height
-                x: parent.width / 2
-                y: parent.height
-
-                updateInterval: 10
-
-                behavior: verticalScrollBehavior
-
-                Rectangle {
-                    id: rect4
-                    width: 50
-                    height: 50
-
-                    color: item4.collided ? "green" : "gray"
-                }
             }
-        ]
+        }
+
+        QuasiEntity {
+            id: item2
+
+            property string name: "BLUE"
+            property int scrollStep: -2
+
+            width: rect2.width
+            height: rect2.height
+            x: parent.width
+
+            updateInterval: 10
+
+            behavior: sideScrollBehavior
+
+            Rectangle {
+                id: rect2
+                width: 50
+                height: 50
+
+                color: item2.collided ? "green" : "blue"
+            }
+        }
+
+        QuasiEntity {
+            id: item3
+
+            property string name: "YELLOW"
+            property int scrollStep: 2
+
+            width: rect3.width
+            height: rect3.height
+            x: parent.width / 2
+            y: 0
+
+            updateInterval: 10
+
+            behavior: verticalScrollBehavior
+
+            Rectangle {
+                id: rect3
+                width: 50
+                height: 50
+
+                color: item3.collided ? "green" : "yellow"
+            }
+        }
+
+        QuasiEntity {
+            id: item4
+
+            property string name: "GRAY"
+            property int scrollStep: -2
+
+            width: rect4.width
+            height: rect4.height
+            x: parent.width / 2
+            y: parent.height
+
+            updateInterval: 10
+
+            behavior: verticalScrollBehavior
+
+            Rectangle {
+                id: rect4
+                width: 50
+                height: 50
+
+                color: item4.collided ? "green" : "gray"
+            }
+        }
     }
 }
