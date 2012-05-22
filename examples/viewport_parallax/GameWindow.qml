@@ -29,8 +29,6 @@ QuasiGame {
 
     currentScene: scene
 
-    fps: 300
-
     function startMoving() {
         if (gameSprite.animation != "moving")
             gameSprite.animation = "moving";

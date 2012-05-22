@@ -27,8 +27,6 @@ QuasiGame {
 
     currentScene: scene
 
-    fps: 300
-
     function toLeft() {
         shipImage.mirror = true;
         layers.direction = Quasi.ForwardDirection;
