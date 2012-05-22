@@ -55,7 +55,7 @@ QuasiGame {
             var spriteObject;
 
             for (var i = 0; i < numberOfSprites; i++) {
-                spriteObject = spriteComponent.createObject(scene)
+                spriteObject = scene.createEntity(spriteComponent)
                 spriteObject.x = Math.random() * game.width
                 spriteObject.y = Math.random() * game.height
             }
