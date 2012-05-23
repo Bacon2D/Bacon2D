@@ -84,12 +84,13 @@ QuasiGame {
         id: bodyComponent
 
         QuasiBody {
+            id: body
+
             width: 10 + Math.random() * 90
-            height:10 + Math.random() * 90
+            height: 10 + Math.random() * 90
 
             x: Math.random() * scene.width
             y: 200 + Math.random() * -scene.height
-
 
             friction: 0.3 + Math.random() * 1.0
             density: 5 + Math.random() * 10
@@ -100,6 +101,16 @@ QuasiGame {
                 anchors.fill: parent
 
                 color: "red"
+            }
+
+            onXChanged: {
+                if (body.x > scene.width || x < -body.width)
+                    body.destroy()
+            }
+
+            onYChanged: {
+                if (body.y > scene.height)
+                    body.destroy()
             }
         }
     }
