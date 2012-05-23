@@ -41,27 +41,25 @@ QuasiGame {
             //drawGrid: true // nice for debug; default: false
             //gridColor: "green" // nice for debug; default: red
 
-            layers: [
-                QuasiAnimatedLayer {
-                    source: ":/large_enough.png" // image source
-                    //factor: 1.0 // updating factor of this layer, useful when using multiple layers; default: 1.0
-                    /* layer ordering, set how the layers will be presented when rendering
-                    * possible values, splited in three main areas:
-                    * - These enums defines the ordering of the background layers
-                    *    BackgroundLayerOrdering_01, BackgroundLayerOrdering_02 and BackgroundLayerOrdering_03
-                    * - These enums defines the ordering of the interaction layers (where the characters, enemies, objects, etc, live)
-                    *    InteractionLayerOrdering_01 (default for every layer), InteractionLayerOrdering_02 and InteractionLayerOrdering_03
-                    * - These enums defines the orderin of the foreground layers
-                    *    ForegroundLayerOrdering_01, ForegroundLayerOrdering_02 and ForegroundLayerOrdering_03
-                    * Please, bear in mind that you can use as many layers you want to (and that your system can support), but they will ordered according these values
-                    */
-                    order: Quasi.BackgroundLayerOrdering_01
+            QuasiAnimatedLayer {
+                source: ":/large_enough.png" // image source
+                //factor: 1.0 // updating factor of this layer, useful when using multiple layers; default: 1.0
+                /* layer ordering, set how the layers will be presented when rendering
+                * possible values, splited in three main areas:
+                * - These enums defines the ordering of the background layers
+                *    BackgroundLayerOrdering_01, BackgroundLayerOrdering_02 and BackgroundLayerOrdering_03
+                * - These enums defines the ordering of the interaction layers (where the characters, enemies, objects, etc, live)
+                *    InteractionLayerOrdering_01 (default for every layer), InteractionLayerOrdering_02 and InteractionLayerOrdering_03
+                * - These enums defines the orderin of the foreground layers
+                *    ForegroundLayerOrdering_01, ForegroundLayerOrdering_02 and ForegroundLayerOrdering_03
+                * Please, bear in mind that you can use as many layers you want to (and that your system can support), but they will ordered according these values
+                */
+                order: Quasi.BackgroundLayerOrdering_01
 
-                    horizontalStep: 5 // base horizontal offset, aka 'step'. There are no need of a signed value as it will always get the positive value; default: 0, i.e., no movement at all
-                    direction: Quasi.BackwardDirection // direction of the background animation; ForwardDirection or BackwardDirection (default)
-                    layerType: Quasi.InfiniteType // type of animation; MirroredType or InfiniteType (default)
-                }
-            ]
+                horizontalStep: 5 // base horizontal offset, aka 'step'. There are no need of a signed value as it will always get the positive value; default: 0, i.e., no movement at all
+                direction: Quasi.BackwardDirection // direction of the background animation; ForwardDirection or BackwardDirection (default)
+                layerType: Quasi.InfiniteType // type of animation; MirroredType or InfiniteType (default)
+            }
         }
 
         QuasiSprite {

@@ -33,11 +33,6 @@ class Layers : public Entity
 {
     Q_OBJECT
 
-#if QT_VERSION >= 0x050000
-    Q_PROPERTY(QQmlListProperty<Layer> layers READ layers)
-#else
-    Q_PROPERTY(QDeclarativeListProperty<Layer> layers READ layers)
-#endif
     Q_PROPERTY(Quasi::DrawType drawType READ drawType WRITE setDrawType)
     Q_PROPERTY(int tileHeight READ tileHeight WRITE setTileHeight)
     Q_PROPERTY(int tileWidth READ tileWidth WRITE setTileWidth)
@@ -50,12 +45,6 @@ class Layers : public Entity
 public:
     Layers(Scene *parent = 0);
     ~Layers();
-
-#if QT_VERSION >= 0x050000
-    QQmlListProperty<Layer> layers() const;
-#else
-    QDeclarativeListProperty<Layer> layers() const;
-#endif
 
     void setDrawType(Quasi::DrawType drawType);
     Quasi::DrawType drawType() const;
@@ -80,22 +69,23 @@ public:
 
     void update(const int &delta);
 
-signals:
-    void xOffsetChanged();
-    void yOffsetChanged();
-
 public slots:
     void changeXOffset();
     void changeYOffset();
 
-private:
-
+protected:
 #if QT_VERSION >= 0x050000
-    static void append_layer(QQmlListProperty<Layer> *list, Layer *layer);
+    virtual void itemChange(ItemChange change, const ItemChangeData &data);
 #else
-    static void append_layer(QDeclarativeListProperty<Layer> *list, Layer *layer);
+    virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 #endif
+    void componentComplete();
 
+signals:
+    void xOffsetChanged();
+    void yOffsetChanged();
+
+private:
     int m_tileWidth;
     int m_tileHeight;
     int m_totalColumns;

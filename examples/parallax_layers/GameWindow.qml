@@ -55,44 +55,49 @@ QuasiGame {
 
             property variant direction: Quasi.BackwardDirection
 
-            layers: [
-                QuasiAnimatedLayer {
-                    source: ":/images/space.png"
-                    factor: 0.3
-                    order: Quasi.BackgroundLayerOrdering_01
+            QuasiAnimatedLayer {
+                id: bgLayer1
+                source: ":/images/space.png"
+                factor: 0.3
+                order: Quasi.BackgroundLayerOrdering_01
 
-                    horizontalStep: 1
-                    layerType: Quasi.MirroredType
-                    direction: layers.direction
-                },
-                QuasiAnimatedLayer {
-                    source: ":/images/planet.png"
-                    factor: 0.5
-                    order: Quasi.BackgroundLayerOrdering_02
+                horizontalStep: 1
+                layerType: Quasi.MirroredType
+                direction: layers.direction
+            }
 
-                    horizontalStep: 1
-                    layerType: Quasi.InfiniteType
-                    direction: layers.direction
-                },
-                QuasiAnimatedLayer {
-                    source: ":/images/stars.png"
-                    factor: 1.1
-                    order: Quasi.ForegroundLayerOrdering_01
+            QuasiAnimatedLayer {
+                id: bgLayer2
+                source: ":/images/planet.png"
+                factor: 0.5
+                order: Quasi.BackgroundLayerOrdering_02
 
-                    horizontalStep: 1
-                    layerType: Quasi.InfiniteType
-                    direction: layers.direction
-                },
-                QuasiAnimatedLayer {
-                    source: ":/images/moon.png"
-                    factor: 1.2
-                    order: Quasi.ForegroundLayerOrdering_02
+                horizontalStep: 1
+                layerType: Quasi.InfiniteType
+                direction: layers.direction
+            }
 
-                    horizontalStep: 1
-                    layerType: Quasi.InfiniteType
-                    direction: layers.direction
-                }
-            ]
+            QuasiAnimatedLayer {
+                id: fgLayer1
+                source: ":/images/stars.png"
+                factor: 1.1
+                order: Quasi.ForegroundLayerOrdering_01
+
+                horizontalStep: 1
+                layerType: Quasi.InfiniteType
+                direction: layers.direction
+            }
+
+            QuasiAnimatedLayer {
+                id: fgLayer2
+                source: ":/images/moon.png"
+                factor: 1.2
+                order: Quasi.ForegroundLayerOrdering_02
+
+                horizontalStep: 1
+                layerType: Quasi.InfiniteType
+                direction: layers.direction
+            }
         }
 
         QuasiEntity {
@@ -118,18 +123,18 @@ QuasiGame {
             focus: true
             Keys.onPressed: {
                 switch (event.key) {
-                    case Qt.Key_Left:
+                case Qt.Key_Left:
                     toLeft();
                     ship.x -= 5;
                     break;
-                    case Qt.Key_Right:
+                case Qt.Key_Right:
                     toRight();
                     ship.x += 5;
                     break;
-                    case Qt.Key_Down:
+                case Qt.Key_Down:
                     ship.y += 5;
                     break;
-                    case Qt.Key_Up:
+                case Qt.Key_Up:
                     ship.y -= 5;
                     break;
                 }

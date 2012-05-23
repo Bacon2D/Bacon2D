@@ -22,19 +22,6 @@
 #include "layers.h"
 #include "staticlayer.h"
 
-#if QT_VERSION >= 0x050000
-void Layers::append_layer(QQmlListProperty<Layer> *list, Layer *layer)
-#else
-void Layers::append_layer(QDeclarativeListProperty<Layer> *list, Layer *layer)
-#endif
-{
-    Layers *layers = qobject_cast<Layers *>(list->object);
-    if (layers) {
-        layer->setParentItem((QuasiDeclarativeItem *)layers->parent());
-        layers->m_layers.append(layer);
-    }
-}
-
 Layers::Layers(Scene *parent)
     : Entity(parent)
     , m_tileWidth(32)
@@ -51,18 +38,6 @@ Layers::Layers(Scene *parent)
     m_drawGrid = false;
     m_gridColor = Qt::red;
 }
-
-#if QT_VERSION >= 0x050000
-QQmlListProperty<Layer> Layers::layers() const
-{
-    return QQmlListProperty<Layer>(const_cast<Layers *>(this), 0, &Layers::append_layer);
-}
-#else
-QDeclarativeListProperty<Layer> Layers::layers() const
-{
-    return QDeclarativeListProperty<Layer>(const_cast<Layers *>(this), 0, &Layers::append_layer);
-}
-#endif
 
 Layers::~Layers()
 {
@@ -174,3 +149,52 @@ void Layers::changeYOffset()
             sl->moveY(m_yOffset);
     }
 }
+
+/*  */
+#if QT_VERSION >= 0x050000
+void Layers::itemChange(ItemChange change, const ItemChangeData &data)
+#else
+QVariant Layers::itemChange(GraphicsItemChange change, const QVariant &value)
+#endif
+{
+    if (isComponentComplete() && change == ItemChildAddedChange) {
+#if QT_VERSION >= 0x050000
+        QQuickItem *child = data.item;
+#else
+        QGraphicsItem *child = value.value<QGraphicsItem *>();
+#endif
+        if (Layer *layer = dynamic_cast<Layer *>(child)) {
+            // TODO: Check why layer doesn't work properly
+            // when it is a child of Layers
+            layer->setParentItem(parentItem());
+            m_layers.append(layer);
+        }
+    }
+
+#if QT_VERSION >= 0x050000
+    Entity::itemChange(change, data);
+#else
+    return Entity::itemChange(change, value);
+#endif
+}
+
+void Layers::componentComplete()
+{
+#if QT_VERSION >= 0x050000
+    QQuickItem *item;
+#else
+    QGraphicsItem *item;
+#endif
+    foreach (item, childItems()) {
+        if (Layer *layer = dynamic_cast<Layer*>(item)) {
+            // TODO: Check why layer doesn't work properly
+            // when it is a child of Layers
+            layer->setParentItem(parentItem());
+            m_layers.append(layer);
+        }
+    }
+
+    Entity::componentComplete();
+}
+
+
