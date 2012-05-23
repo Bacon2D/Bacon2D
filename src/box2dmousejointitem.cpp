@@ -31,11 +31,26 @@
 
 Box2DMouseJointItem::Box2DMouseJointItem(Scene *parent)
     : Box2DBaseItem(parent)
+    , m_joint(0)
     , m_target(0)
     , m_collideConnected(true)
     , m_maxForce(200.0f)
+    , m_dummyGround(0)
 {
     m_synchronize = false;
+}
+
+Box2DMouseJointItem::~Box2DMouseJointItem()
+{
+    if (!m_world || !m_joint)
+        return;
+
+    if (m_dummyGround) {
+        m_worldPtr->DestroyBody(m_dummyGround);
+        m_dummyGround = 0;
+    }
+
+    m_joint = 0;
 }
 
 Box2DItem *Box2DMouseJointItem::target() const
@@ -75,21 +90,23 @@ void Box2DMouseJointItem::initialize()
         return;
 
     if (!m_target->initialized()) {
+        m_target->setWorld(m_world);
         m_target->initialize();
     }
 
     b2BodyDef groundBodyDef; // dummy body
-    b2Body *groundBody = m_world->CreateBody(&groundBodyDef);
+
+    m_dummyGround = m_worldPtr->CreateBody(&groundBodyDef);
 
     b2MouseJointDef jointDef;
 
     jointDef.collideConnected = m_collideConnected;
-    jointDef.bodyA = groundBody;
+    jointDef.bodyA = m_dummyGround;
     jointDef.bodyB = m_target->body();
     jointDef.target = m_target->body()->GetWorldCenter();
     jointDef.maxForce = m_maxForce * m_target->body()->GetMass();
 
-    m_joint = static_cast<b2MouseJoint *>(m_world->CreateJoint(&jointDef));
+    m_joint = static_cast<b2MouseJoint *>(m_worldPtr->CreateJoint(&jointDef));
 
     m_initialized = true;
 }

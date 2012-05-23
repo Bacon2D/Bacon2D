@@ -46,6 +46,15 @@ Box2DItem::Box2DItem(Scene *parent)
     connect(this, SIGNAL(rotationChanged()), SLOT(onRotationChanged()));
 }
 
+Box2DItem::~Box2DItem()
+{
+    if (!m_world || !m_body)
+        return;
+
+    m_worldPtr->DestroyBody(m_body);
+    m_body = 0;
+}
+
 b2Body *Box2DItem::body() const
 {
     return m_body;
@@ -81,7 +90,7 @@ void Box2DItem::initialize()
     bodyDef.allowSleep = m_sleepingAllowed;
     bodyDef.fixedRotation = m_fixedRotation;
 
-    m_body = m_world->CreateBody(&bodyDef);
+    m_body = m_worldPtr->CreateBody(&bodyDef);
 
     b2Shape *shape = 0;
 

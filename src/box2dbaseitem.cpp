@@ -32,7 +32,7 @@ Box2DBaseItem::Box2DBaseItem(Scene *parent )
     , m_initialized(false)
     , m_synchronizing(false)
     , m_synchronize(true)
-    , m_world(0)
+    , m_worldPtr(0)
 {
 }
 
@@ -63,7 +63,10 @@ void Box2DBaseItem::synchronize()
     }
 }
 
-void Box2DBaseItem::setWorld(b2World *world)
+void Box2DBaseItem::setWorld(QSharedPointer<b2World> world)
 {
     m_world = world;
+
+    if (!m_world.isNull())
+        m_worldPtr = m_world.data();
 }

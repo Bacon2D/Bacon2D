@@ -36,6 +36,7 @@ class Box2DDistanceJointItem : public Box2DJointItem
 
 public:
     Box2DDistanceJointItem(Scene *parent = 0);
+    ~Box2DDistanceJointItem();
 
     void initialize();
 
@@ -54,9 +55,6 @@ protected:
 
 signals:
     void lengthChanged();
-
-private:
-    b2DistanceJoint *m_joint;
 };
 
 #endif /* _BOX2DDISTANCEJOINTITEM_H_ */

@@ -24,8 +24,7 @@
 
 #include "entity.h"
 
-class b2World;
-struct b2Vec2;
+#include <Box2D/Box2D.h>
 
 class Box2DBaseItem : public Entity
 {
@@ -33,10 +32,11 @@ class Box2DBaseItem : public Entity
 
 public:
     Box2DBaseItem(Scene *parent = 0);
+    virtual ~Box2DBaseItem() {}
 
     static float m_scaleRatio;
 
-    void setWorld(b2World *world);
+    void setWorld(QSharedPointer<b2World> world);
 
     bool initialized() const;
     virtual void initialize() = 0;
@@ -51,7 +51,8 @@ protected:
     bool m_initialized;
     bool m_synchronizing;
     bool m_synchronize;
-    b2World *m_world;
+    QWeakPointer<b2World> m_world;
+    b2World *m_worldPtr;
 };
 
 #endif /* _BOX2DBASEITEM_H_ */

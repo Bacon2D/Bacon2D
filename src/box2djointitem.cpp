@@ -28,8 +28,8 @@ Box2DJointItem::Box2DJointItem(Scene *parent)
     , m_box2ditemA(0)
     , m_box2ditemB(0)
     , m_collideConnected(true)
+    , m_joint(0)
 {
-
 }
 
 Box2DItem *Box2DJointItem::box2ditemA() const

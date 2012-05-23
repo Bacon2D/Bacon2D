@@ -24,6 +24,7 @@
 
 #include "box2dbaseitem.h"
 
+class b2Body;
 class b2MouseJoint;
 class Box2DItem;
 
@@ -37,6 +38,7 @@ class Box2DMouseJointItem : public Box2DBaseItem
 
 public:
     Box2DMouseJointItem(Scene *parent = 0);
+    ~Box2DMouseJointItem();
 
     Box2DItem *target() const;
     void setTarget(Box2DItem *target);
@@ -65,6 +67,7 @@ private:
     Box2DItem *m_target;
     bool m_collideConnected;
     float m_maxForce;
+    b2Body *m_dummyGround;
 };
 
 #endif /* _BOX2DMOUSEJOINTITEM_H_ */

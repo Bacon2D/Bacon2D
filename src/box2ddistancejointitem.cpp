@@ -28,8 +28,15 @@
 
 Box2DDistanceJointItem::Box2DDistanceJointItem(Scene *parent)
     : Box2DJointItem(parent)
-    , m_joint(0)
 {
+}
+
+Box2DDistanceJointItem::~Box2DDistanceJointItem()
+{
+    if (!m_world || !m_joint)
+        return;
+
+    m_joint = 0;
 }
 
 void Box2DDistanceJointItem::initialize()
@@ -51,7 +58,8 @@ void Box2DDistanceJointItem::initialize()
                         m_box2ditemA->body()->GetWorldCenter(),
                         m_box2ditemB->body()->GetWorldCenter());
 
-    m_joint = static_cast<b2DistanceJoint *>(m_world->CreateJoint(&jointDef));
+
+    m_joint = static_cast<b2DistanceJoint *>(m_worldPtr->CreateJoint(&jointDef));
 
     setHeight(length());
     emit lengthChanged();

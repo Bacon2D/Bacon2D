@@ -36,6 +36,7 @@ class Box2DScene : public Scene
 
 public:
     Box2DScene(Game *parent = 0);
+    ~Box2DScene();
 
     b2World *world() const;
 
@@ -56,7 +57,7 @@ protected slots:
     void onDebugChanged();
 
 private:
-    b2World *m_world;
+    QSharedPointer<b2World> m_world;
     QPointF m_gravity;
     Box2DDebugDrawItem *m_debugDraw;
 };

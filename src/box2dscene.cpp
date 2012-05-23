@@ -27,7 +27,10 @@
 #include "game.h"
 #include "viewport.h"
 
-#include <Box2D/Box2D.h>
+static void deleteWorld(b2World *world)
+{
+    delete world;
+}
 
 Box2DScene::Box2DScene(Game *parent)
     : Scene(parent)
@@ -37,21 +40,26 @@ Box2DScene::Box2DScene(Game *parent)
 {
     const b2Vec2 gravity(m_gravity.x(), m_gravity.y());
 
-    m_world = new b2World(gravity);
+    m_world = QSharedPointer<b2World>(new b2World(gravity), deleteWorld);
 
     connect(this, SIGNAL(debugChanged()), SLOT(onDebugChanged()));
 }
 
+Box2DScene::~Box2DScene()
+{
+    m_world.clear();
+}
+
 b2World *Box2DScene::world() const
 {
-    return m_world;
+    return m_world.data();
 }
 
 void Box2DScene::setGravity(const QPointF &gravity)
 {
     m_gravity = gravity;
-    if (m_world)
-        m_world->SetGravity(b2Vec2(gravity.x(), gravity.y()));
+
+    m_world->SetGravity(b2Vec2(gravity.x(), gravity.y()));
 }
 
 QPointF Box2DScene::gravity() const

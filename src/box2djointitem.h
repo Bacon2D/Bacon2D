@@ -26,6 +26,7 @@
 #include "entity.h"
 
 class Box2DItem;
+class b2Joint;
 
 class Box2DJointItem : public Box2DBaseItem
 {
@@ -37,6 +38,7 @@ class Box2DJointItem : public Box2DBaseItem
 
 public:
     Box2DJointItem(Scene *parent = 0);
+    virtual ~Box2DJointItem() {}
 
     Box2DItem *box2ditemA() const;
     void setBox2ditemA(Box2DItem *box2ditemA);
@@ -56,6 +58,7 @@ protected:
     Box2DItem *m_box2ditemA;
     Box2DItem *m_box2ditemB;
     bool m_collideConnected;
+    b2Joint *m_joint;
 };
 
 #endif /* _BOX2DJOINTITEM_H_ */

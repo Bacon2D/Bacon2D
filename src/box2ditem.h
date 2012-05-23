@@ -52,6 +52,7 @@ class Box2DItem : public Box2DBaseItem
 
 public:
     Box2DItem(Scene *parent = 0);
+    ~Box2DItem();
 
     b2Body *body() const;
 
