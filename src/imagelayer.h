@@ -19,8 +19,8 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _STATICLAYER_H_
-#define _STATICLAYER_H_
+#ifndef _IMAGELAYER_H_
+#define _IMAGELAYER_H_
 
 #include "layer.h"
 
@@ -28,16 +28,25 @@
 #include <QtGui/QPixmap>
 #include <QtGui/QPainter>
 
-class StaticLayer : public Layer
+class ImageLayer : public Layer
 {
     Q_OBJECT
 
+    Q_PROPERTY(qreal horizontalStep READ horizontalStep WRITE setHorizontalStep NOTIFY horizontalStepChanged)
+    Q_PROPERTY(bool animated READ isAnimated WRITE setAnimated NOTIFY animatedChanged)
+
 public:
-    StaticLayer(Layer *parent = 0);
-    ~StaticLayer();
+    ImageLayer(Layer *parent = 0);
+    ~ImageLayer();
 
     void moveX(const qreal &x);
     void moveY(const qreal &y);
+
+    qreal horizontalStep() const { return m_horizontalStep; }
+    void setHorizontalStep(const qreal &step);
+
+    bool isAnimated() const { return m_isAnimated; }
+    void setAnimated(bool animated);
 
 #if QT_VERSION >= 0x050000
     void paint(QPainter *painter);
@@ -45,11 +54,20 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 #endif
 
+signals:
+    void horizontalStepChanged();
+    void animatedChanged();
+
 private:
+    void updateHorizontalStep();
+
     qreal m_globalXPos; // global positioning
     qreal m_globalYPos;
     qreal m_localXPos; // local positioning
     qreal m_localYPos;
+    qreal m_horizontalStep;
+    qreal m_currentHorizontalStep;
+    bool m_isAnimated;
 };
 
-#endif /* _STATICLAYER_H_ */
+#endif /* _IMAGELAYER_H_ */

@@ -91,7 +91,7 @@ private:
     int m_totalColumns;
     int m_totalRows;
     Quasi::DrawType m_drawType;
-    Layer::LayerList m_layers;
+    QList<Layer*> m_layers;
 
     qreal m_xOffset;
     qreal m_yOffset;

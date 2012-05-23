@@ -46,7 +46,7 @@ QuasiGame {
         QuasiLayers {
             id: layers
 
-            // TODO: make 'horizontalStep' a property from QuasiLayers, not QuasiAnimatedLayer?
+            // TODO: make 'horizontalStep' a property from QuasiLayers, not QuasiImageLayer?
             anchors.fill: parent
             drawType: Quasi.TiledDrawType // XXX: There are some problems with Quasi.PLaneDrawType
             tileWidth: 40
@@ -55,8 +55,8 @@ QuasiGame {
 
             property variant direction: Quasi.BackwardDirection
 
-            QuasiAnimatedLayer {
-                id: bgLayer1
+            QuasiImageLayer {
+                animated: true
                 source: ":/images/space.png"
                 factor: 0.3
                 order: Quasi.BackgroundLayerOrdering_01
@@ -66,8 +66,8 @@ QuasiGame {
                 direction: layers.direction
             }
 
-            QuasiAnimatedLayer {
-                id: bgLayer2
+            QuasiImageLayer {
+                animated: true
                 source: ":/images/planet.png"
                 factor: 0.5
                 order: Quasi.BackgroundLayerOrdering_02
@@ -77,8 +77,8 @@ QuasiGame {
                 direction: layers.direction
             }
 
-            QuasiAnimatedLayer {
-                id: fgLayer1
+            QuasiImageLayer {
+                animated: true
                 source: ":/images/stars.png"
                 factor: 1.1
                 order: Quasi.ForegroundLayerOrdering_01
@@ -88,8 +88,8 @@ QuasiGame {
                 direction: layers.direction
             }
 
-            QuasiAnimatedLayer {
-                id: fgLayer2
+            QuasiImageLayer {
+                animated: true
                 source: ":/images/moon.png"
                 factor: 1.2
                 order: Quasi.ForegroundLayerOrdering_02

@@ -35,8 +35,7 @@ HEADERS += quasideclarativeitem.h \
            box2ddistancejointitem.h \
            box2dmousejointitem.h \
            layer.h \
-           staticlayer.h \
-           animatedlayer.h \
+           imagelayer.h \
            layers.h \
            util.h \
            viewport.h \
@@ -73,8 +72,7 @@ SOURCES += entity.cpp \
            box2ddistancejointitem.cpp \
            box2dmousejointitem.cpp \
            layer.cpp \
-           animatedlayer.cpp \
-           staticlayer.cpp \
+           imagelayer.cpp \
            layers.cpp \
            util.cpp \
            viewport.cpp \

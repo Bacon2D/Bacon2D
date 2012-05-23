@@ -77,8 +77,6 @@ class Layer: public QuasiPaintedItem
     Q_PROPERTY(Quasi::LayerDirection direction READ direction WRITE setDirection NOTIFY directionChanged)
 
 public:
-    typedef QList<Layer *> LayerList; //! A layer list based on QList
-
     Layer(QuasiDeclarativeItem *parent = 0);
     ~Layer();
 

@@ -20,7 +20,7 @@
  */
 
 #include "layers.h"
-#include "staticlayer.h"
+#include "imagelayer.h"
 
 Layers::Layers(Scene *parent)
     : Entity(parent)
@@ -133,7 +133,7 @@ void Layers::changeXOffset()
     foreach (Layer *layer, m_layers) {
         layer->setX(m_xOffset);
 
-        StaticLayer *sl = qobject_cast<StaticLayer *>(layer);
+        ImageLayer *sl = qobject_cast<ImageLayer *>(layer);
         if (sl)
             sl->moveX(m_xOffset);
     }
@@ -144,7 +144,7 @@ void Layers::changeYOffset()
     foreach (Layer *layer, m_layers) {
         layer->setY(m_xOffset);
 
-        StaticLayer *sl = qobject_cast<StaticLayer *>(layer);
+        ImageLayer *sl = qobject_cast<ImageLayer *>(layer);
         if (sl)
             sl->moveY(m_yOffset);
     }

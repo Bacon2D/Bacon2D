@@ -41,7 +41,8 @@ QuasiGame {
             //drawGrid: true // nice for debug; default: false
             //gridColor: "green" // nice for debug; default: red
 
-            QuasiAnimatedLayer {
+            QuasiImageLayer {
+                animated: true
                 source: ":/large_enough.png" // image source
                 //factor: 1.0 // updating factor of this layer, useful when using multiple layers; default: 1.0
                 /* layer ordering, set how the layers will be presented when rendering

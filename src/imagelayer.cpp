@@ -19,22 +19,25 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#include "staticlayer.h"
+#include "imagelayer.h"
 
-StaticLayer::StaticLayer(Layer *parent)
+ImageLayer::ImageLayer(Layer *parent)
     : Layer((QuasiDeclarativeItem *)parent)
     , m_globalXPos(0.0)
     , m_localXPos(0.0)
     , m_localYPos(0.0)
+    , m_horizontalStep(0)
+    , m_currentHorizontalStep(0)
+    , m_isAnimated(false)
 {
 }
 
-StaticLayer::~StaticLayer()
+ImageLayer::~ImageLayer()
 {
 }
 
 // move to a X value
-void StaticLayer::moveX(const qreal &x)
+void ImageLayer::moveX(const qreal &x)
 {
     qreal newValue = x * m_factor;
     qreal delta = m_globalXPos + newValue;
@@ -43,8 +46,8 @@ void StaticLayer::moveX(const qreal &x)
     m_localXPos -= delta;
 
     if (m_localXPos <= -width()) {
-            drawPixmap();
-            m_localXPos =  width() + m_localXPos;
+        drawPixmap();
+        m_localXPos =  width() + m_localXPos;
     } else if (m_localXPos >= 0) {
         if (m_globalXPos != 0) {
             drawPixmap();
@@ -54,23 +57,67 @@ void StaticLayer::moveX(const qreal &x)
     }
 }
 
-#include <QDebug>
-void StaticLayer::moveY(const qreal &y)
+void ImageLayer::moveY(const qreal &y)
 {
     Q_UNUSED(y);
-    // TODO
-    qDebug() << "I WILL KILL YOUR WHOLE FAMILY!!";
+
+    // TBD
+}
+
+void ImageLayer::setHorizontalStep(const qreal &step)
+{
+    int temp = step;
+    if (temp < 0)
+        temp *= -1;
+
+    if (temp == m_horizontalStep)
+        return;
+
+    m_horizontalStep = temp;
+
+    emit horizontalStepChanged();
+}
+
+void ImageLayer::setAnimated(bool animated)
+{
+    if (m_isAnimated == animated)
+        return;
+
+    m_isAnimated = animated;
+
+    emit animatedChanged();
+}
+
+void ImageLayer::updateHorizontalStep()
+{
+    m_currentHorizontalStep += (m_horizontalStep * m_factor * m_direction);
+
+    if (m_currentHorizontalStep <= -width()) {
+        drawPixmap();
+        m_currentHorizontalStep = 0;
+    } else if (m_currentHorizontalStep >= 0) {
+        drawPixmap();
+        m_currentHorizontalStep = -width();
+    }
 }
 
 #if QT_VERSION >= 0x050000
-void StaticLayer::paint(QPainter *painter)
+void ImageLayer::paint(QPainter *painter)
 {
 #else
-void StaticLayer::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void ImageLayer::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
 #endif
-    if (m_currentImage)
+
+    if (!m_currentImage)
+        return;
+
+    if (m_isAnimated) {
+        updateHorizontalStep();
+        painter->drawImage(m_currentHorizontalStep, 0, *m_currentImage);
+    } else {
         painter->drawImage(m_localXPos, 0, *m_currentImage);
+    }
 }

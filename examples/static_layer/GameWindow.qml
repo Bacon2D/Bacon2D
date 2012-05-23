@@ -37,7 +37,7 @@ QuasiGame {
             anchors.fill: parent
             drawType: Quasi.PlaneDrawType // draiwing type; PlaneDrawType or TiledDrawType (default)
 
-            QuasiStaticLayer {
+            QuasiImageLayer {
                 id: layer
 
                 source: ":/not_so_large.png" // image source

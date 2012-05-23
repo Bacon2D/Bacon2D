@@ -49,12 +49,12 @@ QuasiGame {
             anchors.fill: parent
             drawType: Quasi.PlaneDrawType
 
-            QuasiStaticLayer {
+            QuasiImageLayer {
                 source: ":/images/layer_01.png"
                 order: Quasi.BackgroundLayerOrdering_01
             }
 
-            QuasiStaticLayer {
+            QuasiImageLayer {
                 source: ":/images/layer_02.png"
                 factor: 1.1
                 order: Quasi.ForegroundLayerOrdering_01
