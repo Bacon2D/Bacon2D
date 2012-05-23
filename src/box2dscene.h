@@ -35,6 +35,8 @@ class Box2DScene : public Scene
 {
     Q_OBJECT
 
+    Q_PROPERTY(QPointF gravity READ gravity WRITE setGravity)
+
 public:
     Box2DScene(Game *parent = 0);
     ~Box2DScene();
