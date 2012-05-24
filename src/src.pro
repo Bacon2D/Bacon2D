@@ -36,7 +36,6 @@ HEADERS += quasideclarativeitem.h \
            box2dmousejointitem.h \
            layer.h \
            imagelayer.h \
-           layers.h \
            util.h \
            viewport.h \
            box2ddebugdrawitem.h \
@@ -73,7 +72,6 @@ SOURCES += entity.cpp \
            box2dmousejointitem.cpp \
            layer.cpp \
            imagelayer.cpp \
-           layers.cpp \
            util.cpp \
            viewport.cpp \
            box2ddebugdrawitem.cpp \

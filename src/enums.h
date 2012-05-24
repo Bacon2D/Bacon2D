@@ -42,36 +42,10 @@ public:
         MirroredType
     };
 
-    // Used on Layer
-    enum LayerDirection {
-        BackwardDirection = 0, // -1 returns undefined on QML :(
-        ForwardDirection = 1
-    };
-
     // Used on Layers
     enum DrawType {
         PlaneDrawType,
         TiledDrawType
-    };
-
-    // This is for the use of Layers and Items
-    enum Ordering {
-        // These enums defines the z order of the background layers
-        BackgroundLayerOrdering_01 = 0,
-        BackgroundLayerOrdering_02 = 1,
-        BackgroundLayerOrdering_03 = 2,
-        // These enums defines the z order of the interaction layers
-        InteractionLayerOrdering_01 = 4,
-        InteractionLayerOrdering_02 = 5,
-        InteractionLayerOrdering_03 = 6,
-        // These enums defines the z order of the game entities
-        EntityOrdering_01 = InteractionLayerOrdering_01,
-        EntityOrdering_02 = InteractionLayerOrdering_02,
-        EntityOrdering_03 = InteractionLayerOrdering_03,
-        // These enums defines the z order of the foreground layers
-        ForegroundLayerOrdering_01 = 7,
-        ForegroundLayerOrdering_02 = 8,
-        ForegroundLayerOrdering_03 = 9
     };
 
     // Enums for the Box2D body types

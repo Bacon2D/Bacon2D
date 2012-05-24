@@ -23,7 +23,6 @@
 #define _SCENE_H_
 
 #include "entity.h"
-#include "layers.h"
 #include "quasideclarativeitem.h"
 
 #include <QtCore/QtGlobal>
@@ -60,8 +59,6 @@ public:
     Game *game() const;
     void setGame(Game *game);
 
-    Layers *gameLayers() const;
-
     bool debug() const;
     void setDebug(const bool &debug);
 
@@ -83,7 +80,6 @@ protected:
     bool m_running;
     Viewport *m_viewport;
     Game *m_game;
-    Layers *m_gameLayers;
     bool m_debug;
 };
 

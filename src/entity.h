@@ -38,7 +38,6 @@ class Entity : public QuasiDeclarativeItem
 
     Q_PROPERTY(int updateInterval READ updateInterval WRITE setUpdateInterval NOTIFY updateIntervalChanged)
     Q_PROPERTY(bool collided READ collided WRITE setCollided NOTIFY collidedChanged)
-    Q_PROPERTY(Quasi::Ordering order READ order WRITE setOrder)
     Q_PROPERTY(Game *game READ game)
     Q_PROPERTY(Behavior *behavior READ behavior WRITE setBehavior NOTIFY behaviorChanged)
 
@@ -50,9 +49,6 @@ public:
 
     bool collided() const;
     void setCollided(const bool &collided);
-
-    Quasi::Ordering order() const;
-    void setOrder(Quasi::Ordering order);
 
     Scene *scene() const;
     void setScene(Scene *scene);

@@ -32,21 +32,45 @@ class ImageLayer : public Layer
 {
     Q_OBJECT
 
-    Q_PROPERTY(qreal horizontalStep READ horizontalStep WRITE setHorizontalStep NOTIFY horizontalStepChanged)
-    Q_PROPERTY(bool animated READ isAnimated WRITE setAnimated NOTIFY animatedChanged)
+    Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
+
+    // From Layers
+    Q_PROPERTY(int tileHeight READ tileHeight WRITE setTileHeight)
+    Q_PROPERTY(int tileWidth READ tileWidth WRITE setTileWidth)
+
+    Q_PROPERTY(Quasi::DrawType drawType READ drawType WRITE setDrawType)
+    Q_PROPERTY(bool drawGrid READ drawGrid WRITE setDrawGrid)
+    Q_PROPERTY(QColor gridColor READ gridColor WRITE setGridColor)
 
 public:
     ImageLayer(Layer *parent = 0);
     ~ImageLayer();
 
+    void setSource(const QString &source);
+    QString source() const;
+
+    void setDrawType(Quasi::DrawType drawType);
+    Quasi::DrawType drawType() const;
+
+    int tileHeight() const { return m_tileHeight; }
+    void setTileHeight(const int &value);
+
+    int tileWidth() const { return m_tileWidth; }
+    void setTileWidth(const int &value);
+
+    int addTile(const QPixmap &pix);
+    QPixmap getTile(int pos) const;
+
+    bool drawGrid() const { return m_drawGrid; }
+    void setDrawGrid(bool draw);
+
+    QColor gridColor() const { return m_gridColor; }
+    void setGridColor(const QColor &color);
+
+    int count() const;
+
     void moveX(const qreal &x);
     void moveY(const qreal &y);
-
-    qreal horizontalStep() const { return m_horizontalStep; }
-    void setHorizontalStep(const qreal &step);
-
-    bool isAnimated() const { return m_isAnimated; }
-    void setAnimated(bool animated);
 
 #if QT_VERSION >= 0x050000
     void paint(QPainter *painter);
@@ -55,19 +79,49 @@ public:
 #endif
 
 signals:
-    void horizontalStepChanged();
-    void animatedChanged();
+    void tilesChanged();
+    void sourceChanged();
+
+protected:
+    void drawPixmap();
+    void componentComplete();
+
+    QImage *m_currentImage;
+
+    int m_tileWidth;
+    int m_tileHeight;
+    int m_numColumns;
+    int m_numRows;
+    int m_totalColumns;
+    int m_totalRows;
+
+protected slots:
+    void onHorizontalDirectionChanged();
 
 private:
+    QPixmap generatePartialPixmap(int startPoint, int size);
+    void generateOffsets();
     void updateHorizontalStep();
+    void updateTiles();
 
-    qreal m_globalXPos; // global positioning
+    QList<Offsets::OffsetsList> m_offsets;
+    QList<QPixmap> m_pixmaps;
+
+    QString m_source;
+    Quasi::DrawType m_drawType;
+
+    const float m_areaToDraw;
+    int m_columnOffset;
+    int m_latestPoint;
+
+    bool m_drawGrid;
+    QColor m_gridColor;
+
+    qreal m_globalXPos;
     qreal m_globalYPos;
-    qreal m_localXPos; // local positioning
+    qreal m_localXPos;
     qreal m_localYPos;
-    qreal m_horizontalStep;
     qreal m_currentHorizontalStep;
-    bool m_isAnimated;
 };
 
 #endif /* _IMAGELAYER_H_ */

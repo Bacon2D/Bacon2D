@@ -29,12 +29,12 @@ QuasiGame {
 
     function toLeft() {
         shipImage.mirror = true;
-        layers.direction = Quasi.ForwardDirection;
+        scene.layerDirection = Quasi.ForwardDirection;
     }
 
     function toRight() {
         shipImage.mirror = false;
-        layers.direction = Quasi.BackwardDirection;
+        scene.layerDirection = Quasi.BackwardDirection;
     }
 
     QuasiScene {
@@ -43,61 +43,41 @@ QuasiGame {
         width: parent.width
         height: parent.height
 
-        QuasiLayers {
-            id: layers
+        property variant layerDirection: Quasi.BackwardDirection
 
-            // TODO: make 'horizontalStep' a property from QuasiLayers, not QuasiImageLayer?
-            anchors.fill: parent
+        QuasiImageLayer {
+            animated: true
+            source: ":/images/space.png"
+            factor: 0.3
+
+            horizontalStep: 1
+            layerType: Quasi.MirroredType
+            direction: scene.layerDirection
+
+            // from QuasiLayers
             drawType: Quasi.TiledDrawType // XXX: There are some problems with Quasi.PLaneDrawType
             tileWidth: 40
             tileHeight: 40
-            //drawGrid: true // nice for debug; default: false
 
-            property variant direction: Quasi.BackwardDirection
+            // TODO: Check if this should be needed
+            anchors.fill: parent
+        }
 
-            QuasiImageLayer {
-                animated: true
-                source: ":/images/space.png"
-                factor: 0.3
-                order: Quasi.BackgroundLayerOrdering_01
+        QuasiImageLayer {
+            animated: true
+            source: ":/images/planet.png"
+            factor: 0.5
 
-                horizontalStep: 1
-                layerType: Quasi.MirroredType
-                direction: layers.direction
-            }
+            horizontalStep: 1
+            layerType: Quasi.InfiniteType
+            direction: scene.layerDirection
 
-            QuasiImageLayer {
-                animated: true
-                source: ":/images/planet.png"
-                factor: 0.5
-                order: Quasi.BackgroundLayerOrdering_02
+            // from QuasiLayers
+            drawType: Quasi.TiledDrawType // XXX: There are some problems with Quasi.PLaneDrawType
+            tileWidth: 40
+            tileHeight: 40
 
-                horizontalStep: 1
-                layerType: Quasi.InfiniteType
-                direction: layers.direction
-            }
-
-            QuasiImageLayer {
-                animated: true
-                source: ":/images/stars.png"
-                factor: 1.1
-                order: Quasi.ForegroundLayerOrdering_01
-
-                horizontalStep: 1
-                layerType: Quasi.InfiniteType
-                direction: layers.direction
-            }
-
-            QuasiImageLayer {
-                animated: true
-                source: ":/images/moon.png"
-                factor: 1.2
-                order: Quasi.ForegroundLayerOrdering_02
-
-                horizontalStep: 1
-                layerType: Quasi.InfiniteType
-                direction: layers.direction
-            }
+            anchors.fill: parent
         }
 
         QuasiEntity {
@@ -105,18 +85,9 @@ QuasiGame {
 
             y: (game.height / 2) - (shipImage.height / 2)
             x: 25
-            /* layer ordering, set how the layers will be presented when rendering
-            * possible values, splited in three main areas:
-            * - These enums defines the ordering of the game entities
-            EntityOrdering_01 (default), EntityOrdering_02 and EntityOrdering_03
-            * Please, bear in mind that you can use as many entities you want to (and that your system can support), but they will be ordered according these values
-            * Prefer to keep colliding items on the same ordering
-            */
-            order: Quasi.EntityOrdering_01
 
             Image {
                 id: shipImage
-
                 source: ":/images/rocketship.png"
             }
 
@@ -139,6 +110,40 @@ QuasiGame {
                     break;
                 }
             }
+        }
+
+        QuasiImageLayer {
+            animated: true
+            source: ":/images/stars.png"
+            factor: 1.1
+
+            horizontalStep: 1
+            layerType: Quasi.InfiniteType
+            direction: scene.layerDirection
+
+            // from QuasiLayers
+            drawType: Quasi.TiledDrawType // XXX: There are some problems with Quasi.PLaneDrawType
+            tileWidth: 40
+            tileHeight: 40
+
+            anchors.fill: parent
+        }
+
+        QuasiImageLayer {
+            animated: true
+            source: ":/images/moon.png"
+            factor: 1.2
+
+            horizontalStep: 1
+            layerType: Quasi.InfiniteType
+            direction: scene.layerDirection
+
+            // from QuasiLayers
+            drawType: Quasi.TiledDrawType // XXX: There are some problems with Quasi.PLaneDrawType
+            tileWidth: 40
+            tileHeight: 40
+
+            anchors.fill: parent
         }
     }
 }

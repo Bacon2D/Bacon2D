@@ -65,12 +65,14 @@ void Viewport::setXOffset(float xOffset)
             xAnim->setEndValue(-m_xOffset);
             m_xGroupAnimation->addAnimation(xAnim);
 
+            /* TODO: Fix this according to current layer scheme
             QPropertyAnimation *xLayerAnimation = new QPropertyAnimation(m_scene->gameLayers(), "xOffset"); // TODO
             xLayerAnimation->setDuration(m_animationDuration); // TODO
             xLayerAnimation->setEasingCurve(m_animationEasingCurve);
             xLayerAnimation->setStartValue(m_scene->gameLayers()->xOffset());
             xLayerAnimation->setEndValue(m_xOffset);
             m_xGroupAnimation->addAnimation(xLayerAnimation);
+            */
 
             m_xGroupAnimation->start();
         }
@@ -101,12 +103,14 @@ void Viewport::setYOffset(float yOffset)
             yAnim->setEndValue(-m_yOffset);
             m_yGroupAnimation->addAnimation(yAnim);
 
+            /* TODO: Fix this according to current layer scheme
             QPropertyAnimation *yLayerAnimation = new QPropertyAnimation(m_scene->gameLayers(), "yOffset"); // TODO
             yLayerAnimation->setDuration(m_animationDuration); // TODO
             yLayerAnimation->setEasingCurve(m_animationEasingCurve);
             yLayerAnimation->setStartValue(m_scene->gameLayers()->yOffset());
             yLayerAnimation->setEndValue(m_yOffset);
             m_yGroupAnimation->addAnimation(yLayerAnimation);
+            */
 
             m_yGroupAnimation->start();
         }

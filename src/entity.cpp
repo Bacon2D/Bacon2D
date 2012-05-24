@@ -33,11 +33,6 @@ Entity::Entity(Scene *parent)
     , m_scene(0)
     , m_behavior(0)
 {
-#if QT_VERSION >= 0x050000
-    setZ(Quasi::EntityOrdering_01);
-#else
-    setZValue(Quasi::EntityOrdering_01);
-#endif
 }
 
 void Entity::update(const int &delta)
@@ -59,9 +54,8 @@ void Entity::update(const int &delta)
     QGraphicsItem *child;
 #endif
     foreach (child, childItems())
-        if (Entity *item = dynamic_cast<Entity *>(child)) {
+        if (Entity *item = dynamic_cast<Entity *>(child))
             item->update(delta);
-        }
 }
 
 int Entity::updateInterval() const
@@ -94,26 +88,6 @@ void Entity::setCollided(const bool &collided)
     }
 }
 
-Quasi::Ordering Entity::order() const
-{
-#if QT_VERSION >= 0x050000
-    return (Quasi::Ordering)z();
-#else
-    return (Quasi::Ordering)zValue();
-#endif
-}
-
-void Entity::setOrder(Quasi::Ordering order)
-{
-#if QT_VERSION >= 0x050000
-    if (z() != order)
-        setZ(order);
-#else
-    if (zValue() != order)
-        setZValue(order);
-#endif
-}
-
 Scene *Entity::scene() const
 {
     return m_scene;
@@ -143,5 +117,6 @@ void Entity::setBehavior(Behavior *behavior)
         return;
 
     m_behavior = behavior;
+
     emit behaviorChanged();
 }

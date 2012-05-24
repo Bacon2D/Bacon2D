@@ -22,7 +22,7 @@
 #include "scene.h"
 
 #include "game.h"
-#include "layers.h"
+#include "layer.h"
 
 #include <QtCore/QtGlobal>
 
@@ -53,8 +53,10 @@ void Scene::update(const int &delta)
     QGraphicsItem *item;
 #endif
     foreach (item, childItems()) {
-        if (Entity *entity = dynamic_cast<Entity *>(item))
+        if (Entity *entity = qobject_cast<Entity *>(item))
             entity->update(delta);
+        else if (Layer *layer = qobject_cast<Layer *>(item))
+            layer->update();
     }
 }
 
@@ -98,11 +100,6 @@ void Scene::setGame(Game *game)
     m_game = game;
 }
 
-Layers *Scene::gameLayers() const
-{
-    return m_gameLayers;
-}
-
 bool Scene::debug() const
 {
     return m_debug;
@@ -128,14 +125,8 @@ void Scene::componentComplete()
     QGraphicsItem *item;
 #endif
     foreach (item, childItems()) {
-        if (Entity *entity = dynamic_cast<Entity *>(item)) {
-            entity->setParent(this);
-            entity->setParentItem(this);
+        if (Entity *entity = dynamic_cast<Entity *>(item))
             entity->setScene(this);
-
-            if (Layers *gameLayers = qobject_cast<Layers *>(entity))
-                m_gameLayers = gameLayers;
-        }
     }
 }
 
