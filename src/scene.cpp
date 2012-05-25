@@ -117,6 +117,8 @@ void Scene::setDebug(const bool &debug)
 
 void Scene::componentComplete()
 {
+    QuasiDeclarativeItem::componentComplete();
+
 #if QT_VERSION >= 0x050000
     QQuickItem *item;
 #else
@@ -132,8 +134,6 @@ void Scene::componentComplete()
                 m_gameLayers = gameLayers;
         }
     }
-
-    QuasiDeclarativeItem::componentComplete();
 }
 
 #if QT_VERSION >= 0x050000

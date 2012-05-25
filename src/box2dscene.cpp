@@ -26,8 +26,6 @@
 #include "game.h"
 #include "viewport.h"
 
-#include <QDebug>
-
 static void deleteWorld(b2World *world)
 {
     delete world;

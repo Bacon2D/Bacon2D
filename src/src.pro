@@ -52,8 +52,10 @@ HEADERS += quasideclarativeitem.h \
            rectangle.h \
            triangle.h \
            polygon.h \
-           circle.h
-           line.h
+           circle.h \
+           line.h \
+           fixture.h \
+           material.h
 
 SOURCES += entity.cpp \
            scene.cpp \
@@ -80,7 +82,9 @@ SOURCES += entity.cpp \
            scriptbehavior.cpp \
            box2dcontact.cpp \
            box2dcontactlistener.cpp \
-           colorfill.cpp
+           colorfill.cpp \
+           fixture.cpp \
+           material.cpp
 
 QMAKE_POST_LINK = $$QMAKE_COPY $$PWD/qmldir $$OUT_PWD/imports/QuasiGame
 

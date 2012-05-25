@@ -42,7 +42,7 @@ public:
         m_points = points;
 
         if (m_fill && m_fill->initialized())
-            updateTriangle(m_fill->pen()->widthF());
+            updateShape(m_fill->pen()->widthF());
 
         emit pointsChanged();
     }
@@ -56,25 +56,19 @@ public:
             return;
         m_fill->initialize();
         if (m_points.size() == 3)
-            updateTriangle(m_fill->pen()->widthF());
+            updateShape(m_fill->pen()->widthF());
     }
 
 signals:
     void pointsChanged();
 
 private:
-    void updateTriangle(qreal penWidth) {
-        qreal offset = penWidth / 2.0;
-        qreal xScale = (width() - penWidth)  / width();
-        qreal yScale = (height() - penWidth)  / height();
-
+    void updateShape(qreal penWidth) {
         m_triangle.clear();
         for (int i = 0; i < 3; i++) {
             QPointF point = m_points.at(i).toPointF();
 
-            const float x = offset + point.x() * xScale;
-            const float y = offset + point.y() * yScale;
-            m_triangle.append(QPointF(x, y));
+            m_triangle.append(point);
         }
     }
 

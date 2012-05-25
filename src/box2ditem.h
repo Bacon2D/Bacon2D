@@ -31,7 +31,6 @@
 class Scene;
 class b2World;
 class b2Body;
-class b2Fixture;
 
 class Box2DItem : public Box2DBaseItem
 {
@@ -40,15 +39,10 @@ class Box2DItem : public Box2DBaseItem
     Q_PROPERTY(qreal linearDamping READ linearDamping WRITE setLinearDamping NOTIFY linearDampingChanged)
     Q_PROPERTY(qreal angularDamping READ angularDamping WRITE setAngularDamping NOTIFY angularDampingChanged)
     Q_PROPERTY(Quasi::BodyType bodyType READ bodyType WRITE setBodyType NOTIFY bodyTypeChanged)
-    Q_PROPERTY(Quasi::BodyShape shapeGeometry READ shapeGeometry WRITE setShapeGeometry NOTIFY shapeGeometryChanged)
     Q_PROPERTY(bool bullet READ bullet WRITE setBullet NOTIFY bulletChanged)
     Q_PROPERTY(bool sleepingAllowed READ sleepingAllowed WRITE setSleepingAllowed NOTIFY sleepingAllowedChanged)
     Q_PROPERTY(bool fixedRotation READ fixedRotation WRITE setFixedRotation NOTIFY fixedRotationChanged)
     Q_PROPERTY(bool active READ active WRITE setActive)
-    Q_PROPERTY(qreal density READ density WRITE setDensity NOTIFY densityChanged)
-    Q_PROPERTY(qreal friction READ friction WRITE setFriction NOTIFY frictionChanged)
-    Q_PROPERTY(qreal restitution READ restitution WRITE setRestitution NOTIFY restitutionChanged)
-    Q_PROPERTY(QVariantList vertices READ vertices WRITE setVertices NOTIFY verticesChanged)
 
 public:
     Box2DItem(Scene *parent = 0);
@@ -65,9 +59,6 @@ public:
     Quasi::BodyType bodyType() const;
     void setBodyType(const Quasi::BodyType &bodyType);
 
-    Quasi::BodyShape shapeGeometry() const;
-    void setShapeGeometry(const Quasi::BodyShape &shape);
-
     bool bullet() const;
     void setBullet(const bool &bullet);
 
@@ -79,18 +70,6 @@ public:
 
     bool active() const;
     void setActive(const bool &active);
-
-    float density() const;
-    void setDensity(const float &density);
-
-    float friction() const;
-    void setFriction(const float &friction);
-
-    float restitution() const;
-    void setRestitution(const float &restitution);
-
-    QVariantList vertices() const;
-    void setVertices(const QVariantList &vertices);
 
     void initialize();
 
@@ -114,31 +93,22 @@ signals:
     void linearDampingChanged();
     void angularDampingChanged();
     void bodyTypeChanged();
-    void shapeGeometryChanged();
     void bulletChanged();
     void sleepingAllowedChanged();
     void fixedRotationChanged();
     void linearVelocityChanged();
-    void densityChanged();
-    void frictionChanged();
-    void restitutionChanged();
-    void verticesChanged();
 
 private:
+    void initializeFixtures();
+
     b2Body *m_body;
     qreal m_linearDamping;
     qreal m_angularDamping;
     Quasi::BodyType m_bodyType;
-    Quasi::BodyShape m_shape;
     bool m_bullet;
     bool m_sleepingAllowed;
     bool m_fixedRotation;
     bool m_active;
-    b2Fixture *m_fixture;
-    float m_density;
-    float m_friction;
-    float m_restitution;
-    QVariantList m_vertices;
 };
 
 #endif /* _BOX2DITEM_H_ */

@@ -30,7 +30,6 @@ class Line : public Shape
 
     Q_PROPERTY(QVariantList points READ points WRITE setPoints NOTIFY pointsChanged)
 
-
 public:
     Line(QuasiDeclarativeItem *parent = 0)
         : Shape(parent)
@@ -46,7 +45,7 @@ public:
         m_points = points;
 
         if (m_fill && m_fill->initialized())
-            updateVector(m_fill->pen()->widthF());
+            updateShape(m_fill->pen()->widthF());
 
         emit pointsChanged();
     }
@@ -61,26 +60,19 @@ public:
         m_fill->initialize();
 
         if (m_points.size() && (m_points.size() % 2) == 0)
-            updateVector(m_fill->pen()->widthF());
+            updateShape(m_fill->pen()->widthF());
     }
 
 signals:
     void pointsChanged();
 
 private:
-    void updateVector(qreal penWidth) {
-        // FIXME: fix offset / scale for large penWidth values
-        qreal offset = penWidth / 2.0;
-        qreal xScale = (width() - penWidth)  / width();
-        qreal yScale = (height() - penWidth)  / height();
+    void updateShape(qreal penWidth) {
         m_lines.clear();
 
         for (int i = 0; i < m_points.count(); i++) {
             QPointF point = m_points.at(i).toPointF();
-
-            const float x = offset + point.x() * xScale;
-            const float y = offset + point.y() * yScale;
-            m_lines.append(QPointF(x, y));
+            m_lines.append(point);
         }
     }
 

@@ -58,10 +58,7 @@ public:
 
     void drawShape(QPainter *painter) {
         if (m_radius) {
-            qreal halpPen = 0;
-            if (m_fill && m_fill->initialized())
-                halpPen = m_fill->pen()->widthF() / 2.0;
-            painter->drawEllipse(m_center, m_radius - halpPen, m_radius - halpPen);
+            painter->drawEllipse(m_center, m_radius, m_radius);
         }
     }
 

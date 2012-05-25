@@ -32,7 +32,6 @@ class Quasi : public QObject {
         LayerDirection
         DrawType
         Ordering
-        BodyShape
         BodyType
     )
 
@@ -74,15 +73,6 @@ public:
         ForegroundLayerOrdering_02 = 8,
         ForegroundLayerOrdering_03 = 9
     };
-
-    // Enums for the Box2D body shapes
-    enum BodyShape {
-        RectangleBodyShape,
-        PolygonBodyShape,
-        CircleBodyShape,
-        ChainBodyShape
-    };
-
 
     // Enums for the Box2D body types
     enum BodyType {

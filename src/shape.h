@@ -27,6 +27,8 @@ nn *
 
 #include <QtGui/QPainter>
 
+class b2Shape;
+
 class Shape : public QuasiPaintedItem
 {
     Q_OBJECT
@@ -38,6 +40,8 @@ public:
         : QuasiPaintedItem(parent)
         , m_fill(0)
         {}
+
+    virtual ~Shape() {}
 
     virtual void initialize() = 0;
     virtual void drawShape(QPainter *painter) = 0;
@@ -53,6 +57,8 @@ public:
             m_fill->initialize();
         emit fillChanged();
     }
+
+    virtual b2Shape *box2DShape() { return 0; }
 
 #if QT_VERSION >= 0x050000
     void paint(QPainter *painter) {

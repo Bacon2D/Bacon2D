@@ -21,7 +21,10 @@
 
 #include "box2ditem.h"
 
+#include "material.h"
 #include "box2dscene.h"
+#include "fixture.h"
+#include "shape.h"
 #include "util.h"
 
 #include <Box2D/Box2D.h>
@@ -32,15 +35,10 @@ Box2DItem::Box2DItem(Scene *parent)
     , m_linearDamping(0.0f)
     , m_angularDamping(0.0f)
     , m_bodyType(Quasi::DynamicBodyType)
-    , m_shape(Quasi::RectangleBodyShape)
     , m_bullet(false)
     , m_sleepingAllowed(true)
     , m_fixedRotation(false)
     , m_active(true)
-    , m_fixture(0)
-    , m_density(0)
-    , m_friction(0)
-    , m_restitution(0)
 {
     setTransformOrigin(Center);
     connect(this, SIGNAL(rotationChanged()), SLOT(onRotationChanged()));
@@ -50,6 +48,16 @@ Box2DItem::~Box2DItem()
 {
     if (!m_world || !m_body)
         return;
+
+#if QT_VERSION >= 0x050000
+    QQuickItem *child;
+#else
+    QGraphicsItem *child;
+#endif
+
+    foreach (child, childItems())
+        if (Fixture *fixture = dynamic_cast<Fixture *>(child))
+            delete fixture;
 
     m_worldPtr->DestroyBody(m_body);
     m_body = 0;
@@ -92,56 +100,7 @@ void Box2DItem::initialize()
 
     m_body = m_worldPtr->CreateBody(&bodyDef);
 
-    b2Shape *shape = 0;
-
-    switch (m_shape) {
-        case Quasi::RectangleBodyShape:
-            shape = new b2PolygonShape;
-            ((b2PolygonShape*)shape)->SetAsBox(width() / m_scaleRatio / 2.0, height() / m_scaleRatio / 2.0);
-            break;
-        case Quasi::PolygonBodyShape:
-            {
-                // TODO: check for b2_maxPolygonVertices
-                b2Vec2 *vertices = b2Util::b2Vertices(m_vertices, boundingRect(), m_scaleRatio);
-
-                shape = new b2PolygonShape;
-                ((b2PolygonShape*)shape)->Set(vertices, m_vertices.length());
-            }
-            break;
-        case Quasi::CircleBodyShape:
-            shape = new b2CircleShape;
-            ((b2CircleShape*)shape)->m_radius = width() / m_scaleRatio / 2.0f;
-            break;
-        case Quasi::ChainBodyShape:
-            {
-                b2Vec2 *vertices = b2Util::b2Vertices(m_vertices, boundingRect(), m_scaleRatio);
-                shape = new b2ChainShape; //TODO: create a way to decide to use CreateChain or CreateLoop
-                ((b2ChainShape*)shape)->CreateChain(vertices, m_vertices.length());
-            }
-            break;
-        default:
-            // TODO error handling
-            break;
-    }
-
-    b2FixtureDef fixtureDef;
-    fixtureDef.shape = shape;
-    fixtureDef.density = m_density;
-    fixtureDef.friction = m_friction;
-    fixtureDef.restitution = m_restitution;
-
-    m_fixture = m_body->CreateFixture(&fixtureDef);
-    m_fixture->SetUserData(this);
-
-#if QT_VERSION >= 0x050000
-    QQuickItem *item;
-#else
-    QGraphicsItem *item;
-#endif
-    foreach (item, childItems()) {
-        if (Box2DBaseItem *box2DItem = dynamic_cast<Box2DBaseItem *>(item))
-            box2DItem->initialize();
-    }
+    initializeFixtures();
 
     m_initialized = true;
 }
@@ -177,21 +136,6 @@ void Box2DItem::setAngularDamping(const qreal &angularDamping)
             m_body->SetAngularDamping(angularDamping);
 
         emit angularDampingChanged();
-    }
-}
-
-Quasi::BodyShape Box2DItem::shapeGeometry() const
-{
-    return m_shape;
-}
-
-void Box2DItem::setShapeGeometry(const Quasi::BodyShape &shape)
-{
-    if (m_shape != shape) {
-        m_shape = shape;
-
-        emit shapeGeometryChanged();
-        // XXX needs additional treatment?
     }
 }
 
@@ -311,59 +255,6 @@ void Box2DItem::setAngularVelocity(const float &velocity)
     }
 }
 
-float Box2DItem::density() const
-{
-    return m_density;
-}
-
-void Box2DItem::setDensity(const float &density)
-{
-    if (m_density != density) {
-        m_density = density;
-
-        if (m_body && m_fixture) {
-            m_fixture->SetDensity(density);
-            m_body->ResetMassData();
-        }
-
-        emit densityChanged();
-    }
-}
-
-float Box2DItem::friction() const
-{
-    return m_friction;
-}
-
-void Box2DItem::setFriction(const float &friction)
-{
-    if (m_friction != friction) {
-        m_friction = friction;
-
-        if (m_fixture) {
-            m_fixture->SetFriction(friction);
-        }
-
-        emit frictionChanged();
-    }
-}
-
-float Box2DItem::restitution() const
-{
-    return m_restitution;
-}
-
-void Box2DItem::setRestitution(const float &restitution)
-{
-    if (m_restitution != restitution) {
-        m_restitution = restitution;
-
-        if (m_fixture) {
-            m_fixture->SetRestitution(restitution);
-        }
-    }
-}
-
 void Box2DItem::geometryChanged(const QRectF &newGeometry,
                                 const QRectF &oldGeometry)
 {
@@ -384,21 +275,6 @@ void Box2DItem::geometryChanged(const QRectF &newGeometry,
 #endif
 }
 
-QVariantList Box2DItem::vertices() const
-{
-    return m_vertices;
-}
-
-void Box2DItem::setVertices(const QVariantList &vertices)
-{
-    if (m_vertices != vertices) {
-        m_vertices.clear(); // XXX it's really needed?
-        m_vertices = vertices;
-
-        emit verticesChanged();
-    }
-}
-
 b2Vec2 Box2DItem::b2TransformOrigin() const
 {
     b2Vec2 vec;
@@ -413,4 +289,20 @@ float Box2DItem::b2Angle() const
     if (m_body)
         angle = m_body->GetAngle();
     return angle;
+}
+
+void Box2DItem::initializeFixtures()
+{
+#if QT_VERSION >= 0x050000
+    QQuickItem *item;
+#else
+    QGraphicsItem *item;
+#endif
+
+    foreach (item, childItems())
+        if (Fixture *fixture = dynamic_cast<Fixture *>(item)) {
+            fixture->setWorld(m_world);
+            fixture->setBody(m_body);
+            fixture->initialize();
+        }
 }

@@ -19,47 +19,57 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _RECTANGLE_H_
-#define _RECTANGLE_H_
+#include "material.h"
 
-#include "shape.h"
-#include "box2dbaseitem.h"
-
-#include <Box2D/Box2D.h>
-
-class Rectangle : public Shape
+Material::Material(QObject *parent)
+    : QObject(parent)
+    , m_density(0)
+    , m_friction(0)
+    , m_restitution(0)
 {
-    Q_OBJECT
+}
 
-public:
-    Rectangle(QuasiDeclarativeItem *parent = 0)
-        : Shape(parent)
-        {}
+float Material::density() const
+{
+    return m_density;
+}
 
-    ~Rectangle() {
-        delete m_shape;
-    }
+void Material::setDensity(const float &density)
+{
+    if (m_density == density)
+        return;
 
-    void drawShape(QPainter *painter) {
-        painter->drawRect(m_rect);
-    }
+    m_density = density;
 
-    void initialize() {
-        m_fill->initialize();
+    emit densityChanged(density);
+}
 
-        m_rect = boundingRect();
-        m_shape = new b2PolygonShape;
-        m_shape->SetAsBox(width() / Box2DBaseItem::m_scaleRatio / 2.0
-                          , height() / Box2DBaseItem::m_scaleRatio / 2.0);
-    }
+float Material::friction() const
+{
+    return m_friction;
+}
 
-    b2Shape *box2DShape() {
-        return m_shape;
-    }
+void Material::setFriction(const float &friction)
+{
+    if (m_friction == friction)
+        return;
 
-private:
-    QRectF m_rect;
-    b2PolygonShape *m_shape;
-};
+    m_friction = friction;
 
-#endif /* _RECTANGLE_H_ */
+    emit frictionChanged(friction);
+}
+
+float Material::restitution() const
+{
+    return m_restitution;
+}
+
+void Material::setRestitution(const float &restitution)
+{
+    if (m_restitution == restitution)
+        return;
+
+    m_restitution = restitution;
+
+    emit restitutionChanged(restitution);
+}
