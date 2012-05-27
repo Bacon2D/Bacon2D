@@ -33,7 +33,6 @@ QuasiGame {
         width: parent.width
         height: parent.height
 
-
         onContact: {
             if (impulse > 500.0 && (bodyA == mouseItem || bodyB == mouseItem)) {
                 if (bodyA == mouseItem)
@@ -49,16 +48,23 @@ QuasiGame {
             width: 60
             height: 60
 
-            friction: 0.3
-            density: 5
-            restitution: 0.6
-            sleepingAllowed: false
+            QuasiFixture {
+                width: parent.width
+                height: parent.height
 
+                material: randomMaterial
 
-            Rectangle {
-                color: "green"
-                anchors.fill: parent
+                shape: QuasiRectangle {
+                    width: parent.width
+                    height: parent.height
+
+                    fill: QuasiColorFill {
+                        brushColor: "green"
+                    }
+                }
             }
+
+            sleepingAllowed: false
 
             x: 200
             y: 160
@@ -74,20 +80,35 @@ QuasiGame {
             bodyType: Quasi.StaticBodyType
 
             width: 790
-            height: 1
+            height: 5
 
-            friction: 0.3
-            density: 50
-            restitution: 0.6
+            QuasiFixture {
+                width: ground.width
+                height: ground.width
 
-            Rectangle {
-                color: "green"
-                anchors.fill: parent
+                material: randomMaterial
+
+                shape: QuasiRectangle {
+                    width: ground.width
+                    height: ground.height
+
+                    fill: QuasiColorFill {
+                        brushColor: "green"
+                    }
+                }
             }
 
             x: 0
             y: 500
         }
+    }
+
+    QuasiMaterial {
+        id: randomMaterial
+
+        friction: 0.3 + Math.random() * 1.0
+        density: 5 + Math.random() * 10
+        restitution: 0.5 + Math.random() * 0.5
     }
 
     Component {
@@ -102,15 +123,18 @@ QuasiGame {
             x: Math.random() * scene.width
             y: 200 + Math.random() * -scene.height
 
-            friction: 0.3 + Math.random() * 1.0
-            density: 5 + Math.random() * 10
-            restitution: 0.5 + Math.random() * 0.5
             sleepingAllowed: false
 
-            Rectangle {
-                anchors.fill: parent
+            QuasiFixture {
+                material: randomMaterial
+                shape: QuasiRectangle {
+                    width: body.width
+                    height: body.height
 
-                color: "red"
+                    fill: QuasiColorFill {
+                        brushColor: "red"
+                    }
+                }
             }
 
             onXChanged: {
@@ -126,7 +150,7 @@ QuasiGame {
     }
 
     Timer {
-        interval: 500; running: true; repeat: true
+        interval: 1500; running: true; repeat: true
         onTriggered: bodyComponent.createObject(scene)
     }
 
