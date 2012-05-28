@@ -33,6 +33,16 @@ QuasiGame {
         width: parent.width
         height: parent.height
 
+
+        onContact: {
+            if (impulse > 500.0 && (bodyA == mouseItem || bodyB == mouseItem)) {
+                if (bodyA == mouseItem)
+                    bodyB.destroy()
+                else
+                    bodyA.destroy()
+            }
+        }
+
         QuasiBody {
             id: mouseItem
 
