@@ -296,6 +296,14 @@ void Box2DItem::applyLinearImpulse(const QPointF &impulse, const QPointF &point)
     }
 }
 
+void Box2DItem::setLinearVelocity(const QPointF &velocity)
+{
+    if (m_body) {
+        m_body->SetLinearVelocity(b2Vec2(velocity.x() / m_scaleRatio,
+                                         -velocity.y() / m_scaleRatio));
+    }
+}
+
 float Box2DItem::density() const
 {
     return m_density;

@@ -102,6 +102,7 @@ public:
 
     Q_INVOKABLE void applyTorque(const float &torque);
     Q_INVOKABLE void applyLinearImpulse(const QPointF &impulse, const QPointF &point);
+    Q_INVOKABLE void setLinearVelocity(const QPointF &velocity);
 
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
