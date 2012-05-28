@@ -131,6 +131,7 @@ void Box2DItem::initialize()
     fixtureDef.restitution = m_restitution;
 
     m_fixture = m_body->CreateFixture(&fixtureDef);
+    m_fixture->SetUserData(this);
 
 #if QT_VERSION >= 0x050000
     QQuickItem *item;

@@ -22,6 +22,7 @@
 #ifndef _BOX2DSCENE_H_
 #define _BOX2DSCENE_H_
 
+#include "box2ditem.h"
 #include "scene.h"
 
 #include <QtCore/QtGlobal>
@@ -53,8 +54,13 @@ public:
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 #endif
 
+    void onContact(Box2DItem *bodyA, Box2DItem *bodyB, qreal impulse);
+
 protected slots:
     void onDebugChanged();
+
+signals:
+    void contact(Box2DItem *bodyA, Box2DItem *bodyB, qreal impulse);
 
 private:
     QSharedPointer<b2World> m_world;

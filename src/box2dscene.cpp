@@ -23,9 +23,37 @@
 
 #include "box2dbaseitem.h"
 #include "box2ddebugdrawitem.h"
-#include "box2ditem.h"
 #include "game.h"
 #include "viewport.h"
+
+#include <QDebug>
+
+class ContactListener : public b2ContactListener
+{
+public:
+    ContactListener(Box2DScene *scene)
+        : m_scene(scene) {}
+
+    void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) {
+        b2Fixture *fixtureA = contact->GetFixtureA();
+        b2Fixture *fixtureB = contact->GetFixtureB();
+
+        Box2DItem *bodyA = static_cast<Box2DItem *>(fixtureA->GetUserData());
+        Box2DItem *bodyB = static_cast<Box2DItem *>(fixtureB->GetUserData());
+
+        int count = contact->GetManifold()->pointCount;
+        float32 maxImpulse = 0.0f;
+        for (int i = 0; i < count; ++i)
+            maxImpulse = b2Max(maxImpulse, impulse->normalImpulses[i]);
+
+        m_scene->onContact(bodyA, bodyB, maxImpulse);
+    }
+
+private:
+    Box2DScene *m_scene;
+};
+
+
 
 static void deleteWorld(b2World *world)
 {
@@ -41,6 +69,9 @@ Box2DScene::Box2DScene(Game *parent)
     const b2Vec2 gravity(m_gravity.x(), m_gravity.y());
 
     m_world = QSharedPointer<b2World>(new b2World(gravity), deleteWorld);
+
+    ContactListener *contactListener = new ContactListener(this);
+    m_world->SetContactListener(contactListener);
 
     connect(this, SIGNAL(debugChanged()), SLOT(onDebugChanged()));
 }
@@ -152,4 +183,9 @@ QVariant Box2DScene::itemChange(GraphicsItemChange change, const QVariant &value
 #else
     return Scene::itemChange(change, value);
 #endif
+}
+
+void Box2DScene::onContact(Box2DItem *bodyA, Box2DItem *bodyB, qreal impulse)
+{
+    emit contact(bodyA, bodyB, impulse);
 }
