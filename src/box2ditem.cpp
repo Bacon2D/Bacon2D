@@ -304,6 +304,13 @@ void Box2DItem::setLinearVelocity(const QPointF &velocity)
     }
 }
 
+void Box2DItem::setAngularVelocity(const float &velocity)
+{
+    if (m_body) {
+        m_body->SetAngularVelocity(velocity);
+    }
+}
+
 float Box2DItem::density() const
 {
     return m_density;
