@@ -52,6 +52,10 @@ b2Vec2 *b2Util::b2Vertices(const QVariantList &vertices, const QRectF &geometry,
     return vec;
 }
 
+b2Vec2 b2Util::b2Vec(const QPointF &point, const qreal &scaleRatio) {
+    return b2Vec2(point.x() / scaleRatio, -point.y() / scaleRatio);
+}
+
 QPointF b2Util::qTopLeft(const b2Vec2 &vec, const QRectF &geometry, const qreal &scaleRatio)
 {
     const qreal newX = vec.x * scaleRatio - geometry.width() / 2.0;
