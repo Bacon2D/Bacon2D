@@ -1,5 +1,8 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
     <file>GameWindow.qml</file>
+    <file>images/backboardhandler.png</file>
+    <file>images/basket.png</file>
+    <file>images/ball.png</file>
 </qresource>
 </RCC>
