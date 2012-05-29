@@ -97,6 +97,8 @@ void Box2DScene::update(const int &delta)
 
 void Box2DScene::componentComplete()
 {
+    Scene::componentComplete();
+
 #if QT_VERSION >= 0x050000
     QQuickItem *item;
 #else
@@ -113,8 +115,6 @@ void Box2DScene::componentComplete()
         m_debugDraw->setWidth(width());
         m_debugDraw->setHeight(height());
     }
-
-    Scene::componentComplete();
 }
 
 void Box2DScene::onDebugChanged()

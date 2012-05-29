@@ -417,6 +417,8 @@ float Box2DItem::b2Angle() const
 
 void Box2DItem::componentComplete()
 {
+    Box2DBaseItem::componentComplete();
+
     if (!m_initialized)
         initialize();
 }
