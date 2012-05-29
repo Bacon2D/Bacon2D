@@ -38,44 +38,16 @@ QuasiGame {
 
         gravity: Qt.point(0, -30.0)
 
-        QuasiBody {
-            id: ball
-            property int centerX: x + (width / 2)
-            property int centerY: y + (height / 2)
-            property bool threw: false
+        Rectangle {
+            id: backgound
+            anchors.fill: parent
+            color: "darkCyan"
+        }
 
-            width: 0.24 * game.scale
-            height: 0.24 * game.scale
-
-            friction: 0.3
-            density: 50
-            restitution: 0.6
-            sleepingAllowed: false
-
-            shapeGeometry: Quasi.CircleBodyShape
-
-            x: game.freethrow
-            y: game.height - height
-
-            Rectangle {
-                id: ball01
-                anchors.fill: parent
-                radius: width / 2
-                color: "red"
-            }
-
-            onYChanged: {
-                if (!threw)
-                    return;
-                if (centerX > baskethandler.x + baskethandler.width
-                        && centerX < basket.x
-                        && centerY < basket.y + (ball.height / 2)
-                        && centerY > basket.y) {
-                    score++;
-                    threw = false;
-                    console.log("score = " + score);
-                }
-            }
+        Image {
+            id: backboardhandler
+            anchors.bottom: parent.bottom
+            source: ":/images/backboardhandler.png"
         }
 
         QuasiBody {
@@ -94,7 +66,7 @@ QuasiGame {
             restitution: 0.0
 
             Rectangle {
-                color: "black"
+                color: "white"
                 anchors.fill: parent
             }
         }
@@ -108,37 +80,48 @@ QuasiGame {
             y: parent.height - (3.05 * game.scale)
 
             width: (1.575 * game.scale) - x - (ball.width / 1.9)
-            height: 4
+            height: 8
 
             friction: 1.0
             density: 0.1
             restitution: 0.0
 
             Rectangle {
-                color: "black"
+                color: "white"
                 anchors.fill: parent
             }
         }
 
         QuasiBody {
-            id: basket
+            id: basketring
 
             bodyType: Quasi.StaticBodyType
 
             x: baskethandler.x + baskethandler.width + (ball.width * 1.2)
             y: baskethandler.y
 
-            width: 4
-            height: 4
+            width: 8
+            height: 8
 
             friction: 1.0
             density: 0.1
             restitution: 0.0
 
             Rectangle {
-                color: "black"
+                color: "white"
                 anchors.fill: parent
             }
+        }
+
+        Image {
+            id: basket
+            anchors.left: baskethandler.right
+            anchors.right: basketring.left
+
+            y: baskethandler.y
+            z: 100
+
+            source: ":/images/basket.png"
         }
 
         QuasiBody {
@@ -147,18 +130,57 @@ QuasiGame {
             bodyType: Quasi.StaticBodyType
 
             x: 0
-            y: parent.height - 10
+            y: parent.height - height
 
             width: parent.width
-            height: 1
+            height: 10
 
             friction: 0.3
             density: 5
             restitution: 0.6
 
             Rectangle {
-                color: "green"
+                color: "darkGreen"
                 anchors.fill: parent
+            }
+        }
+
+        QuasiBody {
+            id: ball
+            property int centerX: x + (width / 2)
+            property int centerY: y + (height / 2)
+            property bool threw: false
+
+            width: 0.25 * game.scale
+            height: 0.25 * game.scale
+
+            friction: 0.3
+            density: 50
+            restitution: 0.6
+            sleepingAllowed: false
+
+            shapeGeometry: Quasi.CircleBodyShape
+
+            x: game.freethrow
+            y: game.height - height
+
+            Image {
+                id: ballimg
+                anchors.fill: parent
+                source: ":/images/ball.png"
+            }
+
+            onYChanged: {
+                if (!threw)
+                    return;
+                if (centerX > baskethandler.x + baskethandler.width
+                        && centerX < basketring.x
+                        && centerY < basketring.y + (ball.height / 2)
+                        && centerY > basketring.y) {
+                    score++;
+                    threw = false;
+                    console.log("score = " + score);
+                }
             }
         }
 
@@ -170,8 +192,8 @@ QuasiGame {
                 if (ball.centerX > game.freethrow
                         && ball.centerX < game.freethrow + ball.width
                         && ball.centerY > parent.height - ball.height) {
-                    var xLaunch = game.scale * (game.mouse.x - ball.centerX);
-                    var yLaunch = game.scale * (game.mouse.y - ball.centerY);
+                    var xLaunch = 2 * game.scale * (game.mouse.x - ball.centerX);
+                    var yLaunch = 2 * game.scale * (game.mouse.y - ball.centerY);
 
                     ball.applyLinearImpulse(Qt.point(xLaunch, yLaunch), Qt.point(ball.centerX, ball.centerY));
                     ball.threw = true;
