@@ -26,6 +26,7 @@
 #include "box2ditem.h"
 #include "box2dscene.h"
 #include "box2dmousejointitem.h"
+#include "box2dcontact.h"
 #include "entity.h"
 #include "layers.h"
 #include "scene.h"
@@ -44,6 +45,7 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterUncreatableType<Quasi>("QuasiGame", 1, 0, "Quasi", "Exporting Quasi enums to QML");
     qmlRegisterUncreatableType<Layer>("QuasiGame", 1, 0, "Layer", "Registering Layer as we use it on QuasiLayers");
     qmlRegisterUncreatableType<Behavior>("QuasiGame", 1, 0, "QuasiBehavior", "Don't use QuasiBehavior directly, use one specialized behavior class");
+    qmlRegisterUncreatableType<Box2DContact>("QuasiGame", 1, 0, "Contact", "This type is used to control scene's (pre)contact event");
 
     qmlRegisterType<Game>("QuasiGame", 1, 0, "QuasiGame");
     qmlRegisterType<Scene>("QuasiGame", 1, 0, "QuasiScene");

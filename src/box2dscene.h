@@ -22,6 +22,8 @@
 #ifndef _BOX2DSCENE_H_
 #define _BOX2DSCENE_H_
 
+#include "box2dcontactlistener.h"
+#include "box2dcontact.h"
 #include "box2ditem.h"
 #include "scene.h"
 
@@ -57,12 +59,14 @@ public:
 #endif
 
     void onContact(Box2DItem *bodyA, Box2DItem *bodyB, qreal impulse);
+    void onPreContact(Box2DItem *bodyA, Box2DItem *bodyB, Box2DContact *contact);
 
 protected slots:
     void onDebugChanged();
 
 signals:
     void contact(Box2DItem *bodyA, Box2DItem *bodyB, qreal impulse);
+    void preContact(Box2DItem *bodyA, Box2DItem *bodyB, Box2DContact *contact);
 
 private:
     QSharedPointer<b2World> m_world;

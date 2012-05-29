@@ -28,33 +28,6 @@
 
 #include <QDebug>
 
-class ContactListener : public b2ContactListener
-{
-public:
-    ContactListener(Box2DScene *scene)
-        : m_scene(scene) {}
-
-    void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) {
-        b2Fixture *fixtureA = contact->GetFixtureA();
-        b2Fixture *fixtureB = contact->GetFixtureB();
-
-        Box2DItem *bodyA = static_cast<Box2DItem *>(fixtureA->GetUserData());
-        Box2DItem *bodyB = static_cast<Box2DItem *>(fixtureB->GetUserData());
-
-        int count = contact->GetManifold()->pointCount;
-        float32 maxImpulse = 0.0f;
-        for (int i = 0; i < count; ++i)
-            maxImpulse = b2Max(maxImpulse, impulse->normalImpulses[i]);
-
-        m_scene->onContact(bodyA, bodyB, maxImpulse);
-    }
-
-private:
-    Box2DScene *m_scene;
-};
-
-
-
 static void deleteWorld(b2World *world)
 {
     delete world;
@@ -188,4 +161,10 @@ QVariant Box2DScene::itemChange(GraphicsItemChange change, const QVariant &value
 void Box2DScene::onContact(Box2DItem *bodyA, Box2DItem *bodyB, qreal impulse)
 {
     emit contact(bodyA, bodyB, impulse);
+}
+
+void Box2DScene::onPreContact(Box2DItem *bodyA, Box2DItem *bodyB, Box2DContact *contact)
+{
+    emit preContact(bodyA, bodyB, contact);
+    delete contact;
 }
