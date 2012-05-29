@@ -22,8 +22,10 @@ QuasiGame {
     id: game
 
     property int score: 0
+    property int scale: 200
+    property real freethrow: 5.80 * game.scale
 
-    width: 1200
+    width: 7.60 * game.scale
     height: 900
 
     currentScene: scene
@@ -34,7 +36,7 @@ QuasiGame {
         width: parent.width
         height: parent.height
 
-        gravity: Qt.point(0, -20.0)
+        gravity: Qt.point(0, -30.0)
 
         QuasiBody {
             id: ball
@@ -42,8 +44,8 @@ QuasiGame {
             property int centerY: y + (height / 2)
             property bool threw: false
 
-            width: 80
-            height: 80
+            width: 0.24 * game.scale
+            height: 0.24 * game.scale
 
             friction: 0.3
             density: 50
@@ -52,8 +54,8 @@ QuasiGame {
 
             shapeGeometry: Quasi.CircleBodyShape
 
-            x: parent.width - width
-            y: parent.height - height
+            x: game.freethrow
+            y: game.height - height
 
             Rectangle {
                 id: ball01
@@ -81,11 +83,11 @@ QuasiGame {
 
             bodyType: Quasi.StaticBodyType
 
-            x: 0
-            y: 100
+            x: 1.2 * game.scale
+            y: parent.height - (3.95 * game.scale)
 
             width: 4
-            height: 200
+            height: 1.05 * game.scale
 
             friction: 1.0
             density: 0.1
@@ -103,9 +105,9 @@ QuasiGame {
             bodyType: Quasi.StaticBodyType
 
             x: backboard.x + backboard.width
-            y: backboard.y + backboard.height
+            y: parent.height - (3.05 * game.scale)
 
-            width: 30
+            width: (1.575 * game.scale) - x - (ball.width / 1.9)
             height: 4
 
             friction: 1.0
@@ -123,7 +125,7 @@ QuasiGame {
 
             bodyType: Quasi.StaticBodyType
 
-            x: baskethandler.x + baskethandler.width + ball.width + 10
+            x: baskethandler.x + baskethandler.width + (ball.width * 1.2)
             y: baskethandler.y
 
             width: 4
@@ -165,17 +167,17 @@ QuasiGame {
 
             onClicked: {
 
-                if (ball.centerX > parent.width - ball.width
-                        && ball.centerX < parent.width
+                if (ball.centerX > game.freethrow
+                        && ball.centerX < game.freethrow + ball.width
                         && ball.centerY > parent.height - ball.height) {
-                    var xLaunch = 800 * (game.mouse.x - ball.centerX);
-                    var yLaunch = 800 * (game.mouse.y - ball.centerY);
+                    var xLaunch = game.scale * (game.mouse.x - ball.centerX);
+                    var yLaunch = game.scale * (game.mouse.y - ball.centerY);
 
                     ball.applyLinearImpulse(Qt.point(xLaunch, yLaunch), Qt.point(ball.centerX, ball.centerY));
                     ball.threw = true;
                 } else {
                     ball.setLinearVelocity(Qt.point(0, 0));
-                    ball.x = parent.width - ball.width;
+                    ball.x = game.freethrow
                     ball.y = parent.height - ball.height;
                     ball.threw = false;
                 }
