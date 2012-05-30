@@ -170,6 +170,7 @@ QuasiGame {
                 id: ballimg
                 anchors.fill: parent
                 source: ":/images/ball.png"
+                smooth: true
             }
 
             onYChanged: {
@@ -200,6 +201,7 @@ QuasiGame {
                     for (i = 0; i <= currentBallIndex; i++) {
                         ballmodel.get(i).type = "blank";
                     }
+                    score = 0;
                     return;
                 }
 
