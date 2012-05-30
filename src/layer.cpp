@@ -96,10 +96,7 @@ Quasi::DrawType Layer::drawType() const
 void Layer::setDirection(const Quasi::LayerDirection &direction)
 {
     if (direction != m_direction) {
-        if (direction == Quasi::BackwardDirection)
-            m_direction = (Quasi::LayerDirection)-1; // insane black magic
-        else
-            m_direction = direction;
+        m_direction = direction;
 
         if (m_offsets.count() != 0)
             m_columnOffset = (m_columnOffset + 2) % m_offsets.size();

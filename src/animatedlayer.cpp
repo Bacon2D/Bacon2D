@@ -47,7 +47,9 @@ void AnimatedLayer::setHorizontalStep(const qreal &step)
 
 void AnimatedLayer::updateHorizontalStep()
 {
-    m_currentHorizontalStep += (m_horizontalStep * m_factor * m_direction);
+    int directionFactor = (m_direction == Quasi::ForwardDirection) ? 1 : -1;
+
+    m_currentHorizontalStep += (m_horizontalStep * m_factor * directionFactor);
 
     if (m_currentHorizontalStep <= -width()) {
         drawPixmap();
