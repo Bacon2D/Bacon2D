@@ -126,6 +126,39 @@ QuasiGame {
         }
 
         QuasiBody {
+            id: basketright
+
+            bodyType: Quasi.StaticBodyType
+
+            x: basketring.x
+            y: basketring.y + basketring.height
+
+            width: 4
+            height: ball.height / 2
+
+            friction: 1.0
+            density: 0.1
+            restitution: 0.0
+        }
+
+  QuasiBody {
+            id: basketleft
+
+            bodyType: Quasi.StaticBodyType
+
+            x: baskethandler.x + baskethandler.width - width
+            y: baskethandler.y + baskethandler.height
+
+            width: 4
+            height: ball.height / 2
+
+            friction: 1.0
+            density: 0.1
+            restitution: 0.0
+        }
+
+
+        QuasiBody {
             id: ground
 
             bodyType: Quasi.StaticBodyType
@@ -211,6 +244,7 @@ QuasiGame {
                     var yLaunch = 2 * game.scale * (game.mouse.y - ball.centerY);
 
                     ball.applyLinearImpulse(Qt.point(xLaunch, yLaunch), Qt.point(ball.centerX, ball.centerY));
+
                     ball.threw = true;
                 } else {
                     ball.setLinearVelocity(Qt.point(0, 0));
