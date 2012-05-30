@@ -22,6 +22,7 @@ QuasiGame {
     id: game
 
     property int score: 0
+    property int currentBallIndex: ballmodel.count - 1
     property int scale: 200
     property real freethrow: 5.80 * game.scale
 
@@ -150,6 +151,7 @@ QuasiGame {
             property int centerX: x + (width / 2)
             property int centerY: y + (height / 2)
             property bool threw: false
+            property bool scored: false
 
             width: 0.25 * game.scale
             height: 0.25 * game.scale
@@ -171,14 +173,17 @@ QuasiGame {
             }
 
             onYChanged: {
-                if (!threw)
+
+                if (scored || !threw)
                     return;
+
                 if (centerX > baskethandler.x + baskethandler.width
                         && centerX < basketring.x
                         && centerY < basketring.y + (ball.height / 2)
                         && centerY > basketring.y) {
+                    ballmodel.get(currentBallIndex).type = "score";
+                    scored = true;
                     score++;
-                    threw = false;
                     console.log("score = " + score);
                 }
             }
@@ -188,6 +193,15 @@ QuasiGame {
             anchors.fill: parent
 
             onClicked: {
+                if (currentBallIndex < 0) {
+                    // Reset demo
+                    var i = 0;
+                    currentBallIndex = ballmodel.count - 1
+                    for (i = 0; i <= currentBallIndex; i++) {
+                        ballmodel.get(i).type = "blank";
+                    }
+                    return;
+                }
 
                 if (ball.centerX > game.freethrow
                         && ball.centerX < game.freethrow + ball.width
@@ -199,10 +213,56 @@ QuasiGame {
                     ball.threw = true;
                 } else {
                     ball.setLinearVelocity(Qt.point(0, 0));
+                    ball.setAngularVelocity(0);
                     ball.x = game.freethrow
                     ball.y = parent.height - ball.height;
+
+                    if (ball.threw) {
+                        if (!ball.scored) {
+                            ballmodel.get(currentBallIndex).type = "fail";
+                        }
+
+                        currentBallIndex --;
+                    }
+
                     ball.threw = false;
                 }
+
+                ball.scored = false;
+            }
+        }
+    }
+
+    ListModel {
+        id: ballmodel
+        ListElement { type: "blank" }
+        ListElement { type: "blank" }
+        ListElement { type: "blank" }
+        ListElement { type: "blank" }
+        ListElement { type: "blank" }
+        ListElement { type: "blank" }
+        ListElement { type: "blank" }
+        ListElement { type: "blank" }
+        ListElement { type: "blank" }
+        ListElement { type: "blank" }
+    }
+
+    Row {
+        anchors.right: parent.right
+        anchors.rightMargin: 20
+        anchors.top: parent.top
+        anchors.topMargin: 20
+        spacing: 10
+
+        Repeater {
+            model: ballmodel
+
+            Image {
+                id: scoreview
+                width: 50
+                height: 50
+
+                source: ":/images/" + type + "ball.png"
             }
         }
     }
