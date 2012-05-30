@@ -206,8 +206,7 @@ QuasiGame {
                 }
 
                 if (ball.centerX > game.freethrow
-                        && ball.centerX < game.freethrow + ball.width
-                        && ball.centerY > parent.height - ball.height) {
+                        && ball.centerX < game.freethrow + ball.width) {
                     var xLaunch = 2 * game.scale * (game.mouse.x - ball.centerX);
                     var yLaunch = 2 * game.scale * (game.mouse.y - ball.centerY);
 
@@ -217,7 +216,7 @@ QuasiGame {
                     ball.setLinearVelocity(Qt.point(0, 0));
                     ball.setAngularVelocity(0);
                     ball.x = game.freethrow
-                    ball.y = parent.height - ball.height;
+                    ball.y = parent.height - 3 * ball.height;
 
                     if (ball.threw) {
                         if (!ball.scored) {
