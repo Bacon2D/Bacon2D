@@ -208,17 +208,23 @@ QuasiGame {
 
             onYChanged: {
 
-                if (scored || !threw)
+                if (!threw)
                     return;
 
                 if (centerX > baskethandler.x + baskethandler.width
                         && centerX < basketring.x
-                        && centerY < basketring.y + (ball.height / 2)
-                        && centerY > basketring.y) {
-                    ballmodel.get(currentBallIndex).type = "score";
-                    scored = true;
-                    score++;
-                    console.log("score = " + score);
+                        && centerY > basketring.y
+                        && centerY < basketring.y + basket.height) {
+
+                    if (!scored && centerY < basketring.y + (ball.height / 2)) {
+                        ballmodel.get(currentBallIndex).type = "score";
+                        scored = true;
+                        score++;
+                        console.log("score = " + score);
+                    }
+                    basket.source = ":/images/scorebasket.png"
+                } else {
+                    basket.source = ":/images/basket.png"
                 }
             }
         }
