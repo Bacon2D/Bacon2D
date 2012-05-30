@@ -75,6 +75,12 @@ signals:
     void debugChanged();
 
 protected:
+#if QT_VERSION >= 0x050000
+    virtual void itemChange(ItemChange change, const ItemChangeData &data);
+#else
+    virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+#endif
+
     bool m_running;
     Viewport *m_viewport;
     Game *m_game;

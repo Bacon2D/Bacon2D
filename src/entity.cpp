@@ -128,6 +128,7 @@ Game *Entity::game() const
 {
     if (m_scene)
         return m_scene->game();
+
     return 0;
 }
 

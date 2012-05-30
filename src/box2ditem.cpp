@@ -414,11 +414,3 @@ float Box2DItem::b2Angle() const
         angle = m_body->GetAngle();
     return angle;
 }
-
-void Box2DItem::componentComplete()
-{
-    Box2DBaseItem::componentComplete();
-
-    if (!m_initialized)
-        initialize();
-}

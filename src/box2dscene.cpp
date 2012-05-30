@@ -146,8 +146,9 @@ QVariant Box2DScene::itemChange(GraphicsItemChange change, const QVariant &value
 #else
         QGraphicsItem *child = value.value<QGraphicsItem *>();
 #endif
-        if (Box2DItem *box2DItem = dynamic_cast<Box2DItem *>(child)) {
-            box2DItem->setWorld(m_world);
+        if (Box2DBaseItem *box2DBaseItem = dynamic_cast<Box2DBaseItem *>(child)) {
+            box2DBaseItem->setWorld(m_world);
+            box2DBaseItem->initialize();
         }
     }
 

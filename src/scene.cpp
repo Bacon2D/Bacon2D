@@ -135,3 +135,26 @@ void Scene::componentComplete()
 
     QuasiDeclarativeItem::componentComplete();
 }
+
+#if QT_VERSION >= 0x050000
+void Scene::itemChange(ItemChange change, const ItemChangeData &data)
+#else
+QVariant Scene::itemChange(GraphicsItemChange change, const QVariant &value)
+#endif
+{
+    if (isComponentComplete() && change == ItemChildAddedChange) {
+#if QT_VERSION >= 0x050000
+        QQuickItem *child = data.item;
+#else
+        QGraphicsItem *child = value.value<QGraphicsItem *>();
+#endif
+        if (Entity *entity = dynamic_cast<Entity *>(child))
+            entity->setScene(this);
+    }
+
+#if QT_VERSION >= 0x050000
+    QuasiDeclarativeItem::itemChange(change, data);
+#else
+    return QuasiDeclarativeItem::itemChange(change, value);
+#endif
+}

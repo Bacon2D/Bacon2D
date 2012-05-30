@@ -70,3 +70,11 @@ void Box2DBaseItem::setWorld(QSharedPointer<b2World> world)
     if (!m_world.isNull())
         m_worldPtr = m_world.data();
 }
+
+void Box2DBaseItem::componentComplete()
+{
+    Entity::componentComplete();
+
+    if (!m_initialized)
+        initialize();
+}

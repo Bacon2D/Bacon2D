@@ -44,6 +44,8 @@ public:
     void synchronize();
 
 protected:
+    void componentComplete();
+
     virtual b2Vec2 b2TransformOrigin() const = 0;
     virtual float b2Angle() const = 0;
 
