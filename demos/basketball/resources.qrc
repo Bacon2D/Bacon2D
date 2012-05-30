@@ -3,6 +3,7 @@
     <file>GameWindow.qml</file>
     <file>images/backboardhandler.png</file>
     <file>images/basket.png</file>
+    <file>images/scorebasket.png</file>
     <file>images/ball.png</file>
     <file>images/blankball.png</file>
     <file>images/failball.png</file>
