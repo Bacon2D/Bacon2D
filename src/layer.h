@@ -71,7 +71,7 @@ class Layer: public QuasiPaintedItem
     Q_OBJECT
 
     Q_PROPERTY(QString source READ source WRITE setSource)
-    Q_PROPERTY(qreal factor READ factor WRITE setFactor)
+    Q_PROPERTY(qreal factor READ factor WRITE setFactor NOTIFY factorChanged)
     Q_PROPERTY(Quasi::Ordering order READ order WRITE setOrder)
     Q_PROPERTY(Quasi::LayerType layerType READ layerType WRITE setLayerType NOTIFY layerTypeChanged)
     Q_PROPERTY(Quasi::LayerDirection direction READ direction WRITE setDirection NOTIFY directionChanged)
@@ -123,6 +123,7 @@ public slots:
     virtual void updateTiles();
 
 signals:
+    void factorChanged();
     void tilesChanged();
     void directionChanged();
     void layerTypeChanged();

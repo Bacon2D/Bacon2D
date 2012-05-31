@@ -111,8 +111,11 @@ void Layer::setDirection(const Quasi::LayerDirection &direction)
  */
 void Layer::setFactor(qreal factor)
 {
-    if (m_factor != factor)
+    if (m_factor != factor) {
         m_factor = factor;
+
+        emit factorChanged();
+    }
 }
 
 //! Gets the layer update factor
