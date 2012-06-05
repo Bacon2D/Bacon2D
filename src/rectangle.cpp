@@ -19,45 +19,29 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _SHAPE_H_
-#define _SHAPE_H_
+#include "rectangle.h"
 
-#include "quasipainteditem.h"
-#include "fill.h"
+#include "box2dbaseitem.h"
 
-#include <Box2D/Box2D.h>
-#include <QtGui/QPainter>
-
-class Shape : public QuasiPaintedItem
+Rectangle::Rectangle(QuasiDeclarativeItem *parent)
+    : Shape(parent)
 {
-    Q_OBJECT
+}
 
-    Q_PROPERTY(Fill *fill READ fill WRITE setFill NOTIFY fillChanged)
+void Rectangle::drawShape(QPainter *painter)
+{
+    painter->drawRect(m_rect);
+}
 
-public:
-    Shape(QuasiDeclarativeItem *parent = 0);
-    virtual ~Shape();
+void Rectangle::initialize()
+{
+    Shape::initialize();
 
-    virtual void initialize();
-    virtual void drawShape(QPainter *painter) = 0;
+    m_rect = boundingRect();
+    m_shape = new b2PolygonShape;
 
-    Fill *fill() const { return m_fill; }
-    void setFill(Fill *fill);
+    b2PolygonShape *polygonShape = static_cast<b2PolygonShape*>(m_shape);
+    polygonShape->SetAsBox(width() / Box2DBaseItem::m_scaleRatio / 2.0,
+                           height() / Box2DBaseItem::m_scaleRatio / 2.0);
+}
 
-    b2Shape *box2DShape() { return m_shape; }
-
-#if QT_VERSION >= 0x050000
-    void paint(QPainter *painter);
-#else
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-#endif
-
-signals:
-    void fillChanged();
-
-protected:
-    b2Shape *m_shape;
-    Fill *m_fill;
-};
-
-#endif /* _SHAPE_H_ */

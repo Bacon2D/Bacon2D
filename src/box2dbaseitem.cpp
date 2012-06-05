@@ -56,6 +56,7 @@ void Box2DBaseItem::synchronize()
 
         if (!qFuzzyCompare(x(), newPoint.x()) || !qFuzzyCompare(y(), newPoint.y()))
             setPos(newPoint);
+
         if (!qFuzzyCompare(rotation(), newRotation))
             setRotation(newRotation);
 

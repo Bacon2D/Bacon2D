@@ -19,45 +19,62 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _SHAPE_H_
-#define _SHAPE_H_
+#include "shape.h"
 
-#include "quasipainteditem.h"
-#include "fill.h"
-
-#include <Box2D/Box2D.h>
-#include <QtGui/QPainter>
-
-class Shape : public QuasiPaintedItem
+Shape::Shape(QuasiDeclarativeItem *parent)
+    : QuasiPaintedItem(parent)
+    , m_shape(0)
+    , m_fill(0)
 {
-    Q_OBJECT
+}
 
-    Q_PROPERTY(Fill *fill READ fill WRITE setFill NOTIFY fillChanged)
+Shape::~Shape()
+{
+    delete m_shape;
+}
 
-public:
-    Shape(QuasiDeclarativeItem *parent = 0);
-    virtual ~Shape();
+void Shape::initialize()
+{
+    if (!m_fill)
+        return;
 
-    virtual void initialize();
-    virtual void drawShape(QPainter *painter) = 0;
+    if (!m_fill->initialized())
+        m_fill->initialize();
+}
 
-    Fill *fill() const { return m_fill; }
-    void setFill(Fill *fill);
+void Shape::setFill(Fill *fill)
+{
+    if (m_fill == fill)
+        return;
 
-    b2Shape *box2DShape() { return m_shape; }
+    m_fill = fill;
+
+    if (!m_fill->initialized())
+        m_fill->initialize();
+
+    emit fillChanged();
+}
 
 #if QT_VERSION >= 0x050000
-    void paint(QPainter *painter);
+void Shape::paint(QPainter *painter)
+{
 #else
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+void Shape::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
 #endif
 
-signals:
-    void fillChanged();
+    if (!m_fill)
+        return;
 
-protected:
-    b2Shape *m_shape;
-    Fill *m_fill;
-};
+    QBrush *brush = m_fill->brush();
+    if (brush)
+        painter->setBrush(*brush);
 
-#endif /* _SHAPE_H_ */
+    QPen *pen = m_fill->pen();
+    if (pen)
+        painter->setPen(*pen);
+
+    drawShape(painter);
+}

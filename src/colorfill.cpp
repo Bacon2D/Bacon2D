@@ -37,6 +37,7 @@ void ColorFill::initialize()
         m_pen->setColor(QColor(m_penColor));
     else
         m_pen->setColor(QColor(m_brushColor));
+
     m_initialized = true;
 }
 
@@ -56,6 +57,7 @@ void ColorFill::setBrushColor(const QColor &brushColor)
         delete m_brush;
 
     m_brush = new QBrush(QColor(m_brushColor));
+
     emit brushColorChanged();
 }
 
@@ -83,5 +85,6 @@ void ColorFill::setPenColor(const QColor &penColor)
         m_pen->setCapStyle(m_penCapStyle);
         m_pen->setJoinStyle(m_penJoinStyle);
     }
+
     emit penColorChanged();
 }

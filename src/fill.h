@@ -18,6 +18,7 @@
  * @author Rodrigo Goncalves de Oliveira <rodrigo.goncalves@openbossa.org>
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
+
 #ifndef _FILL_H_
 #define _FILL_H_
 
@@ -36,17 +37,7 @@ class Fill : public QObject
     Q_PROPERTY(qreal penWidth READ penWidth WRITE setPenWidth NOTIFY penWidthChanged)
 
 public:
-    Fill(QObject *parent = 0)
-        : QObject(parent)
-        , m_brush(0)
-        , m_pen(0)
-        , m_initialized(false)
-        , m_brushStyle(Qt::SolidPattern)
-        , m_penStyle(Qt::SolidLine)
-        , m_penCapStyle(Qt::SquareCap)
-        , m_penJoinStyle(Qt::BevelJoin)
-        , m_penWidth(0)
-        {}
+    Fill(QObject *parent = 0);
 
     QBrush *brush() const { return m_brush; }
     QPen *pen() const { return m_pen; }
@@ -55,49 +46,19 @@ public:
     bool initialized() const { return m_initialized; }
 
     Qt::BrushStyle brushStyle() const { return m_brushStyle; }
-    void setBrushStyle(const Qt::BrushStyle &brushStyle) {
-        if (m_brushStyle == brushStyle)
-            return;
-
-        m_brushStyle = brushStyle;
-        emit brushStyleChanged();
-    }
+    void setBrushStyle(const Qt::BrushStyle &brushStyle);
 
     Qt::PenStyle penStyle() const { return m_penStyle; };
-    void setPenStyle(const Qt::PenStyle &penStyle) {
-        if (m_penStyle == penStyle)
-            return;
-
-        m_penStyle = penStyle;
-        emit penStyleChanged();
-    }
+    void setPenStyle(const Qt::PenStyle &penStyle);
 
     Qt::PenCapStyle penCapStyle() const { return m_penCapStyle; }
-    void setPenCapStyle(const Qt::PenCapStyle &penCapStyle) {
-        if (m_penCapStyle == penCapStyle)
-            return;
-
-        m_penCapStyle = penCapStyle;
-        emit penCapStyleChanged();
-    }
+    void setPenCapStyle(const Qt::PenCapStyle &penCapStyle);
 
     Qt::PenJoinStyle penJoinStyle() const { return m_penJoinStyle; }
-    void setPenJoinStyle(const Qt::PenJoinStyle &penJoinStyle) {
-        if (m_penJoinStyle == penJoinStyle)
-            return;
-
-        m_penJoinStyle = penJoinStyle;
-        emit penJoinStyleChanged();
-    }
+    void setPenJoinStyle(const Qt::PenJoinStyle &penJoinStyle);
 
     qreal penWidth() const { return m_penWidth; }
-    void setPenWidth(const qreal &penWidth) {
-        if (m_penWidth == penWidth)
-            return;
-
-        m_penWidth = penWidth;
-        emit penWidthChanged();
-    }
+    void setPenWidth(const qreal &penWidth);
 
 signals:
     void brushStyleChanged();
@@ -116,6 +77,5 @@ protected:
     Qt::PenJoinStyle m_penJoinStyle;
     qreal m_penWidth;
 };
-
 
 #endif /* _FILL_H_ */

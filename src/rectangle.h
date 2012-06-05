@@ -23,43 +23,20 @@
 #define _RECTANGLE_H_
 
 #include "shape.h"
-#include "box2dbaseitem.h"
-
-#include <Box2D/Box2D.h>
 
 class Rectangle : public Shape
 {
     Q_OBJECT
 
 public:
-    Rectangle(QuasiDeclarativeItem *parent = 0)
-        : Shape(parent)
-        {}
+    Rectangle(QuasiDeclarativeItem *parent = 0);
 
-    ~Rectangle() {
-        delete m_shape;
-    }
+    void drawShape(QPainter *painter);
 
-    void drawShape(QPainter *painter) {
-        painter->drawRect(m_rect);
-    }
-
-    void initialize() {
-        m_fill->initialize();
-
-        m_rect = boundingRect();
-        m_shape = new b2PolygonShape;
-        m_shape->SetAsBox(width() / Box2DBaseItem::m_scaleRatio / 2.0
-                          , height() / Box2DBaseItem::m_scaleRatio / 2.0);
-    }
-
-    b2Shape *box2DShape() {
-        return m_shape;
-    }
+    void initialize();
 
 private:
     QRectF m_rect;
-    b2PolygonShape *m_shape;
 };
 
 #endif /* _RECTANGLE_H_ */

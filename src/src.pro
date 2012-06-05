@@ -82,7 +82,10 @@ SOURCES += entity.cpp \
            scriptbehavior.cpp \
            box2dcontact.cpp \
            box2dcontactlistener.cpp \
+           fill.cpp \
            colorfill.cpp \
+           shape.cpp \
+           rectangle.cpp \
            fixture.cpp \
            material.cpp
 

@@ -280,6 +280,7 @@ b2Vec2 Box2DItem::b2TransformOrigin() const
     b2Vec2 vec;
     if (m_body)
         vec = m_body->GetPosition();
+
     return vec;
 }
 
@@ -299,10 +300,11 @@ void Box2DItem::initializeFixtures()
     QGraphicsItem *item;
 #endif
 
-    foreach (item, childItems())
+    foreach (item, childItems()) {
         if (Fixture *fixture = dynamic_cast<Fixture *>(item)) {
             fixture->setWorld(m_world);
             fixture->setBody(m_body);
             fixture->initialize();
         }
+    }
 }
