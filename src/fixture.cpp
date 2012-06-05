@@ -55,6 +55,11 @@ Fixture::~Fixture()
         return;
 
     m_body->DestroyFixture(m_fixture);
+
+    if (!m_shapeItem)
+        return;
+
+    m_shapeItem->deleteLater();
 }
 
 Material *Fixture::material() const

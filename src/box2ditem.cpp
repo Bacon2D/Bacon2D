@@ -308,3 +308,29 @@ void Box2DItem::initializeFixtures()
         }
     }
 }
+
+#if QT_VERSION >= 0x050000
+void Box2DItem::itemChange(ItemChange change, const ItemChangeData &data)
+#else
+QVariant Box2DItem::itemChange(GraphicsItemChange change, const QVariant &value)
+#endif
+{
+    if (isComponentComplete() && change == ItemChildAddedChange) {
+#if QT_VERSION >= 0x050000
+        QQuickItem *child = data.item;
+#else
+        QGraphicsItem *child = value.value<QGraphicsItem *>();
+#endif
+        if (Fixture *fixture = dynamic_cast<Fixture *>(child)) {
+            fixture->setWorld(m_world);
+            fixture->setBody(m_body);
+            fixture->initialize();
+        }
+    }
+
+#if QT_VERSION >= 0x050000
+    Box2DBaseItem::itemChange(change, data);
+#else
+    return Box2DBaseItem::itemChange(change, value);
+#endif
+}
