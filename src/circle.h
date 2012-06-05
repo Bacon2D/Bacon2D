@@ -28,52 +28,24 @@ class Circle : public Shape
 {
     Q_OBJECT
 
-    Q_PROPERTY(QPointF center READ center WRITE setCenter NOTIFY centerChanged)
     Q_PROPERTY(qreal radius READ radius WRITE setRadius NOTIFY radiusChanged)
 
 public:
-    Circle(QuasiDeclarativeItem *parent = 0)
-        : Shape(parent)
-        , m_radius(0)
-        {}
-
-    QPointF center() const { return m_center; }
-    void setCenter(const QPointF &center) {
-        if (m_center == center)
-            return;
-
-        m_center = center;
-
-        emit centerChanged();
-    }
+    Circle(QuasiDeclarativeItem *parent = 0);
 
     qreal radius() const { return m_radius; }
-    void setRadius(const qreal &radius) {
-        if (radius <= 0.0 || m_radius == radius)
-            return;
+    void setRadius(qreal radius);
 
-        m_radius = radius;
-        emit radiusChanged();
-    }
+    void drawShape(QPainter *painter);
 
-    void drawShape(QPainter *painter) {
-        if (m_radius) {
-            painter->drawEllipse(m_center, m_radius, m_radius);
-        }
-    }
-
-    void initialize() {
-        if (!m_fill)
-            return;
-        m_fill->initialize();
-    }
+    void initialize();
 
 signals:
-    void centerChanged();
     void radiusChanged();
 
 private:
-    QPointF m_center;
+    qreal getDiameter() const;
+
     qreal m_radius;
 };
 

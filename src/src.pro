@@ -86,6 +86,7 @@ SOURCES += entity.cpp \
            colorfill.cpp \
            shape.cpp \
            rectangle.cpp \
+           circle.cpp \
            fixture.cpp \
            material.cpp
 
