@@ -33,6 +33,20 @@ Fixture::Fixture(QuasiDeclarativeItem *parent)
     , m_shapeItem(0)
     , m_body(0)
 {
+    connect(this, SIGNAL(parentChanged()),
+            this, SLOT(onParentChanged()));
+}
+
+void Fixture::onParentChanged()
+{
+    if (!m_shapeItem)
+        return;
+
+    // NOTE: Probably we need to check if there is a
+    // better place to set container Box2DItem to be
+    // parent of Shape.
+    m_shapeItem->setParent(parentItem());
+    m_shapeItem->setParentItem(parentItem());
 }
 
 Fixture::~Fixture()
@@ -64,20 +78,14 @@ void Fixture::setMaterial(Material *material)
         m_fixture->SetRestitution(m_material->restitution());
     }
 
-    connect(m_material,
-            SIGNAL(densityChanged(const float &)),
-            this,
-            SLOT(onDensityChanged(const float &)));
+    connect(m_material, SIGNAL(densityChanged(const float &)),
+            this, SLOT(onDensityChanged(const float &)));
 
-    connect(m_material,
-            SIGNAL(frictionChanged(const float &)),
-            this,
-            SLOT(onFrictionChanged(const float &)));
+    connect(m_material, SIGNAL(frictionChanged(const float &)),
+            this, SLOT(onFrictionChanged(const float &)));
 
-    connect(m_material,
-            SIGNAL(restitutionChanged(const float &)),
-            this,
-            SLOT(onRestitutionChanged(const float &)));
+    connect(m_material, SIGNAL(restitutionChanged(const float &)),
+            this, SLOT(onRestitutionChanged(const float &)));
 
     emit materialChanged();
 }
@@ -102,9 +110,6 @@ void Fixture::setShapeItem(QDeclarativeItem *shapeItem)
 
     m_shapeItem = shapeItem;
 
-    m_shapeItem->setParent(this);
-    m_shapeItem->setParentItem(this);
-
     emit shapeChanged();
 }
 
@@ -112,7 +117,9 @@ void Fixture::onDensityChanged(const float &density)
 {
     if (!m_fixture)
         return;
+
     m_fixture->SetDensity(density);
+
     if (m_body)
         m_body->ResetMassData();
 }
@@ -121,6 +128,7 @@ void Fixture::onFrictionChanged(const float &friction)
 {
     if (!m_fixture)
         return;
+
     m_fixture->SetFriction(friction);
 }
 
@@ -128,6 +136,7 @@ void Fixture::onRestitutionChanged(const float &restitution)
 {
     if (!m_fixture)
         return;
+
     m_fixture->SetRestitution(restitution);
 }
 
@@ -143,6 +152,9 @@ void Fixture::setBody(b2Body *body)
 
 void Fixture::initialize()
 {
+    if (!isComponentComplete())
+        return;
+
     if (!m_material || !m_shapeItem || !m_body)
         return;
 
@@ -151,23 +163,35 @@ void Fixture::initialize()
     fixtureDef.friction = m_material->friction();
     fixtureDef.restitution = m_material->restitution();
 
+    // Test if the 'shape' property is a Shape derived class.
+    // In that case, get the B2Shape created by it.
     if (Shape *quasiShape = dynamic_cast<Shape *>(m_shapeItem)) {
         fixtureDef.shape = quasiShape->box2DShape();
         m_fixture = m_body->CreateFixture(&fixtureDef);
-    } else {
-        b2PolygonShape *shape = new b2PolygonShape;
-
-        //XXX get coordinates
-        shape->SetAsBox(m_shapeItem->width() / Box2DBaseItem::m_scaleRatio / 2.0
-                        , m_shapeItem->height() / Box2DBaseItem::m_scaleRatio / 2.0);
-        fixtureDef.shape = shape;
-        m_fixture = m_body->CreateFixture(&fixtureDef);
-        delete shape;
+        m_fixture->SetUserData(parentItem());
+        return;
     }
+
+    // If 'shape' does not inherit from Shape, set it to be a Box.
+    // It should be default if shape is set to be to any other
+    // QML Item derived element (e.g. Rectangle, Image, etc).
+    b2PolygonShape shape;
+
+    //XXX: get coordinates
+    shape.SetAsBox(m_shapeItem->width() / Box2DBaseItem::m_scaleRatio / 2.0,
+                   m_shapeItem->height() / Box2DBaseItem::m_scaleRatio / 2.0);
+    fixtureDef.shape = &shape;
+
+    m_fixture = m_body->CreateFixture(&fixtureDef);
+    m_fixture->SetUserData(parentItem());
 }
 
 void Fixture::componentComplete()
 {
-    if (!m_fixture)
-        initialize();
+    QuasiDeclarativeItem::componentComplete();
+
+    if (Shape *shape = qobject_cast<Shape*>(m_shapeItem))
+        shape->initialize();
+
+    initialize();
 }

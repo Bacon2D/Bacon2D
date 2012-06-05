@@ -72,6 +72,7 @@ protected slots:
     void onDensityChanged(const float &density);
     void onFrictionChanged(const float &friction);
     void onRestitutionChanged(const float &restitution);
+    void onParentChanged();
 
 protected:
     void componentComplete();
