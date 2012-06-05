@@ -34,7 +34,7 @@
 
 Scene::Scene(Game *parent)
     : QuasiDeclarativeItem(parent)
-    , m_running(false)
+    , m_running(true)
     , m_viewport(0)
     , m_game(0)
     , m_debug(false)
@@ -65,11 +65,12 @@ bool Scene::running() const
 
 void Scene::setRunning(const bool &running)
 {
-    if (m_running != running) {
-        m_running = running;
+    if (m_running == running)
+        return;
 
-        emit runningChanged();
-    }
+    m_running = running;
+
+    emit runningChanged();
 }
 
 Viewport *Scene::viewport() const
@@ -79,11 +80,12 @@ Viewport *Scene::viewport() const
 
 void Scene::setViewport(Viewport *viewport)
 {
-    if (m_viewport != viewport) {
-        m_viewport = viewport;
+    if (m_viewport == viewport)
+        return;
 
-        emit viewportChanged();
-    }
+    m_viewport = viewport;
+
+    emit viewportChanged();
 }
 
 Game *Scene::game() const
@@ -108,11 +110,12 @@ bool Scene::debug() const
 
 void Scene::setDebug(const bool &debug)
 {
-    if (m_debug != debug) {
-        m_debug = debug;
+    if (m_debug == debug)
+        return;
 
-        emit debugChanged();
-    }
+    m_debug = debug;
+
+    emit debugChanged();
 }
 
 void Scene::componentComplete()

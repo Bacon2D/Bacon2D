@@ -50,45 +50,46 @@ Scene *Game::currentScene() const
 
 void Game::setCurrentScene(Scene *currentScene)
 {
-    if (m_currentScene != currentScene) {
-        if (m_currentScene) {
-            if (m_viewport) {
-                m_viewport->setVisible(false);
-                m_viewport = 0;
-            }
+    if (m_currentScene == currentScene)
+        return;
 
-            m_currentScene->setRunning(false);
-            m_currentScene->setVisible(false);
+    if (m_currentScene) {
+        if (m_viewport) {
+            m_viewport->setVisible(false);
+            m_viewport = 0;
         }
 
-        m_currentScene = currentScene;
-
-        if (m_currentScene) {
-            m_currentScene->setGame(this);
-
-            if ((m_viewport = m_currentScene->viewport())) {
-                m_viewport->setParent(this);
-                m_viewport->setParentItem(this);
-                m_viewport->setScene(m_currentScene);
-                m_viewport->setWidth(width());
-                m_viewport->setHeight(height());
-                m_viewport->setContentWidth(m_currentScene->width());
-                m_viewport->setContentHeight(m_currentScene->height());
-                m_viewport->updateMaxOffsets();
-                m_viewport->setVisible(true);
-
-                m_currentScene->setParentItem(m_viewport);
-            } else {
-                m_currentScene->setParent(this);
-                m_currentScene->setParentItem(this);
-            }
-
-            m_currentScene->setVisible(true);
-            m_currentScene->setRunning(true);
-        }
-
-        emit currentSceneChanged();
+        m_currentScene->setRunning(false);
+        m_currentScene->setVisible(false);
     }
+
+    m_currentScene = currentScene;
+
+    if (m_currentScene) {
+        m_currentScene->setGame(this);
+
+        if ((m_viewport = m_currentScene->viewport())) {
+            m_viewport->setParent(this);
+            m_viewport->setParentItem(this);
+            m_viewport->setScene(m_currentScene);
+            m_viewport->setWidth(width());
+            m_viewport->setHeight(height());
+            m_viewport->setContentWidth(m_currentScene->width());
+            m_viewport->setContentHeight(m_currentScene->height());
+            m_viewport->updateMaxOffsets();
+            m_viewport->setVisible(true);
+
+            m_currentScene->setParentItem(m_viewport);
+        } else {
+            m_currentScene->setParent(this);
+            m_currentScene->setParentItem(this);
+        }
+
+        m_currentScene->setRunning(true);
+        m_currentScene->setVisible(true);
+    }
+
+    emit currentSceneChanged();
 }
 
 int Game::fps() const

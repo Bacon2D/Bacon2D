@@ -67,14 +67,13 @@ public:
 
     virtual void update(const int &delta);
 
-    virtual void componentComplete();
-
 signals:
     void runningChanged();
     void viewportChanged();
     void debugChanged();
 
 protected:
+    virtual void componentComplete();
 #if QT_VERSION >= 0x050000
     virtual void itemChange(ItemChange change, const ItemChangeData &data);
 #else

@@ -19,20 +19,163 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-QuasiGame {
-    id: game
+Item {
+    id: container
 
-    width: 400
-    height: 250
+    width: 900
+    height: 300
 
-    currentScene: scene
+    property int currentSceneIndex: 0
 
-    QuasiScene {
-        id: scene
+    Rectangle {
+        anchors.fill: parent
+        color: "gray"
+    }
 
-        QuasiEntity {
-            behavior: QuasiScriptBehavior {
-                script: console.log("update")
+    Component {
+        id: sceneComponent
+
+        QuasiPhysicsScene {
+            id: scene
+
+            width: 300
+            height: 300
+
+            function applyLinearImpulse() {
+                var center = Qt.point(x + width / 2, y + height / 2)
+                var impulseX = -width + Math.random() * width
+                var impulseY = -height + Math.random() * height
+                var impulse = Qt.point(impulseX, impulseY)
+
+                ball.applyLinearImpulse(impulse, center)
+            }
+
+            Rectangle {
+                anchors.fill: parent
+                color: "white"
+            }
+
+            QuasiMaterial {
+                id: wallMaterial
+                density: 10
+                restitution: 0.1
+            }
+
+            QuasiBody {
+                bodyType: Quasi.StaticBodyType
+                anchors.left: parent.left
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                width: 1
+
+                QuasiFixture {
+                    material: wallMaterial
+                    shape: Item { anchors.fill: parent }
+                }
+            }
+
+            QuasiBody {
+                bodyType: Quasi.StaticBodyType
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                width: 1
+
+                QuasiFixture {
+                    material: wallMaterial
+                    shape: Item { anchors.fill: parent }
+                }
+            }
+
+            QuasiBody {
+                bodyType: Quasi.StaticBodyType
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.top: parent.top
+                height: 1
+
+                QuasiFixture {
+                    material: wallMaterial
+                    shape: Item { anchors.fill: parent }
+                }
+            }
+
+            QuasiBody {
+                bodyType: Quasi.StaticBodyType
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                height: 1
+
+                QuasiFixture {
+                    material: wallMaterial
+                    shape: Item {
+                        anchors.fill: parent
+                    }
+                }
+            }
+
+            QuasiMaterial {
+                id: ballMaterial
+                density: Math.random()
+                restitution: density
+            }
+
+            QuasiBody {
+                id: ball
+                width: 40
+                height: 40
+                x: scene.width / 2 - width / 2
+                y: scene.height / 3
+
+                QuasiFixture {
+                    material: ballMaterial
+                    shape: QuasiCircle {
+                        anchors.fill: parent
+                        fill: QuasiColorFill {
+                            brushColor: {
+                                switch (currentSceneIndex) {
+                                case 0: return "black"
+                                case 1: return "red"
+                                case 2: return "blue"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    Timer {
+        interval: 2000
+        running: true
+        repeat: true
+        triggeredOnStart: true
+        onTriggered: {
+            game.currentScene = game.children[currentSceneIndex]
+            game.currentScene.applyLinearImpulse()
+            currentSceneIndex = (currentSceneIndex + 1) % game.children.length
+        }
+    }
+
+    QuasiGame {
+        id: game
+
+        anchors.fill: parent
+        focus: true
+
+        Component.onCompleted: {
+            var scene
+            var prevScene
+
+            for (var i = 0; i < 3; i++) {
+                prevScene = game.children[game.children.length - 1]
+                scene = sceneComponent.createObject(game)
+                if (prevScene)
+                    scene.anchors.left = prevScene.right
+                else
+                    scene.anchors.left = scene.parent.left
             }
         }
     }
