@@ -2,12 +2,18 @@ import QtQuick 1.1
 import QuasiGame 1.0
 
 QuasiBody {
-    width: img.width
-    height: img.height
+    width: paratrooperImage.width
+    height: paratrooperImage.height
 
-    friction: 0.3
-    density: 2
-    restitution: 0
+    QuasiFixture {
+        shape: paratrooperImage
+        material: QuasiMaterial {
+            friction: 0.3
+            density: 2
+            restitution: 0
+        }
+    }
+
     sleepingAllowed: true
     fixedRotation: true
 
@@ -68,7 +74,7 @@ QuasiBody {
     }
 
     Image {
-        id: img
+        id: paratrooperImage
         source: ":/paratrooper.png"
         smooth: true
         anchors.horizontalCenter: parent.horizontalCenter

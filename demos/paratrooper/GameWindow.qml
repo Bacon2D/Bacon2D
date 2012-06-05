@@ -206,12 +206,16 @@ QuasiGame {
             anchors.right: parent.right
             anchors.top: parent.top
 
-            density: 50
-            restitution: 0
+            QuasiFixture {
+                shape: Rectangle {
+                    color: "lightGray"
+                    anchors.fill: parent
+                }
 
-            Rectangle {
-                color: "lightGray"
-                anchors.fill: parent
+                material: QuasiMaterial {
+                    density: 50
+                    restitution: 0
+                }
             }
         }
 
@@ -225,12 +229,16 @@ QuasiGame {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
-            density: 50
-            restitution: 0.2
+            QuasiFixture {
+                shape: Rectangle {
+                    color: "lightGray"
+                    anchors.fill: parent
+                }
 
-            Rectangle {
-                color: "lightGray"
-                anchors.fill: parent
+                material: QuasiMaterial {
+                    density: 50
+                    restitution: 0.2
+                }
             }
         }
 
@@ -244,12 +252,16 @@ QuasiGame {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
-            density: 50
-            restitution: 0.2
+            QuasiFixture {
+                shape: Rectangle {
+                    color: "lightGray"
+                    anchors.fill: parent
+                }
 
-            Rectangle {
-                color: "lightGray"
-                anchors.fill: parent
+                material: QuasiMaterial {
+                    density: 50
+                    restitution: 0.2
+                }
             }
         }
 
@@ -263,14 +275,18 @@ QuasiGame {
             anchors.right: parent.right
             anchors.bottom: parent.bottom
 
-            friction: 0.3
-            density: 50
+            QuasiFixture {
+                shape: Rectangle {
+                    anchors.fill: parent
+                    gradient: Gradient {
+                        GradientStop { position: 0.1; color: "green" }
+                        GradientStop { position: 1.0; color: "#003000" }
+                    }
+                }
 
-            Rectangle {
-                anchors.fill: parent
-                gradient: Gradient {
-                    GradientStop { position: 0.1; color: "green" }
-                    GradientStop { position: 1.0; color: "#003000" }
+                material: QuasiMaterial {
+                    density: 50
+                    restitution: 0.3
                 }
             }
         }
@@ -285,16 +301,30 @@ QuasiGame {
             anchors.verticalCenter: ground.top
             x: Math.round(Math.random() * (scene.width - landingArea.width))
 
-            density: 100
-            restitution: 0
-            friction: 50
+            QuasiFixture {
+                material: QuasiMaterial {
+                    density: 100
+                    restitution: 0
+                    friction: 50
+                }
 
-            Image {
-                id: target
-                source: ":/target.png"
-                anchors.centerIn: parent
-                smooth: true
-                transform: Rotation { origin.x: target.width / 2; origin.y: target.height / 2; axis { x: 1; y: 0; z: 0 } angle: 75 }
+                shape: Item {
+                    width: target.width
+                    height: 2
+
+                    Image {
+                        id: target
+                        source: ":/target.png"
+                        anchors.centerIn: parent
+                        smooth: true
+                        transform: Rotation {
+                            angle: 75
+                            origin.x: target.width / 2
+                            origin.y: target.height / 2
+                            axis { x: 1; y: 0; z: 0 }
+                        }
+                    }
+                }
             }
         }
 
@@ -305,9 +335,8 @@ QuasiGame {
         }
 
         onContact: {
-            if (bodyA == landingArea || bodyB == landingArea) {
+            if (bodyA == landingArea || bodyB == landingArea)
                 done(impulse)
-            }
         }
     }
 
