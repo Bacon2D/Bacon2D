@@ -27,11 +27,17 @@ QuasiGame {
 
     currentScene: scene
 
+    Rectangle {
+        anchors.fill: parent
+        color: "black"
+    }
+
     QuasiPhysicsScene {
         id: scene
 
         width: parent.width
         height: parent.height
+        debug: true
 
         onContact: {
             if (impulse > 500.0 && (bodyA == mouseItem || bodyB == mouseItem)) {
@@ -83,15 +89,10 @@ QuasiGame {
             height: 5
 
             QuasiFixture {
-                width: ground.width
-                height: ground.width
-
+                anchors.fill: parent
                 material: randomMaterial
-
                 shape: QuasiRectangle {
-                    width: ground.width
-                    height: ground.height
-
+                    anchors.fill: parent
                     fill: QuasiColorFill {
                         brushColor: "green"
                     }
@@ -117,22 +118,60 @@ QuasiGame {
         QuasiBody {
             id: body
 
-            width: 10 + Math.random() * 90
-            height: 10 + Math.random() * 90
-
-            x: Math.random() * scene.width
-            y: 200 + Math.random() * -scene.height
+            width: 100
+            height: 100
+            x: 200
+            y: 200
 
             sleepingAllowed: false
 
+            Rectangle {
+                color: "blue"
+                anchors.fill: parent
+                opacity: 0.4
+            }
+
             QuasiFixture {
                 material: randomMaterial
-                shape: QuasiRectangle {
-                    width: body.width
-                    height: body.height
 
+                shape: QuasiCircle {
+                    width: 30
+                    height: 30
+                    //radius: 5
+                    x: 0
+                    y: 0
                     fill: QuasiColorFill {
                         brushColor: "red"
+                    }
+                }
+            }
+
+            QuasiFixture {
+                material: randomMaterial
+
+                shape: QuasiCircle {
+                    width: 30
+                    height: 30
+                    x: 33
+                    y: 20
+                    fill: QuasiColorFill {
+                        brushColor: "blue"
+                    }
+                }
+            }
+
+            QuasiFixture {
+                material: QuasiMaterial {
+                    density: 50
+                }
+
+                shape: QuasiCircle {
+                    width: 30
+                    height: 30
+                    x: 66
+                    y: 0
+                    fill: QuasiColorFill {
+                        brushColor: "green"
                     }
                 }
             }
@@ -150,19 +189,18 @@ QuasiGame {
     }
 
     Timer {
-        interval: 1500; running: true; repeat: true
+        //interval: 1500; running: true; repeat: true
         onTriggered: bodyComponent.createObject(scene)
     }
 
     Component.onCompleted: {
-        for (var i = 0; i < 10; i++) {
+        for (var i = 0; i < 1; i++) {
             bodyComponent.createObject(scene)
         }
     }
 
     MouseArea {
         anchors.fill: parent
-
         onClicked: bodyComponent.createObject(scene)
     }
 }
