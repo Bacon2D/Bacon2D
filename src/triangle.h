@@ -31,46 +31,20 @@ class Triangle : public Shape
     Q_PROPERTY(QVariantList points READ points WRITE setPoints NOTIFY pointsChanged)
 
 public:
-    Triangle(QuasiDeclarativeItem *parent = 0)
-        : Shape(parent)
-        {}
+    Triangle(QuasiDeclarativeItem *parent = 0);
 
     QVariantList points() const { return m_points; }
-    void setPoints(QVariantList &points) {
-        if (points.size() != 3 || m_points == points)
-            return;
-        m_points = points;
+    void setPoints(QVariantList &points);
 
-        if (m_fill && m_fill->initialized())
-            updateShape(m_fill->pen()->widthF());
+    void drawShape(QPainter *painter);
 
-        emit pointsChanged();
-    }
-
-    void drawShape(QPainter *painter) {
-        painter->drawPolygon(m_triangle);
-    }
-
-    void initialize() {
-        if (!m_fill)
-            return;
-        m_fill->initialize();
-        if (m_points.size() == 3)
-            updateShape(m_fill->pen()->widthF());
-    }
+    void initialize();
 
 signals:
     void pointsChanged();
 
 private:
-    void updateShape(qreal penWidth) {
-        m_triangle.clear();
-        for (int i = 0; i < 3; i++) {
-            QPointF point = m_points.at(i).toPointF();
-
-            m_triangle.append(point);
-        }
-    }
+    void updateShape(qreal penWidth);
 
 private:
     QVariantList m_points;
