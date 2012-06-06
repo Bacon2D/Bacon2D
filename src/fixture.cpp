@@ -171,7 +171,11 @@ void Fixture::initialize()
     // Test if the 'shape' property is a Shape derived class.
     // In that case, get the B2Shape created by it.
     if (Shape *quasiShape = dynamic_cast<Shape *>(m_shapeItem)) {
-        fixtureDef.shape = quasiShape->box2DShape();
+        b2Shape *shape = quasiShape->box2DShape();
+        if (!shape)
+            return;
+
+        fixtureDef.shape = shape;
         m_fixture = m_body->CreateFixture(&fixtureDef);
         m_fixture->SetUserData(parentItem());
         return;
