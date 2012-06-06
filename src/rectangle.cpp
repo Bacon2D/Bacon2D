@@ -22,6 +22,7 @@
 #include "rectangle.h"
 
 #include "box2dbaseitem.h"
+#include "util.h"
 
 Rectangle::Rectangle(QuasiDeclarativeItem *parent)
     : Shape(parent)
@@ -40,8 +41,16 @@ void Rectangle::initialize()
     m_rect = boundingRect();
     m_shape = new b2PolygonShape;
 
+    QPointF newPos(x() - parentItem()->width() / 2.0,
+                   y() - parentItem()->height() / 2.0);
+
+    b2Vec2 rect[4];
+    rect[0] = b2Util::b2Vec(QPointF(newPos.x(), newPos.y() + height()), Box2DBaseItem::m_scaleRatio);
+    rect[1] = b2Util::b2Vec(QPointF(newPos.x() + width(), newPos.y() + height()), Box2DBaseItem::m_scaleRatio);
+    rect[2] = b2Util::b2Vec(QPointF(newPos.x() + width(), newPos.y()), Box2DBaseItem::m_scaleRatio);
+    rect[3] = b2Util::b2Vec(newPos, Box2DBaseItem::m_scaleRatio);
+
     b2PolygonShape *polygonShape = static_cast<b2PolygonShape*>(m_shape);
-    polygonShape->SetAsBox(width() / Box2DBaseItem::m_scaleRatio / 2.0,
-                           height() / Box2DBaseItem::m_scaleRatio / 2.0);
+    polygonShape->Set(rect, 4);
 }
 
