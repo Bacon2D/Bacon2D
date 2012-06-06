@@ -113,7 +113,13 @@ void Fixture::setShapeItem(QDeclarativeItem *shapeItem)
     if (m_shapeItem == shapeItem)
         return;
 
+    if (m_shapeItem)
+        m_shapeItem->disconnect();
+
     m_shapeItem = shapeItem;
+
+    connect(m_shapeItem, SIGNAL(box2DShapeUpdated()),
+            this, SLOT(onBox2DShapeUpdated()));
 
     emit shapeChanged();
 }
@@ -160,8 +166,18 @@ void Fixture::initialize()
     if (!isComponentComplete())
         return;
 
+    updateFixture();
+}
+
+void Fixture::updateFixture()
+{
     if (!m_material || !m_shapeItem || !m_body)
         return;
+
+    if (m_fixture) {
+        m_body->DestroyFixture(m_fixture);
+        m_fixture = 0;
+    }
 
     b2FixtureDef fixtureDef;
     fixtureDef.density = m_material->density();
@@ -203,4 +219,9 @@ void Fixture::componentComplete()
         shape->initialize();
 
     initialize();
+}
+
+void Fixture::onBox2DShapeUpdated()
+{
+    updateFixture();
 }

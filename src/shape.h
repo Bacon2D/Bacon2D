@@ -54,10 +54,12 @@ public:
 
 signals:
     void fillChanged();
+    void box2DShapeUpdated();
 
 protected:
     b2Shape *m_shape;
     Fill *m_fill;
+    bool m_initialized;
 };
 
 #endif /* _SHAPE_H_ */

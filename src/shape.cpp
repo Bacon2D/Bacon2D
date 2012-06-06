@@ -25,6 +25,7 @@ Shape::Shape(QuasiDeclarativeItem *parent)
     : QuasiPaintedItem(parent)
     , m_shape(0)
     , m_fill(0)
+    , m_initialized(false)
 {
 }
 
@@ -35,11 +36,12 @@ Shape::~Shape()
 
 void Shape::initialize()
 {
-    if (!m_fill)
+    if (!m_fill || m_initialized)
         return;
 
     if (!m_fill->initialized())
         m_fill->initialize();
+    m_initialized = true;
 }
 
 void Shape::setFill(Fill *fill)

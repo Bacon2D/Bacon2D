@@ -73,10 +73,13 @@ protected slots:
     void onFrictionChanged(const float &friction);
     void onRestitutionChanged(const float &restitution);
     void onParentChanged();
+    void onBox2DShapeUpdated();
 
 protected:
     void componentComplete();
+    void updateFixture();
 
+protected:
     b2Fixture *m_fixture;
     Material *m_material;
 #if QT_VERSION >= 0x050000
