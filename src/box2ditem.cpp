@@ -303,7 +303,7 @@ void Box2DItem::initializeFixtures()
     foreach (item, childItems()) {
         if (Fixture *fixture = dynamic_cast<Fixture *>(item)) {
             fixture->setWorld(m_world);
-            fixture->setBody(m_body);
+            fixture->setBody(this);
             fixture->initialize();
         }
     }
@@ -323,7 +323,7 @@ QVariant Box2DItem::itemChange(GraphicsItemChange change, const QVariant &value)
 #endif
         if (Fixture *fixture = dynamic_cast<Fixture *>(child)) {
             fixture->setWorld(m_world);
-            fixture->setBody(m_body);
+            fixture->setBody(this);
             fixture->initialize();
         }
     }

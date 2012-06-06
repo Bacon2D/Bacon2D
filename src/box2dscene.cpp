@@ -157,13 +157,13 @@ QVariant Box2DScene::itemChange(GraphicsItemChange change, const QVariant &value
 #endif
 }
 
-void Box2DScene::onContact(Box2DItem *bodyA, Box2DItem *bodyB, qreal impulse)
+void Box2DScene::onContact(Fixture *fixtureA, Fixture *fixtureB, qreal impulse)
 {
-    emit contact(bodyA, bodyB, impulse);
+    emit contact(fixtureA, fixtureB, impulse);
 }
 
-void Box2DScene::onPreContact(Box2DItem *bodyA, Box2DItem *bodyB, Box2DContact *contact)
+void Box2DScene::onPreContact(Fixture *fixtureA, Fixture *fixtureB, Box2DContact *contact)
 {
-    emit preContact(bodyA, bodyB, contact);
+    emit preContact(fixtureA, fixtureB, contact);
     delete contact;
 }

@@ -335,7 +335,7 @@ QuasiGame {
         }
 
         onContact: {
-            if (bodyA == landingArea || bodyB == landingArea)
+            if (fixtureA.body == landingArea || fixtureB.body == landingArea)
                 done(impulse)
         }
     }

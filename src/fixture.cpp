@@ -32,6 +32,7 @@ Fixture::Fixture(QuasiDeclarativeItem *parent)
     , m_material(0)
     , m_shapeItem(0)
     , m_body(0)
+    , m_bodyItem(0)
 {
     connect(this, SIGNAL(parentChanged()),
             this, SLOT(onParentChanged()));
@@ -156,9 +157,15 @@ void Fixture::setWorld(QSharedPointer<b2World> world)
     m_world = world;
 }
 
-void Fixture::setBody(b2Body *body)
+void Fixture::setBody(Box2DItem *body)
 {
-    m_body = body;
+    m_bodyItem = body;
+    m_body = m_bodyItem->body();
+}
+
+Box2DItem *Fixture::body() const
+{
+    return m_bodyItem;
 }
 
 void Fixture::initialize()
@@ -193,7 +200,7 @@ void Fixture::updateFixture()
 
         fixtureDef.shape = shape;
         m_fixture = m_body->CreateFixture(&fixtureDef);
-        m_fixture->SetUserData(parentItem());
+        m_fixture->SetUserData(this);
         return;
     }
 

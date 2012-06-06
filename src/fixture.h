@@ -44,6 +44,7 @@ class Fixture : public QuasiDeclarativeItem
 #else
     Q_PROPERTY(QDeclarativeItem *shape READ shapeItem WRITE setShapeItem NOTIFY shapeChanged)
 #endif
+    Q_PROPERTY(Box2DItem *body READ body)
 
 public:
     Fixture(QuasiDeclarativeItem *parent = 0);
@@ -61,7 +62,10 @@ public:
 #endif
 
     void setWorld(QSharedPointer<b2World> world);
-    void setBody(b2Body *body);
+
+    void setBody(Box2DItem *body);
+    Box2DItem *body() const;
+
     void initialize();
 
 signals:
@@ -89,6 +93,7 @@ protected:
 #endif
     QWeakPointer<b2World> m_world;
     b2Body *m_body;
+    Box2DItem *m_bodyItem;
 };
 
 

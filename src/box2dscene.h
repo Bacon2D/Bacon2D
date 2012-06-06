@@ -25,6 +25,7 @@
 #include "box2dcontactlistener.h"
 #include "box2dcontact.h"
 #include "box2ditem.h"
+#include "fixture.h"
 #include "scene.h"
 
 #include <QtCore/QtGlobal>
@@ -58,15 +59,15 @@ public:
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 #endif
 
-    void onContact(Box2DItem *bodyA, Box2DItem *bodyB, qreal impulse);
-    void onPreContact(Box2DItem *bodyA, Box2DItem *bodyB, Box2DContact *contact);
+    void onContact(Fixture *fixtureA, Fixture *fixtureB, qreal impulse);
+    void onPreContact(Fixture *fixtureA, Fixture *fixtureB, Box2DContact *contact);
 
 protected slots:
     void onDebugChanged();
 
 signals:
-    void contact(Box2DItem *bodyA, Box2DItem *bodyB, qreal impulse);
-    void preContact(Box2DItem *bodyA, Box2DItem *bodyB, Box2DContact *contact);
+    void contact(Fixture *fixtureA, Fixture *fixtureB, qreal impulse);
+    void preContact(Fixture *fixtureA, Fixture *fixtureB, Box2DContact *contact);
 
 private:
     QSharedPointer<b2World> m_world;
