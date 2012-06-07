@@ -43,6 +43,7 @@
 #include "colorfill.h"
 #include "triangle.h"
 #include "polygon.h"
+#include "polyline.h"
 #include "circle.h"
 #include "line.h"
 #include "fixture.h"
@@ -77,6 +78,7 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<ColorFill>("QuasiGame", 1, 0, "QuasiColorFill");
     qmlRegisterType<Triangle>("QuasiGame", 1, 0, "QuasiTriangle");
     qmlRegisterType<Polygon>("QuasiGame", 1, 0, "QuasiPolygon");
+    qmlRegisterType<Polyline>("QuasiGame", 1, 0, "QuasiPolyline");
     qmlRegisterType<Circle>("QuasiGame", 1, 0, "QuasiCircle");
     qmlRegisterType<Line>("QuasiGame", 1, 0, "QuasiLine");
     qmlRegisterType<Material>("QuasiGame", 1, 0, "QuasiMaterial");

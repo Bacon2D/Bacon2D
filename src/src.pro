@@ -52,6 +52,7 @@ HEADERS += quasideclarativeitem.h \
            rectangle.h \
            triangle.h \
            polygon.h \
+           polyline.h \
            circle.h \
            line.h \
            fixture.h \
@@ -89,6 +90,7 @@ SOURCES += entity.cpp \
            circle.cpp \
            triangle.cpp \
            polygon.cpp \
+           polyline.cpp \
            fixture.cpp \
            material.cpp
 
