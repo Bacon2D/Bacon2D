@@ -88,6 +88,7 @@ SOURCES += entity.cpp \
            rectangle.cpp \
            circle.cpp \
            triangle.cpp \
+           polygon.cpp \
            fixture.cpp \
            material.cpp
 

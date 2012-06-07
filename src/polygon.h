@@ -31,48 +31,22 @@ class Polygon : public Shape
     Q_PROPERTY(QVariantList points READ points WRITE setPoints NOTIFY pointsChanged)
 
 public:
-    Polygon(QuasiDeclarativeItem *parent = 0)
-        : Shape(parent)
-        {}
+    Polygon(QuasiDeclarativeItem *parent = 0);
 
     QVariantList points() const { return m_points; }
-    void setPoints(const QVariantList &points) {
-        if (points.size() < 3 || m_points == points)
-            return;
-        m_points = points;
+    void setPoints(const QVariantList &points);
 
-        if (m_fill && m_fill->initialized())
-            updateShape(m_fill->pen()->widthF());
+    virtual void drawShape(QPainter *painter);
 
-        emit pointsChanged();
-    }
-
-    void drawShape(QPainter *painter) {
-        painter->drawPolygon(m_polygon);
-    }
-
-    void initialize() {
-        if (!m_fill)
-            return;
-        m_fill->initialize();
-        if (m_points.size() > 2)
-            updateShape(m_fill->pen()->widthF());
-    }
+    void initialize();
 
 signals:
     void pointsChanged();
 
-private:
-    void updateShape(qreal penWidth) {
-        m_polygon.clear();
-        for (int i = 0; i < m_points.count(); i++) {
-            QPointF point = m_points.at(i).toPointF();
+protected:
+    virtual void updateShape(qreal penWidth);
 
-            m_polygon.append(point);
-        }
-    }
-
-private:
+protected:
     QVariantList m_points;
     QPolygonF m_polygon;
 };
