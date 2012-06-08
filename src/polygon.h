@@ -36,17 +36,16 @@ public:
     QVariantList points() const { return m_points; }
     void setPoints(const QVariantList &points);
 
-    virtual void drawShape(QPainter *painter);
+    void drawShape(QPainter *painter);
 
     void initialize();
+
+    void updateShape(qreal penWidth);
 
 signals:
     void pointsChanged();
 
-protected:
-    virtual void updateShape(qreal penWidth);
-
-protected:
+private:
     QVariantList m_points;
     QPolygonF m_polygon;
 };

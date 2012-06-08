@@ -38,6 +38,9 @@ void Circle::setRadius(qreal radius)
     m_radius = radius;
 
     emit radiusChanged();
+
+    if (m_initialized)
+        emit shapeUpdated();
 }
 
 void Circle::drawShape(QPainter *painter)
@@ -53,16 +56,10 @@ void Circle::drawShape(QPainter *painter)
 void Circle::initialize()
 {
     Shape::initialize();
+    if (!m_fill || !m_fill->initialized())
+        return;
 
-    m_shape = new b2CircleShape;
-    b2CircleShape *circleShape = static_cast<b2CircleShape*>(m_shape);
-
-    qreal diameter = getDiameter();
-    QPointF newPos(x() - parentItem()->width() / 2.0 + diameter / 2.0,
-                   y() - parentItem()->height() / 2.0 + diameter / 2.0);
-
-    circleShape->m_radius = diameter / 2.0 / Box2DBaseItem::m_scaleRatio;
-    circleShape->m_p = b2Util::b2Vec(newPos, Box2DBaseItem::m_scaleRatio);
+    updateShape(m_fill->pen()->widthF());
 }
 
 qreal Circle::getDiameter() const
@@ -75,4 +72,24 @@ qreal Circle::getDiameter() const
         diameter = width() > height() ? height() : width();
 
     return diameter;
+}
+
+void Circle::updateShape(qreal penWidth)
+{
+    //FIXME: Use penWidth to calculate the new points.
+    // When using big penWidth values, the shape will overflow
+    // it's own boundingRect and we have to fix it somehow.
+    Q_UNUSED(penWidth);
+
+    if (!m_shape)
+        m_shape = new b2CircleShape;
+
+    b2CircleShape *circleShape = static_cast<b2CircleShape*>(m_shape);
+
+    qreal diameter = getDiameter();
+    QPointF shapePos(x() - parentItem()->width() / 2.0 + diameter / 2.0,
+                     y() - parentItem()->height() / 2.0 + diameter / 2.0);
+
+    circleShape->m_radius = diameter / 2.0 / Box2DBaseItem::m_scaleRatio;
+    circleShape->m_p = b2Util::b2Vec(shapePos, Box2DBaseItem::m_scaleRatio);
 }

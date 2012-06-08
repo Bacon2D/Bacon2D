@@ -38,19 +38,33 @@ void Rectangle::initialize()
 {
     Shape::initialize();
 
-    m_rect = boundingRect();
-    m_shape = new b2PolygonShape;
+    if (!m_fill || !m_fill->initialized())
+        return;
 
-    QPointF newPos(x() - parentItem()->width() / 2.0,
-                   y() - parentItem()->height() / 2.0);
+    m_rect = boundingRect();
+
+    updateShape(m_fill->pen()->widthF());
+}
+
+void Rectangle::updateShape(qreal penWidth)
+{
+    //FIXME: Use penWidth to calculate the new points.
+    // When using big penWidth values, the shape will overflow
+    // it's own boundingRect and we have to fix it somehow.
+    Q_UNUSED(penWidth);
+
+    if (!m_shape)
+        m_shape = new b2PolygonShape;
+
+    QPointF basePos(x() - parentItem()->width() / 2.0,
+                    y() - parentItem()->height() / 2.0);
 
     b2Vec2 rect[4];
-    rect[0] = b2Util::b2Vec(QPointF(newPos.x(), newPos.y() + height()), Box2DBaseItem::m_scaleRatio);
-    rect[1] = b2Util::b2Vec(QPointF(newPos.x() + width(), newPos.y() + height()), Box2DBaseItem::m_scaleRatio);
-    rect[2] = b2Util::b2Vec(QPointF(newPos.x() + width(), newPos.y()), Box2DBaseItem::m_scaleRatio);
-    rect[3] = b2Util::b2Vec(newPos, Box2DBaseItem::m_scaleRatio);
+    rect[0] = b2Util::b2Vec(QPointF(basePos.x(), basePos.y() + height()), Box2DBaseItem::m_scaleRatio);
+    rect[1] = b2Util::b2Vec(QPointF(basePos.x() + width(), basePos.y() + height()), Box2DBaseItem::m_scaleRatio);
+    rect[2] = b2Util::b2Vec(QPointF(basePos.x() + width(), basePos.y()), Box2DBaseItem::m_scaleRatio);
+    rect[3] = b2Util::b2Vec(basePos, Box2DBaseItem::m_scaleRatio);
 
     b2PolygonShape *polygonShape = static_cast<b2PolygonShape*>(m_shape);
     polygonShape->Set(rect, 4);
 }
-

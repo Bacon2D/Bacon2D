@@ -35,10 +35,10 @@ void Triangle::setPoints(QVariantList &points)
         return;
     m_points = points;
 
-    if (m_fill && m_fill->initialized())
-        updateShape(m_fill->pen()->widthF());
-
     emit pointsChanged();
+
+    if (m_initialized)
+        emit shapeUpdated();
 }
 
 void Triangle::drawShape(QPainter *painter)
@@ -49,7 +49,7 @@ void Triangle::drawShape(QPainter *painter)
 void Triangle::initialize()
 {
     Shape::initialize();
-    if (!m_fill)
+    if (!m_fill || !m_fill->initialized())
         return;
 
     if (m_points.size() == 3)
@@ -58,6 +58,11 @@ void Triangle::initialize()
 
 void Triangle::updateShape(qreal penWidth)
 {
+    //FIXME: Use penWidth to calculate the new points.
+    // When using big penWidth values, the shape will overflow
+    // it's own boundingRect and we have to fix it somehow.
+    Q_UNUSED(penWidth);
+
     b2Vec2 triangle[3];
     qreal xOffset = x() - parentItem()->width() / 2.0;
     qreal yOffset = y() - parentItem()->height() / 2.0;
@@ -77,7 +82,4 @@ void Triangle::updateShape(qreal penWidth)
     m_shape = new b2PolygonShape;
     b2PolygonShape *polygonShape = static_cast<b2PolygonShape*>(m_shape);
     polygonShape->Set(triangle, 3);
-
-    if (m_initialized)
-        emit box2DShapeUpdated();
 }

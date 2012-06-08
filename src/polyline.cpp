@@ -25,9 +25,21 @@
 #include "box2dbaseitem.h"
 
 Polyline::Polyline(QuasiDeclarativeItem *parent)
-    : Polygon(parent)
+    : Shape(parent)
     , m_loop(false)
 {
+}
+
+void Polyline::setPoints(const QVariantList &points)
+{
+    if (points.size() < 3 || m_points == points)
+        return;
+    m_points = points;
+
+    emit pointsChanged();
+
+    if (m_initialized)
+        emit shapeUpdated();
 }
 
 void Polyline::drawShape(QPainter *painter)
@@ -35,8 +47,14 @@ void Polyline::drawShape(QPainter *painter)
     painter->drawPolyline(m_polygon);
 }
 
-void Polyline::updateShape(qreal penWidth) {
-    b2Vec2 polyline[m_points.count() + m_loop ? 1 : 0];
+void Polyline::updateShape(qreal penWidth)
+{
+    //FIXME: Use penWidth to calculate the new points.
+    // When using big penWidth values, the shape will overflow
+    // it's own boundingRect and we have to fix it somehow.
+    Q_UNUSED(penWidth);
+
+    b2Vec2 polyline[m_points.count()];
     qreal xOffset = x() - parentItem()->width() / 2.0;
     qreal yOffset = y() - parentItem()->height() / 2.0;
 
@@ -46,29 +64,22 @@ void Polyline::updateShape(qreal penWidth) {
 
         m_polygon.append(point);
         polyline[i] = b2Util::b2Vec(QPointF(point.x() + xOffset,
-                                           point.y() + yOffset), Box2DBaseItem::m_scaleRatio);
+                                            point.y() + yOffset), Box2DBaseItem::m_scaleRatio);
     }
 
-    int pointCount = m_points.count();
     if (m_loop) {
-        pointCount += 1;
-        polyline[m_points.count()] = polyline[0];
-        m_polygon.append(m_polygon.at(0));
+        QPointF point = m_polygon.at(0);
+        m_polygon.append(point);
     }
 
-    if (m_shape)
-        delete m_shape;
-
-    m_shape = new b2ChainShape;
+    if (!m_shape)
+        m_shape = new b2ChainShape;
     b2ChainShape *chainShape = static_cast<b2ChainShape*>(m_shape);
 
     if (m_loop)
-        chainShape->CreateLoop(polyline, pointCount);
+        chainShape->CreateLoop(polyline, m_points.count());
     else
-        chainShape->CreateChain(polyline, pointCount);
-
-    if (m_initialized)
-        emit box2DShapeUpdated();
+        chainShape->CreateChain(polyline, m_points.count());
 }
 
 void Polyline::setLoop(const bool &loop)
@@ -79,4 +90,15 @@ void Polyline::setLoop(const bool &loop)
     m_loop = loop;
 
     emit loopChanged();
+
+    if (m_initialized && (m_points.count() > 2))
+        emit shapeUpdated();
+}
+
+void Polyline::initialize()
+{
+    Shape::initialize();
+
+    if (m_points.size() > 2)
+        updateShape(penWidth());
 }

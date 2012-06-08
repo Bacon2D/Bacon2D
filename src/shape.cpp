@@ -80,3 +80,12 @@ void Shape::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 
     drawShape(painter);
 }
+
+void Shape::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+{
+    Q_UNUSED(newGeometry);
+    Q_UNUSED(oldGeometry);
+
+    if (m_initialized)
+        emit shapeUpdated();
+}

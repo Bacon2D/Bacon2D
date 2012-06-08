@@ -17,8 +17,8 @@ void Line::setP1(const QPointF &p1)
 
     emit p1Changed();
 
-    if (m_initialized && m_fill)
-        updateShape(m_fill->pen()->widthF());
+    if (m_initialized)
+        emit shapeUpdated();
 }
 
 void Line::setP2(const QPointF &p2)
@@ -30,8 +30,8 @@ void Line::setP2(const QPointF &p2)
 
     emit p2Changed();
 
-    if (m_initialized && m_fill)
-        updateShape(m_fill->pen()->widthF());
+    if (m_initialized)
+        emit shapeUpdated();
 }
 
 void Line::drawShape(QPainter *painter)
@@ -42,7 +42,7 @@ void Line::drawShape(QPainter *painter)
 void Line::initialize()
 {
     Shape::initialize();
-    if (!m_fill)
+    if (!m_fill || !m_fill->initialized())
         return;
 
     updateShape(m_fill->pen()->widthF());
@@ -50,6 +50,11 @@ void Line::initialize()
 
 void Line::updateShape(qreal penWidth)
 {
+    //FIXME: Use penWidth to calculate the new points.
+    // When using big penWidth values, the shape will overflow
+    // it's own boundingRect and we have to fix it somehow.
+    Q_UNUSED(penWidth);
+
     qreal xOffset = x() - parentItem()->width() / 2.0;
     qreal yOffset = y() - parentItem()->height() / 2.0;
 
@@ -61,7 +66,4 @@ void Line::updateShape(qreal penWidth)
                                          m_p1.y() + yOffset), Box2DBaseItem::m_scaleRatio),
                    b2Util::b2Vec(QPointF(m_p2.x() + xOffset,
                                          m_p2.y() + yOffset), Box2DBaseItem::m_scaleRatio));
-
-    if (m_initialized)
-        emit box2DShapeUpdated();
 }

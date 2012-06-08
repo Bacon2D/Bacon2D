@@ -52,9 +52,14 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 #endif
 
+    virtual void updateShape(qreal penWidth) = 0;
+
+protected:
+    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
+
 signals:
     void fillChanged();
-    void box2DShapeUpdated();
+    void shapeUpdated();
 
 protected:
     b2Shape *m_shape;

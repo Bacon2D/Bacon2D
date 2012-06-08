@@ -119,8 +119,8 @@ void Fixture::setShapeItem(QDeclarativeItem *shapeItem)
 
     m_shapeItem = shapeItem;
 
-    connect(m_shapeItem, SIGNAL(box2DShapeUpdated()),
-            this, SLOT(onBox2DShapeUpdated()));
+    connect(m_shapeItem, SIGNAL(shapeUpdated()),
+            this, SLOT(onShapeUpdated()));
 
     emit shapeChanged();
 }
@@ -228,7 +228,21 @@ void Fixture::componentComplete()
     initialize();
 }
 
-void Fixture::onBox2DShapeUpdated()
+void Fixture::onShapeUpdated()
 {
+    updateShape();
     updateFixture();
+}
+
+void Fixture::updateShape() {
+    if (!m_shapeItem)
+        return;
+
+    if (Shape *shape = dynamic_cast<Shape *>(m_shapeItem)) {
+        Fill *fill = shape->fill();
+        if (!fill || !fill->initialized())
+            return;
+
+        shape->updateShape(fill->pen()->widthF());
+    }
 }

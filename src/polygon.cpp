@@ -14,10 +14,10 @@ void Polygon::setPoints(const QVariantList &points)
         return;
     m_points = points;
 
-    if (m_fill && m_fill->initialized())
-        updateShape(m_fill->pen()->widthF());
-
     emit pointsChanged();
+
+    if (m_initialized)
+        emit shapeUpdated();
 }
 
 void Polygon::drawShape(QPainter *painter)
@@ -28,7 +28,7 @@ void Polygon::drawShape(QPainter *painter)
 void Polygon::initialize()
 {
     Shape::initialize();
-    if (!m_fill)
+    if (!m_fill || !m_fill->initialized())
         return;
 
     if (m_points.size() > 2)
@@ -37,6 +37,11 @@ void Polygon::initialize()
 
 void Polygon::updateShape(qreal penWidth)
 {
+    //FIXME: Use penWidth to calculate the new points.
+    // When using big penWidth values, the shape will overflow
+    // it's own boundingRect and we have to fix it somehow.
+    Q_UNUSED(penWidth);
+
     b2Vec2 polygon[m_points.count()];
     qreal xOffset = x() - parentItem()->width() / 2.0;
     qreal yOffset = y() - parentItem()->height() / 2.0;
@@ -50,13 +55,9 @@ void Polygon::updateShape(qreal penWidth)
                                            point.y() + yOffset), Box2DBaseItem::m_scaleRatio);
     }
 
-    if (m_shape)
-        delete m_shape;
+    if (!m_shape)
+        m_shape = new b2PolygonShape;
 
-    m_shape = new b2PolygonShape;
     b2PolygonShape *polygonShape = static_cast<b2PolygonShape*>(m_shape);
     polygonShape->Set(polygon, m_points.count());
-
-    if (m_initialized)
-        emit box2DShapeUpdated();
 }

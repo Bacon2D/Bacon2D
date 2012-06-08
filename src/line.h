@@ -44,12 +44,11 @@ public:
 
     void initialize();
 
+    void updateShape(qreal penWidth);
+
 signals:
     void p1Changed();
     void p2Changed();
-
-private:
-    void updateShape(qreal penWidth);
 
 private:
     QPointF m_p1;

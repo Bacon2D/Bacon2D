@@ -40,11 +40,10 @@ public:
 
     void initialize();
 
+    void updateShape(qreal penWidth);
+
 signals:
     void pointsChanged();
-
-private:
-    void updateShape(qreal penWidth);
 
 private:
     QVariantList m_points;

@@ -22,30 +22,38 @@
 #ifndef _POLYLINE_H_
 #define _POLYLINE_H_
 
-#include "polygon.h"
+#include "shape.h"
 
-class Polyline : public Polygon
+class Polyline : public Shape
 {
     Q_OBJECT
 
     Q_PROPERTY(bool loop READ loop WRITE setLoop NOTIFY loopChanged)
+    Q_PROPERTY(QVariantList points READ points WRITE setPoints NOTIFY pointsChanged)
 
 public:
     Polyline(QuasiDeclarativeItem *parent = 0);
+
+    QVariantList points() const { return m_points; }
+    void setPoints(const QVariantList &points);
 
     void drawShape(QPainter *painter);
 
     bool loop() const { return m_loop; }
     void setLoop(const bool &loop);
 
-protected:
+    void initialize();
+
     void updateShape(qreal penWidth);
 
 signals:
     void loopChanged();
+    void pointsChanged();
 
 private:
     bool m_loop;
+    QVariantList m_points;
+    QPolygonF m_polygon;
 };
 
 #endif /* _POLYLINE_H_ */

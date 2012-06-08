@@ -35,6 +35,8 @@ public:
 
     void initialize();
 
+    void updateShape(qreal penWidth);
+
 private:
     QRectF m_rect;
 };

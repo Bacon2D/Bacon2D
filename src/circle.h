@@ -40,6 +40,9 @@ public:
 
     void initialize();
 
+protected:
+    void updateShape(qreal penWidth);
+
 signals:
     void radiusChanged();
 
