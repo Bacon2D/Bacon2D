@@ -28,57 +28,32 @@ class Line : public Shape
 {
     Q_OBJECT
 
-    Q_PROPERTY(QVariantList points READ points WRITE setPoints NOTIFY pointsChanged)
+    Q_PROPERTY(QPointF p1 READ p1 WRITE setP1 NOTIFY p1Changed)
+    Q_PROPERTY(QPointF p2 READ p2 WRITE setP2 NOTIFY p2Changed)
 
 public:
-    Line(QuasiDeclarativeItem *parent = 0)
-        : Shape(parent)
-        {}
+    Line(QuasiDeclarativeItem *parent = 0);
 
-    QVariantList points() const { return m_points; }
-    void setPoints(const QVariantList &points) {
-        if (m_points == points
-            && points.size()
-            && (points.size() % 2) == 0)
-            return;
+    QPointF p1() const { return m_p1; }
+    void setP1(const QPointF &p1);
 
-        m_points = points;
+    QPointF p2() const { return m_p2; }
+    void setP2(const QPointF &p2);
 
-        if (m_fill && m_fill->initialized())
-            updateShape(m_fill->pen()->widthF());
+    void drawShape(QPainter *painter);
 
-        emit pointsChanged();
-    }
-
-     void drawShape(QPainter *painter) {
-        painter->drawLines(m_lines);
-    }
-
-    void initialize() {
-        if (!m_fill)
-            return;
-        m_fill->initialize();
-
-        if (m_points.size() && (m_points.size() % 2) == 0)
-            updateShape(m_fill->pen()->widthF());
-    }
+    void initialize();
 
 signals:
-    void pointsChanged();
+    void p1Changed();
+    void p2Changed();
 
 private:
-    void updateShape(qreal penWidth) {
-        m_lines.clear();
-
-        for (int i = 0; i < m_points.count(); i++) {
-            QPointF point = m_points.at(i).toPointF();
-            m_lines.append(point);
-        }
-    }
+    void updateShape(qreal penWidth);
 
 private:
-    QVariantList m_points;
-    QVector<QPointF> m_lines;
+    QPointF m_p1;
+    QPointF m_p2;
 };
 
 #endif /* _LINE_H_ */

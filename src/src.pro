@@ -88,6 +88,7 @@ SOURCES += entity.cpp \
            shape.cpp \
            rectangle.cpp \
            circle.cpp \
+           line.cpp \
            triangle.cpp \
            polygon.cpp \
            polyline.cpp \
