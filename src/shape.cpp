@@ -41,6 +41,7 @@ void Shape::initialize()
 
     if (!m_fill->initialized())
         m_fill->initialize();
+
     m_initialized = true;
 }
 
@@ -88,4 +89,13 @@ void Shape::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry
 
     if (m_initialized)
         emit shapeUpdated();
+}
+
+qreal Shape::penWidth() const
+{
+    qreal penWidth = 0;
+    if (m_fill && m_fill->initialized())
+        penWidth = m_fill->pen()->widthF();
+
+    return penWidth;
 }

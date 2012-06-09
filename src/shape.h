@@ -54,6 +54,8 @@ public:
 
     virtual void updateShape(qreal penWidth) = 0;
 
+    qreal penWidth() const;
+
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
 

@@ -56,10 +56,8 @@ void Circle::drawShape(QPainter *painter)
 void Circle::initialize()
 {
     Shape::initialize();
-    if (!m_fill || !m_fill->initialized())
-        return;
 
-    updateShape(m_fill->pen()->widthF());
+    updateShape(penWidth());
 }
 
 qreal Circle::getDiameter() const

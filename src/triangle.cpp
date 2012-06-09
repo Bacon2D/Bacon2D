@@ -49,11 +49,9 @@ void Triangle::drawShape(QPainter *painter)
 void Triangle::initialize()
 {
     Shape::initialize();
-    if (!m_fill || !m_fill->initialized())
-        return;
 
     if (m_points.size() == 3)
-        updateShape(m_fill->pen()->widthF());
+        updateShape(penWidth());
 }
 
 void Triangle::updateShape(qreal penWidth)

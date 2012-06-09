@@ -42,10 +42,8 @@ void Line::drawShape(QPainter *painter)
 void Line::initialize()
 {
     Shape::initialize();
-    if (!m_fill || !m_fill->initialized())
-        return;
 
-    updateShape(m_fill->pen()->widthF());
+    updateShape(penWidth());
 }
 
 void Line::updateShape(qreal penWidth)

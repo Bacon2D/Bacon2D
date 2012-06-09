@@ -28,11 +28,9 @@ void Polygon::drawShape(QPainter *painter)
 void Polygon::initialize()
 {
     Shape::initialize();
-    if (!m_fill || !m_fill->initialized())
-        return;
 
     if (m_points.size() > 2)
-        updateShape(m_fill->pen()->widthF());
+        updateShape(penWidth());
 }
 
 void Polygon::updateShape(qreal penWidth)

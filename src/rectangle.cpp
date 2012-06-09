@@ -38,12 +38,9 @@ void Rectangle::initialize()
 {
     Shape::initialize();
 
-    if (!m_fill || !m_fill->initialized())
-        return;
-
     m_rect = boundingRect();
 
-    updateShape(m_fill->pen()->widthF());
+    updateShape(penWidth());
 }
 
 void Rectangle::updateShape(qreal penWidth)
