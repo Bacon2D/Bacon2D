@@ -23,20 +23,20 @@
 
 ColorFill::ColorFill(Fill *parent)
     : Fill(parent)
-    , m_brushColor("#FFFFFF")
-    , m_penColor("")
+    , m_brushColor("transparent")
+    , m_penColor("invalid color")
 {
 }
 
 void ColorFill::initialize()
 {
-    m_brush = new QBrush(QColor(m_brushColor), m_brushStyle);
-    m_pen = new QPen(*m_brush, m_penWidth, m_penStyle, m_penCapStyle, m_penJoinStyle);
+    m_brush = new QBrush(m_brushColor, m_brushStyle);
 
-    if (m_penColor.isValid())
-        m_pen->setColor(QColor(m_penColor));
-    else
-        m_pen->setColor(QColor(m_brushColor));
+    m_pen = new QPen(m_penColor.isValid() ? m_penColor : m_brushColor);
+    m_pen->setWidthF(m_penWidth);
+    m_pen->setStyle(m_penStyle);
+    m_pen->setCapStyle(m_penCapStyle);
+    m_pen->setJoinStyle(m_penJoinStyle);
 
     m_initialized = true;
 }
@@ -56,7 +56,7 @@ void ColorFill::setBrushColor(const QColor &brushColor)
     if (m_brush)
         delete m_brush;
 
-    m_brush = new QBrush(QColor(m_brushColor));
+    m_brush = new QBrush(m_brushColor);
 
     emit brushColorChanged();
 }
@@ -76,15 +76,11 @@ void ColorFill::setPenColor(const QColor &penColor)
     if (m_pen)
         delete m_pen;
 
-    if (m_brush)
-        m_pen = new QPen(*m_brush, m_penWidth, m_penStyle, m_penCapStyle, m_penJoinStyle);
-    else {
-        m_pen = new QPen(QColor(m_penColor));
-        m_pen->setWidthF(m_penWidth);
-        m_pen->setStyle(m_penStyle);
-        m_pen->setCapStyle(m_penCapStyle);
-        m_pen->setJoinStyle(m_penJoinStyle);
-    }
+    m_pen = new QPen(m_penColor);
+    m_pen->setWidthF(m_penWidth);
+    m_pen->setStyle(m_penStyle);
+    m_pen->setCapStyle(m_penCapStyle);
+    m_pen->setJoinStyle(m_penJoinStyle);
 
     emit penColorChanged();
 }
