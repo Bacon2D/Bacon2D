@@ -119,8 +119,10 @@ void Fixture::setShapeItem(QDeclarativeItem *shapeItem)
 
     m_shapeItem = shapeItem;
 
-    connect(m_shapeItem, SIGNAL(shapeUpdated()),
-            this, SLOT(onShapeUpdated()));
+    if (Shape *shape = dynamic_cast<Shape*>(m_shapeItem)) {
+        connect(shape, SIGNAL(shapeUpdated()),
+                this, SLOT(onShapeUpdated()));
+    }
 
     emit shapeChanged();
 }
@@ -215,7 +217,7 @@ void Fixture::updateFixture()
     fixtureDef.shape = &shape;
 
     m_fixture = m_body->CreateFixture(&fixtureDef);
-    m_fixture->SetUserData(parentItem());
+    m_fixture->SetUserData(this);
 }
 
 void Fixture::componentComplete()
