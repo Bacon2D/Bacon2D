@@ -4,7 +4,7 @@ CONFIG += qt plugin
 contains(QT_VERSION, ^5.*) QT += quick
 else: QT += declarative
 
-TARGET = plugins
+TARGET = quasigameplugin
 TARGETPATH = QuasiGame
 
 DESTDIR = $$OUT_PWD/imports/QuasiGame
