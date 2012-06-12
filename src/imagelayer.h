@@ -84,7 +84,7 @@ signals:
 
 protected:
     void drawPixmap();
-    void componentComplete();
+    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
 
     QImage *m_currentImage;
 
@@ -122,6 +122,8 @@ private:
     qreal m_localXPos;
     qreal m_localYPos;
     qreal m_currentHorizontalStep;
+
+    bool m_initialized;
 };
 
 #endif /* _IMAGELAYER_H_ */

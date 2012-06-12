@@ -35,6 +35,7 @@ ImageLayer::ImageLayer(Layer *parent)
     , m_globalXPos(0.0)
     , m_localXPos(0.0)
     , m_localYPos(0.0)
+    , m_initialized(false)
 {
     connect(this, SIGNAL(horizontalDirectionChanged()),
             this, SLOT(onHorizontalDirectionChanged()));
@@ -104,8 +105,7 @@ void ImageLayer::setTileWidth(const int &value)
 
     m_tileWidth = value;
 
-    if (m_tileWidth != 0 && m_tileHeight != 0)
-        emit tilesChanged();
+    emit tilesChanged();
 }
 
 //! Adds a tile on the list
@@ -418,9 +418,14 @@ void ImageLayer::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     painter->drawImage(m_currentHorizontalStep, 0, *m_currentImage);
 }
 
-void ImageLayer::componentComplete()
+void ImageLayer::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
-    Layer::componentComplete();
+    if (newGeometry.isEmpty() || m_initialized)
+        return;
 
     updateTiles();
+
+    m_initialized = true;
+
+    Layer::geometryChanged(newGeometry, oldGeometry);
 }
