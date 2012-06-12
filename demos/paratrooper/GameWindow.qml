@@ -96,8 +96,10 @@ QuasiGame {
 
         anchors.fill: parent
         gravity: Qt.point(0, -0.5)
+        clip: true
 
         Rectangle {
+            id: sky
             anchors.fill: parent
             gradient: Gradient {
                 GradientStop { position: 0.0; color: "lightBlue" }
@@ -159,41 +161,29 @@ QuasiGame {
             }
         }
 
-        QuasiLayers {
+        QuasiImageLayer {
             anchors.fill: parent
-
-            drawType: Quasi.TiledDrawType
+            animated: true
+            source: ":/background_clouds.png"
+            horizontalStep: player.windReversed ? -1 : 1
+            layerType: Quasi.MirroredType
             tileWidth: 90
             tileHeight: 90
+        }
 
-            layers: [
-                QuasiAnimatedLayer {
-                    source: ":/background_clouds.png"
-                    factor: 0.3
-                    order: Quasi.BackgroundLayerOrdering_01
-                    horizontalStep: 1
-                    layerType: Quasi.MirroredType
-                    direction: {
-                        if (player.windReversed)
-                            Quasi.BackwardDirection
-                        else
-                            Quasi.ForwardDirection
-                    }
-                },
-                QuasiAnimatedLayer {
-                    source: ":/foreground_wind.png"
-                    factor: 1.5 * player.windImpulseFactor / player.playerImpulseFactor
-                    order: Quasi.ForegroundLayerOrdering_01
-                    horizontalStep: 1
-                    layerType: Quasi.MirroredType
-                    direction: {
-                        if (player.windReversed)
-                            Quasi.BackwardDirection
-                        else
-                            Quasi.ForwardDirection
-                    }
-                }
-            ]
+        QuasiImageLayer {
+            anchors.fill: parent
+            animated: true
+            source: ":/foreground_wind.png"
+            horizontalStep: {
+                if (player.windReversed)
+                    -5 * (player.windImpulseFactor / player.playerImpulseFactor)
+                else
+                    5 * (player.windImpulseFactor / player.playerImpulseFactor)
+            }
+            layerType: Quasi.MirroredType
+            tileWidth: 90
+            tileHeight: 90
         }
 
         QuasiBody {

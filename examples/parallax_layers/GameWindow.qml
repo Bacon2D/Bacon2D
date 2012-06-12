@@ -22,19 +22,23 @@
 QuasiGame {
     id: game
 
+    focus: true
+    clip: true
     width: 800
     height: 400
 
     currentScene: scene
 
     function toLeft() {
-        shipImage.mirror = true;
-        scene.layerDirection = Quasi.ForwardDirection;
+        scene.scrollFactor -= 0.05;
+        if (scene.scrollFactor <= 0)
+            shipImage.mirror = true;
     }
 
     function toRight() {
-        shipImage.mirror = false;
-        scene.layerDirection = Quasi.BackwardDirection;
+        scene.scrollFactor += 0.05;
+        if (scene.scrollFactor >= 0)
+            shipImage.mirror = false;
     }
 
     QuasiScene {
@@ -43,107 +47,94 @@ QuasiGame {
         width: parent.width
         height: parent.height
 
-        property variant layerDirection: Quasi.BackwardDirection
+        property real scrollFactor: 1
 
         QuasiImageLayer {
+            id: layer1
+            anchors.fill: parent
             animated: true
             source: ":/images/space.png"
-            factor: 0.3
-
-            horizontalStep: 1
+            horizontalStep: -10 * scene.scrollFactor
             layerType: Quasi.MirroredType
-            direction: scene.layerDirection
-
-            // from QuasiLayers
-            drawType: Quasi.TiledDrawType // XXX: There are some problems with Quasi.PLaneDrawType
             tileWidth: 40
             tileHeight: 40
-
-            // TODO: Check if this should be needed
-            anchors.fill: parent
         }
 
         QuasiImageLayer {
+            id: layer2
+            anchors.fill: parent
             animated: true
             source: ":/images/planet.png"
-            factor: 0.5
-
-            horizontalStep: 1
+            horizontalStep: -15 * scene.scrollFactor
             layerType: Quasi.InfiniteType
-            direction: scene.layerDirection
-
-            // from QuasiLayers
-            drawType: Quasi.TiledDrawType // XXX: There are some problems with Quasi.PLaneDrawType
             tileWidth: 40
             tileHeight: 40
-
-            anchors.fill: parent
         }
 
         QuasiEntity {
             id: ship
-
             y: (game.height / 2) - (shipImage.height / 2)
-            x: 25
+            x: (game.width / 2) - (shipImage.width / 2)
 
             Image {
                 id: shipImage
                 source: ":/images/rocketship.png"
             }
 
-            focus: true
-            Keys.onPressed: {
-                switch (event.key) {
-                case Qt.Key_Left:
-                    toLeft();
-                    ship.x -= 5;
-                    break;
-                case Qt.Key_Right:
-                    toRight();
-                    ship.x += 5;
-                    break;
-                case Qt.Key_Down:
-                    ship.y += 5;
-                    break;
-                case Qt.Key_Up:
-                    ship.y -= 5;
-                    break;
-                }
-            }
+            Behavior on y { SmoothedAnimation {}}
         }
 
         QuasiImageLayer {
+            id: layer3
+            anchors.fill: parent
             animated: true
             source: ":/images/stars.png"
-            factor: 1.1
-
-            horizontalStep: 1
+            horizontalStep: -20 * scene.scrollFactor
             layerType: Quasi.InfiniteType
-            direction: scene.layerDirection
-
-            // from QuasiLayers
-            drawType: Quasi.TiledDrawType // XXX: There are some problems with Quasi.PLaneDrawType
             tileWidth: 40
             tileHeight: 40
-
-            anchors.fill: parent
         }
 
         QuasiImageLayer {
+            id: layer4
+            anchors.fill: parent
             animated: true
             source: ":/images/moon.png"
-            factor: 1.2
-
-            horizontalStep: 1
+            horizontalStep: -23 * scene.scrollFactor
             layerType: Quasi.InfiniteType
-            direction: scene.layerDirection
-
-            // from QuasiLayers
-            drawType: Quasi.TiledDrawType // XXX: There are some problems with Quasi.PLaneDrawType
             tileWidth: 40
             tileHeight: 40
+        }
+    }
 
-            anchors.fill: parent
+    Keys.onPressed: {
+        switch (event.key) {
+        case Qt.Key_Left:
+            toLeft();
+            ship.x -= 5;
+            break;
+        case Qt.Key_Right:
+            toRight();
+            ship.x += 5;
+            break;
+        case Qt.Key_Down:
+            ship.y += 5;
+            break;
+        case Qt.Key_Up:
+            ship.y -= 5;
+            break;
+        case Qt.Key_1:
+            layer1.animated = !layer1.animated
+            break;
+        case Qt.Key_2:
+            layer2.animated = !layer2.animated
+            break;
+        case Qt.Key_3:
+            layer3.animated = !layer3.animated
+            break;
+        case Qt.Key_4:
+            layer4.animated = !layer4.animated
+            break;
         }
     }
 }

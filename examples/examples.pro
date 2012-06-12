@@ -1,6 +1,6 @@
 TEMPLATE = subdirs
 
-SUBDIRS += animated_layer \
+SUBDIRS += imagelayer \
            box2dscene \
            gamescene \
            gamewindow \
@@ -8,8 +8,7 @@ SUBDIRS += animated_layer \
            parallax_layers \
            simplecollision \
            sprite \
-           static_layer \
            updateInterval \
            manysprites \
            viewport_parallax \
-	   behaviorchange
+           behaviorchange
