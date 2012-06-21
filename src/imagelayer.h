@@ -98,6 +98,9 @@ protected:
 protected slots:
     void onHorizontalDirectionChanged();
 
+protected:
+    void componentComplete();
+
 private:
     QPixmap generatePartialPixmap(int startPoint, int size);
     void generateOffsets();
