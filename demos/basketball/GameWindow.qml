@@ -213,13 +213,14 @@ QuasiGame {
 
                 shape: QuasiCircle {
                     anchors.fill: parent
-                    Image {
-                        id: ballImage
-                        anchors.fill: parent
-                        source: ":/images/ball.png"
-                        smooth: true
-                    }
                 }
+            }
+
+            Image {
+                id: ballImage
+                anchors.fill: parent
+                source: ":/images/ball.png"
+                smooth: true
             }
 
             x: game.freethrow
