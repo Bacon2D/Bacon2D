@@ -9,7 +9,7 @@ QuasiBody {
         shape: paratrooperImage
         material: QuasiMaterial {
             friction: 0.3
-            density: 2
+            density: 6
             restitution: 0
         }
     }
@@ -35,10 +35,10 @@ QuasiBody {
         var impulse = Qt.point(0, 0)
 
         if (isUpPressed)
-            impulse.y = -height * (playerImpulseFactor / 3)
+            impulse.y = -height * (playerImpulseFactor / 6)
 
         if (isDownPressed && useDownKey)
-            impulse.y = height * (playerImpulseFactor / 3)
+            impulse.y = height * (playerImpulseFactor / 6)
 
         if (isLeftPressed)
             impulse.x = -width * playerImpulseFactor
@@ -75,6 +75,8 @@ QuasiBody {
 
     Image {
         id: paratrooperImage
+        width: sourceSize.width / 2
+        height: sourceSize.height / 2
         source: ":/paratrooper.png"
         smooth: true
         anchors.horizontalCenter: parent.horizontalCenter

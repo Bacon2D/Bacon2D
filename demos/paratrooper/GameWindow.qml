@@ -22,15 +22,13 @@
 QuasiGame {
     id: game
 
-    width: 1350
-    height: 900
+    width: 1024
+    height: 768
 
     currentScene: scene
     focus: true
 
     property int wallHeight: 1
-
-    // game properties
     property bool useDownKey: false
     property int maxLandingImpulse: 50
     property int score: 0
@@ -56,10 +54,6 @@ QuasiGame {
 
     function getScore() {
         var precisionScore = getPrecisionScore()
-
-        // getImpulseScore
-        // getTimeScore
-
         console.log("Precision: " + getPrecisionScore() + "%")
     }
 
@@ -107,62 +101,9 @@ QuasiGame {
             }
         }
 
-        Item {
-            z: 1
-            anchors.left: parent.left
-            anchors.right: parent.right
-
-            Rectangle {
-                id: sunLight1
-                gradient: Gradient {
-                    GradientStop { position: 0.0; color: "yellow" }
-                    GradientStop { position: 1.0; color: "transparent" }
-                }
-
-                opacity: 0.25
-                anchors.centerIn: sun
-                width: 350
-                height: 350
-                radius: width
-            }
-
-            Rectangle {
-                id: sunLight2
-                gradient: Gradient {
-                    GradientStop { position: 0.0; color: "yellow" }
-                    GradientStop { position: 1.0; color: "transparent" }
-                }
-                opacity: 0.2
-                anchors.centerIn: sun
-                width: 600
-                height: 600
-                radius: width
-            }
-
-            Rectangle {
-                id: sunLight3
-                gradient: Gradient {
-                    GradientStop { position: 0.0; color: "yellow" }
-                    GradientStop { position: 1.0; color: "transparent" }
-                }
-                opacity: 0.1
-                anchors.centerIn: sun
-                width: 1000
-                height: 1000
-                radius: width
-            }
-
-            Image {
-                id: sun
-                source: ":/sun.png"
-                anchors.top: parent.top
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.margins: -sun.height / 2
-            }
-        }
-
         QuasiImageLayer {
-            anchors.fill: parent
+            width: 1350
+            height: 900
             animated: true
             source: ":/background_clouds.png"
             horizontalStep: player.windReversed ? -1 : 1
@@ -171,8 +112,17 @@ QuasiGame {
             tileHeight: 90
         }
 
+        Image {
+            id: sun
+            source: ":/sun.png"
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.margins: -sun.height / 2
+        }
+
         QuasiImageLayer {
-            anchors.fill: parent
+            width: 1350
+            height: 900
             animated: true
             source: ":/foreground_wind.png"
             horizontalStep: {
@@ -227,7 +177,7 @@ QuasiGame {
 
                 material: QuasiMaterial {
                     density: 50
-                    restitution: 0.2
+                    restitution: 0.1
                 }
             }
         }
@@ -250,7 +200,7 @@ QuasiGame {
 
                 material: QuasiMaterial {
                     density: 50
-                    restitution: 0.2
+                    restitution: 0.1
                 }
             }
         }
@@ -276,7 +226,7 @@ QuasiGame {
 
                 material: QuasiMaterial {
                     density: 50
-                    restitution: 0.3
+                    restitution: 0.1
                 }
             }
         }
@@ -291,6 +241,11 @@ QuasiGame {
             anchors.verticalCenter: ground.top
             x: Math.round(Math.random() * (scene.width - landingArea.width))
 
+            Rectangle {
+                color: "lightBlue"
+                anchors.fill: parent
+            }
+
             QuasiFixture {
                 material: QuasiMaterial {
                     density: 100
@@ -298,23 +253,21 @@ QuasiGame {
                     friction: 50
                 }
 
-                shape: Item {
+                shape: Rectangle {
                     width: target.width
                     height: 2
-
-                    Image {
-                        id: target
-                        source: ":/target.png"
-                        anchors.centerIn: parent
-                        smooth: true
-                        transform: Rotation {
-                            angle: 75
-                            origin.x: target.width / 2
-                            origin.y: target.height / 2
-                            axis { x: 1; y: 0; z: 0 }
-                        }
-                    }
+                    color: "black"
+                    z: 10
                 }
+            }
+
+            Image {
+                id: target
+                source: ":/target.png"
+                width: sourceSize.width / 2
+                height: sourceSize.height / 2
+                anchors.centerIn: parent
+                smooth: true
             }
         }
 
