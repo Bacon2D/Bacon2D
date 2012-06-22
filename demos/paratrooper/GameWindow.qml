@@ -35,14 +35,14 @@ QuasiGame {
 
     function win() {
         console.log("You Win")
-        var score = getScore()
     }
 
     function lose() {
         console.log("You Lose")
+        player.explode()
     }
 
-    function getPrecisionScore() {
+    function calcPrecision() {
         var landingAreaCenter = landingArea.x + landingArea.width / 2
         var playerCenter = player.x + player.width / 2
         var distance = Math.abs(landingAreaCenter - playerCenter)
@@ -52,17 +52,14 @@ QuasiGame {
         return Math.round(score)
     }
 
-    function getScore() {
-        var precisionScore = getPrecisionScore()
-        console.log("Precision: " + getPrecisionScore() + "%")
-    }
-
     function done(impulse, body) {
         scene.running = false
 
-        console.log("landing impulse: " + impulse)
+        var precision = calcPrecision()
 
-        if (impulse > maxLandingImpulse || body != landingArea)
+        console.log("landing impulse: " + impulse + " -- precision: " + precision)
+
+        if (impulse > maxLandingImpulse || body != landingArea || precision < 0)
             lose()
         else
             win()
@@ -73,9 +70,7 @@ QuasiGame {
     function reset() {
         console.log("reset game")
 
-        // reset player
-        player.x = width / 2 - player.width / 2
-        player.y = 0
+        player.reset()
 
         // reset target
         landingArea.x = Math.round(Math.random() * (scene.width - landingArea.width))

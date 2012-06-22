@@ -2,8 +2,28 @@ import QtQuick 1.1
 import QuasiGame 1.0
 
 QuasiBody {
+    id: trooperBody
     width: paratrooperImage.width
     height: paratrooperImage.height
+
+    property variant explosionObj: null
+
+    function explode() {
+        paratrooperImage.visible = false
+        explosionObj = explosionComponent.createObject(trooperBody)
+        explosionObj.anchors.horizontalCenter = trooperBody.horizontalCenter
+        explosionObj.anchors.bottom = trooperBody.bottom
+    }
+
+    function reset() {
+        if (explosionObj)
+            explosionObj.destroy()
+
+        paratrooperImage.visible = true
+
+        player.x = parent.width / 2 - player.width / 2
+        player.y = 0
+    }
 
     QuasiFixture {
         shape: paratrooperImage
@@ -82,6 +102,21 @@ QuasiBody {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.bottomMargin: -1
+    }
+
+    Component {
+        id: explosionComponent
+        QuasiSprite {
+            anchors.centerIn: parent
+            animation: "explosion"
+
+            animations: QuasiSpriteAnimation {
+                name: "explosion"
+                source: ":/explosion.png"
+                frames: 5
+                duration: 500
+            }
+        }
     }
 
     Keys.onUpPressed: isUpPressed = true
