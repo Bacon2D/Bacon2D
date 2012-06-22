@@ -30,7 +30,7 @@ QuasiGame {
 
     property int wallHeight: 1
     property bool useDownKey: false
-    property int maxLandingImpulse: 50
+    property int maxLandingImpulse: 35
     property int score: 0
 
     function win() {
@@ -57,13 +57,15 @@ QuasiGame {
         console.log("Precision: " + getPrecisionScore() + "%")
     }
 
-    function done(impulse) {
+    function done(impulse, body) {
         scene.running = false
 
-        if (impulse < maxLandingImpulse)
-            win()
-        else
+        console.log("landing impulse: " + impulse)
+
+        if (impulse > maxLandingImpulse || body != landingArea)
             lose()
+        else
+            win()
 
         resetTimer.running = true
     }
@@ -253,11 +255,9 @@ QuasiGame {
                     friction: 50
                 }
 
-                shape: Rectangle {
+                shape: Item {
                     width: target.width
                     height: 2
-                    color: "black"
-                    z: 10
                 }
             }
 
@@ -279,7 +279,9 @@ QuasiGame {
 
         onContact: {
             if (fixtureA.body == landingArea || fixtureB.body == landingArea)
-                done(impulse)
+                done(impulse, landingArea)
+            else if (fixtureA.body == ground || fixtureB.body == ground)
+                done(impulse, ground)
         }
     }
 
