@@ -23,7 +23,7 @@
 #define _ENTITY_H_
 
 #include "enums.h"
-#include "quasideclarativeitem.h"
+#include "box2dbaseitem.h"
 
 #include <QtCore/QtGlobal>
 #include <QtCore/QTime>
@@ -32,23 +32,27 @@ class Game;
 class Scene;
 class Behavior;
 
-class Entity : public QuasiDeclarativeItem
+class Entity : public Box2DBaseItem
 {
     Q_OBJECT
 
     Q_PROPERTY(int updateInterval READ updateInterval WRITE setUpdateInterval NOTIFY updateIntervalChanged)
-    Q_PROPERTY(bool collided READ collided WRITE setCollided NOTIFY collidedChanged)
     Q_PROPERTY(Game *game READ game)
     Q_PROPERTY(Behavior *behavior READ behavior WRITE setBehavior NOTIFY behaviorChanged)
+    Q_PROPERTY(qreal linearDamping READ linearDamping WRITE setLinearDamping NOTIFY linearDampingChanged)
+    Q_PROPERTY(qreal angularDamping READ angularDamping WRITE setAngularDamping NOTIFY angularDampingChanged)
+    Q_PROPERTY(Quasi::BodyType bodyType READ bodyType WRITE setBodyType NOTIFY bodyTypeChanged)
+    Q_PROPERTY(bool bullet READ bullet WRITE setBullet NOTIFY bulletChanged)
+    Q_PROPERTY(bool sleepingAllowed READ sleepingAllowed WRITE setSleepingAllowed NOTIFY sleepingAllowedChanged)
+    Q_PROPERTY(bool fixedRotation READ fixedRotation WRITE setFixedRotation NOTIFY fixedRotationChanged)
+    Q_PROPERTY(bool active READ active WRITE setActive)
 
 public:
     Entity(Scene *parent = 0);
+    ~Entity();
 
     int updateInterval() const;
     void setUpdateInterval(const int &updateInterval);
-
-    bool collided() const;
-    void setCollided(const bool &collided);
 
     Scene *scene() const;
     void setScene(Scene *scene);
@@ -60,17 +64,80 @@ public:
 
     virtual void update(const int &delta);
 
+    b2Body *body() const;
+
+    qreal linearDamping() const;
+    void setLinearDamping(const qreal &linearDamping);
+
+    qreal angularDamping() const;
+    void setAngularDamping(const qreal &angularDamping);
+
+    Quasi::BodyType bodyType() const;
+    void setBodyType(const Quasi::BodyType &bodyType);
+
+    bool bullet() const;
+    void setBullet(const bool &bullet);
+
+    bool sleepingAllowed() const;
+    void setSleepingAllowed(const bool &allowed);
+
+    bool fixedRotation() const;
+    void setFixedRotation(const bool &fixedRotation);
+
+    bool active() const;
+    void setActive(const bool &active);
+
+    void initialize();
+
+    b2Vec2 b2TransformOrigin() const;
+
+    float b2Angle() const;
+
+    Q_INVOKABLE void applyTorque(const float &torque);
+    Q_INVOKABLE void applyLinearImpulse(const QPointF &impulse, const QPointF &point);
+    Q_INVOKABLE void setLinearVelocity(const QPointF &velocity);
+    Q_INVOKABLE void setAngularVelocity(const float &velocity);
+
+protected:
+    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
+#if QT_VERSION >= 0x050000
+    virtual void itemChange(ItemChange change, const ItemChangeData &data);
+#else
+    virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+#endif
+    void componentComplete();
+
 signals:
     void updateIntervalChanged();
-    void collidedChanged();
     void behaviorChanged();
+    void activeChanged();
+    void linearDampingChanged();
+    void angularDampingChanged();
+    void bodyTypeChanged();
+    void bulletChanged();
+    void sleepingAllowedChanged();
+    void fixedRotationChanged();
+    void linearVelocityChanged();
+
+private slots:
+    void onRotationChanged();
+
+private:
+    void initializeFixtures();
 
 private:
     int m_updateInterval;
     QTime m_updateTime;
-    bool m_collided;
     Scene *m_scene;
     Behavior *m_behavior;
+    b2Body *m_body;
+    qreal m_linearDamping;
+    qreal m_angularDamping;
+    Quasi::BodyType m_bodyType;
+    bool m_bullet;
+    bool m_sleepingAllowed;
+    bool m_fixedRotation;
+    bool m_active;
 };
 
 #endif /* _ENTITY_H_ */

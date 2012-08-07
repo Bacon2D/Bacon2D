@@ -22,11 +22,13 @@
 #ifndef _BOX2DBASEITEM_H_
 #define _BOX2DBASEITEM_H_
 
-#include "entity.h"
+#include "quasideclarativeitem.h"
 
 #include <Box2D/Box2D.h>
 
-class Box2DBaseItem : public Entity
+class Scene;
+
+class Box2DBaseItem : public QuasiDeclarativeItem
 {
     Q_OBJECT
 
@@ -44,8 +46,6 @@ public:
     void synchronize();
 
 protected:
-    void componentComplete();
-
     virtual b2Vec2 b2TransformOrigin() const = 0;
     virtual float b2Angle() const = 0;
 

@@ -21,8 +21,8 @@
 
 #include "box2dmousejointitem.h"
 
-#include "box2ditem.h"
 #include "box2dscene.h"
+#include "entity.h"
 #include "game.h"
 
 #include <Box2D/Box2D.h>
@@ -53,12 +53,12 @@ Box2DMouseJointItem::~Box2DMouseJointItem()
     m_joint = 0;
 }
 
-Box2DItem *Box2DMouseJointItem::target() const
+Entity *Box2DMouseJointItem::target() const
 {
     return m_target;
 }
 
-void Box2DMouseJointItem::setTarget(Box2DItem *target)
+void Box2DMouseJointItem::setTarget(Entity *target)
 {
     if (m_target != target) {
         m_target = target;
@@ -111,17 +111,6 @@ void Box2DMouseJointItem::initialize()
     m_initialized = true;
 }
 
-void Box2DMouseJointItem::update(const int &delta)
-{
-    if (!m_joint)
-        return;
-
-    Entity::update(delta);
-
-    QPointF mousePos = game()->mouse();
-    m_joint->SetTarget(b2Vec2(mousePos.x() / m_scaleRatio, -mousePos.y() / m_scaleRatio));
-}
-
 bool Box2DMouseJointItem::collideConnected() const
 {
     return m_collideConnected;
@@ -145,3 +134,5 @@ float Box2DMouseJointItem::b2Angle() const
 {
     return 0.0f;
 }
+
+//TODO: UPDATE MOUSE POS!

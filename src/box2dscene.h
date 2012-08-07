@@ -24,7 +24,6 @@
 
 #include "box2dcontactlistener.h"
 #include "box2dcontact.h"
-#include "box2ditem.h"
 #include "fixture.h"
 #include "scene.h"
 

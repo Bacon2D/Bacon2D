@@ -19,8 +19,6 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-
-#include "box2ditem.h"
 #include "box2dscene.h"
 #include "box2dcontact.h"
 #include "box2dcontactlistener.h"

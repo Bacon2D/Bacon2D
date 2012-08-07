@@ -21,42 +21,40 @@
 
 #include "box2djointitem.h"
 
-#include "box2ditem.h"
-
 Box2DJointItem::Box2DJointItem(Scene *parent)
     : Box2DBaseItem(parent)
-    , m_box2ditemA(0)
-    , m_box2ditemB(0)
+    , m_bodyA(0)
+    , m_bodyB(0)
     , m_collideConnected(true)
     , m_joint(0)
 {
 }
 
-Box2DItem *Box2DJointItem::box2ditemA() const
+Entity *Box2DJointItem::bodyA() const
 {
-    return m_box2ditemA;
+    return m_bodyA;
 }
 
-void Box2DJointItem::setBox2ditemA(Box2DItem *box2ditemA)
+void Box2DJointItem::setBodyA(Entity *bodyA)
 {
-    if (m_box2ditemA != box2ditemA) {
-        m_box2ditemA = box2ditemA;
+    if (m_bodyA != bodyA) {
+        m_bodyA = bodyA;
 
-        emit box2ditemAChanged();
+        emit bodyAChanged();
     }
 }
 
-Box2DItem *Box2DJointItem::box2ditemB() const
+Entity *Box2DJointItem::bodyB() const
 {
-    return m_box2ditemB;
+    return m_bodyB;
 }
 
-void Box2DJointItem::setBox2ditemB(Box2DItem *box2ditemB)
+void Box2DJointItem::setBodyB(Entity *bodyB)
 {
-    if (m_box2ditemB != box2ditemB) {
-        m_box2ditemB = box2ditemB;
+    if (m_bodyB != bodyB) {
+        m_bodyB = bodyB;
 
-        emit box2ditemBChanged();
+        emit bodyBChanged();
     }
 }
 

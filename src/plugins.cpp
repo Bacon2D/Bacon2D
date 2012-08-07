@@ -22,7 +22,6 @@
 #include "plugins.h"
 
 #include "box2ddistancejointitem.h"
-#include "box2ditem.h"
 #include "box2dscene.h"
 #include "box2dmousejointitem.h"
 #include "box2dcontact.h"
@@ -64,7 +63,6 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<Sprite>("QuasiGame", 1, 0, "QuasiSprite");
     qmlRegisterType<SpriteAnimation>("QuasiGame", 1, 0, "QuasiSpriteAnimation");
     qmlRegisterType<Box2DScene>("QuasiGame", 1, 0, "QuasiPhysicsScene");
-    qmlRegisterType<Box2DItem>("QuasiGame", 1, 0, "QuasiBody");
     qmlRegisterType<Box2DDistanceJointItem>("QuasiGame", 1, 0, "QuasiDistanceJoint");
     qmlRegisterType<Box2DMouseJointItem>("QuasiGame", 1, 0, "QuasiMouseJoint");
     qmlRegisterType<ImageLayer>("QuasiGame", 1, 0, "QuasiImageLayer");

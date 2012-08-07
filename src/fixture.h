@@ -28,7 +28,7 @@
 #include <QtCore/QSharedPointer>
 
 class Material;
-class Box2DItem;
+class Entity;
 class b2FixtureDef;
 class b2Fixture;
 class b2World;
@@ -44,7 +44,7 @@ class Fixture : public QuasiDeclarativeItem
 #else
     Q_PROPERTY(QDeclarativeItem *shape READ shapeItem WRITE setShapeItem NOTIFY shapeChanged)
 #endif
-    Q_PROPERTY(Box2DItem *body READ body)
+    Q_PROPERTY(Entity *body READ body)
 
 public:
     Fixture(QuasiDeclarativeItem *parent = 0);
@@ -63,8 +63,8 @@ public:
 
     void setWorld(QSharedPointer<b2World> world);
 
-    void setBody(Box2DItem *body);
-    Box2DItem *body() const;
+    void setBody(Entity *body);
+    Entity *body() const;
 
     void initialize();
 
@@ -94,8 +94,7 @@ protected:
 #endif
     QWeakPointer<b2World> m_world;
     b2Body *m_body;
-    Box2DItem *m_bodyItem;
+    Entity *m_bodyItem;
 };
-
 
 #endif /* _FIXTURE_H_ */

@@ -21,7 +21,6 @@
 
 #include "box2ddistancejointitem.h"
 
-#include "box2ditem.h"
 #include "util.h"
 
 #include <Box2D/Box2D.h>
@@ -41,22 +40,22 @@ Box2DDistanceJointItem::~Box2DDistanceJointItem()
 
 void Box2DDistanceJointItem::initialize()
 {
-    if (m_initialized || !m_box2ditemA || !m_box2ditemB || !m_world)
+    if (m_initialized || !m_bodyA || !m_bodyB || !m_world)
         return;
 
-    if (!m_box2ditemA->initialized())
-        m_box2ditemA->initialize();
-    if (!m_box2ditemB->initialized())
-        m_box2ditemB->initialize();
+    if (!m_bodyA->initialized())
+        m_bodyA->initialize();
+    if (!m_bodyB->initialized())
+        m_bodyB->initialize();
 
     b2DistanceJointDef jointDef;
 
     jointDef.collideConnected = m_collideConnected;
 
-    jointDef.Initialize(m_box2ditemA->body(),
-                        m_box2ditemB->body(),
-                        m_box2ditemA->body()->GetWorldCenter(),
-                        m_box2ditemB->body()->GetWorldCenter());
+    jointDef.Initialize(m_bodyA->body(),
+                        m_bodyB->body(),
+                        m_bodyA->body()->GetWorldCenter(),
+                        m_bodyB->body()->GetWorldCenter());
 
 
     m_joint = static_cast<b2DistanceJoint *>(m_worldPtr->CreateJoint(&jointDef));

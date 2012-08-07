@@ -21,7 +21,7 @@
 
 #include "fixture.h"
 #include "material.h"
-#include "box2ditem.h"
+#include "entity.h"
 #include "shape.h"
 
 #include <Box2D/Box2D.h>
@@ -44,7 +44,7 @@ void Fixture::onParentChanged()
         return;
 
     // NOTE: Probably we need to check if there is a
-    // better place to set container Box2DItem to be
+    // better place to set container Entity to be
     // parent of Shape.
     m_shapeItem->setParent(parentItem());
     m_shapeItem->setParentItem(parentItem());
@@ -159,13 +159,13 @@ void Fixture::setWorld(QSharedPointer<b2World> world)
     m_world = world;
 }
 
-void Fixture::setBody(Box2DItem *body)
+void Fixture::setBody(Entity *body)
 {
     m_bodyItem = body;
     m_body = m_bodyItem->body();
 }
 
-Box2DItem *Fixture::body() const
+Entity *Fixture::body() const
 {
     return m_bodyItem;
 }
