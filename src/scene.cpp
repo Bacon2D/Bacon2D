@@ -23,6 +23,10 @@
 
 #include "game.h"
 #include "layer.h"
+#include "box2dcontactlistener.h"
+#include "box2dcontact.h"
+#include "box2ddebugdrawitem.h"
+#include "viewport.h"
 
 #include <QtCore/QtGlobal>
 
@@ -32,14 +36,38 @@
 #include <QtDeclarative/QDeclarativeEngine>
 #endif
 
+#include <Box2D/Box2D.h>
+
+static void deleteWorld(b2World *world)
+{
+    delete world;
+}
+
 Scene::Scene(Game *parent)
     : QuasiDeclarativeItem(parent)
     , m_running(true)
     , m_viewport(0)
     , m_game(0)
     , m_debug(false)
+    , m_world(0)
+    , m_gravity(qreal(0), qreal(-10))
+    , m_debugDraw(0)
 {
     setVisible(false);
+
+    const b2Vec2 gravity(m_gravity.x(), m_gravity.y());
+
+    m_world = QSharedPointer<b2World>(new b2World(gravity), deleteWorld);
+
+    ContactListener *contactListener = new ContactListener(this);
+    m_world->SetContactListener(contactListener);
+
+    connect(this, SIGNAL(debugChanged()), SLOT(onDebugChanged()));
+}
+
+Scene::~Scene()
+{
+    m_world.clear();
 }
 
 void Scene::update(const int &delta)
@@ -57,7 +85,16 @@ void Scene::update(const int &delta)
             entity->update(delta);
         else if (Layer *layer = qobject_cast<Layer *>(item))
             layer->update();
+
+        if (Box2DBaseItem *box2DItem = dynamic_cast<Box2DBaseItem *>(item))
+            box2DItem->synchronize();
     }
+
+    // TODO crete properties for this arguments
+    // TODO: check if scene is simulating physics
+    m_world->Step(1.0f / 60.0f, 10, 10);
+    if (m_debugDraw)
+        m_debugDraw->step();
 }
 
 bool Scene::running() const
@@ -127,6 +164,16 @@ void Scene::componentComplete()
     foreach (item, childItems()) {
         if (Entity *entity = dynamic_cast<Entity *>(item))
             entity->setScene(this);
+
+        if (Box2DBaseItem *box2DItem = dynamic_cast<Box2DBaseItem *>(item)) {
+            box2DItem->setWorld(m_world);
+            box2DItem->initialize();
+        }
+    }
+
+    if (m_debugDraw) {
+        m_debugDraw->setWidth(width());
+        m_debugDraw->setHeight(height());
     }
 }
 
@@ -144,6 +191,11 @@ QVariant Scene::itemChange(GraphicsItemChange change, const QVariant &value)
 #endif
         if (Entity *entity = dynamic_cast<Entity *>(child))
             entity->setScene(this);
+
+        if (Box2DBaseItem *box2DBaseItem = dynamic_cast<Box2DBaseItem *>(child)) {
+            box2DBaseItem->setWorld(m_world);
+            box2DBaseItem->initialize();
+        }
     }
 
 #if QT_VERSION >= 0x050000
@@ -151,4 +203,50 @@ QVariant Scene::itemChange(GraphicsItemChange change, const QVariant &value)
 #else
     return QuasiDeclarativeItem::itemChange(change, value);
 #endif
+}
+
+b2World *Scene::world() const
+{
+    return m_world.data();
+}
+
+void Scene::setGravity(const QPointF &gravity)
+{
+    m_gravity = gravity;
+
+    m_world->SetGravity(b2Vec2(gravity.x(), gravity.y()));
+}
+
+QPointF Scene::gravity() const
+{
+    return m_gravity;
+}
+
+
+void Scene::onDebugChanged()
+{
+    if (m_debugDraw)
+        delete m_debugDraw;
+
+    m_debugDraw = new Box2DDebugDrawItem(this);
+    m_debugDraw->setOpacity(0.7);
+
+    if (m_viewport) {
+        m_debugDraw->setWidth(m_viewport->width());
+        m_debugDraw->setHeight(m_viewport->height());
+    } else {
+        m_debugDraw->setWidth(width());
+        m_debugDraw->setHeight(height());
+    }
+}
+
+void Scene::onContact(Fixture *fixtureA, Fixture *fixtureB, qreal impulse)
+{
+    emit contact(fixtureA, fixtureB, impulse);
+}
+
+void Scene::onPreContact(Fixture *fixtureA, Fixture *fixtureB, Box2DContact *contact)
+{
+    emit preContact(fixtureA, fixtureB, contact);
+    delete contact;
 }

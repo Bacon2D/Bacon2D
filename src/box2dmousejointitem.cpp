@@ -21,7 +21,6 @@
 
 #include "box2dmousejointitem.h"
 
-#include "box2dscene.h"
 #include "entity.h"
 #include "game.h"
 

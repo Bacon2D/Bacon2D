@@ -29,14 +29,14 @@
 #include <QtCore/QtGlobal>
 
 class QPainter;
-class Box2DScene;
+class Scene;
 
 class Box2DDebugDrawItem : public QuasiPaintedItem, public b2Draw
 {
     Q_OBJECT
 
 public:
-    Box2DDebugDrawItem(Box2DScene *parent = 0);
+    Box2DDebugDrawItem(Scene *parent = 0);
 
 #if QT_VERSION >= 0x050000
     void paint(QPainter *painter);
@@ -58,7 +58,7 @@ private:
 
 private:
     QPainter *m_painter;
-    Box2DScene *m_scene;
+    Scene *m_scene;
 };
 
 #endif /* _BOX2DDEBUGDRAWITEM_H_ */

@@ -28,7 +28,6 @@ HEADERS += quasideclarativeitem.h \
            spriteanimation.h \
            animationtransition.h \
            animationchangeevent.h \
-           box2dscene.h \
            box2djointitem.h \
            box2dbaseitem.h \
            box2ddistancejointitem.h \
@@ -63,7 +62,6 @@ SOURCES += entity.cpp \
            sprite.cpp \
            spriteanimation.cpp \
            animationtransition.cpp \
-           box2dscene.cpp \
            box2djointitem.cpp \
            box2dbaseitem.cpp \
            box2ddistancejointitem.cpp \

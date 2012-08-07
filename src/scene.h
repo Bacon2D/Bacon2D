@@ -26,8 +26,6 @@
 #include "quasideclarativeitem.h"
 
 #include <QtCore/QtGlobal>
-#include <QtCore/QList>
-#include <QtCore/QVector>
 
 #if QT_VERSION >= 0x050000
 #include <QtQml/QQmlComponent>
@@ -37,6 +35,10 @@
 
 class Game;
 class Viewport;
+class b2World;
+class Fixture;
+class Box2DContact;
+class Box2DDebugDrawItem;
 
 class Scene : public QuasiDeclarativeItem
 {
@@ -46,9 +48,11 @@ class Scene : public QuasiDeclarativeItem
     Q_PROPERTY(Viewport *viewport READ viewport WRITE setViewport NOTIFY viewportChanged)
     Q_PROPERTY(Game *game READ game WRITE setGame)
     Q_PROPERTY(bool debug READ debug WRITE setDebug NOTIFY debugChanged)
+    Q_PROPERTY(QPointF gravity READ gravity WRITE setGravity)
 
 public:
     Scene(Game *parent = 0);
+    ~Scene();
 
     bool running() const;
     void setRunning(const bool &running);
@@ -64,10 +68,23 @@ public:
 
     virtual void update(const int &delta);
 
+    b2World *world() const;
+
+    void setGravity(const QPointF &gravity);
+    QPointF gravity() const;
+
+    void onContact(Fixture *fixtureA, Fixture *fixtureB, qreal impulse);
+    void onPreContact(Fixture *fixtureA, Fixture *fixtureB, Box2DContact *contact);
+
 signals:
     void runningChanged();
     void viewportChanged();
     void debugChanged();
+    void contact(Fixture *fixtureA, Fixture *fixtureB, qreal impulse);
+    void preContact(Fixture *fixtureA, Fixture *fixtureB, Box2DContact *contact);
+
+protected slots:
+    void onDebugChanged();
 
 protected:
     virtual void componentComplete();
@@ -77,10 +94,14 @@ protected:
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 #endif
 
+protected:
     bool m_running;
     Viewport *m_viewport;
     Game *m_game;
     bool m_debug;
+    QSharedPointer<b2World> m_world;
+    QPointF m_gravity;
+    Box2DDebugDrawItem *m_debugDraw;
 };
 
 #endif /* _SCENE_H_ */

@@ -19,11 +19,12 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#include "box2dscene.h"
+
+#include "scene.h"
 #include "box2dcontact.h"
 #include "box2dcontactlistener.h"
 
-ContactListener::ContactListener(Box2DScene *scene)
+ContactListener::ContactListener(Scene *scene)
     : m_scene(scene)
 {
 }

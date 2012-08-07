@@ -24,20 +24,18 @@
 
 #include <Box2D/Box2D.h>
 
-#include "box2dscene.h"
-
-class Box2DScene;
+class Scene;
 
 class ContactListener : public b2ContactListener
 {
 public:
-    ContactListener(Box2DScene *scene);
+    ContactListener(Scene *scene);
 
     void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse);
     void PreSolve(b2Contact* contact, const b2Manifold *oldManifold);
 
 private:
-    Box2DScene *m_scene;
+    Scene *m_scene;
 };
 
 #endif /* _BOX2DCONTACTLISTENER */
