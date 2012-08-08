@@ -31,7 +31,6 @@ Box2DBaseItem::Box2DBaseItem(Scene *parent )
     : QuasiDeclarativeItem((QuasiDeclarativeItem*)parent)
     , m_initialized(false)
     , m_synchronizing(false)
-    , m_synchronize(true)
     , m_worldPtr(0)
 {
 }
@@ -48,7 +47,7 @@ bool Box2DBaseItem::initialized() const
  */
 void Box2DBaseItem::synchronize()
 {
-    if (m_synchronize && m_initialized) {
+    if (m_initialized) {
         m_synchronizing = true;
 
         const QPointF newPoint = b2Util::qTopLeft(b2TransformOrigin(), boundingRect(), m_scaleRatio);

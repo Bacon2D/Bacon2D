@@ -52,7 +52,6 @@ protected:
 protected:
     bool m_initialized;
     bool m_synchronizing;
-    bool m_synchronize;
     QWeakPointer<b2World> m_world;
     b2World *m_worldPtr;
 };
