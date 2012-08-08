@@ -55,6 +55,8 @@ public:
 
     float b2Angle() const;
 
+    void synchronize();
+
 signals:
     void targetChanged();
     void collideConnectedChanged();
@@ -66,6 +68,9 @@ private:
     bool m_collideConnected;
     float m_maxForce;
     b2Body *m_dummyGround;
+#if QT_VERSION < 0x050000
+    QPoint m_mousePos;
+#endif
 };
 
 #endif /* _BOX2DMOUSEJOINTITEM_H_ */

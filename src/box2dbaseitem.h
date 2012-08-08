@@ -43,7 +43,7 @@ public:
     bool initialized() const;
     virtual void initialize() = 0;
 
-    void synchronize();
+    virtual void synchronize();
 
 protected:
     virtual b2Vec2 b2TransformOrigin() const = 0;
