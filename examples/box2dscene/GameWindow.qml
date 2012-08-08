@@ -32,7 +32,7 @@ QuasiGame {
         color: "black"
     }
 
-    QuasiPhysicsScene {
+    QuasiScene {
         id: scene
 
         width: parent.width
@@ -47,7 +47,7 @@ QuasiGame {
             }
         }
 
-        QuasiBody {
+        QuasiEntity {
             id: mouseItem
 
             width: 60
@@ -79,7 +79,7 @@ QuasiGame {
             target: mouseItem
         }
 
-        QuasiBody {
+        QuasiEntity {
             id: ground
 
             bodyType: Quasi.StaticBodyType
@@ -114,7 +114,7 @@ QuasiGame {
     Component {
         id: bodyComponent
 
-        QuasiBody {
+        QuasiEntity {
             id: body
 
             width: 100
