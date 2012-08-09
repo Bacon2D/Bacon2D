@@ -38,7 +38,7 @@ QuasiGame {
         width: parent.width
         height: parent.height
 
-        onPostSolve: {
+        onContactPostSolve: {
             var impulse = contact.maxImpulse
             var fixtureA = contact.fixtureA
             var fixtureB = contact.fixtureB
