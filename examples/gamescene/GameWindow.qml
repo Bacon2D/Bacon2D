@@ -35,7 +35,7 @@ Item {
     Component {
         id: sceneComponent
 
-        QuasiPhysicsScene {
+        QuasiScene {
             id: scene
 
             width: 300
@@ -61,8 +61,7 @@ Item {
                 restitution: 0.1
             }
 
-            QuasiBody {
-                bodyType: Quasi.StaticBodyType
+            QuasiEntity {
                 anchors.left: parent.left
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
@@ -74,8 +73,7 @@ Item {
                 }
             }
 
-            QuasiBody {
-                bodyType: Quasi.StaticBodyType
+            QuasiEntity {
                 anchors.right: parent.right
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
@@ -87,8 +85,7 @@ Item {
                 }
             }
 
-            QuasiBody {
-                bodyType: Quasi.StaticBodyType
+            QuasiEntity {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.top: parent.top
@@ -100,8 +97,7 @@ Item {
                 }
             }
 
-            QuasiBody {
-                bodyType: Quasi.StaticBodyType
+            QuasiEntity {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
@@ -121,12 +117,14 @@ Item {
                 restitution: density
             }
 
-            QuasiBody {
+            QuasiEntity {
                 id: ball
                 width: 40
                 height: 40
                 x: scene.width / 2 - width / 2
                 y: scene.height / 3
+
+                bodyType: Quasi.DynamicBodyType
 
                 QuasiFixture {
                     material: ballMaterial
