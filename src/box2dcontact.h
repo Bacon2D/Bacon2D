@@ -25,25 +25,43 @@
 #include <Box2D/Box2D.h>
 #include <QtCore/QObject>
 
+class Fixture;
+
 class Box2DContact : public QObject
 {
     Q_OBJECT
 
     Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
+    Q_PROPERTY(bool touching READ touching CONSTANT)
+    Q_PROPERTY(Fixture *fixtureA READ fixtureA CONSTANT)
+    Q_PROPERTY(Fixture *fixtureB READ fixtureB CONSTANT)
+    Q_PROPERTY(double maxImpulse READ maxImpulse CONSTANT)
 
 public:
     Box2DContact(b2Contact *contact, QObject *parent = 0);
     ~Box2DContact() {}
 
+    void setImpulse(const b2ContactImpulse* impulse);
+
     void setEnabled(const bool &enabled);
     bool enabled() const;
+
+    bool touching() const;
+
+    Fixture *fixtureA() const;
+    Fixture *fixtureB() const;
+
+    double maxImpulse() const;
 
 signals:
     void enabledChanged();
 
-
 private:
     b2Contact *m_contact;
+    Fixture *m_fixtureA;
+    Fixture *m_fixtureB;
+    double m_maxImpulse;
+    const b2ContactImpulse* m_impulse;
 };
 
 #endif /* _BOX2DCONTACT */

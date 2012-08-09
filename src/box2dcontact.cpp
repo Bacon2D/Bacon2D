@@ -21,10 +21,17 @@
 
 #include "box2dcontact.h"
 
+#include "fixture.h"
+
 Box2DContact::Box2DContact(b2Contact *contact, QObject *parent)
     : QObject(parent)
     , m_contact(contact)
 {
+    b2Fixture *b2FixtureA = contact->GetFixtureA();
+    b2Fixture *b2FixtureB = contact->GetFixtureB();
+
+    m_fixtureA = static_cast<Fixture *>(b2FixtureA->GetUserData());
+    m_fixtureB = static_cast<Fixture *>(b2FixtureB->GetUserData());
 }
 
 void Box2DContact::setEnabled(const bool &enabled)
@@ -39,4 +46,38 @@ void Box2DContact::setEnabled(const bool &enabled)
 bool Box2DContact::enabled() const
 {
     return m_contact->IsEnabled();
+}
+
+bool Box2DContact::touching() const
+{
+    return m_contact->IsTouching();
+}
+
+Fixture *Box2DContact::fixtureA() const
+{
+    return m_fixtureA;
+}
+
+Fixture *Box2DContact::fixtureB() const
+{
+    return m_fixtureB;
+}
+
+double Box2DContact::maxImpulse() const
+{
+    return m_maxImpulse;
+}
+
+void Box2DContact::setImpulse(const b2ContactImpulse* impulse)
+{
+    m_impulse = impulse;
+
+    if (!m_contact)
+        return;
+
+    int count = m_contact->GetManifold()->pointCount;
+    float32 max = 0.0f;
+    for (int i = 0; i < count; ++i)
+        max = b2Max(max, m_impulse->normalImpulses[i]);
+    m_maxImpulse = max;
 }

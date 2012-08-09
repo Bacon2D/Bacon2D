@@ -240,25 +240,22 @@ void Scene::onDebugChanged()
     }
 }
 
-void Scene::onPostSolve(Fixture *fixtureA, Fixture *fixtureB, qreal impulse)
+void Scene::onPostSolve(Box2DContact *contact)
 {
-    emit postSolve(fixtureA, fixtureB, impulse);
+    emit postSolve(contact);
 }
 
-void Scene::onPreSolve(Fixture *fixtureA, Fixture *fixtureB, Box2DContact *contact)
+void Scene::onPreSolve(Box2DContact *contact)
 {
-    emit preSolve(fixtureA, fixtureB, contact);
-    delete contact;
+    emit preSolve(contact);
 }
 
-void Scene::onBeginContact(Fixture *fixtureA, Fixture *fixtureB, Box2DContact *contact)
+void Scene::onBeginContact(Box2DContact *contact)
 {
-    emit beginContact(fixtureA, fixtureB, contact);
-    delete contact;
+    emit beginContact(contact);
 }
 
-void Scene::onEndContact(Fixture *fixtureA, Fixture *fixtureB, Box2DContact *contact)
+void Scene::onEndContact(Box2DContact *contact)
 {
-    emit endContact(fixtureA, fixtureB, contact);
-    delete contact;
+    emit endContact(contact);
 }
