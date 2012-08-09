@@ -53,6 +53,8 @@ QuasiGame {
             width: 60
             height: 60
 
+            bodyType: Quasi.DynamicBodyType
+
             QuasiFixture {
                 width: parent.width
                 height: parent.height
@@ -122,6 +124,7 @@ QuasiGame {
             x: 200
             y: 200
 
+            bodyType: Quasi.DynamicBodyType
             sleepingAllowed: false
 
             Rectangle {
