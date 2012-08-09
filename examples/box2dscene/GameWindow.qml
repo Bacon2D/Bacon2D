@@ -39,6 +39,10 @@ QuasiGame {
         height: parent.height
 
         onPostSolve: {
+            var impulse = contact.maxImpulse
+            var fixtureA = contact.fixtureA
+            var fixtureB = contact.fixtureB
+
             if (impulse > 500.0 && (fixtureA.body == mouseItem || fixtureB.body == mouseItem)) {
                 if (fixtureA.body == mouseItem)
                     fixtureB.body.destroy()
