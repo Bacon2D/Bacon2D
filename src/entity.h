@@ -31,6 +31,7 @@
 class Game;
 class Scene;
 class Behavior;
+class Fixture;
 
 class Entity : public Box2DBaseItem
 {
@@ -90,7 +91,6 @@ public:
     void initialize();
 
     b2Vec2 b2TransformOrigin() const;
-
     float b2Angle() const;
 
     Q_INVOKABLE void applyTorque(const float &torque);
@@ -124,6 +124,8 @@ private slots:
 
 private:
     void initializeFixtures();
+    void createSensorFixture();
+    void destroySensorFixture();
 
 private:
     int m_updateInterval;
@@ -138,6 +140,7 @@ private:
     bool m_sleepingAllowed;
     bool m_fixedRotation;
     bool m_active;
+    Fixture *m_sensorFixture;
 };
 
 #endif /* _ENTITY_H_ */

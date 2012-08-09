@@ -26,6 +26,7 @@
 #include "game.h"
 #include "behavior.h"
 #include "fixture.h"
+#include "material.h"
 
 Entity::Entity(Scene *parent)
     : Box2DBaseItem(parent)
@@ -35,11 +36,12 @@ Entity::Entity(Scene *parent)
     , m_body(0)
     , m_linearDamping(0.0f)
     , m_angularDamping(0.0f)
-    , m_bodyType(Quasi::KinematicBodyType)
+    , m_bodyType(Quasi::StaticBodyType)
     , m_bullet(false)
     , m_sleepingAllowed(true)
     , m_fixedRotation(false)
     , m_active(true)
+    , m_sensorFixture(0)
 {
     setTransformOrigin(Center);
     connect(this, SIGNAL(rotationChanged()), SLOT(onRotationChanged()));
@@ -379,13 +381,18 @@ void Entity::initializeFixtures()
     QGraphicsItem *item;
 #endif
 
+    bool createSensor = true;
     foreach (item, childItems()) {
         if (Fixture *fixture = dynamic_cast<Fixture *>(item)) {
+            createSensor = false;
             fixture->setWorld(m_world);
             fixture->setBody(this);
             fixture->initialize();
         }
     }
+
+    if (createSensor)
+        createSensorFixture();
 }
 
 #if QT_VERSION >= 0x050000
@@ -401,6 +408,7 @@ QVariant Entity::itemChange(GraphicsItemChange change, const QVariant &value)
         QGraphicsItem *child = value.value<QGraphicsItem *>();
 #endif
         if (Fixture *fixture = dynamic_cast<Fixture *>(child)) {
+            destroySensorFixture();
             fixture->setWorld(m_world);
             fixture->setBody(this);
             fixture->initialize();
@@ -412,4 +420,29 @@ QVariant Entity::itemChange(GraphicsItemChange change, const QVariant &value)
 #else
     return Box2DBaseItem::itemChange(change, value);
 #endif
+}
+
+void Entity::createSensorFixture()
+{
+    setBodyType(Quasi::DynamicBodyType);
+    m_body->SetGravityScale(0);
+
+    m_sensorFixture = new Fixture(this);
+    m_sensorFixture->setMaterial(new Material(this));
+    m_sensorFixture->setWidth(width());
+    m_sensorFixture->setHeight(height());
+    m_sensorFixture->setShapeItem(this);
+    m_sensorFixture->setWorld(m_world);
+    m_sensorFixture->setBody(this);
+    m_sensorFixture->setSensor(true);
+    m_sensorFixture->updateFixture();
+}
+
+void Entity::destroySensorFixture()
+{
+    if (!m_sensorFixture)
+        return;
+
+    m_sensorFixture->deleteLater();
+    m_sensorFixture = 0;
 }

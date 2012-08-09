@@ -33,6 +33,7 @@ Fixture::Fixture(QuasiDeclarativeItem *parent)
     , m_shapeItem(0)
     , m_body(0)
     , m_bodyItem(0)
+    , m_sensor(false)
 {
     connect(this, SIGNAL(parentChanged()),
             this, SLOT(onParentChanged()));
@@ -63,11 +64,6 @@ Fixture::~Fixture()
     m_shapeItem->deleteLater();
 }
 
-Material *Fixture::material() const
-{
-    return m_material;
-}
-
 void Fixture::setMaterial(Material *material)
 {
     if (m_material == material)
@@ -94,15 +90,6 @@ void Fixture::setMaterial(Material *material)
             this, SLOT(onRestitutionChanged(const float &)));
 
     emit materialChanged();
-}
-
-#if QT_VERSION >= 0x050000
-QQuickItem *Fixture::shapeItem() const
-#else
-QDeclarativeItem *Fixture::shapeItem() const
-#endif
-{
-    return m_shapeItem;
 }
 
 #if QT_VERSION >= 0x050000
@@ -165,11 +152,6 @@ void Fixture::setBody(Entity *body)
     m_body = m_bodyItem->body();
 }
 
-Entity *Fixture::body() const
-{
-    return m_bodyItem;
-}
-
 void Fixture::initialize()
 {
     if (!isComponentComplete())
@@ -192,6 +174,7 @@ void Fixture::updateFixture()
     fixtureDef.density = m_material->density();
     fixtureDef.friction = m_material->friction();
     fixtureDef.restitution = m_material->restitution();
+    fixtureDef.isSensor = m_sensor;
 
     // Test if the 'shape' property is a Shape derived class.
     // In that case, get the B2Shape created by it.
@@ -247,4 +230,17 @@ void Fixture::updateShape() {
 
         shape->updateShape(fill->pen()->widthF());
     }
+}
+
+void Fixture::setSensor(const bool &sensor)
+{
+    if (m_sensor == sensor)
+        return;
+
+    m_sensor = sensor;
+
+    if (m_fixture)
+        updateFixture();
+
+    emit sensorChanged();
 }
