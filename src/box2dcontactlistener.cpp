@@ -42,7 +42,7 @@ void ContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impu
     for (int i = 0; i < count; ++i)
         maxImpulse = b2Max(maxImpulse, impulse->normalImpulses[i]);
 
-    m_scene->onContact(fixtureA, fixtureB, maxImpulse);
+    m_scene->onPostSolve(fixtureA, fixtureB, maxImpulse);
 }
 
 void ContactListener::PreSolve(b2Contact* contact, const b2Manifold *oldManifold)
@@ -56,5 +56,29 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold *oldManifold
     Fixture *fixtureB = static_cast<Fixture *>(b2FixtureB->GetUserData());
     Box2DContact *contactObject = new Box2DContact(contact);
 
-    m_scene->onPreContact(fixtureA, fixtureB, contactObject);
+    m_scene->onPreSolve(fixtureA, fixtureB, contactObject);
+}
+
+void ContactListener::BeginContact(b2Contact *contact)
+{
+    b2Fixture *b2FixtureA = contact->GetFixtureA();
+    b2Fixture *b2FixtureB = contact->GetFixtureB();
+
+    Fixture *fixtureA = static_cast<Fixture *>(b2FixtureA->GetUserData());
+    Fixture *fixtureB = static_cast<Fixture *>(b2FixtureB->GetUserData());
+    Box2DContact *contactObject = new Box2DContact(contact);
+
+    m_scene->onBeginContact(fixtureA, fixtureB, contactObject);
+}
+
+void ContactListener::EndContact(b2Contact *contact)
+{
+    b2Fixture *b2FixtureA = contact->GetFixtureA();
+    b2Fixture *b2FixtureB = contact->GetFixtureB();
+
+    Fixture *fixtureA = static_cast<Fixture *>(b2FixtureA->GetUserData());
+    Fixture *fixtureB = static_cast<Fixture *>(b2FixtureB->GetUserData());
+    Box2DContact *contactObject = new Box2DContact(contact);
+
+    m_scene->onEndContact(fixtureA, fixtureB, contactObject);
 }

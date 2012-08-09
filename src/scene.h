@@ -73,15 +73,19 @@ public:
     void setGravity(const QPointF &gravity);
     QPointF gravity() const;
 
-    void onContact(Fixture *fixtureA, Fixture *fixtureB, qreal impulse);
-    void onPreContact(Fixture *fixtureA, Fixture *fixtureB, Box2DContact *contact);
+    void onPostSolve(Fixture *fixtureA, Fixture *fixtureB, qreal impulse);
+    void onPreSolve(Fixture *fixtureA, Fixture *fixtureB, Box2DContact *contact);
+    void onBeginContact(Fixture *fixtureA, Fixture *fixtureB, Box2DContact *contact);
+    void onEndContact(Fixture *fixtureA, Fixture *fixtureB, Box2DContact *contact);
 
 signals:
     void runningChanged();
     void viewportChanged();
     void debugChanged();
-    void contact(Fixture *fixtureA, Fixture *fixtureB, qreal impulse);
-    void preContact(Fixture *fixtureA, Fixture *fixtureB, Box2DContact *contact);
+    void postSolve(Fixture *fixtureA, Fixture *fixtureB, qreal impulse);
+    void preSolve(Fixture *fixtureA, Fixture *fixtureB, Box2DContact *contact);
+    void beginContact(Fixture *fixtureA, Fixture *fixtureB, Box2DContact *contact);
+    void endContact(Fixture *fixtureA, Fixture *fixtureB, Box2DContact *contact);
 
 protected slots:
     void onDebugChanged();
