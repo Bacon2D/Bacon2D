@@ -38,7 +38,7 @@ QuasiGame {
         width: parent.width
         height: parent.height
 
-        onContact: {
+        onPostSolve: {
             if (impulse > 500.0 && (fixtureA.body == mouseItem || fixtureB.body == mouseItem)) {
                 if (fixtureA.body == mouseItem)
                     fixtureB.body.destroy()
