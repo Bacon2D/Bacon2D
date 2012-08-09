@@ -82,10 +82,10 @@ signals:
     void runningChanged();
     void viewportChanged();
     void debugChanged();
-    void postSolve(Box2DContact *contact);
-    void preSolve(Box2DContact *contact);
-    void beginContact(Box2DContact *contact);
-    void endContact(Box2DContact *contact);
+    void contactPostSolve(Box2DContact *contact);
+    void contactPreSolve(Box2DContact *contact);
+    void contactBegin(Box2DContact *contact);
+    void contactEnd(Box2DContact *contact);
 
 protected slots:
     void onDebugChanged();

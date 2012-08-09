@@ -242,20 +242,20 @@ void Scene::onDebugChanged()
 
 void Scene::onPostSolve(Box2DContact *contact)
 {
-    emit postSolve(contact);
+    emit contactPostSolve(contact);
 }
 
 void Scene::onPreSolve(Box2DContact *contact)
 {
-    emit preSolve(contact);
+    emit contactPreSolve(contact);
 }
 
 void Scene::onBeginContact(Box2DContact *contact)
 {
-    emit beginContact(contact);
+    emit contactBegin(contact);
 }
 
 void Scene::onEndContact(Box2DContact *contact)
 {
-    emit endContact(contact);
+    emit contactEnd(contact);
 }
