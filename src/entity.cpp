@@ -140,6 +140,8 @@ void Entity::setBehavior(Behavior *behavior)
 
 void Entity::componentComplete()
 {
+    Box2DBaseItem::componentComplete();
+
     if (!m_initialized)
         initialize();
 }
