@@ -81,3 +81,62 @@ void Box2DContact::setImpulse(const b2ContactImpulse* impulse)
         max = b2Max(max, m_impulse->normalImpulses[i]);
     m_maxImpulse = max;
 }
+
+double Box2DContact::restitution() const
+{
+    if (!m_contact)
+        return 0.0;
+    return m_contact->GetRestitution();
+}
+
+void Box2DContact::setRestitution(const double &restitution)
+{
+    if (!m_contact)
+        return;
+
+    double value = Box2DContact::restitution();
+    if (restitution == value)
+        return;
+
+    m_contact->SetRestitution(restitution);
+    emit restitutionChanged();
+}
+
+double Box2DContact::friction() const
+{
+    if (!m_contact)
+        return 0.0;
+    return m_contact->GetFriction();
+}
+
+void Box2DContact::setFriction(const double &friction)
+{
+    if (!m_contact)
+        return;
+
+    double value = Box2DContact::friction();
+    if (friction == value)
+        return;
+
+    m_contact->SetFriction(friction);
+
+    emit frictionChanged();
+}
+
+void Box2DContact::resetRestitution()
+{
+    if (!m_contact)
+        return;
+
+    m_contact->ResetRestitution();
+    emit restitutionChanged();
+}
+
+void Box2DContact::resetFriction()
+{
+    if (!m_contact)
+        return;
+
+    m_contact->ResetFriction();
+    emit frictionChanged();
+}

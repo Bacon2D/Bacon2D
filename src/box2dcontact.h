@@ -36,6 +36,8 @@ class Box2DContact : public QObject
     Q_PROPERTY(Fixture *fixtureA READ fixtureA CONSTANT)
     Q_PROPERTY(Fixture *fixtureB READ fixtureB CONSTANT)
     Q_PROPERTY(double maxImpulse READ maxImpulse CONSTANT)
+    Q_PROPERTY(double restitution READ restitution WRITE setRestitution NOTIFY restitutionChanged)
+    Q_PROPERTY(double friction READ friction WRITE setFriction NOTIFY frictionChanged)
 
 public:
     Box2DContact(b2Contact *contact, QObject *parent = 0);
@@ -53,8 +55,19 @@ public:
 
     double maxImpulse() const;
 
+    double restitution() const;
+    void setRestitution(const double &restitution);
+
+    double friction() const;
+    void setFriction(const double &friction);
+
+    Q_INVOKABLE void resetRestitution();
+    Q_INVOKABLE void resetFriction();
+
 signals:
     void enabledChanged();
+    void restitutionChanged();
+    void frictionChanged();
 
 private:
     b2Contact *m_contact;
