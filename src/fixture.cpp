@@ -32,7 +32,7 @@ Fixture::Fixture(QuasiDeclarativeItem *parent)
     , m_material(0)
     , m_shapeItem(0)
     , m_body(0)
-    , m_bodyItem(0)
+    , m_entity(0)
     , m_sensor(false)
 {
     connect(this, SIGNAL(parentChanged()),
@@ -146,10 +146,10 @@ void Fixture::setWorld(QSharedPointer<b2World> world)
     m_world = world;
 }
 
-void Fixture::setBody(Entity *body)
+void Fixture::setEntity(Entity *entity)
 {
-    m_bodyItem = body;
-    m_body = m_bodyItem->body();
+    m_entity = entity;
+    m_body = m_entity->body();
 }
 
 void Fixture::initialize()

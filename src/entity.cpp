@@ -388,7 +388,7 @@ void Entity::initializeFixtures()
         if (Fixture *fixture = dynamic_cast<Fixture *>(item)) {
             createSensor = false;
             fixture->setWorld(m_world);
-            fixture->setBody(this);
+            fixture->setEntity(this);
             fixture->initialize();
         }
     }
@@ -412,7 +412,7 @@ QVariant Entity::itemChange(GraphicsItemChange change, const QVariant &value)
         if (Fixture *fixture = dynamic_cast<Fixture *>(child)) {
             destroySensorFixture();
             fixture->setWorld(m_world);
-            fixture->setBody(this);
+            fixture->setEntity(this);
             fixture->initialize();
         }
     }
@@ -435,7 +435,7 @@ void Entity::createSensorFixture()
     m_sensorFixture->setHeight(height());
     m_sensorFixture->setShapeItem(this);
     m_sensorFixture->setWorld(m_world);
-    m_sensorFixture->setBody(this);
+    m_sensorFixture->setEntity(this);
     m_sensorFixture->setSensor(true);
     m_sensorFixture->updateFixture();
 }

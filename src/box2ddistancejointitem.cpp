@@ -40,22 +40,22 @@ Box2DDistanceJointItem::~Box2DDistanceJointItem()
 
 void Box2DDistanceJointItem::initialize()
 {
-    if (m_initialized || !m_bodyA || !m_bodyB || !m_world)
+    if (m_initialized || !m_entityA || !m_entityB || !m_world)
         return;
 
-    if (!m_bodyA->initialized())
-        m_bodyA->initialize();
-    if (!m_bodyB->initialized())
-        m_bodyB->initialize();
+    if (!m_entityA->initialized())
+        m_entityA->initialize();
+    if (!m_entityB->initialized())
+        m_entityB->initialize();
 
     b2DistanceJointDef jointDef;
 
     jointDef.collideConnected = m_collideConnected;
 
-    jointDef.Initialize(m_bodyA->body(),
-                        m_bodyB->body(),
-                        m_bodyA->body()->GetWorldCenter(),
-                        m_bodyB->body()->GetWorldCenter());
+    jointDef.Initialize(m_entityA->body(),
+                        m_entityB->body(),
+                        m_entityA->body()->GetWorldCenter(),
+                        m_entityB->body()->GetWorldCenter());
 
 
     m_joint = static_cast<b2DistanceJoint *>(m_worldPtr->CreateJoint(&jointDef));

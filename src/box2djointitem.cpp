@@ -23,38 +23,38 @@
 
 Box2DJointItem::Box2DJointItem(Scene *parent)
     : Box2DBaseItem(parent)
-    , m_bodyA(0)
-    , m_bodyB(0)
+    , m_entityA(0)
+    , m_entityB(0)
     , m_collideConnected(true)
     , m_joint(0)
 {
 }
 
-Entity *Box2DJointItem::bodyA() const
+Entity *Box2DJointItem::entityA() const
 {
-    return m_bodyA;
+    return m_entityA;
 }
 
-void Box2DJointItem::setBodyA(Entity *bodyA)
+void Box2DJointItem::setEntityA(Entity *entityA)
 {
-    if (m_bodyA != bodyA) {
-        m_bodyA = bodyA;
+    if (m_entityA != entityA) {
+        m_entityA = entityA;
 
-        emit bodyAChanged();
+        emit entityAChanged();
     }
 }
 
-Entity *Box2DJointItem::bodyB() const
+Entity *Box2DJointItem::entityB() const
 {
-    return m_bodyB;
+    return m_entityB;
 }
 
-void Box2DJointItem::setBodyB(Entity *bodyB)
+void Box2DJointItem::setEntityB(Entity *entityB)
 {
-    if (m_bodyB != bodyB) {
-        m_bodyB = bodyB;
+    if (m_entityB != entityB) {
+        m_entityB = entityB;
 
-        emit bodyBChanged();
+        emit entityBChanged();
     }
 }
 

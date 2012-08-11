@@ -32,31 +32,31 @@ class Box2DJointItem : public Box2DBaseItem
 {
     Q_OBJECT
 
-    Q_PROPERTY(Entity *bodyA READ bodyA WRITE setBodyA NOTIFY bodyAChanged)
-    Q_PROPERTY(Entity *bodyB READ bodyB WRITE setBodyB NOTIFY bodyBChanged)
+    Q_PROPERTY(Entity *entityA READ entityA WRITE setEntityA NOTIFY entityAChanged)
+    Q_PROPERTY(Entity *entityB READ entityB WRITE setEntityB NOTIFY entityBChanged)
     Q_PROPERTY(bool collideConnected READ collideConnected WRITE setCollideConnected NOTIFY collideConnectedChanged)
 
 public:
     Box2DJointItem(Scene *parent = 0);
     virtual ~Box2DJointItem() {}
 
-    Entity *bodyA() const;
-    void setBodyA(Entity *bodyA);
+    Entity *entityA() const;
+    void setEntityA(Entity *entityA);
 
-    Entity *bodyB() const;
-    void setBodyB(Entity *bodyB);
+    Entity *entityB() const;
+    void setEntityB(Entity *entityB);
 
     bool collideConnected() const;
     void setCollideConnected(const bool &collideConnected);
 
 signals:
-    void bodyAChanged();
-    void bodyBChanged();
+    void entityAChanged();
+    void entityBChanged();
     void collideConnectedChanged();
 
 protected:
-    Entity *m_bodyA;
-    Entity *m_bodyB;
+    Entity *m_entityA;
+    Entity *m_entityB;
     bool m_collideConnected;
     b2Joint *m_joint;
 };
