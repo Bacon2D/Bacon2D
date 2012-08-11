@@ -43,11 +43,11 @@ QuasiGame {
             var fixtureA = contact.fixtureA
             var fixtureB = contact.fixtureB
 
-            if (impulse > 500.0 && (fixtureA.body == mouseItem || fixtureB.body == mouseItem)) {
-                if (fixtureA.body == mouseItem)
-                    fixtureB.body.destroy()
+            if (impulse > 500.0 && (fixtureA.entity == mouseItem || fixtureB.entity == mouseItem)) {
+                if (fixtureA.entity == mouseItem)
+                    fixtureB.entity.destroy()
                 else
-                    fixtureA.body.destroy()
+                    fixtureA.entity.destroy()
             }
         }
 
@@ -57,7 +57,7 @@ QuasiGame {
             width: 60
             height: 60
 
-            bodyType: Quasi.DynamicBodyType
+            entityType: Quasi.DynamicType
 
             QuasiFixture {
                 width: parent.width
@@ -88,7 +88,7 @@ QuasiGame {
         QuasiEntity {
             id: ground
 
-            bodyType: Quasi.StaticBodyType
+            entityType: Quasi.StaticType
 
             width: 790
             height: 5
@@ -128,7 +128,7 @@ QuasiGame {
             x: 200
             y: 200
 
-            bodyType: Quasi.DynamicBodyType
+            entityType: Quasi.DynamicType
             sleepingAllowed: false
 
             Rectangle {

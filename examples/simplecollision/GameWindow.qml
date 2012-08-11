@@ -54,19 +54,19 @@ QuasiGame {
         height: parent.height
 
         onContactPreSolve: {
-            console.log("preSolve:", contact.fixtureA.body, "collided with", contact.fixtureB.body)
+            console.log("preSolve:", contact.fixtureA.entity, "collided with", contact.fixtureB.entity)
         }
 
         onContactPostSolve: {
-            console.log("postSolve:", contact.fixtureA.body, "collided with", contact.fixtureB.body)
+            console.log("postSolve:", contact.fixtureA.entity, "collided with", contact.fixtureB.entity)
         }
 
         onContactBegin: {
-            console.log("beginContact:", contact.fixtureA.body, "collided with", contact.fixtureB.body)
+            console.log("beginContact:", contact.fixtureA.entity, "collided with", contact.fixtureB.entity)
         }
 
         onContactEnd: {
-            console.log("endContact:", contact.fixtureA.body, "collided with", contact.fixtureB.body)
+            console.log("endContact:", contact.fixtureA.entity, "collided with", contact.fixtureB.entity)
         }
 
         QuasiEntity {

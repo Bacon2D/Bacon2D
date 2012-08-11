@@ -124,7 +124,7 @@ Item {
                 x: scene.width / 2 - width / 2
                 y: scene.height / 3
 
-                bodyType: Quasi.DynamicBodyType
+                entityType: Quasi.DynamicType
 
                 QuasiFixture {
                     material: ballMaterial
