@@ -32,7 +32,7 @@ class Quasi : public QObject {
         LayerDirection
         DrawType
         Ordering
-        BodyType
+        EntityType
     )
 
 public:
@@ -49,10 +49,10 @@ public:
     };
 
     // Enums for the Box2D body types
-    enum BodyType {
-        StaticBodyType,
-        KinematicBodyType,
-        DynamicBodyType
+    enum EntityType {
+        StaticType,
+        KinematicType,
+        DynamicType
     };
 
     // Internal use onlu, not exported to QML

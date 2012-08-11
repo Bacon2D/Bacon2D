@@ -36,7 +36,7 @@ Entity::Entity(Scene *parent)
     , m_body(0)
     , m_linearDamping(0.0f)
     , m_angularDamping(0.0f)
-    , m_bodyType(Quasi::StaticBodyType)
+    , m_entityType(Quasi::StaticType)
     , m_bullet(false)
     , m_sleepingAllowed(true)
     , m_fixedRotation(false)
@@ -170,7 +170,7 @@ void Entity::initialize()
         return;
 
     b2BodyDef bodyDef;
-    bodyDef.type = static_cast<b2BodyType>(m_bodyType);
+    bodyDef.type = static_cast<b2BodyType>(m_entityType);
     bodyDef.position.Set((x() + width() / 2.0) / m_scaleRatio,
                          (-y() - height() / 2.0) / m_scaleRatio);
 
@@ -222,20 +222,20 @@ void Entity::setAngularDamping(const qreal &angularDamping)
     }
 }
 
-Quasi::BodyType Entity::bodyType() const
+Quasi::EntityType Entity::entityType() const
 {
-    return m_bodyType;
+    return m_entityType;
 }
 
-void Entity::setBodyType(const Quasi::BodyType &bodyType)
+void Entity::setEntityType(const Quasi::EntityType &entityType)
 {
-    if (m_bodyType != bodyType) {
-        m_bodyType = bodyType;
+    if (m_entityType != entityType) {
+        m_entityType = entityType;
 
         if (m_body)
-            m_body->SetType((b2BodyType)bodyType);
+            m_body->SetType((b2BodyType)entityType);
 
-        emit bodyTypeChanged();
+        emit entityTypeChanged();
     }
 }
 
@@ -426,7 +426,7 @@ QVariant Entity::itemChange(GraphicsItemChange change, const QVariant &value)
 
 void Entity::createSensorFixture()
 {
-    setBodyType(Quasi::DynamicBodyType);
+    setEntityType(Quasi::DynamicType);
     m_body->SetGravityScale(0);
 
     m_sensorFixture = new Fixture(this);
