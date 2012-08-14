@@ -1,10 +1,12 @@
 import QtQuick 1.1
 import QuasiGame 1.0
 
-QuasiBody {
+QuasiEntity {
     id: trooperBody
     width: paratrooperImage.width
     height: paratrooperImage.height
+
+    entityType: Quasi.DynamicType
 
     property variant explosionObj: null
 

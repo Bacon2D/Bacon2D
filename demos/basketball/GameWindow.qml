@@ -31,7 +31,7 @@ QuasiGame {
 
     currentScene: scene
 
-    QuasiPhysicsScene {
+    QuasiScene {
         id: scene
 
         width: parent.width
@@ -58,10 +58,8 @@ QuasiGame {
             restitution: 0.0
         }
 
-        QuasiBody {
+        QuasiEntity {
             id: backboard
-
-            bodyType: Quasi.StaticBodyType
 
             anchors.top: backboardHandler.top
             anchors.right: backboardHandler.right
@@ -78,10 +76,8 @@ QuasiGame {
             }
         }
 
-        QuasiBody {
+        QuasiEntity {
             id: basketHandler
-
-            bodyType: Quasi.StaticBodyType
 
             anchors.left: backboard.right
             anchors.bottom: backboard.bottom
@@ -107,10 +103,8 @@ QuasiGame {
             source: ":/images/basket.png"
         }
 
-        QuasiBody {
+        QuasiEntity {
             id: basketRight
-
-            bodyType: Quasi.StaticBodyType
 
             anchors.right: basket.right
             anchors.top: basket.top
@@ -124,10 +118,8 @@ QuasiGame {
             }
         }
 
-        QuasiBody {
+        QuasiEntity {
             id: basketLeft
-
-            bodyType: Quasi.StaticBodyType
 
             anchors.left: basket.left
             anchors.top: basket.top
@@ -141,10 +133,8 @@ QuasiGame {
             }
         }
 
-        QuasiBody {
+        QuasiEntity {
             id: ground
-
-            bodyType: Quasi.StaticBodyType
 
             x: 0
             y: parent.height - height
@@ -166,12 +156,14 @@ QuasiGame {
             }
         }
 
-        QuasiBody {
+        QuasiEntity {
             id: ball
             property int centerX: x + (width / 2)
             property int centerY: y + (height / 2)
             property bool threw: false
             property bool scored: false
+
+            entityType: Quasi.DynamicType
 
             width: 0.25 * game.scale
             height: 0.25 * game.scale

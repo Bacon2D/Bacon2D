@@ -82,7 +82,7 @@ QuasiGame {
         scene.running = !scene.running
     }
 
-    QuasiPhysicsScene {
+    QuasiScene {
         id: scene
 
         anchors.fill: parent
@@ -133,10 +133,8 @@ QuasiGame {
             tileHeight: 90
         }
 
-        QuasiBody {
+        QuasiEntity {
             id: topWall
-
-            bodyType: Quasi.StaticBodyType
 
             height: game.wallHeight
             anchors.left: parent.left
@@ -156,10 +154,8 @@ QuasiGame {
             }
         }
 
-        QuasiBody {
+        QuasiEntity {
             id: leftWall
-
-            bodyType: Quasi.StaticBodyType
 
             width: game.wallHeight
             anchors.left: parent.left
@@ -179,10 +175,8 @@ QuasiGame {
             }
         }
 
-        QuasiBody {
+        QuasiEntity {
             id: rightWall
-
-            bodyType: Quasi.StaticBodyType
 
             width: game.wallHeight
             anchors.right: parent.right
@@ -202,10 +196,8 @@ QuasiGame {
             }
         }
 
-        QuasiBody {
+        QuasiEntity {
             id: ground
-
-            bodyType: Quasi.StaticBodyType
 
             height: 50
             anchors.left: parent.left
@@ -228,10 +220,8 @@ QuasiGame {
             }
         }
 
-        QuasiBody {
+        QuasiEntity {
             id: landingArea
-
-            bodyType: Quasi.StaticBodyType
 
             width: target.width
             height: 2
@@ -272,10 +262,14 @@ QuasiGame {
             x: parent.width / 2 - width / 2
         }
 
-        onContact: {
-            if (fixtureA.body == landingArea || fixtureB.body == landingArea)
+        onContactPostSolve: {
+            var fixtureA = contact.fixtureA
+            var fixtureB = contact.fixtureB
+            var impulse = contact.maxImpulse
+
+            if (fixtureA.entity == landingArea || fixtureB.entity == landingArea)
                 done(impulse, landingArea)
-            else if (fixtureA.body == ground || fixtureB.body == ground)
+            else if (fixtureA.entity == ground || fixtureB.entity == ground)
                 done(impulse, ground)
         }
     }
