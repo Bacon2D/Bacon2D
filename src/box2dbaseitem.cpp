@@ -28,10 +28,9 @@
 float Box2DBaseItem::m_scaleRatio = 32.0f;
 
 Box2DBaseItem::Box2DBaseItem(Scene *parent )
-    : Entity(parent)
+    : QuasiDeclarativeItem((QuasiDeclarativeItem*)parent)
     , m_initialized(false)
     , m_synchronizing(false)
-    , m_synchronize(true)
     , m_worldPtr(0)
 {
 }
@@ -48,7 +47,7 @@ bool Box2DBaseItem::initialized() const
  */
 void Box2DBaseItem::synchronize()
 {
-    if (m_synchronize && m_initialized) {
+    if (m_initialized) {
         m_synchronizing = true;
 
         const QPointF newPoint = b2Util::qTopLeft(b2TransformOrigin(), boundingRect(), m_scaleRatio);
@@ -70,12 +69,4 @@ void Box2DBaseItem::setWorld(QSharedPointer<b2World> world)
 
     if (!m_world.isNull())
         m_worldPtr = m_world.data();
-}
-
-void Box2DBaseItem::componentComplete()
-{
-    Entity::componentComplete();
-
-    if (!m_initialized)
-        initialize();
 }

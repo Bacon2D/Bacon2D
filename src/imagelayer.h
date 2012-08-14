@@ -19,58 +19,47 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _LAYERS_H_
-#define _LAYERS_H_
+#ifndef _IMAGELAYER_H_
+#define _IMAGELAYER_H_
 
-#include "enums.h"
-#include "entity.h"
 #include "layer.h"
 
-#include <QtCore/QList>
-#include <QtCore/QString>
+#include <QtCore/QtGlobal>
+#include <QtGui/QPixmap>
+#include <QtGui/QPainter>
 
-class Layers : public Entity
+class ImageLayer : public Layer
 {
     Q_OBJECT
 
-#if QT_VERSION >= 0x050000
-    Q_PROPERTY(QQmlListProperty<Layer> layers READ layers)
-#else
-    Q_PROPERTY(QDeclarativeListProperty<Layer> layers READ layers)
-#endif
-    Q_PROPERTY(Quasi::DrawType drawType READ drawType WRITE setDrawType)
+    Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
+
+    // From Layers
     Q_PROPERTY(int tileHeight READ tileHeight WRITE setTileHeight)
     Q_PROPERTY(int tileWidth READ tileWidth WRITE setTileWidth)
-    Q_PROPERTY(qreal xOffset READ xOffset WRITE setXOffset NOTIFY xOffsetChanged)
-    Q_PROPERTY(qreal yOffset READ yOffset WRITE setYOffset NOTIFY yOffsetChanged)
 
+    Q_PROPERTY(Quasi::DrawType drawType READ drawType WRITE setDrawType)
     Q_PROPERTY(bool drawGrid READ drawGrid WRITE setDrawGrid)
     Q_PROPERTY(QColor gridColor READ gridColor WRITE setGridColor)
 
 public:
-    Layers(Scene *parent = 0);
-    ~Layers();
+    ImageLayer(Layer *parent = 0);
+    ~ImageLayer();
 
-#if QT_VERSION >= 0x050000
-    QQmlListProperty<Layer> layers() const;
-#else
-    QDeclarativeListProperty<Layer> layers() const;
-#endif
+    void setSource(const QString &source);
+    QString source() const;
 
     void setDrawType(Quasi::DrawType drawType);
     Quasi::DrawType drawType() const;
 
     int tileHeight() const { return m_tileHeight; }
-    void setTileHeight(const int &tileHeight);
+    void setTileHeight(const int &value);
 
     int tileWidth() const { return m_tileWidth; }
-    void setTileWidth(const int &tileWidth);
+    void setTileWidth(const int &value);
 
-    qreal xOffset() const { return m_xOffset; }
-    void setXOffset(const qreal &xOffset);
-
-    qreal yOffset() const { return m_yOffset; }
-    void setYOffset(const qreal &yOffset);
+    int addTile(const QPixmap &pix);
+    QPixmap getTile(int pos) const;
 
     bool drawGrid() const { return m_drawGrid; }
     void setDrawGrid(bool draw);
@@ -78,36 +67,66 @@ public:
     QColor gridColor() const { return m_gridColor; }
     void setGridColor(const QColor &color);
 
-    void update(const int &delta);
+    int count() const;
 
-signals:
-    void xOffsetChanged();
-    void yOffsetChanged();
-
-public slots:
-    void changeXOffset();
-    void changeYOffset();
-
-private:
+    void moveX(const qreal &x);
+    void moveY(const qreal &y);
 
 #if QT_VERSION >= 0x050000
-    static void append_layer(QQmlListProperty<Layer> *list, Layer *layer);
+    void paint(QPainter *painter);
 #else
-    static void append_layer(QDeclarativeListProperty<Layer> *list, Layer *layer);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 #endif
+
+signals:
+    void tilesChanged();
+    void sourceChanged();
+
+protected:
+    void drawPixmap();
+    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
+
+    QImage *m_currentImage;
 
     int m_tileWidth;
     int m_tileHeight;
+    int m_numColumns;
+    int m_numRows;
     int m_totalColumns;
     int m_totalRows;
-    Quasi::DrawType m_drawType;
-    Layer::LayerList m_layers;
 
-    qreal m_xOffset;
-    qreal m_yOffset;
+protected slots:
+    void onHorizontalDirectionChanged();
+
+protected:
+    void componentComplete();
+
+private:
+    QPixmap generatePartialPixmap(int startPoint, int size);
+    void generateOffsets();
+    void updateHorizontalStep();
+    void updateTiles();
+
+    QList<Offsets::OffsetsList> m_offsets;
+    QList<QPixmap> m_pixmaps;
+
+    QString m_source;
+    Quasi::DrawType m_drawType;
+
+    const float m_areaToDraw;
+    int m_columnOffset;
+    int m_latestPoint;
 
     bool m_drawGrid;
     QColor m_gridColor;
+
+    qreal m_globalXPos;
+    qreal m_globalYPos;
+    qreal m_localXPos;
+    qreal m_localYPos;
+    qreal m_currentHorizontalStep;
+
+    bool m_initialized;
 };
 
-#endif /* _LAYERS_H_ */
+#endif /* _IMAGELAYER_H_ */

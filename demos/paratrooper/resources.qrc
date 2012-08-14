@@ -7,5 +7,6 @@
     <file>foreground_wind.png</file>
     <file>sun.png</file>
     <file>target.png</file>
+    <file>explosion.png</file>
 </qresource>
 </RCC>

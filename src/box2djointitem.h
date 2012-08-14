@@ -25,38 +25,38 @@
 #include "box2dbaseitem.h"
 #include "entity.h"
 
-class Box2DItem;
+class Entity;
 class b2Joint;
 
 class Box2DJointItem : public Box2DBaseItem
 {
     Q_OBJECT
 
-    Q_PROPERTY(Box2DItem *box2ditemA READ box2ditemA WRITE setBox2ditemA NOTIFY box2ditemAChanged)
-    Q_PROPERTY(Box2DItem *box2ditemB READ box2ditemB WRITE setBox2ditemB NOTIFY box2ditemBChanged)
+    Q_PROPERTY(Entity *entityA READ entityA WRITE setEntityA NOTIFY entityAChanged)
+    Q_PROPERTY(Entity *entityB READ entityB WRITE setEntityB NOTIFY entityBChanged)
     Q_PROPERTY(bool collideConnected READ collideConnected WRITE setCollideConnected NOTIFY collideConnectedChanged)
 
 public:
     Box2DJointItem(Scene *parent = 0);
     virtual ~Box2DJointItem() {}
 
-    Box2DItem *box2ditemA() const;
-    void setBox2ditemA(Box2DItem *box2ditemA);
+    Entity *entityA() const;
+    void setEntityA(Entity *entityA);
 
-    Box2DItem *box2ditemB() const;
-    void setBox2ditemB(Box2DItem *box2ditemB);
+    Entity *entityB() const;
+    void setEntityB(Entity *entityB);
 
     bool collideConnected() const;
     void setCollideConnected(const bool &collideConnected);
 
 signals:
-    void box2ditemAChanged();
-    void box2ditemBChanged();
+    void entityAChanged();
+    void entityBChanged();
     void collideConnectedChanged();
 
 protected:
-    Box2DItem *m_box2ditemA;
-    Box2DItem *m_box2ditemB;
+    Entity *m_entityA;
+    Entity *m_entityB;
     bool m_collideConnected;
     b2Joint *m_joint;
 };

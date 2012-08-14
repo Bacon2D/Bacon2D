@@ -21,42 +21,40 @@
 
 #include "box2djointitem.h"
 
-#include "box2ditem.h"
-
 Box2DJointItem::Box2DJointItem(Scene *parent)
     : Box2DBaseItem(parent)
-    , m_box2ditemA(0)
-    , m_box2ditemB(0)
+    , m_entityA(0)
+    , m_entityB(0)
     , m_collideConnected(true)
     , m_joint(0)
 {
 }
 
-Box2DItem *Box2DJointItem::box2ditemA() const
+Entity *Box2DJointItem::entityA() const
 {
-    return m_box2ditemA;
+    return m_entityA;
 }
 
-void Box2DJointItem::setBox2ditemA(Box2DItem *box2ditemA)
+void Box2DJointItem::setEntityA(Entity *entityA)
 {
-    if (m_box2ditemA != box2ditemA) {
-        m_box2ditemA = box2ditemA;
+    if (m_entityA != entityA) {
+        m_entityA = entityA;
 
-        emit box2ditemAChanged();
+        emit entityAChanged();
     }
 }
 
-Box2DItem *Box2DJointItem::box2ditemB() const
+Entity *Box2DJointItem::entityB() const
 {
-    return m_box2ditemB;
+    return m_entityB;
 }
 
-void Box2DJointItem::setBox2ditemB(Box2DItem *box2ditemB)
+void Box2DJointItem::setEntityB(Entity *entityB)
 {
-    if (m_box2ditemB != box2ditemB) {
-        m_box2ditemB = box2ditemB;
+    if (m_entityB != entityB) {
+        m_entityB = entityB;
 
-        emit box2ditemBChanged();
+        emit entityBChanged();
     }
 }
 

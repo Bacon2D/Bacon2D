@@ -23,12 +23,9 @@
 #define _SCENE_H_
 
 #include "entity.h"
-#include "layers.h"
 #include "quasideclarativeitem.h"
 
 #include <QtCore/QtGlobal>
-#include <QtCore/QList>
-#include <QtCore/QVector>
 
 #if QT_VERSION >= 0x050000
 #include <QtQml/QQmlComponent>
@@ -38,6 +35,10 @@
 
 class Game;
 class Viewport;
+class b2World;
+class Fixture;
+class Box2DContact;
+class Box2DDebugDrawItem;
 
 class Scene : public QuasiDeclarativeItem
 {
@@ -47,9 +48,11 @@ class Scene : public QuasiDeclarativeItem
     Q_PROPERTY(Viewport *viewport READ viewport WRITE setViewport NOTIFY viewportChanged)
     Q_PROPERTY(Game *game READ game WRITE setGame)
     Q_PROPERTY(bool debug READ debug WRITE setDebug NOTIFY debugChanged)
+    Q_PROPERTY(QPointF gravity READ gravity WRITE setGravity)
 
 public:
     Scene(Game *parent = 0);
+    ~Scene();
 
     bool running() const;
     void setRunning(const bool &running);
@@ -60,17 +63,32 @@ public:
     Game *game() const;
     void setGame(Game *game);
 
-    Layers *gameLayers() const;
-
     bool debug() const;
     void setDebug(const bool &debug);
 
     virtual void update(const int &delta);
 
+    b2World *world() const;
+
+    void setGravity(const QPointF &gravity);
+    QPointF gravity() const;
+
+    void onPostSolve(Box2DContact *contact);
+    void onPreSolve(Box2DContact *contact);
+    void onBeginContact(Box2DContact *contact);
+    void onEndContact(Box2DContact *contact);
+
 signals:
     void runningChanged();
     void viewportChanged();
     void debugChanged();
+    void contactPostSolve(Box2DContact *contact);
+    void contactPreSolve(Box2DContact *contact);
+    void contactBegin(Box2DContact *contact);
+    void contactEnd(Box2DContact *contact);
+
+protected slots:
+    void onDebugChanged();
 
 protected:
     virtual void componentComplete();
@@ -80,11 +98,14 @@ protected:
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 #endif
 
+protected:
     bool m_running;
     Viewport *m_viewport;
     Game *m_game;
-    Layers *m_gameLayers;
     bool m_debug;
+    QSharedPointer<b2World> m_world;
+    QPointF m_gravity;
+    Box2DDebugDrawItem *m_debugDraw;
 };
 
 #endif /* _SCENE_H_ */

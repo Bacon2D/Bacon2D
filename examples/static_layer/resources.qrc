@@ -1,7 +1,0 @@
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource>
-    <file>GameWindow.qml</file>
-    <file>not_so_large.png</file>
-    <file>sliding.png</file>
-</qresource>
-</RCC>

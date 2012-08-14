@@ -26,13 +26,13 @@
 
 class b2Body;
 class b2MouseJoint;
-class Box2DItem;
+class Entity;
 
 class Box2DMouseJointItem : public Box2DBaseItem
 {
     Q_OBJECT
 
-    Q_PROPERTY(Box2DItem *target READ target WRITE setTarget NOTIFY targetChanged)
+    Q_PROPERTY(Entity *target READ target WRITE setTarget NOTIFY targetChanged)
     Q_PROPERTY(bool collideConnected READ collideConnected WRITE setCollideConnected NOTIFY collideConnectedChanged)
     Q_PROPERTY(float maxForce READ maxForce WRITE setMaxForce NOTIFY maxForceChanged)
 
@@ -40,8 +40,8 @@ public:
     Box2DMouseJointItem(Scene *parent = 0);
     ~Box2DMouseJointItem();
 
-    Box2DItem *target() const;
-    void setTarget(Box2DItem *target);
+    Entity *target() const;
+    void setTarget(Entity *target);
 
     bool collideConnected() const;
     void setCollideConnected(const bool &collideConnected);
@@ -51,11 +51,11 @@ public:
 
     void initialize();
 
-    void update(const int &delta);
-
     b2Vec2 b2TransformOrigin() const;
 
     float b2Angle() const;
+
+    void synchronize();
 
 signals:
     void targetChanged();
@@ -64,10 +64,13 @@ signals:
 
 private:
     b2MouseJoint *m_joint;
-    Box2DItem *m_target;
+    Entity *m_target;
     bool m_collideConnected;
     float m_maxForce;
     b2Body *m_dummyGround;
+#if QT_VERSION < 0x050000
+    QPoint m_mousePos;
+#endif
 };
 
 #endif /* _BOX2DMOUSEJOINTITEM_H_ */

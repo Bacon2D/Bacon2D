@@ -28,7 +28,7 @@
 #include <QtCore/QSharedPointer>
 
 class Material;
-class Box2DItem;
+class Entity;
 class b2FixtureDef;
 class b2Fixture;
 class b2World;
@@ -44,33 +44,40 @@ class Fixture : public QuasiDeclarativeItem
 #else
     Q_PROPERTY(QDeclarativeItem *shape READ shapeItem WRITE setShapeItem NOTIFY shapeChanged)
 #endif
-    Q_PROPERTY(Box2DItem *body READ body)
+    Q_PROPERTY(Entity *entity READ entity)
+    Q_PROPERTY(bool sensor READ sensor WRITE setSensor NOTIFY sensorChanged)
 
 public:
     Fixture(QuasiDeclarativeItem *parent = 0);
     ~Fixture();
 
-    Material *material() const;
+    Material *material() const { return m_material; }
     void setMaterial(Material *material);
 
 #if QT_VERSION >= 0x050000
-    QQuickItem *shapeItem() const;
+    QQuickItem *shapeItem() const { return m_shapeItem; }
     void setShapeItem(QQuickItem *shapeItem);
 #else
-    QDeclarativeItem *shapeItem() const;
+    QDeclarativeItem *shapeItem() const { return m_shapeItem; }
     void setShapeItem(QDeclarativeItem *shapeItem);
 #endif
 
     void setWorld(QSharedPointer<b2World> world);
 
-    void setBody(Box2DItem *body);
-    Box2DItem *body() const;
+    void setEntity(Entity *entity);
+    Entity *entity() const { return m_entity; }
 
     void initialize();
+
+    bool sensor() const { return m_sensor; }
+    void setSensor(const bool &sensor);
+
+    void updateFixture();
 
 signals:
     void materialChanged();
     void shapeChanged();
+    void sensorChanged();
 
 protected slots:
     void onDensityChanged(const float &density);
@@ -81,7 +88,6 @@ protected slots:
 
 protected:
     void componentComplete();
-    void updateFixture();
     void updateShape();
 
 protected:
@@ -94,8 +100,8 @@ protected:
 #endif
     QWeakPointer<b2World> m_world;
     b2Body *m_body;
-    Box2DItem *m_bodyItem;
+    Entity *m_entity;
+    bool m_sensor;
 };
-
 
 #endif /* _FIXTURE_H_ */

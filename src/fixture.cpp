@@ -21,7 +21,7 @@
 
 #include "fixture.h"
 #include "material.h"
-#include "box2ditem.h"
+#include "entity.h"
 #include "shape.h"
 
 #include <Box2D/Box2D.h>
@@ -32,7 +32,8 @@ Fixture::Fixture(QuasiDeclarativeItem *parent)
     , m_material(0)
     , m_shapeItem(0)
     , m_body(0)
-    , m_bodyItem(0)
+    , m_entity(0)
+    , m_sensor(false)
 {
     connect(this, SIGNAL(parentChanged()),
             this, SLOT(onParentChanged()));
@@ -44,7 +45,7 @@ void Fixture::onParentChanged()
         return;
 
     // NOTE: Probably we need to check if there is a
-    // better place to set container Box2DItem to be
+    // better place to set container Entity to be
     // parent of Shape.
     m_shapeItem->setParent(parentItem());
     m_shapeItem->setParentItem(parentItem());
@@ -61,11 +62,6 @@ Fixture::~Fixture()
         return;
 
     m_shapeItem->deleteLater();
-}
-
-Material *Fixture::material() const
-{
-    return m_material;
 }
 
 void Fixture::setMaterial(Material *material)
@@ -94,15 +90,6 @@ void Fixture::setMaterial(Material *material)
             this, SLOT(onRestitutionChanged(const float &)));
 
     emit materialChanged();
-}
-
-#if QT_VERSION >= 0x050000
-QQuickItem *Fixture::shapeItem() const
-#else
-QDeclarativeItem *Fixture::shapeItem() const
-#endif
-{
-    return m_shapeItem;
 }
 
 #if QT_VERSION >= 0x050000
@@ -159,15 +146,10 @@ void Fixture::setWorld(QSharedPointer<b2World> world)
     m_world = world;
 }
 
-void Fixture::setBody(Box2DItem *body)
+void Fixture::setEntity(Entity *entity)
 {
-    m_bodyItem = body;
-    m_body = m_bodyItem->body();
-}
-
-Box2DItem *Fixture::body() const
-{
-    return m_bodyItem;
+    m_entity = entity;
+    m_body = m_entity->body();
 }
 
 void Fixture::initialize()
@@ -192,6 +174,7 @@ void Fixture::updateFixture()
     fixtureDef.density = m_material->density();
     fixtureDef.friction = m_material->friction();
     fixtureDef.restitution = m_material->restitution();
+    fixtureDef.isSensor = m_sensor;
 
     // Test if the 'shape' property is a Shape derived class.
     // In that case, get the B2Shape created by it.
@@ -247,4 +230,17 @@ void Fixture::updateShape() {
 
         shape->updateShape(fill->pen()->widthF());
     }
+}
+
+void Fixture::setSensor(const bool &sensor)
+{
+    if (m_sensor == sensor)
+        return;
+
+    m_sensor = sensor;
+
+    if (m_fixture)
+        updateFixture();
+
+    emit sensorChanged();
 }

@@ -20,42 +20,42 @@
  */
 
 
-#include "box2ditem.h"
-#include "box2dscene.h"
+#include "scene.h"
 #include "box2dcontact.h"
 #include "box2dcontactlistener.h"
 
-ContactListener::ContactListener(Box2DScene *scene)
+ContactListener::ContactListener(Scene *scene)
     : m_scene(scene)
 {
 }
 
 void ContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
 {
-    b2Fixture *b2FixtureA = contact->GetFixtureA();
-    b2Fixture *b2FixtureB = contact->GetFixtureB();
-
-    Fixture *fixtureA = static_cast<Fixture *>(b2FixtureA->GetUserData());
-    Fixture *fixtureB = static_cast<Fixture *>(b2FixtureB->GetUserData());
-
-    int count = contact->GetManifold()->pointCount;
-    float32 maxImpulse = 0.0f;
-    for (int i = 0; i < count; ++i)
-        maxImpulse = b2Max(maxImpulse, impulse->normalImpulses[i]);
-
-    m_scene->onContact(fixtureA, fixtureB, maxImpulse);
+    Box2DContact *box2dContact = new Box2DContact(contact);
+    box2dContact->setImpulse(impulse);
+    m_scene->onPostSolve(box2dContact);
+    delete box2dContact;
 }
 
 void ContactListener::PreSolve(b2Contact* contact, const b2Manifold *oldManifold)
 {
     Q_UNUSED(oldManifold);
 
-    b2Fixture *b2FixtureA = contact->GetFixtureA();
-    b2Fixture *b2FixtureB = contact->GetFixtureB();
+    Box2DContact *box2dContact = new Box2DContact(contact);
+    m_scene->onPreSolve(box2dContact);
+    delete box2dContact;
+}
 
-    Fixture *fixtureA = static_cast<Fixture *>(b2FixtureA->GetUserData());
-    Fixture *fixtureB = static_cast<Fixture *>(b2FixtureB->GetUserData());
-    Box2DContact *contactObject = new Box2DContact(contact);
+void ContactListener::BeginContact(b2Contact *contact)
+{
+    Box2DContact *box2dContact = new Box2DContact(contact);
+    m_scene->onBeginContact(box2dContact);
+    delete box2dContact;
+}
 
-    m_scene->onPreContact(fixtureA, fixtureB, contactObject);
+void ContactListener::EndContact(b2Contact *contact)
+{
+    Box2DContact *box2dContact = new Box2DContact(contact);
+    m_scene->onEndContact(box2dContact);
+    delete box2dContact;
 }

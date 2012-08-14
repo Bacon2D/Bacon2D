@@ -28,7 +28,6 @@
 
 #include <QtCore/QList>
 #include <QtCore/QString>
-#include <QtGui/QPixmap>
 
 class Offsets {
 public:
@@ -70,94 +69,33 @@ class Layer: public QuasiPaintedItem
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString source READ source WRITE setSource)
-    Q_PROPERTY(qreal factor READ factor WRITE setFactor NOTIFY factorChanged)
-    Q_PROPERTY(Quasi::Ordering order READ order WRITE setOrder)
+    Q_PROPERTY(bool animated READ isAnimated WRITE setAnimated NOTIFY animatedChanged)
+    Q_PROPERTY(qreal horizontalStep READ horizontalStep WRITE setHorizontalStep NOTIFY horizontalStepChanged)
     Q_PROPERTY(Quasi::LayerType layerType READ layerType WRITE setLayerType NOTIFY layerTypeChanged)
-    Q_PROPERTY(Quasi::LayerDirection direction READ direction WRITE setDirection NOTIFY directionChanged)
 
 public:
-    typedef QList<Layer *> LayerList; //! A layer list based on QList
-
     Layer(QuasiDeclarativeItem *parent = 0);
-    ~Layer();
+    virtual ~Layer();
 
-    void setSource(const QString &source);
-    QString source() const;
+    bool isAnimated() const { return m_isAnimated; }
+    void setAnimated(bool animated);
 
-    void setDrawType(Quasi::DrawType drawType);
-    Quasi::DrawType drawType() const;
-
-    void setFactor(qreal factor);
-    qreal factor() const;
-
-    void setOrder(Quasi::Ordering order);
-    Quasi::Ordering order() const;
+    qreal horizontalStep() const { return m_horizontalStep; }
+    void setHorizontalStep(const qreal &step);
 
     Quasi::LayerType layerType() const { return m_type; };
     void setLayerType(const Quasi::LayerType &type);
 
-    Quasi::LayerDirection direction() const { return m_direction; };
-    void setDirection(const Quasi::LayerDirection &direction);
-
-    int tileHeight() const { return m_tileHeight; }
-    void setTileHeight(const int &value);
-
-    int tileWidth() const { return m_tileWidth; }
-    void setTileWidth(const int &value);
-
-    int addTile(const QPixmap &pix);
-    QPixmap getTile(int pos) const;
-
-    bool drawGrid() const { return m_drawGrid; }
-    void setDrawGrid(bool draw);
-
-    QColor gridColor() const { return m_gridColor; }
-    void setGridColor(const QColor &color);
-
-    int count() const;
-
-    void drawPixmap();
-
-public slots:
-    virtual void updateTiles();
-
 signals:
-    void factorChanged();
-    void tilesChanged();
-    void directionChanged();
+    void animatedChanged();
+    void horizontalStepChanged();
+    void horizontalDirectionChanged();
     void layerTypeChanged();
 
 protected:
-    QImage *m_currentImage;
-    Quasi::LayerDirection m_direction;
-
-    int m_tileWidth;
-    int m_tileHeight;
-    int m_numColumns;
-    int m_numRows;
-    int m_totalColumns;
-    int m_totalRows;
-
-    qreal m_factor;
-
-private:
-    QPixmap generatePartialPixmap(int startPoint, int size);
-    void generateOffsets();
-
-    QList<Offsets::OffsetsList> m_offsets;
-    QList<QPixmap> m_pixmaps;
-
-    QString m_source;
-    Quasi::DrawType m_drawType;
+    bool m_isAnimated;
+    qreal m_horizontalStep;
     Quasi::LayerType m_type;
-
-    const float m_areaToDraw;
-    int m_columnOffset;
-    int m_latestPoint;
-
-    bool m_drawGrid;
-    QColor m_gridColor;
 };
 
 #endif /* _LAYER */

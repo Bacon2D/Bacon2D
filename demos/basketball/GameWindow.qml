@@ -23,15 +23,15 @@ QuasiGame {
 
     property int score: 0
     property int currentBallIndex: ballmodel.count - 1
-    property int scale: 200
+    property int scale: 180
     property real freethrow: 5.80 * game.scale
 
     width: 7.60 * game.scale
-    height: 900
+    height: 768
 
     currentScene: scene
 
-    QuasiPhysicsScene {
+    QuasiScene {
         id: scene
 
         width: parent.width
@@ -46,31 +46,29 @@ QuasiGame {
         }
 
         Image {
-            id: backBoardhandler
+            id: backboardHandler
             anchors.bottom: parent.bottom
             source: ":/images/backboardhandler.png"
         }
 
         QuasiMaterial {
-            id: basketMaterial
+            id: boardMaterial
             friction: 1.0
             density: 0.1
             restitution: 0.0
         }
 
-        QuasiBody {
-            id: backBoard
+        QuasiEntity {
+            id: backboard
 
-            bodyType: Quasi.StaticBodyType
-
-            x: 1.2 * game.scale
-            y: parent.height - (3.95 * game.scale)
+            anchors.top: backboardHandler.top
+            anchors.right: backboardHandler.right
 
             width: 4
-            height: 1.05 * game.scale
+            height: 203
 
             QuasiFixture {
-                material: basketMaterial
+                material: boardMaterial
                 shape: Rectangle {
                     color: "white"
                     anchors.fill: parent
@@ -78,39 +76,18 @@ QuasiGame {
             }
         }
 
-        QuasiBody {
+        QuasiEntity {
             id: basketHandler
 
-            bodyType: Quasi.StaticBodyType
+            anchors.left: backboard.right
+            anchors.bottom: backboard.bottom
+            anchors.bottomMargin: backboard.height * 0.2
 
-            x: backBoard.x + backBoard.width
-            y: parent.height - (3.05 * game.scale)
-
-            width: (1.575 * game.scale) - x - (ball.width / 1.9)
+            width: 20
             height: 8
 
             QuasiFixture {
-                material: basketMaterial
-                shape: Rectangle {
-                    color: "white"
-                    anchors.fill: parent
-                }
-            }
-        }
-
-        QuasiBody {
-            id: basketRing
-
-            bodyType: Quasi.StaticBodyType
-
-            x: basketHandler.x + basketHandler.width + (ball.width * 1.2)
-            y: basketHandler.y
-
-            width: 8
-            height: 8
-
-            QuasiFixture {
-                material: basketMaterial
+                material: boardMaterial
                 shape: Rectangle {
                     color: "white"
                     anchors.fill: parent
@@ -121,56 +98,43 @@ QuasiGame {
         Image {
             id: basket
             anchors.left: basketHandler.right
-            anchors.right: basketRing.left
-
-            y: basketHandler.y
-            z: 100
-
+            anchors.top: basketHandler.top
+            z: 10
             source: ":/images/basket.png"
         }
 
-        QuasiBody {
+        QuasiEntity {
             id: basketRight
 
-            bodyType: Quasi.StaticBodyType
-
-            x: basketRing.x
-            y: basketRing.y + basketRing.height
+            anchors.right: basket.right
+            anchors.top: basket.top
 
             width: 4
             height: ball.height / 2
 
             QuasiFixture {
-                material: basketMaterial
-                shape: Item {
-                    anchors.fill: parent
-                }
+                material: boardMaterial
+                shape: Item { anchors.fill: parent }
             }
         }
 
-        QuasiBody {
+        QuasiEntity {
             id: basketLeft
 
-            bodyType: Quasi.StaticBodyType
-
-            x: basketHandler.x + basketHandler.width - width
-            y: basketHandler.y + basketHandler.height
+            anchors.left: basket.left
+            anchors.top: basket.top
 
             width: 4
             height: ball.height / 2
 
             QuasiFixture {
-                material: basketMaterial
-                shape: Item {
-                    anchors.fill: parent
-                }
+                material: boardMaterial
+                shape: Item { anchors.fill: parent }
             }
         }
 
-        QuasiBody {
+        QuasiEntity {
             id: ground
-
-            bodyType: Quasi.StaticBodyType
 
             x: 0
             y: parent.height - height
@@ -192,12 +156,14 @@ QuasiGame {
             }
         }
 
-        QuasiBody {
+        QuasiEntity {
             id: ball
             property int centerX: x + (width / 2)
             property int centerY: y + (height / 2)
             property bool threw: false
             property bool scored: false
+
+            entityType: Quasi.DynamicType
 
             width: 0.25 * game.scale
             height: 0.25 * game.scale
@@ -211,15 +177,14 @@ QuasiGame {
                     restitution: 0.6
                 }
 
-                shape: QuasiCircle {
-                    anchors.fill: parent
-                    Image {
-                        id: ballImage
-                        anchors.fill: parent
-                        source: ":/images/ball.png"
-                        smooth: true
-                    }
-                }
+                shape: QuasiCircle { anchors.fill: parent }
+            }
+
+            Image {
+                id: ballImage
+                anchors.fill: parent
+                source: ":/images/ball.png"
+                smooth: true
             }
 
             x: game.freethrow
@@ -231,11 +196,11 @@ QuasiGame {
                     return;
 
                 if (centerX > basketHandler.x + basketHandler.width
-                        && centerX < basketRing.x
-                        && centerY > basketRing.y
-                        && centerY < basketRing.y + basket.height) {
+                        && centerX < basketRight.x
+                        && centerY > basketRight.y
+                        && centerY < basketRight.y + basket.height) {
 
-                    if (!scored && centerY < basketRing.y + (ball.height / 2)) {
+                    if (!scored && centerY < basketRight.y + (ball.height / 2)) {
                         ballmodel.get(currentBallIndex).type = "score";
                         scored = true;
                         score++;

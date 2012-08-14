@@ -53,6 +53,22 @@ QuasiGame {
         width: parent.width
         height: parent.height
 
+        onContactPreSolve: {
+            console.log("preSolve:", contact.fixtureA.entity, "collided with", contact.fixtureB.entity)
+        }
+
+        onContactPostSolve: {
+            console.log("postSolve:", contact.fixtureA.entity, "collided with", contact.fixtureB.entity)
+        }
+
+        onContactBegin: {
+            console.log("beginContact:", contact.fixtureA.entity, "collided with", contact.fixtureB.entity)
+        }
+
+        onContactEnd: {
+            console.log("endContact:", contact.fixtureA.entity, "collided with", contact.fixtureB.entity)
+        }
+
         QuasiEntity {
             id: item
 
@@ -72,20 +88,7 @@ QuasiGame {
                 width: 50
                 height: 50
 
-                color: item.collided ? "green" : "red"
-            }
-
-            onCollidedChanged: {
-                if (collided) {
-                    console.log("red collided with:")
-                    var collidedList = item.collidedItems()
-                    console.log(collidedList)
-                    for (var i=0; i< collidedList.length; ++i) {
-                        var gameItem = collidedList[i]
-                        console.log(gameItem)
-                        console.log(gameItem.name)
-                    }
-                }
+                color: "red"
             }
         }
 
@@ -108,7 +111,7 @@ QuasiGame {
                 width: 50
                 height: 50
 
-                color: item2.collided ? "green" : "blue"
+                color: "blue"
             }
         }
 
@@ -132,7 +135,7 @@ QuasiGame {
                 width: 50
                 height: 50
 
-                color: item3.collided ? "green" : "yellow"
+                color: "yellow"
             }
         }
 
@@ -156,7 +159,7 @@ QuasiGame {
                 width: 50
                 height: 50
 
-                color: item4.collided ? "green" : "gray"
+                color: "gray"
             }
         }
     }

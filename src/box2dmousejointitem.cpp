@@ -21,13 +21,18 @@
 
 #include "box2dmousejointitem.h"
 
-#include "box2ditem.h"
-#include "box2dscene.h"
+#include "entity.h"
 #include "game.h"
 
-#include <Box2D/Box2D.h>
+#if QT_VERSION >= 0x050000
+#include <QtQuick/QQuickCanvas>
+#else
+#include <QtGui/QApplication>
+#endif
 
 #include <QtGui/QCursor>
+
+#include <Box2D/Box2D.h>
 
 Box2DMouseJointItem::Box2DMouseJointItem(Scene *parent)
     : Box2DBaseItem(parent)
@@ -37,7 +42,6 @@ Box2DMouseJointItem::Box2DMouseJointItem(Scene *parent)
     , m_maxForce(200.0f)
     , m_dummyGround(0)
 {
-    m_synchronize = false;
 }
 
 Box2DMouseJointItem::~Box2DMouseJointItem()
@@ -53,12 +57,12 @@ Box2DMouseJointItem::~Box2DMouseJointItem()
     m_joint = 0;
 }
 
-Box2DItem *Box2DMouseJointItem::target() const
+Entity *Box2DMouseJointItem::target() const
 {
     return m_target;
 }
 
-void Box2DMouseJointItem::setTarget(Box2DItem *target)
+void Box2DMouseJointItem::setTarget(Entity *target)
 {
     if (m_target != target) {
         m_target = target;
@@ -86,12 +90,13 @@ void Box2DMouseJointItem::setMaxForce(const float &maxForce)
 
 void Box2DMouseJointItem::initialize()
 {
-    if (m_initialized || !m_target || !m_world)
+    if (m_initialized || !m_world || !m_target)
         return;
 
     if (!m_target->initialized()) {
         m_target->setWorld(m_world);
         m_target->initialize();
+
     }
 
     b2BodyDef groundBodyDef; // dummy body
@@ -111,17 +116,6 @@ void Box2DMouseJointItem::initialize()
     m_initialized = true;
 }
 
-void Box2DMouseJointItem::update(const int &delta)
-{
-    if (!m_joint)
-        return;
-
-    Entity::update(delta);
-
-    QPointF mousePos = game()->mouse();
-    m_joint->SetTarget(b2Vec2(mousePos.x() / m_scaleRatio, -mousePos.y() / m_scaleRatio));
-}
-
 bool Box2DMouseJointItem::collideConnected() const
 {
     return m_collideConnected;
@@ -138,10 +132,35 @@ void Box2DMouseJointItem::setCollideConnected(const bool &collideConnected)
 
 b2Vec2 Box2DMouseJointItem::b2TransformOrigin() const
 {
-    return b2Vec2(0, 0); // FIXME: remove "m_syncronize" member and return correct position
+    return b2Vec2(0, 0);
 }
 
 float Box2DMouseJointItem::b2Angle() const
 {
     return 0.0f;
+}
+
+void Box2DMouseJointItem::synchronize()
+{
+    if (!m_joint || !m_target)
+        return;
+
+    Box2DBaseItem::synchronize();
+
+    QPoint mousePos;
+
+#if QT_VERSION >= 0x050000
+    mousePos = canvas()->mapFromGlobal(QCursor::pos());
+#else
+    m_mousePos = QCursor::pos();
+    QWidget *widget = QApplication::widgetAt(m_mousePos);
+
+    if (widget)
+        mousePos = widget->mapFromGlobal(m_mousePos);
+    else
+        mousePos = m_mousePos;
+    m_mousePos = mousePos;
+#endif
+
+    m_joint->SetTarget(b2Vec2(mousePos.x() / m_scaleRatio, -mousePos.y() / m_scaleRatio));
 }

@@ -32,26 +32,32 @@ QuasiGame {
         color: "black"
     }
 
-    QuasiPhysicsScene {
+    QuasiScene {
         id: scene
 
         width: parent.width
         height: parent.height
 
-        onContact: {
-            if (impulse > 500.0 && (fixtureA.body == mouseItem || fixtureB.body == mouseItem)) {
-                if (fixtureA.body == mouseItem)
-                    fixtureB.body.destroy()
+        onContactPostSolve: {
+            var impulse = contact.maxImpulse
+            var fixtureA = contact.fixtureA
+            var fixtureB = contact.fixtureB
+
+            if (impulse > 500.0 && (fixtureA.entity == mouseItem || fixtureB.entity == mouseItem)) {
+                if (fixtureA.entity == mouseItem)
+                    fixtureB.entity.destroy()
                 else
-                    fixtureA.body.destroy()
+                    fixtureA.entity.destroy()
             }
         }
 
-        QuasiBody {
+        QuasiEntity {
             id: mouseItem
 
             width: 60
             height: 60
+
+            entityType: Quasi.DynamicType
 
             QuasiFixture {
                 width: parent.width
@@ -79,10 +85,10 @@ QuasiGame {
             target: mouseItem
         }
 
-        QuasiBody {
+        QuasiEntity {
             id: ground
 
-            bodyType: Quasi.StaticBodyType
+            entityType: Quasi.StaticType
 
             width: 790
             height: 5
@@ -114,7 +120,7 @@ QuasiGame {
     Component {
         id: bodyComponent
 
-        QuasiBody {
+        QuasiEntity {
             id: body
 
             width: 100
@@ -122,6 +128,7 @@ QuasiGame {
             x: 200
             y: 200
 
+            entityType: Quasi.DynamicType
             sleepingAllowed: false
 
             Rectangle {
