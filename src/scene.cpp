@@ -47,11 +47,14 @@ Scene::Scene(Game *parent)
     : QuasiDeclarativeItem(parent)
     , m_running(true)
     , m_viewport(0)
-    , m_game(0)
+    , m_game(parent)
     , m_debug(false)
     , m_world(0)
     , m_gravity(qreal(0), qreal(-10))
     , m_debugDraw(0)
+    , m_physicsTimeStep(0.0)
+    , m_physicsVelocityIterations(10)
+    , m_physicsPositionIterations(10)
 {
     setVisible(false);
 
@@ -90,9 +93,7 @@ void Scene::update(const int &delta)
             box2DItem->synchronize();
     }
 
-    // TODO crete properties for this arguments
-    // TODO: check if scene is simulating physics
-    m_world->Step(1.0f / 60.0f, 10, 10);
+    m_world->Step(m_physicsTimeStep, m_physicsVelocityIterations, m_physicsPositionIterations);
     if (m_debugDraw)
         m_debugDraw->step();
 }
@@ -135,6 +136,17 @@ Game *Scene::game() const
 void Scene::setGame(Game *game)
 {
     m_game = game;
+    if (!m_game)
+        return;
+
+    if (!qFuzzyCompare(0.0, m_physicsTimeStep))
+        return;
+
+    qreal fps = m_game->fps();
+    if (qFuzzyCompare(0.0, fps))
+        return;
+
+    m_physicsTimeStep = 1.0 / m_game->fps();
 }
 
 bool Scene::debug() const
@@ -258,4 +270,50 @@ void Scene::onBeginContact(Box2DContact *contact)
 void Scene::onEndContact(Box2DContact *contact)
 {
     emit contactEnd(contact);
+}
+
+
+qreal Scene::physicsTimeStep() const
+{
+    return m_physicsTimeStep;
+}
+
+void Scene::setPhysicsTimestep(const qreal &physicsTimeStep)
+{
+    if (m_physicsTimeStep == physicsTimeStep)
+        return;
+
+    m_physicsTimeStep = physicsTimeStep;
+
+    emit physicsTimeStepChanged();
+}
+
+int Scene::physicsVelocityIterations() const
+{
+    return m_physicsVelocityIterations;
+}
+
+void Scene::setPhysicsVelocityIterations(const int &physicsVelocityIterations)
+{
+    if (m_physicsVelocityIterations == physicsVelocityIterations)
+        return;
+
+    m_physicsVelocityIterations = physicsVelocityIterations;
+
+    emit physicsVelocityIterationsChanged();
+}
+
+int Scene::physicsPositionIterations() const
+{
+    return m_physicsPositionIterations;
+}
+
+void Scene::setPhysicsPositionIterations(const int &physicsPositionIterations)
+{
+    if (m_physicsPositionIterations == physicsPositionIterations)
+        return;
+
+    m_physicsPositionIterations = physicsPositionIterations;
+
+    emit physicsPositionIterationsChanged();
 }
