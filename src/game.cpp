@@ -99,11 +99,12 @@ int Game::fps() const
 
 void Game::setFps(const int &fps)
 {
-    if (m_fps != fps) {
-        m_fps = fps;
+    if (m_fps == fps)
+        return;
 
-        emit fpsChanged();
-    }
+    m_fps = fps;
+
+    emit fpsChanged();
 }
 
 void Game::timerEvent(QTimerEvent *event)

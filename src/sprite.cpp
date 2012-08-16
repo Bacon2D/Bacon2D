@@ -35,10 +35,11 @@ void Sprite::append_animation(QDeclarativeListProperty<SpriteAnimation> *list, S
 {
     Sprite *spriteItem = qobject_cast<Sprite *>(list->object);
 
-    if (spriteItem) {
-        spriteItem->m_states.insert(animation->name(), animation);
-        animation->spriteSheet()->setParentItem(spriteItem);
-    }
+    if (!spriteItem)
+        return;
+
+    spriteItem->m_states.insert(animation->name(), animation);
+    animation->spriteSheet()->setParentItem(spriteItem);
 }
 
 Sprite::Sprite(Scene *parent)
@@ -125,14 +126,15 @@ bool Sprite::verticalMirror() const
 
 void Sprite::setVerticalMirror(const bool &verticalMirror)
 {
-    if (m_verticalMirror != verticalMirror) {
-        m_verticalMirror = verticalMirror;
+    if (m_verticalMirror == verticalMirror)
+        return;
 
-        foreach (SpriteAnimation *animation, m_states.values())
-            animation->setVerticalMirror(m_verticalMirror);
+    m_verticalMirror = verticalMirror;
 
-        emit verticalMirrorChanged();
-    }
+    foreach (SpriteAnimation *animation, m_states.values())
+        animation->setVerticalMirror(m_verticalMirror);
+
+    emit verticalMirrorChanged();
 }
 
 bool Sprite::horizontalMirror() const
@@ -142,12 +144,13 @@ bool Sprite::horizontalMirror() const
 
 void Sprite::setHorizontalMirror(const bool &horizontalMirror)
 {
-    if (m_horizontalMirror != horizontalMirror) {
-        m_horizontalMirror = horizontalMirror;
+    if (m_horizontalMirror == horizontalMirror)
+        return;
 
-        foreach (SpriteAnimation *animation, m_states.values())
-            animation->setHorizontalMirror(m_horizontalMirror);
+    m_horizontalMirror = horizontalMirror;
 
-        emit horizontalMirrorChanged();
-    }
+    foreach (SpriteAnimation *animation, m_states.values())
+        animation->setHorizontalMirror(m_horizontalMirror);
+
+    emit horizontalMirrorChanged();
 }

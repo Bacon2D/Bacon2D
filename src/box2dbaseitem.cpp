@@ -47,20 +47,21 @@ bool Box2DBaseItem::initialized() const
  */
 void Box2DBaseItem::synchronize()
 {
-    if (m_initialized) {
-        m_synchronizing = true;
+    if (!m_initialized)
+        return;
 
-        const QPointF newPoint = b2Util::qTopLeft(b2TransformOrigin(), boundingRect(), m_scaleRatio);
-        const qreal newRotation = b2Util::qAngle(b2Angle());
+    m_synchronizing = true;
 
-        if (!qFuzzyCompare(x(), newPoint.x()) || !qFuzzyCompare(y(), newPoint.y()))
-            setPos(newPoint);
+    const QPointF newPoint = b2Util::qTopLeft(b2TransformOrigin(), boundingRect(), m_scaleRatio);
+    const qreal newRotation = b2Util::qAngle(b2Angle());
 
-        if (!qFuzzyCompare(rotation(), newRotation))
-            setRotation(newRotation);
+    if (!qFuzzyCompare(x(), newPoint.x()) || !qFuzzyCompare(y(), newPoint.y()))
+        setPos(newPoint);
 
-        m_synchronizing = false;
-    }
+    if (!qFuzzyCompare(rotation(), newRotation))
+        setRotation(newRotation);
+
+    m_synchronizing = false;
 }
 
 void Box2DBaseItem::setWorld(QSharedPointer<b2World> world)
