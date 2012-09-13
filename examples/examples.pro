@@ -10,5 +10,4 @@ SUBDIRS += imagelayer \
            sprite \
            updateInterval \
            manysprites \
-           viewport_parallax \
            behaviorchange
