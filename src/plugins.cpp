@@ -30,7 +30,6 @@
 #include "sprite.h"
 #include "imagelayer.h"
 #include "game.h"
-#include "viewport.h"
 #include "behavior.h"
 #include "scriptbehavior.h"
 #include "shape.h"
@@ -64,7 +63,6 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<Box2DDistanceJointItem>("QuasiGame", 1, 0, "QuasiDistanceJoint");
     qmlRegisterType<Box2DMouseJointItem>("QuasiGame", 1, 0, "QuasiMouseJoint");
     qmlRegisterType<ImageLayer>("QuasiGame", 1, 0, "QuasiImageLayer");
-    qmlRegisterType<Viewport>("QuasiGame", 1, 0, "QuasiViewport");
     qmlRegisterType<ScriptBehavior>("QuasiGame", 1, 0, "QuasiScriptBehavior");
     qmlRegisterType<Rectangle>("QuasiGame", 1, 0, "QuasiRectangle");
     qmlRegisterType<ColorFill>("QuasiGame", 1, 0, "QuasiColorFill");

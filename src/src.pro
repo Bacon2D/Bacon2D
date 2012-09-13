@@ -35,7 +35,6 @@ HEADERS += quasideclarativeitem.h \
            layer.h \
            imagelayer.h \
            util.h \
-           viewport.h \
            box2ddebugdrawitem.h \
            enums.h \
            behavior.h \
@@ -69,7 +68,6 @@ SOURCES += entity.cpp \
            layer.cpp \
            imagelayer.cpp \
            util.cpp \
-           viewport.cpp \
            box2ddebugdrawitem.cpp \
            behavior.cpp \
            scriptbehavior.cpp \

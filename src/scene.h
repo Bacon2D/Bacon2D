@@ -34,7 +34,6 @@
 #endif
 
 class Game;
-class Viewport;
 class b2World;
 class Fixture;
 class Box2DContact;
@@ -45,7 +44,6 @@ class Scene : public QuasiDeclarativeItem
     Q_OBJECT
 
     Q_PROPERTY(bool running READ running WRITE setRunning NOTIFY runningChanged)
-    Q_PROPERTY(Viewport *viewport READ viewport WRITE setViewport NOTIFY viewportChanged)
     Q_PROPERTY(Game *game READ game WRITE setGame)
     Q_PROPERTY(bool debug READ debug WRITE setDebug NOTIFY debugChanged)
     Q_PROPERTY(QPointF gravity READ gravity WRITE setGravity)
@@ -59,9 +57,6 @@ public:
 
     bool running() const;
     void setRunning(const bool &running);
-
-    Viewport *viewport() const;
-    void setViewport(Viewport *viewport);
 
     Game *game() const;
     void setGame(Game *game);
@@ -92,7 +87,6 @@ public:
 
 signals:
     void runningChanged();
-    void viewportChanged();
     void debugChanged();
     void contactPostSolve(Box2DContact *contact);
     void contactPreSolve(Box2DContact *contact);
@@ -115,7 +109,6 @@ protected:
 
 protected:
     bool m_running;
-    Viewport *m_viewport;
     Game *m_game;
     bool m_debug;
     QSharedPointer<b2World> m_world;

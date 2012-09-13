@@ -26,7 +26,6 @@
 #include "box2dcontactlistener.h"
 #include "box2dcontact.h"
 #include "box2ddebugdrawitem.h"
-#include "viewport.h"
 
 #include <QtCore/QtGlobal>
 
@@ -46,7 +45,6 @@ static void deleteWorld(b2World *world)
 Scene::Scene(Game *parent)
     : QuasiDeclarativeItem(parent)
     , m_running(true)
-    , m_viewport(0)
     , m_game(parent)
     , m_debug(false)
     , m_world(0)
@@ -111,21 +109,6 @@ void Scene::setRunning(const bool &running)
     m_running = running;
 
     emit runningChanged();
-}
-
-Viewport *Scene::viewport() const
-{
-    return m_viewport;
-}
-
-void Scene::setViewport(Viewport *viewport)
-{
-    if (m_viewport == viewport)
-        return;
-
-    m_viewport = viewport;
-
-    emit viewportChanged();
 }
 
 Game *Scene::game() const
@@ -243,13 +226,8 @@ void Scene::onDebugChanged()
     m_debugDraw = new Box2DDebugDrawItem(this);
     m_debugDraw->setOpacity(0.7);
 
-    if (m_viewport) {
-        m_debugDraw->setWidth(m_viewport->width());
-        m_debugDraw->setHeight(m_viewport->height());
-    } else {
-        m_debugDraw->setWidth(width());
-        m_debugDraw->setHeight(height());
-    }
+    m_debugDraw->setWidth(width());
+    m_debugDraw->setHeight(height());
 }
 
 void Scene::onPostSolve(Box2DContact *contact)
