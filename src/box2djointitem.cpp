@@ -71,3 +71,23 @@ void Box2DJointItem::setCollideConnected(const bool &collideConnected)
         emit collideConnectedChanged();
     }
 }
+
+void Box2DJointItem::setAnchorA(const QPointF &anchorA)
+{
+    if (m_anchorA == anchorA)
+        return;
+
+    m_anchorA = anchorA;
+
+    emit anchorAChanged();
+}
+
+void Box2DJointItem::setAnchorB(const QPointF &anchorB)
+{
+    if (m_anchorB == anchorB)
+        return;
+
+    m_anchorB = anchorB;
+
+    emit anchorBChanged();
+}

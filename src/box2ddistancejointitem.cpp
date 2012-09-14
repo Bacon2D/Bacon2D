@@ -54,8 +54,8 @@ void Box2DDistanceJointItem::initialize()
 
     jointDef.Initialize(m_entityA->body(),
                         m_entityB->body(),
-                        m_entityA->body()->GetWorldCenter(),
-                        m_entityB->body()->GetWorldCenter());
+                        m_anchorA.isNull() ? m_entityA->body()->GetWorldCenter() : b2Util::b2Vec(m_anchorA, m_scaleRatio),
+                        m_anchorB.isNull() ? m_entityB->body()->GetWorldCenter() : b2Util::b2Vec(m_anchorB, m_scaleRatio));
 
 
     m_joint = static_cast<b2DistanceJoint *>(m_worldPtr->CreateJoint(&jointDef));

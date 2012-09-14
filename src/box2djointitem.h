@@ -35,6 +35,8 @@ class Box2DJointItem : public Box2DBaseItem
     Q_PROPERTY(Entity *entityA READ entityA WRITE setEntityA NOTIFY entityAChanged)
     Q_PROPERTY(Entity *entityB READ entityB WRITE setEntityB NOTIFY entityBChanged)
     Q_PROPERTY(bool collideConnected READ collideConnected WRITE setCollideConnected NOTIFY collideConnectedChanged)
+    Q_PROPERTY(QPointF anchorA READ anchorA WRITE setAnchorA NOTIFY anchorAChanged)
+    Q_PROPERTY(QPointF anchorB READ anchorB WRITE setAnchorB NOTIFY anchorBChanged)
 
 public:
     Box2DJointItem(Scene *parent = 0);
@@ -49,16 +51,26 @@ public:
     bool collideConnected() const;
     void setCollideConnected(const bool &collideConnected);
 
+    QPointF anchorA() const { return m_anchorA; }
+    void setAnchorA(const QPointF &anchorA);
+
+    QPointF anchorB() const { return m_anchorB; }
+    void setAnchorB(const QPointF &anchorB);
+
 signals:
     void entityAChanged();
     void entityBChanged();
     void collideConnectedChanged();
+    void anchorAChanged();
+    void anchorBChanged();
 
 protected:
     Entity *m_entityA;
     Entity *m_entityB;
     bool m_collideConnected;
     b2Joint *m_joint;
+    QPointF m_anchorA;
+    QPointF m_anchorB;
 };
 
 #endif /* _BOX2DJOINTITEM_H_ */
