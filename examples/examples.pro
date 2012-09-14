@@ -10,4 +10,5 @@ SUBDIRS += imagelayer \
            sprite \
            updateInterval \
            manysprites \
-           behaviorchange
+           behaviorchange \
+           box2ddistancejoints
