@@ -123,61 +123,22 @@ QuasiGame {
         QuasiEntity {
             id: body
 
-            width: 100
-            height: 100
-            x: 200
-            y: 200
+            width: 30
+            height: 30
+            x: Math.random() * scene.width
+            y: Math.random() * 200
 
             entityType: Quasi.DynamicType
             sleepingAllowed: false
 
-            Rectangle {
-                color: "blue"
-                anchors.fill: parent
-                opacity: 0.4
-            }
-
             QuasiFixture {
                 material: randomMaterial
 
                 shape: QuasiCircle {
-                    width: 30
-                    height: 30
-                    //radius: 5
-                    x: 0
-                    y: 0
+                    anchors.fill: parent
+
                     fill: QuasiColorFill {
                         brushColor: "red"
-                    }
-                }
-            }
-
-            QuasiFixture {
-                material: randomMaterial
-
-                shape: QuasiCircle {
-                    width: 30
-                    height: 30
-                    x: 33
-                    y: 20
-                    fill: QuasiColorFill {
-                        brushColor: "blue"
-                    }
-                }
-            }
-
-            QuasiFixture {
-                material: QuasiMaterial {
-                    density: 50
-                }
-
-                shape: QuasiCircle {
-                    width: 30
-                    height: 30
-                    x: 66
-                    y: 0
-                    fill: QuasiColorFill {
-                        brushColor: "green"
                     }
                 }
             }
