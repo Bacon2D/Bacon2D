@@ -26,6 +26,7 @@
 #include "box2dcontactlistener.h"
 #include "box2dcontact.h"
 #include "box2ddebugdrawitem.h"
+#include "box2djointitem.h"
 
 #include <QtCore/QtGlobal>
 
@@ -156,14 +157,25 @@ void Scene::componentComplete()
 #else
     QGraphicsItem *item;
 #endif
+
+    QList<Box2DJointItem *> jointItems;
+
     foreach (item, childItems()) {
         if (Entity *entity = dynamic_cast<Entity *>(item))
             entity->setScene(this);
 
         if (Box2DBaseItem *box2DItem = dynamic_cast<Box2DBaseItem *>(item)) {
             box2DItem->setWorld(m_world);
-            box2DItem->initialize();
+
+            if (Box2DJointItem *box2DJointItem = dynamic_cast<Box2DJointItem *>(item))
+                jointItems << box2DJointItem;
+            else
+                box2DItem->initialize();
         }
+    }
+
+    foreach (Box2DJointItem *box2DJointItem, jointItems) {
+        box2DJointItem->initialize();
     }
 
     if (m_debugDraw) {
