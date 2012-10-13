@@ -29,7 +29,7 @@
 #include "material.h"
 
 Entity::Entity(Scene *parent)
-    : Box2DBaseItem(parent)
+    : Box2DBase(parent)
     , m_updateInterval(0)
     , m_scene(0)
     , m_behavior(0)
@@ -141,7 +141,7 @@ void Entity::setBehavior(Behavior *behavior)
 
 void Entity::componentComplete()
 {
-    Box2DBaseItem::componentComplete();
+    Box2DBase::componentComplete();
 
     if (!m_initialized)
         initialize();
@@ -434,9 +434,9 @@ QVariant Entity::itemChange(GraphicsItemChange change, const QVariant &value)
     }
 
 #if QT_VERSION >= 0x050000
-    Box2DBaseItem::itemChange(change, data);
+    Box2DBase::itemChange(change, data);
 #else
-    return Box2DBaseItem::itemChange(change, value);
+    return Box2DBase::itemChange(change, value);
 #endif
 }
 

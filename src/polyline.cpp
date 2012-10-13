@@ -22,7 +22,7 @@
 #include "polyline.h"
 
 #include "util.h"
-#include "box2dbaseitem.h"
+#include "box2dbase.h"
 
 Polyline::Polyline(QuasiDeclarativeItem *parent)
     : Shape(parent)
@@ -64,7 +64,7 @@ void Polyline::updateShape(qreal penWidth)
 
         m_polygon.append(point);
         polyline[i] = b2Util::b2Vec(QPointF(point.x() + xOffset,
-                                            point.y() + yOffset), Box2DBaseItem::m_scaleRatio);
+                                            point.y() + yOffset), Box2DBase::m_scaleRatio);
     }
 
     if (m_loop) {

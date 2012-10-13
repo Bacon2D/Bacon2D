@@ -19,9 +19,9 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#include "box2ddebugdrawitem.h"
+#include "box2ddebugdraw.h"
 
-#include "box2dbaseitem.h"
+#include "box2dbase.h"
 #include "enums.h"
 #include "util.h"
 #include "scene.h"
@@ -30,7 +30,7 @@
 
 #include <QtGui/QPainter>
 
-Box2DDebugDrawItem::Box2DDebugDrawItem(Scene *parent)
+Box2DDebugDraw::Box2DDebugDraw(Scene *parent)
     : QuasiPaintedItem((QuasiDeclarativeItem*)parent)
     , b2Draw()
     , m_painter(0)
@@ -50,7 +50,7 @@ Box2DDebugDrawItem::Box2DDebugDrawItem(Scene *parent)
 #endif
 }
 
-void Box2DDebugDrawItem::draw()
+void Box2DDebugDraw::draw()
 {
     if (m_scene) {
         b2World *world = m_scene->world();
@@ -60,7 +60,7 @@ void Box2DDebugDrawItem::draw()
     }
 }
 
-void Box2DDebugDrawItem::DrawPolygon(const b2Vec2 *vertices, int32 vertexCount,
+void Box2DDebugDraw::DrawPolygon(const b2Vec2 *vertices, int32 vertexCount,
                             const b2Color &color)
 {
     if (!m_painter)
@@ -68,10 +68,10 @@ void Box2DDebugDrawItem::DrawPolygon(const b2Vec2 *vertices, int32 vertexCount,
 
     m_painter->setPen(b2Util::qColor(color));
     m_painter->setBrush(Qt::NoBrush);
-    m_painter->drawPolygon(b2Util::qPolygonF(vertices, vertexCount, Box2DBaseItem::m_scaleRatio));
+    m_painter->drawPolygon(b2Util::qPolygonF(vertices, vertexCount, Box2DBase::m_scaleRatio));
 }
 
-void Box2DDebugDrawItem::DrawSolidPolygon(const b2Vec2 *vertices, int32 vertexCount,
+void Box2DDebugDraw::DrawSolidPolygon(const b2Vec2 *vertices, int32 vertexCount,
                                  const b2Color &color)
 {
     if (!m_painter)
@@ -79,10 +79,10 @@ void Box2DDebugDrawItem::DrawSolidPolygon(const b2Vec2 *vertices, int32 vertexCo
 
     m_painter->setPen(Qt::NoPen);
     m_painter->setBrush(b2Util::qColor(color));
-    m_painter->drawPolygon(b2Util::qPolygonF(vertices, vertexCount, Box2DBaseItem::m_scaleRatio));
+    m_painter->drawPolygon(b2Util::qPolygonF(vertices, vertexCount, Box2DBase::m_scaleRatio));
 }
 
-void Box2DDebugDrawItem::DrawCircle(const b2Vec2 &center, float32 radius,
+void Box2DDebugDraw::DrawCircle(const b2Vec2 &center, float32 radius,
                            const b2Color &color)
 {
     if (!m_painter)
@@ -91,11 +91,11 @@ void Box2DDebugDrawItem::DrawCircle(const b2Vec2 &center, float32 radius,
     m_painter->setPen(b2Util::qColor(color));
     m_painter->setBrush(Qt::NoBrush);
     m_painter->drawEllipse(b2Util::qPointF(center),
-                           radius * Box2DBaseItem::m_scaleRatio,
-                           radius * Box2DBaseItem::m_scaleRatio);
+                           radius * Box2DBase::m_scaleRatio,
+                           radius * Box2DBase::m_scaleRatio);
 }
 
-void Box2DDebugDrawItem::DrawSolidCircle(const b2Vec2 &center, float32 radius,
+void Box2DDebugDraw::DrawSolidCircle(const b2Vec2 &center, float32 radius,
                                 const b2Vec2 &axis, const b2Color &color)
 {
     Q_UNUSED(axis)
@@ -105,34 +105,34 @@ void Box2DDebugDrawItem::DrawSolidCircle(const b2Vec2 &center, float32 radius,
 
     m_painter->setPen(Qt::NoPen);
     m_painter->setBrush(b2Util::qColor(color));
-    m_painter->drawEllipse(b2Util::qPointF(center, Box2DBaseItem::m_scaleRatio),
-                           radius * Box2DBaseItem::m_scaleRatio,
-                           radius * Box2DBaseItem::m_scaleRatio);
+    m_painter->drawEllipse(b2Util::qPointF(center, Box2DBase::m_scaleRatio),
+                           radius * Box2DBase::m_scaleRatio,
+                           radius * Box2DBase::m_scaleRatio);
 }
 
 
 
 
-void Box2DDebugDrawItem::DrawSegment(const b2Vec2 &p1, const b2Vec2 &p2,
+void Box2DDebugDraw::DrawSegment(const b2Vec2 &p1, const b2Vec2 &p2,
                             const b2Color &color)
 {
     if (!m_painter)
         return;
 
     m_painter->setPen(b2Util::qColor(color));
-    m_painter->drawLine(b2Util::qPointF(p1, Box2DBaseItem::m_scaleRatio), b2Util::qPointF(p2, Box2DBaseItem::m_scaleRatio));
+    m_painter->drawLine(b2Util::qPointF(p1, Box2DBase::m_scaleRatio), b2Util::qPointF(p2, Box2DBase::m_scaleRatio));
 }
 
-void Box2DDebugDrawItem::DrawTransform(const b2Transform &xf)
+void Box2DDebugDraw::DrawTransform(const b2Transform &xf)
 {
     Q_UNUSED(xf)
 }
 
 #if QT_VERSION >= 0x050000
-void Box2DDebugDrawItem::paint(QPainter *painter)
+void Box2DDebugDraw::paint(QPainter *painter)
 {
 #else
-void Box2DDebugDrawItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void Box2DDebugDraw::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
@@ -142,7 +142,7 @@ void Box2DDebugDrawItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
     draw();
 }
 
-void Box2DDebugDrawItem::step()
+void Box2DDebugDraw::step()
 {
     update();
 }

@@ -19,42 +19,41 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _BOX2DDISTANCEJOINTITEM_H_
-#define _BOX2DDISTANCEJOINTITEM_H_
+#ifndef _BOX2DBASE_H_
+#define _BOX2DBASE_H_
 
-#include "box2djointitem.h"
+#include "quasideclarativeitem.h"
 
-#include <QtCore/QtGlobal>
+#include <Box2D/Box2D.h>
 
-class b2DistanceJoint;
+class Scene;
 
-class Box2DDistanceJointItem : public Box2DJointItem
+class Box2DBase : public QuasiDeclarativeItem
 {
     Q_OBJECT
 
-    Q_PROPERTY(float length READ length NOTIFY lengthChanged)
-
 public:
-    Box2DDistanceJointItem(Scene *parent = 0);
-    ~Box2DDistanceJointItem();
+    Box2DBase(Scene *parent = 0);
+    virtual ~Box2DBase() {}
 
-    void initialize();
+    static float m_scaleRatio;
 
-    b2Vec2 b2TransformOrigin() const;
+    void setWorld(QSharedPointer<b2World> world);
 
-    float b2Angle() const;
+    bool initialized() const;
+    virtual void initialize() = 0;
 
-    float length() const;
+    virtual void synchronize();
 
 protected:
-#if QT_VERSION >= 0x050000
-    void itemChange(ItemChange change, const ItemChangeData &data);
-#else
-    QVariant itemChange(GraphicsItemChange change, const QVariant &value);
-#endif
+    virtual b2Vec2 b2TransformOrigin() const = 0;
+    virtual float b2Angle() const = 0;
 
-signals:
-    void lengthChanged();
+protected:
+    bool m_initialized;
+    bool m_synchronizing;
+    QWeakPointer<b2World> m_world;
+    b2World *m_worldPtr;
 };
 
-#endif /* _BOX2DDISTANCEJOINTITEM_H_ */
+#endif /* _BOX2DBASE_H_ */

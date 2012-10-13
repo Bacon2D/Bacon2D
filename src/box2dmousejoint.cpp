@@ -19,7 +19,7 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#include "box2dmousejointitem.h"
+#include "box2dmousejoint.h"
 
 #include "entity.h"
 #include "game.h"
@@ -34,8 +34,8 @@
 
 #include <Box2D/Box2D.h>
 
-Box2DMouseJointItem::Box2DMouseJointItem(Scene *parent)
-    : Box2DBaseItem(parent)
+Box2DMouseJoint::Box2DMouseJoint(Scene *parent)
+    : Box2DBase(parent)
     , m_joint(0)
     , m_target(0)
     , m_collideConnected(true)
@@ -44,7 +44,7 @@ Box2DMouseJointItem::Box2DMouseJointItem(Scene *parent)
 {
 }
 
-Box2DMouseJointItem::~Box2DMouseJointItem()
+Box2DMouseJoint::~Box2DMouseJoint()
 {
     if (!m_world || !m_joint)
         return;
@@ -57,12 +57,12 @@ Box2DMouseJointItem::~Box2DMouseJointItem()
     m_joint = 0;
 }
 
-Entity *Box2DMouseJointItem::target() const
+Entity *Box2DMouseJoint::target() const
 {
     return m_target;
 }
 
-void Box2DMouseJointItem::setTarget(Entity *target)
+void Box2DMouseJoint::setTarget(Entity *target)
 {
     if (m_target != target) {
         m_target = target;
@@ -71,12 +71,12 @@ void Box2DMouseJointItem::setTarget(Entity *target)
     }
 }
 
-float Box2DMouseJointItem::maxForce() const
+float Box2DMouseJoint::maxForce() const
 {
     return m_maxForce;
 }
 
-void Box2DMouseJointItem::setMaxForce(const float &maxForce)
+void Box2DMouseJoint::setMaxForce(const float &maxForce)
 {
     if (m_maxForce != maxForce) {
         m_maxForce = maxForce;
@@ -88,7 +88,7 @@ void Box2DMouseJointItem::setMaxForce(const float &maxForce)
     }
 }
 
-void Box2DMouseJointItem::initialize()
+void Box2DMouseJoint::initialize()
 {
     if (m_initialized || !m_world || !m_target)
         return;
@@ -116,12 +116,12 @@ void Box2DMouseJointItem::initialize()
     m_initialized = true;
 }
 
-bool Box2DMouseJointItem::collideConnected() const
+bool Box2DMouseJoint::collideConnected() const
 {
     return m_collideConnected;
 }
 
-void Box2DMouseJointItem::setCollideConnected(const bool &collideConnected)
+void Box2DMouseJoint::setCollideConnected(const bool &collideConnected)
 {
     if (m_collideConnected != collideConnected) {
         m_collideConnected = collideConnected;
@@ -130,22 +130,22 @@ void Box2DMouseJointItem::setCollideConnected(const bool &collideConnected)
     }
 }
 
-b2Vec2 Box2DMouseJointItem::b2TransformOrigin() const
+b2Vec2 Box2DMouseJoint::b2TransformOrigin() const
 {
     return b2Vec2(0, 0);
 }
 
-float Box2DMouseJointItem::b2Angle() const
+float Box2DMouseJoint::b2Angle() const
 {
     return 0.0f;
 }
 
-void Box2DMouseJointItem::synchronize()
+void Box2DMouseJoint::synchronize()
 {
     if (!m_joint || !m_target)
         return;
 
-    Box2DBaseItem::synchronize();
+    Box2DBase::synchronize();
 
     QPoint mousePos;
 

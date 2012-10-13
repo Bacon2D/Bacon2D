@@ -19,8 +19,8 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _BOX2DDEBUGDRAWITEM_H_
-#define _BOX2DDEBUGDRAWITEM_H_
+#ifndef _BOX2DDEBUGDRAW_H_
+#define _BOX2DDEBUGDRAW_H_
 
 #include "quasipainteditem.h"
 
@@ -31,12 +31,12 @@
 class QPainter;
 class Scene;
 
-class Box2DDebugDrawItem : public QuasiPaintedItem, public b2Draw
+class Box2DDebugDraw : public QuasiPaintedItem, public b2Draw
 {
     Q_OBJECT
 
 public:
-    Box2DDebugDrawItem(Scene *parent = 0);
+    Box2DDebugDraw(Scene *parent = 0);
 
 #if QT_VERSION >= 0x050000
     void paint(QPainter *painter);
@@ -61,4 +61,4 @@ private:
     Scene *m_scene;
 };
 
-#endif /* _BOX2DDEBUGDRAWITEM_H_ */
+#endif /* _BOX2DDEBUGDRAW_H_ */

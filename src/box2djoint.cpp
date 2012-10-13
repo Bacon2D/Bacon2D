@@ -19,10 +19,10 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#include "box2djointitem.h"
+#include "box2djoint.h"
 
-Box2DJointItem::Box2DJointItem(Scene *parent)
-    : Box2DBaseItem(parent)
+Box2DJoint::Box2DJoint(Scene *parent)
+    : Box2DBase(parent)
     , m_entityA(0)
     , m_entityB(0)
     , m_collideConnected(true)
@@ -30,12 +30,12 @@ Box2DJointItem::Box2DJointItem(Scene *parent)
 {
 }
 
-Entity *Box2DJointItem::entityA() const
+Entity *Box2DJoint::entityA() const
 {
     return m_entityA;
 }
 
-void Box2DJointItem::setEntityA(Entity *entityA)
+void Box2DJoint::setEntityA(Entity *entityA)
 {
     if (m_entityA != entityA) {
         m_entityA = entityA;
@@ -44,12 +44,12 @@ void Box2DJointItem::setEntityA(Entity *entityA)
     }
 }
 
-Entity *Box2DJointItem::entityB() const
+Entity *Box2DJoint::entityB() const
 {
     return m_entityB;
 }
 
-void Box2DJointItem::setEntityB(Entity *entityB)
+void Box2DJoint::setEntityB(Entity *entityB)
 {
     if (m_entityB != entityB) {
         m_entityB = entityB;
@@ -58,12 +58,12 @@ void Box2DJointItem::setEntityB(Entity *entityB)
     }
 }
 
-bool Box2DJointItem::collideConnected() const
+bool Box2DJoint::collideConnected() const
 {
     return m_collideConnected;
 }
 
-void Box2DJointItem::setCollideConnected(const bool &collideConnected)
+void Box2DJoint::setCollideConnected(const bool &collideConnected)
 {
     if (m_collideConnected != collideConnected) {
         m_collideConnected = collideConnected;
@@ -72,7 +72,7 @@ void Box2DJointItem::setCollideConnected(const bool &collideConnected)
     }
 }
 
-void Box2DJointItem::setAnchorA(const QPointF &anchorA)
+void Box2DJoint::setAnchorA(const QPointF &anchorA)
 {
     if (m_anchorA == anchorA)
         return;
@@ -82,7 +82,7 @@ void Box2DJointItem::setAnchorA(const QPointF &anchorA)
     emit anchorAChanged();
 }
 
-void Box2DJointItem::setAnchorB(const QPointF &anchorB)
+void Box2DJoint::setAnchorB(const QPointF &anchorB)
 {
     if (m_anchorB == anchorB)
         return;

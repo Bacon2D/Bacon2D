@@ -19,16 +19,16 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _BOX2DJOINTITEM_H_
-#define _BOX2DJOINTITEM_H_
+#ifndef _BOX2DJOINT_H_
+#define _BOX2DJOINT_H_
 
-#include "box2dbaseitem.h"
+#include "box2dbase.h"
 #include "entity.h"
 
 class Entity;
 class b2Joint;
 
-class Box2DJointItem : public Box2DBaseItem
+class Box2DJoint : public Box2DBase
 {
     Q_OBJECT
 
@@ -39,8 +39,8 @@ class Box2DJointItem : public Box2DBaseItem
     Q_PROPERTY(QPointF anchorB READ anchorB WRITE setAnchorB NOTIFY anchorBChanged)
 
 public:
-    Box2DJointItem(Scene *parent = 0);
-    virtual ~Box2DJointItem() {}
+    Box2DJoint(Scene *parent = 0);
+    virtual ~Box2DJoint() {}
 
     Entity *entityA() const;
     void setEntityA(Entity *entityA);
@@ -73,4 +73,4 @@ protected:
     QPointF m_anchorB;
 };
 
-#endif /* _BOX2DJOINTITEM_H_ */
+#endif /* _BOX2DJOINT_H_ */

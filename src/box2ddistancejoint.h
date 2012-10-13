@@ -19,41 +19,42 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _BOX2DBASEITEM_H_
-#define _BOX2DBASEITEM_H_
+#ifndef _BOX2DDISTANCEJOINT_H_
+#define _BOX2DDISTANCEJOINT_H_
 
-#include "quasideclarativeitem.h"
+#include "box2djoint.h"
 
-#include <Box2D/Box2D.h>
+#include <QtCore/QtGlobal>
 
-class Scene;
+class b2DistanceJoint;
 
-class Box2DBaseItem : public QuasiDeclarativeItem
+class Box2DDistanceJoint : public Box2DJoint
 {
     Q_OBJECT
 
+    Q_PROPERTY(float length READ length NOTIFY lengthChanged)
+
 public:
-    Box2DBaseItem(Scene *parent = 0);
-    virtual ~Box2DBaseItem() {}
+    Box2DDistanceJoint(Scene *parent = 0);
+    ~Box2DDistanceJoint();
 
-    static float m_scaleRatio;
+    void initialize();
 
-    void setWorld(QSharedPointer<b2World> world);
+    b2Vec2 b2TransformOrigin() const;
 
-    bool initialized() const;
-    virtual void initialize() = 0;
+    float b2Angle() const;
 
-    virtual void synchronize();
-
-protected:
-    virtual b2Vec2 b2TransformOrigin() const = 0;
-    virtual float b2Angle() const = 0;
+    float length() const;
 
 protected:
-    bool m_initialized;
-    bool m_synchronizing;
-    QWeakPointer<b2World> m_world;
-    b2World *m_worldPtr;
+#if QT_VERSION >= 0x050000
+    void itemChange(ItemChange change, const ItemChangeData &data);
+#else
+    QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+#endif
+
+signals:
+    void lengthChanged();
 };
 
-#endif /* _BOX2DBASEITEM_H_ */
+#endif /* _BOX2DDISTANCEJOINT_H_ */

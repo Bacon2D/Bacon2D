@@ -37,7 +37,7 @@ class Game;
 class b2World;
 class Fixture;
 class Box2DContact;
-class Box2DDebugDrawItem;
+class Box2DDebugDraw;
 
 class Scene : public QuasiDeclarativeItem
 {
@@ -113,7 +113,7 @@ protected:
     bool m_debug;
     QSharedPointer<b2World> m_world;
     QPointF m_gravity;
-    Box2DDebugDrawItem *m_debugDraw;
+    Box2DDebugDraw *m_debugDraw;
     qreal m_physicsTimeStep;
     int m_physicsVelocityIterations;
     int m_physicsPositionIterations;

@@ -23,7 +23,7 @@
 #define _ENTITY_H_
 
 #include "enums.h"
-#include "box2dbaseitem.h"
+#include "box2dbase.h"
 
 #include <QtCore/QtGlobal>
 #include <QtCore/QTime>
@@ -33,7 +33,7 @@ class Scene;
 class Behavior;
 class Fixture;
 
-class Entity : public Box2DBaseItem
+class Entity : public Box2DBase
 {
     Q_OBJECT
 

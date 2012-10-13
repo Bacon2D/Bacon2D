@@ -25,8 +25,8 @@
 #include "layer.h"
 #include "box2dcontactlistener.h"
 #include "box2dcontact.h"
-#include "box2ddebugdrawitem.h"
-#include "box2djointitem.h"
+#include "box2ddebugdraw.h"
+#include "box2djoint.h"
 
 #include <QtCore/QtGlobal>
 
@@ -88,7 +88,7 @@ void Scene::update(const int &delta)
         else if (Layer *layer = qobject_cast<Layer *>(item))
             layer->update();
 
-        if (Box2DBaseItem *box2DItem = dynamic_cast<Box2DBaseItem *>(item))
+        if (Box2DBase *box2DItem = dynamic_cast<Box2DBase *>(item))
             box2DItem->synchronize();
     }
 
@@ -158,23 +158,23 @@ void Scene::componentComplete()
     QGraphicsItem *item;
 #endif
 
-    QList<Box2DJointItem *> jointItems;
+    QList<Box2DJoint *> jointItems;
 
     foreach (item, childItems()) {
         if (Entity *entity = dynamic_cast<Entity *>(item))
             entity->setScene(this);
 
-        if (Box2DBaseItem *box2DItem = dynamic_cast<Box2DBaseItem *>(item)) {
+        if (Box2DBase *box2DItem = dynamic_cast<Box2DBase *>(item)) {
             box2DItem->setWorld(m_world);
 
-            if (Box2DJointItem *box2DJointItem = dynamic_cast<Box2DJointItem *>(item))
+            if (Box2DJoint *box2DJointItem = dynamic_cast<Box2DJoint *>(item))
                 jointItems << box2DJointItem;
             else
                 box2DItem->initialize();
         }
     }
 
-    foreach (Box2DJointItem *box2DJointItem, jointItems) {
+    foreach (Box2DJoint *box2DJointItem, jointItems) {
         box2DJointItem->initialize();
     }
 
@@ -199,7 +199,7 @@ QVariant Scene::itemChange(GraphicsItemChange change, const QVariant &value)
         if (Entity *entity = dynamic_cast<Entity *>(child))
             entity->setScene(this);
 
-        if (Box2DBaseItem *box2DBaseItem = dynamic_cast<Box2DBaseItem *>(child)) {
+        if (Box2DBase *box2DBaseItem = dynamic_cast<Box2DBase *>(child)) {
             box2DBaseItem->setWorld(m_world);
             box2DBaseItem->initialize();
         }
@@ -235,7 +235,7 @@ void Scene::onDebugChanged()
     if (m_debugDraw)
         delete m_debugDraw;
 
-    m_debugDraw = new Box2DDebugDrawItem(this);
+    m_debugDraw = new Box2DDebugDraw(this);
     m_debugDraw->setOpacity(0.7);
 
     m_debugDraw->setWidth(width());

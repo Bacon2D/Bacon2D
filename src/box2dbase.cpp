@@ -19,15 +19,15 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#include "box2dbaseitem.h"
+#include "box2dbase.h"
 
 #include "util.h"
 
 #include <Box2D/Box2D.h>
 
-float Box2DBaseItem::m_scaleRatio = 32.0f;
+float Box2DBase::m_scaleRatio = 32.0f;
 
-Box2DBaseItem::Box2DBaseItem(Scene *parent )
+Box2DBase::Box2DBase(Scene *parent )
     : QuasiDeclarativeItem((QuasiDeclarativeItem*)parent)
     , m_initialized(false)
     , m_synchronizing(false)
@@ -35,7 +35,7 @@ Box2DBaseItem::Box2DBaseItem(Scene *parent )
 {
 }
 
-bool Box2DBaseItem::initialized() const
+bool Box2DBase::initialized() const
 {
     return m_initialized;
 }
@@ -45,7 +45,7 @@ bool Box2DBaseItem::initialized() const
  *
  * https://gitorious.org/qml-box2d/qml-box2d
  */
-void Box2DBaseItem::synchronize()
+void Box2DBase::synchronize()
 {
     if (!m_initialized)
         return;
@@ -64,7 +64,7 @@ void Box2DBaseItem::synchronize()
     m_synchronizing = false;
 }
 
-void Box2DBaseItem::setWorld(QSharedPointer<b2World> world)
+void Box2DBase::setWorld(QSharedPointer<b2World> world)
 {
     m_world = world;
 

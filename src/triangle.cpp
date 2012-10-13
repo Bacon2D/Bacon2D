@@ -22,7 +22,7 @@
 #include "triangle.h"
 
 #include "util.h"
-#include "box2dbaseitem.h"
+#include "box2dbase.h"
 
 Triangle::Triangle(QuasiDeclarativeItem *parent)
     : Shape(parent)
@@ -71,7 +71,7 @@ void Triangle::updateShape(qreal penWidth)
 
         m_triangle.append(point);
         triangle[i] = b2Util::b2Vec(QPointF(point.x() + xOffset,
-                                            point.y() + yOffset), Box2DBaseItem::m_scaleRatio);
+                                            point.y() + yOffset), Box2DBase::m_scaleRatio);
     }
 
     if (m_shape)
