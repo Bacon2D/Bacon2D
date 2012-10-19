@@ -29,7 +29,7 @@
 #include "material.h"
 
 Entity::Entity(Scene *parent)
-    : Box2DBaseItem(parent)
+    : Box2DBase(parent)
     , m_updateInterval(0)
     , m_scene(0)
     , m_behavior(0)
@@ -96,13 +96,14 @@ int Entity::updateInterval() const
 
 void Entity::setUpdateInterval(const int &updateInterval)
 {
-    if (m_updateInterval != updateInterval) {
-        m_updateInterval = updateInterval;
+    if (m_updateInterval == updateInterval)
+        return;
 
-        emit updateIntervalChanged();
+    m_updateInterval = updateInterval;
 
-        m_updateTime.restart();
-    }
+    emit updateIntervalChanged();
+
+    m_updateTime.restart();
 }
 
 Scene *Entity::scene() const
@@ -140,7 +141,7 @@ void Entity::setBehavior(Behavior *behavior)
 
 void Entity::componentComplete()
 {
-    Box2DBaseItem::componentComplete();
+    Box2DBase::componentComplete();
 
     if (!m_initialized)
         initialize();
@@ -195,14 +196,15 @@ qreal Entity::linearDamping() const
 
 void Entity::setLinearDamping(const qreal &linearDamping)
 {
-    if (m_linearDamping != linearDamping) {
-        m_linearDamping = linearDamping;
+    if (m_linearDamping == linearDamping)
+        return;
 
-        if (m_body)
-            m_body->SetLinearDamping(linearDamping);
+    m_linearDamping = linearDamping;
 
-        emit linearDampingChanged();
-    }
+    if (m_body)
+        m_body->SetLinearDamping(linearDamping);
+
+    emit linearDampingChanged();
 }
 
 qreal Entity::angularDamping() const
@@ -212,14 +214,15 @@ qreal Entity::angularDamping() const
 
 void Entity::setAngularDamping(const qreal &angularDamping)
 {
-    if (m_angularDamping != angularDamping) {
-        m_angularDamping = angularDamping;
+    if (m_angularDamping == angularDamping)
+        return;
 
-        if (m_body)
-            m_body->SetAngularDamping(angularDamping);
+    m_angularDamping = angularDamping;
 
-        emit angularDampingChanged();
-    }
+    if (m_body)
+        m_body->SetAngularDamping(angularDamping);
+
+    emit angularDampingChanged();
 }
 
 Quasi::EntityType Entity::entityType() const
@@ -229,14 +232,15 @@ Quasi::EntityType Entity::entityType() const
 
 void Entity::setEntityType(const Quasi::EntityType &entityType)
 {
-    if (m_entityType != entityType) {
-        m_entityType = entityType;
+    if (m_entityType == entityType)
+        return;
 
-        if (m_body)
-            m_body->SetType((b2BodyType)entityType);
+    m_entityType = entityType;
 
-        emit entityTypeChanged();
-    }
+    if (m_body)
+        m_body->SetType((b2BodyType)entityType);
+
+    emit entityTypeChanged();
 }
 
 bool Entity::bullet() const
@@ -246,14 +250,15 @@ bool Entity::bullet() const
 
 void Entity::setBullet(const bool &bullet)
 {
-    if (m_bullet != bullet) {
-        m_bullet = bullet;
+    if (m_bullet == bullet)
+        return;
 
-        if (m_body)
-            m_body->SetBullet(bullet);
+    m_bullet = bullet;
 
-        emit bulletChanged();
-    }
+    if (m_body)
+        m_body->SetBullet(bullet);
+
+    emit bulletChanged();
 }
 
 bool Entity::sleepingAllowed() const
@@ -263,14 +268,15 @@ bool Entity::sleepingAllowed() const
 
 void Entity::setSleepingAllowed(const bool &sleepingAllowed)
 {
-    if (m_sleepingAllowed != sleepingAllowed) {
-        m_sleepingAllowed = sleepingAllowed;
+    if (m_sleepingAllowed == sleepingAllowed)
+        return;
 
-        if (m_body)
-            m_body->SetSleepingAllowed(sleepingAllowed);
+    m_sleepingAllowed = sleepingAllowed;
 
-        emit sleepingAllowedChanged();
-    }
+    if (m_body)
+        m_body->SetSleepingAllowed(sleepingAllowed);
+
+    emit sleepingAllowedChanged();
 }
 
 bool Entity::fixedRotation() const
@@ -280,14 +286,15 @@ bool Entity::fixedRotation() const
 
 void Entity::setFixedRotation(const bool &fixedRotation)
 {
-    if (m_fixedRotation != fixedRotation) {
-        m_fixedRotation = fixedRotation;
+    if (m_fixedRotation == fixedRotation)
+        return;
 
-        if (m_body)
-            m_body->SetFixedRotation(fixedRotation);
+    m_fixedRotation = fixedRotation;
 
-        emit fixedRotationChanged();
-    }
+    if (m_body)
+        m_body->SetFixedRotation(fixedRotation);
+
+    emit fixedRotationChanged();
 }
 
 bool Entity::active() const
@@ -297,45 +304,51 @@ bool Entity::active() const
 
 void Entity::setActive(const bool &active)
 {
-    if (m_active != active) {
-        m_active = active;
+    if (m_active == active)
+        return;
 
-        if (m_body)
-            m_body->SetActive(active);
+    m_active = active;
 
-        emit activeChanged();
-    }
+    if (m_body)
+        m_body->SetActive(active);
+
+    emit activeChanged();
 }
 
 void Entity::applyTorque(const float &torque)
 {
-    if (m_body)
-        m_body->ApplyTorque(torque);
+    if (!m_body)
+        return;
+
+    m_body->ApplyTorque(torque);
 }
 
 void Entity::applyLinearImpulse(const QPointF &impulse, const QPointF &point)
 {
-    if (m_body) {
-        m_body->ApplyLinearImpulse(b2Vec2(impulse.x() / m_scaleRatio,
-                                          -impulse.y() / m_scaleRatio),
-                                   b2Vec2(point.x() / m_scaleRatio,
-                                          -point.y() / m_scaleRatio));
-    }
+    if (!m_body)
+        return;
+
+    m_body->ApplyLinearImpulse(b2Vec2(impulse.x() / m_scaleRatio,
+                                      -impulse.y() / m_scaleRatio),
+                               b2Vec2(point.x() / m_scaleRatio,
+                                      -point.y() / m_scaleRatio));
 }
 
 void Entity::setLinearVelocity(const QPointF &velocity)
 {
-    if (m_body) {
-        m_body->SetLinearVelocity(b2Vec2(velocity.x() / m_scaleRatio,
-                                         -velocity.y() / m_scaleRatio));
-    }
+    if (!m_body)
+        return;
+
+    m_body->SetLinearVelocity(b2Vec2(velocity.x() / m_scaleRatio,
+                                     -velocity.y() / m_scaleRatio));
 }
 
 void Entity::setAngularVelocity(const float &velocity)
 {
-    if (m_body) {
-        m_body->SetAngularVelocity(velocity);
-    }
+    if (!m_body)
+        return;
+
+    m_body->SetAngularVelocity(velocity);
 }
 
 void Entity::geometryChanged(const QRectF &newGeometry,
@@ -361,6 +374,7 @@ void Entity::geometryChanged(const QRectF &newGeometry,
 b2Vec2 Entity::b2TransformOrigin() const
 {
     b2Vec2 vec;
+
     if (m_body)
         vec = m_body->GetPosition();
 
@@ -370,8 +384,10 @@ b2Vec2 Entity::b2TransformOrigin() const
 float Entity::b2Angle() const
 {
     float32 angle = 0.0f;
+
     if (m_body)
         angle = m_body->GetAngle();
+
     return angle;
 }
 
@@ -418,9 +434,9 @@ QVariant Entity::itemChange(GraphicsItemChange change, const QVariant &value)
     }
 
 #if QT_VERSION >= 0x050000
-    Box2DBaseItem::itemChange(change, data);
+    Box2DBase::itemChange(change, data);
 #else
-    return Box2DBaseItem::itemChange(change, value);
+    return Box2DBase::itemChange(change, value);
 #endif
 }
 

@@ -19,16 +19,16 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _BOX2DMOUSEJOINTITEM_H_
-#define _BOX2DMOUSEJOINTITEM_H_
+#ifndef _BOX2DMOUSEJOINT_H_
+#define _BOX2DMOUSEJOINT_H_
 
-#include "box2dbaseitem.h"
+#include "box2dbase.h"
 
 class b2Body;
 class b2MouseJoint;
 class Entity;
 
-class Box2DMouseJointItem : public Box2DBaseItem
+class Box2DMouseJoint : public Box2DBase
 {
     Q_OBJECT
 
@@ -37,8 +37,8 @@ class Box2DMouseJointItem : public Box2DBaseItem
     Q_PROPERTY(float maxForce READ maxForce WRITE setMaxForce NOTIFY maxForceChanged)
 
 public:
-    Box2DMouseJointItem(Scene *parent = 0);
-    ~Box2DMouseJointItem();
+    Box2DMouseJoint(Scene *parent = 0);
+    ~Box2DMouseJoint();
 
     Entity *target() const;
     void setTarget(Entity *target);
@@ -73,4 +73,4 @@ private:
 #endif
 };
 
-#endif /* _BOX2DMOUSEJOINTITEM_H_ */
+#endif /* _BOX2DMOUSEJOINT_H_ */

@@ -22,7 +22,6 @@
 #include "game.h"
 
 #include "scene.h"
-#include "viewport.h"
 
 #if QT_VERSION >= 0x050000
 #include <QtQuick/QQuickCanvas>
@@ -36,7 +35,6 @@ Game::Game(QuasiDeclarativeItem *parent)
     : QuasiDeclarativeItem(parent)
     , m_currentScene(0)
     , m_fps(60)
-    , m_viewport(0)
     , m_timerId(0)
 {
     m_gameTime.start();
@@ -54,11 +52,6 @@ void Game::setCurrentScene(Scene *currentScene)
         return;
 
     if (m_currentScene) {
-        if (m_viewport) {
-            m_viewport->setVisible(false);
-            m_viewport = 0;
-        }
-
         m_currentScene->setRunning(false);
         m_currentScene->setVisible(false);
     }
@@ -68,22 +61,8 @@ void Game::setCurrentScene(Scene *currentScene)
     if (m_currentScene) {
         m_currentScene->setGame(this);
 
-        if ((m_viewport = m_currentScene->viewport())) {
-            m_viewport->setParent(this);
-            m_viewport->setParentItem(this);
-            m_viewport->setScene(m_currentScene);
-            m_viewport->setWidth(width());
-            m_viewport->setHeight(height());
-            m_viewport->setContentWidth(m_currentScene->width());
-            m_viewport->setContentHeight(m_currentScene->height());
-            m_viewport->updateMaxOffsets();
-            m_viewport->setVisible(true);
-
-            m_currentScene->setParentItem(m_viewport);
-        } else {
-            m_currentScene->setParent(this);
-            m_currentScene->setParentItem(this);
-        }
+        m_currentScene->setParent(this);
+        m_currentScene->setParentItem(this);
 
         m_currentScene->setRunning(true);
         m_currentScene->setVisible(true);
@@ -99,11 +78,12 @@ int Game::fps() const
 
 void Game::setFps(const int &fps)
 {
-    if (m_fps != fps) {
-        m_fps = fps;
+    if (m_fps == fps)
+        return;
 
-        emit fpsChanged();
-    }
+    m_fps = fps;
+
+    emit fpsChanged();
 }
 
 void Game::timerEvent(QTimerEvent *event)
@@ -118,8 +98,6 @@ void Game::update()
     long elapsedTime = m_gameTime.restart();
     if (m_currentScene)
         m_currentScene->update(elapsedTime);
-    if (m_viewport)
-        m_viewport->update(elapsedTime);
 }
 
 QPointF Game::mouse()
@@ -136,19 +114,3 @@ QPointF Game::mouse()
         return m_mousePos;
 #endif
 }
-
-#if QT_VERSION < 0x050000
-// this function is needed on Qt4 to fix viewport's width and height
-void Game::componentComplete()
-{
-    if (m_viewport && m_currentScene) {
-        m_viewport->setWidth(width());
-        m_viewport->setHeight(height());
-        m_viewport->setContentWidth(m_currentScene->width());
-        m_viewport->setContentHeight(m_currentScene->height());
-        m_viewport->updateMaxOffsets();
-    }
-
-    QDeclarativeItem::componentComplete();
-}
-#endif

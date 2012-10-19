@@ -21,8 +21,8 @@
 
 #include "plugins.h"
 
-#include "box2ddistancejointitem.h"
-#include "box2dmousejointitem.h"
+#include "box2ddistancejoint.h"
+#include "box2dmousejoint.h"
 #include "box2dcontact.h"
 #include "entity.h"
 #include "scene.h"
@@ -30,7 +30,6 @@
 #include "sprite.h"
 #include "imagelayer.h"
 #include "game.h"
-#include "viewport.h"
 #include "behavior.h"
 #include "scriptbehavior.h"
 #include "shape.h"
@@ -61,10 +60,9 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<Entity>("QuasiGame", 1, 0, "QuasiEntity");
     qmlRegisterType<Sprite>("QuasiGame", 1, 0, "QuasiSprite");
     qmlRegisterType<SpriteAnimation>("QuasiGame", 1, 0, "QuasiSpriteAnimation");
-    qmlRegisterType<Box2DDistanceJointItem>("QuasiGame", 1, 0, "QuasiDistanceJoint");
-    qmlRegisterType<Box2DMouseJointItem>("QuasiGame", 1, 0, "QuasiMouseJoint");
+    qmlRegisterType<Box2DDistanceJoint>("QuasiGame", 1, 0, "QuasiDistanceJoint");
+    qmlRegisterType<Box2DMouseJoint>("QuasiGame", 1, 0, "QuasiMouseJoint");
     qmlRegisterType<ImageLayer>("QuasiGame", 1, 0, "QuasiImageLayer");
-    qmlRegisterType<Viewport>("QuasiGame", 1, 0, "QuasiViewport");
     qmlRegisterType<ScriptBehavior>("QuasiGame", 1, 0, "QuasiScriptBehavior");
     qmlRegisterType<Rectangle>("QuasiGame", 1, 0, "QuasiRectangle");
     qmlRegisterType<ColorFill>("QuasiGame", 1, 0, "QuasiColorFill");

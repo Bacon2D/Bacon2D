@@ -21,7 +21,7 @@
 
 #include "rectangle.h"
 
-#include "box2dbaseitem.h"
+#include "box2dbase.h"
 #include "util.h"
 
 Rectangle::Rectangle(QuasiDeclarativeItem *parent)
@@ -57,10 +57,10 @@ void Rectangle::updateShape(qreal penWidth)
                     y() - parentItem()->height() / 2.0);
 
     b2Vec2 rect[4];
-    rect[0] = b2Util::b2Vec(QPointF(basePos.x(), basePos.y() + height()), Box2DBaseItem::m_scaleRatio);
-    rect[1] = b2Util::b2Vec(QPointF(basePos.x() + width(), basePos.y() + height()), Box2DBaseItem::m_scaleRatio);
-    rect[2] = b2Util::b2Vec(QPointF(basePos.x() + width(), basePos.y()), Box2DBaseItem::m_scaleRatio);
-    rect[3] = b2Util::b2Vec(basePos, Box2DBaseItem::m_scaleRatio);
+    rect[0] = b2Util::b2Vec(QPointF(basePos.x(), basePos.y() + height()), Box2DBase::m_scaleRatio);
+    rect[1] = b2Util::b2Vec(QPointF(basePos.x() + width(), basePos.y() + height()), Box2DBase::m_scaleRatio);
+    rect[2] = b2Util::b2Vec(QPointF(basePos.x() + width(), basePos.y()), Box2DBase::m_scaleRatio);
+    rect[3] = b2Util::b2Vec(basePos, Box2DBase::m_scaleRatio);
 
     b2PolygonShape *polygonShape = static_cast<b2PolygonShape*>(m_shape);
     polygonShape->Set(rect, 4);

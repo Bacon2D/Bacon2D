@@ -21,7 +21,7 @@
 
 #include "circle.h"
 
-#include "box2dbaseitem.h"
+#include "box2dbase.h"
 #include "util.h"
 
 Circle::Circle(QuasiDeclarativeItem *parent)
@@ -88,6 +88,6 @@ void Circle::updateShape(qreal penWidth)
     QPointF shapePos(x() - parentItem()->width() / 2.0 + diameter / 2.0,
                      y() - parentItem()->height() / 2.0 + diameter / 2.0);
 
-    circleShape->m_radius = diameter / 2.0 / Box2DBaseItem::m_scaleRatio;
-    circleShape->m_p = b2Util::b2Vec(shapePos, Box2DBaseItem::m_scaleRatio);
+    circleShape->m_radius = diameter / 2.0 / Box2DBase::m_scaleRatio;
+    circleShape->m_p = b2Util::b2Vec(shapePos, Box2DBase::m_scaleRatio);
 }

@@ -195,8 +195,8 @@ void Fixture::updateFixture()
     b2PolygonShape shape;
 
     //XXX: get coordinates
-    shape.SetAsBox(m_shapeItem->width() / Box2DBaseItem::m_scaleRatio / 2.0,
-                   m_shapeItem->height() / Box2DBaseItem::m_scaleRatio / 2.0);
+    shape.SetAsBox(m_shapeItem->width() / Box2DBase::m_scaleRatio / 2.0,
+                   m_shapeItem->height() / Box2DBase::m_scaleRatio / 2.0);
     fixtureDef.shape = &shape;
 
     m_fixture = m_body->CreateFixture(&fixtureDef);

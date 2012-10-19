@@ -19,55 +19,41 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#include "box2djointitem.h"
+#ifndef _BOX2DBASE_H_
+#define _BOX2DBASE_H_
 
-Box2DJointItem::Box2DJointItem(Scene *parent)
-    : Box2DBaseItem(parent)
-    , m_entityA(0)
-    , m_entityB(0)
-    , m_collideConnected(true)
-    , m_joint(0)
+#include "quasideclarativeitem.h"
+
+#include <Box2D/Box2D.h>
+
+class Scene;
+
+class Box2DBase : public QuasiDeclarativeItem
 {
-}
+    Q_OBJECT
 
-Entity *Box2DJointItem::entityA() const
-{
-    return m_entityA;
-}
+public:
+    Box2DBase(Scene *parent = 0);
+    virtual ~Box2DBase() {}
 
-void Box2DJointItem::setEntityA(Entity *entityA)
-{
-    if (m_entityA != entityA) {
-        m_entityA = entityA;
+    static float m_scaleRatio;
 
-        emit entityAChanged();
-    }
-}
+    void setWorld(QSharedPointer<b2World> world);
 
-Entity *Box2DJointItem::entityB() const
-{
-    return m_entityB;
-}
+    bool initialized() const;
+    virtual void initialize() = 0;
 
-void Box2DJointItem::setEntityB(Entity *entityB)
-{
-    if (m_entityB != entityB) {
-        m_entityB = entityB;
+    virtual void synchronize();
 
-        emit entityBChanged();
-    }
-}
+protected:
+    virtual b2Vec2 b2TransformOrigin() const = 0;
+    virtual float b2Angle() const = 0;
 
-bool Box2DJointItem::collideConnected() const
-{
-    return m_collideConnected;
-}
+protected:
+    bool m_initialized;
+    bool m_synchronizing;
+    QWeakPointer<b2World> m_world;
+    b2World *m_worldPtr;
+};
 
-void Box2DJointItem::setCollideConnected(const bool &collideConnected)
-{
-    if (m_collideConnected != collideConnected) {
-        m_collideConnected = collideConnected;
-
-        emit collideConnectedChanged();
-    }
-}
+#endif /* _BOX2DBASE_H_ */

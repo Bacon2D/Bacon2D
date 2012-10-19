@@ -1,7 +1,7 @@
 #include "line.h"
 
 #include "util.h"
-#include "box2dbaseitem.h"
+#include "box2dbase.h"
 
 Line::Line(QuasiDeclarativeItem *parent)
     : Shape(parent)
@@ -61,7 +61,7 @@ void Line::updateShape(qreal penWidth)
 
     b2EdgeShape *edgeShape = static_cast<b2EdgeShape *>(m_shape);
     edgeShape->Set(b2Util::b2Vec(QPointF(m_p1.x() + xOffset,
-                                         m_p1.y() + yOffset), Box2DBaseItem::m_scaleRatio),
+                                         m_p1.y() + yOffset), Box2DBase::m_scaleRatio),
                    b2Util::b2Vec(QPointF(m_p2.x() + xOffset,
-                                         m_p2.y() + yOffset), Box2DBaseItem::m_scaleRatio));
+                                         m_p2.y() + yOffset), Box2DBase::m_scaleRatio));
 }

@@ -28,15 +28,14 @@ HEADERS += quasideclarativeitem.h \
            spriteanimation.h \
            animationtransition.h \
            animationchangeevent.h \
-           box2djointitem.h \
-           box2dbaseitem.h \
-           box2ddistancejointitem.h \
-           box2dmousejointitem.h \
+           box2djoint.h \
+           box2dbase.h \
+           box2ddistancejoint.h \
+           box2dmousejoint.h \
            layer.h \
            imagelayer.h \
            util.h \
-           viewport.h \
-           box2ddebugdrawitem.h \
+           box2ddebugdraw.h \
            enums.h \
            behavior.h \
            scriptbehavior.h \
@@ -62,15 +61,14 @@ SOURCES += entity.cpp \
            sprite.cpp \
            spriteanimation.cpp \
            animationtransition.cpp \
-           box2djointitem.cpp \
-           box2dbaseitem.cpp \
-           box2ddistancejointitem.cpp \
-           box2dmousejointitem.cpp \
+           box2djoint.cpp \
+           box2dbase.cpp \
+           box2ddistancejoint.cpp \
+           box2dmousejoint.cpp \
            layer.cpp \
            imagelayer.cpp \
            util.cpp \
-           viewport.cpp \
-           box2ddebugdrawitem.cpp \
+           box2ddebugdraw.cpp \
            behavior.cpp \
            scriptbehavior.cpp \
            box2dcontact.cpp \

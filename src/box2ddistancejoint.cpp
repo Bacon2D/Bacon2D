@@ -19,18 +19,18 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#include "box2ddistancejointitem.h"
+#include "box2ddistancejoint.h"
 
 #include "util.h"
 
 #include <Box2D/Box2D.h>
 
-Box2DDistanceJointItem::Box2DDistanceJointItem(Scene *parent)
-    : Box2DJointItem(parent)
+Box2DDistanceJoint::Box2DDistanceJoint(Scene *parent)
+    : Box2DJoint(parent)
 {
 }
 
-Box2DDistanceJointItem::~Box2DDistanceJointItem()
+Box2DDistanceJoint::~Box2DDistanceJoint()
 {
     if (!m_world || !m_joint)
         return;
@@ -38,15 +38,14 @@ Box2DDistanceJointItem::~Box2DDistanceJointItem()
     m_joint = 0;
 }
 
-void Box2DDistanceJointItem::initialize()
+void Box2DDistanceJoint::initialize()
 {
     if (m_initialized || !m_entityA || !m_entityB || !m_world)
         return;
-
     if (!m_entityA->initialized())
-        m_entityA->initialize();
+        return;
     if (!m_entityB->initialized())
-        m_entityB->initialize();
+        return;
 
     b2DistanceJointDef jointDef;
 
@@ -54,9 +53,8 @@ void Box2DDistanceJointItem::initialize()
 
     jointDef.Initialize(m_entityA->body(),
                         m_entityB->body(),
-                        m_entityA->body()->GetWorldCenter(),
-                        m_entityB->body()->GetWorldCenter());
-
+                        m_entityA->body()->GetWorldCenter() + b2Util::b2Vec(m_anchorA, m_scaleRatio),
+                        m_entityB->body()->GetWorldCenter() + b2Util::b2Vec(m_anchorB, m_scaleRatio));
 
     m_joint = static_cast<b2DistanceJoint *>(m_worldPtr->CreateJoint(&jointDef));
 
@@ -66,7 +64,7 @@ void Box2DDistanceJointItem::initialize()
     m_initialized = true;
 }
 
-b2Vec2 Box2DDistanceJointItem::b2TransformOrigin() const
+b2Vec2 Box2DDistanceJoint::b2TransformOrigin() const
 {
     b2Vec2 vec;
     if (m_joint)
@@ -74,7 +72,7 @@ b2Vec2 Box2DDistanceJointItem::b2TransformOrigin() const
     return vec;
 }
 
-float Box2DDistanceJointItem::b2Angle() const
+float Box2DDistanceJoint::b2Angle() const
 {
     float32 angle = 0.0f;
     if (m_joint)
@@ -82,7 +80,7 @@ float Box2DDistanceJointItem::b2Angle() const
     return angle;
 }
 
-float Box2DDistanceJointItem::length() const
+float Box2DDistanceJoint::length() const
 {
     if (m_joint)
         return b2Util::b2Length(m_joint->GetAnchorA(), m_joint->GetAnchorB()) * m_scaleRatio;
@@ -90,9 +88,9 @@ float Box2DDistanceJointItem::length() const
 }
 
 #if QT_VERSION >= 0x050000
-void Box2DDistanceJointItem::itemChange(ItemChange change, const ItemChangeData &data)
+void Box2DDistanceJoint::itemChange(ItemChange change, const ItemChangeData &data)
 #else
-QVariant Box2DDistanceJointItem::itemChange(GraphicsItemChange change, const QVariant &value)
+QVariant Box2DDistanceJoint::itemChange(GraphicsItemChange change, const QVariant &value)
 #endif
 {
     if (change == ItemChildAddedChange) {
