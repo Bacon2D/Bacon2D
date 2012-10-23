@@ -83,6 +83,10 @@ void Game::setFps(const int &fps)
 
     m_fps = fps;
 
+    killTimer(m_timerId);
+    m_gameTime.restart();
+    m_timerId = startTimer(1000 / m_fps);
+
     emit fpsChanged();
 }
 
