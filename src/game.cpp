@@ -34,7 +34,7 @@
 Game::Game(QuasiDeclarativeItem *parent)
     : QuasiDeclarativeItem(parent)
     , m_currentScene(0)
-    , m_fps(60)
+    , m_fps(30)
     , m_timerId(0)
 {
     m_gameTime.start();
@@ -82,6 +82,10 @@ void Game::setFps(const int &fps)
         return;
 
     m_fps = fps;
+
+    killTimer(m_timerId);
+    m_gameTime.restart();
+    m_timerId = startTimer(1000 / m_fps);
 
     emit fpsChanged();
 }
