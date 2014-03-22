@@ -7,7 +7,9 @@ else: QT += declarative
 TARGET = quasigameplugin
 TARGETPATH = QuasiGame
 
+API_VER=1.0
 DESTDIR = $$OUT_PWD/imports/QuasiGame
+
 OBJECTS_DIR = tmp
 MOC_DIR = tmp
 
@@ -88,7 +90,7 @@ SOURCES += entity.cpp \
 QMAKE_POST_LINK = $$QMAKE_COPY $$PWD/qmldir $$OUT_PWD/imports/QuasiGame
 
 !isEmpty(QTPATH): target.path = $$QTPATH/imports/$$TARGETPATH
-else: target.path = $$[QT_INSTALL_IMPORTS]/$$TARGETPATH
+else: target.path = $$[QT_INSTALL_QML]/$$replace(TARGETPATH, \\., /).$$API_VER
 
 qmlpluginfiles.path = $$target.path
 qmlpluginfiles.files += \
