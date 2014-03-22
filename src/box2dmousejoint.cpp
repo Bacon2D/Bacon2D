@@ -25,7 +25,7 @@
 #include "game.h"
 
 #if QT_VERSION >= 0x050000
-#include <QtQuick/QQuickCanvas>
+#include <QtQuick/QQuickWindow>
 #else
 #include <QtGui/QApplication>
 #endif
@@ -150,7 +150,7 @@ void Box2DMouseJoint::synchronize()
     QPoint mousePos;
 
 #if QT_VERSION >= 0x050000
-    mousePos = canvas()->mapFromGlobal(QCursor::pos());
+    mousePos = window()->mapFromGlobal(QCursor::pos());
 #else
     m_mousePos = QCursor::pos();
     QWidget *widget = QApplication::widgetAt(m_mousePos);

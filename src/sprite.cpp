@@ -54,7 +54,7 @@ Sprite::Sprite(Scene *parent)
 #if QT_VERSION >= 0x050000
 QQmlListProperty<SpriteAnimation> Sprite::animations() const
 {
-    return QQmlListProperty<SpriteAnimation>(const_cast<Sprite *>(this), 0, &Sprite::append_animation);
+    return QQmlListProperty<SpriteAnimation>(const_cast<Sprite *>(this), 0, &Sprite::append_animation, 0, 0, 0);
 }
 #else
 QDeclarativeListProperty<SpriteAnimation> Sprite::animations() const

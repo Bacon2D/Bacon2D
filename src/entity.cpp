@@ -320,7 +320,7 @@ void Entity::applyTorque(const float &torque)
     if (!m_body)
         return;
 
-    m_body->ApplyTorque(torque);
+    m_body->ApplyTorque(torque, true);
 }
 
 void Entity::applyLinearImpulse(const QPointF &impulse, const QPointF &point)
@@ -331,7 +331,8 @@ void Entity::applyLinearImpulse(const QPointF &impulse, const QPointF &point)
     m_body->ApplyLinearImpulse(b2Vec2(impulse.x() / m_scaleRatio,
                                       -impulse.y() / m_scaleRatio),
                                b2Vec2(point.x() / m_scaleRatio,
-                                      -point.y() / m_scaleRatio));
+                                      -point.y() / m_scaleRatio),
+                               true);
 }
 
 void Entity::setLinearVelocity(const QPointF &velocity)

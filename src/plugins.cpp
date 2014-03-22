@@ -74,5 +74,3 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<Material>("QuasiGame", 1, 0, "QuasiMaterial");
     qmlRegisterType<Fixture>("QuasiGame", 1, 0, "QuasiFixture");
 }
-
-Q_EXPORT_PLUGIN2(QuasiGame, Plugins);
