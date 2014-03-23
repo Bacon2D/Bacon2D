@@ -83,7 +83,7 @@ protected slots:
     void onDensityChanged(const float &density);
     void onFrictionChanged(const float &friction);
     void onRestitutionChanged(const float &restitution);
-    void onParentChanged();
+    void onParentChanged(QQuickItem*);
     void onShapeUpdated();
 
 protected:

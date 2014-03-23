@@ -56,14 +56,14 @@ void ScriptBehavior::setScript(const QQmlScriptString &script)
 void ScriptBehavior::setScript(const QDeclarativeScriptString &script)
 #endif
 {
-    if (m_script.script() != script.script()) {
+    if (m_script.stringLiteral() != script.stringLiteral()) {
         m_script = script;
 
         if (m_expression)
             delete m_expression;
 
 #if QT_VERSION >= 0x050000
-        m_expression = new QQmlExpression(m_script.context(), m_script.scopeObject(), m_script.script());
+        m_expression = new QQmlExpression(m_script);
 #else
         m_expression = new QDeclarativeExpression(m_script.context(), m_script.scopeObject(), m_script.script());
 #endif

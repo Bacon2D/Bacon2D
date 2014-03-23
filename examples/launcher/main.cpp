@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     Launcher launcher;
 
     view.engine()->rootContext()->setContextProperty("launcher", &launcher);
-    view.engine()->addImportPath("../../imports");
+    view.engine()->addImportPath("../../src/imports");
 
 #if QT_VERSION >= 0x050000
     view.setSource(QUrl("qrc:/main-qt5.qml"));

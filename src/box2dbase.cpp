@@ -55,8 +55,11 @@ void Box2DBase::synchronize()
     const QPointF newPoint = b2Util::qTopLeft(b2TransformOrigin(), boundingRect(), m_scaleRatio);
     const qreal newRotation = b2Util::qAngle(b2Angle());
 
-    if (!qFuzzyCompare(x(), newPoint.x()) || !qFuzzyCompare(y(), newPoint.y()))
-        setPos(newPoint);
+    if (!qFuzzyCompare(x(), newPoint.x()))
+        setX(newPoint.x());
+
+    if (!qFuzzyCompare(y(), newPoint.y()))
+        setY(newPoint.y());
 
     if (!qFuzzyCompare(rotation(), newRotation))
         setRotation(newRotation);

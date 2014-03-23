@@ -35,11 +35,11 @@ Fixture::Fixture(QuasiDeclarativeItem *parent)
     , m_entity(0)
     , m_sensor(false)
 {
-    connect(this, SIGNAL(parentChanged()),
-            this, SLOT(onParentChanged()));
+    connect(this, SIGNAL(parentChanged(QQuickItem*)),
+            this, SLOT(onParentChanged(QQuickItem*)));
 }
 
-void Fixture::onParentChanged()
+void Fixture::onParentChanged(QQuickItem*)
 {
     if (!m_shapeItem)
         return;
