@@ -234,6 +234,10 @@ void ImageLayer::updateTiles()
 
     // TODO create enums to define image aspect, auto tile, etc...
     QPixmap pixmap(source()); // TODO
+    // If item height doesn't match pixmap height, scaleToHeight
+    if (pixmap.height() != (int)height()) {
+        pixmap = pixmap.scaledToHeight(height()); 
+    }
 
     if (m_drawType == Quasi::PlaneDrawType) {
         m_tileWidth = width();
