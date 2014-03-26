@@ -24,42 +24,18 @@
 
 #include <QtCore/QtGlobal>
 
-#if QT_VERSION >= 0x050000
 #include <QtQuick/QQuickPaintedItem>
-#else
-#include <QtDeclarative/QDeclarativeItem>
-#endif
 
 #include "quasideclarativeitem.h"
 
 class QuasiPaintedItem
-#if QT_VERSION >= 0x050000
     : public QQuickPaintedItem
-#else
-    : public QDeclarativeItem
-#endif
 {
 public:
     QuasiPaintedItem(QuasiDeclarativeItem *parent = 0)
-#if QT_VERSION >= 0x050000
         : QQuickPaintedItem(parent) {}
-#else
-        : QDeclarativeItem(parent)
-    {
-        setFlag(ItemHasNoContents, false);
-    }
-#endif
 
-#if QT_VERSION >= 0x050000
     virtual void paint(QPainter *painter) { Q_UNUSED(painter); };
-#else
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0)
-    {
-        Q_UNUSED(painter);
-        Q_UNUSED(option);
-        Q_UNUSED(widget);
-    };
-#endif
 
     virtual ~QuasiPaintedItem() {}
 };

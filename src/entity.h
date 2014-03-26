@@ -100,11 +100,7 @@ public:
 
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
-#if QT_VERSION >= 0x050000
     virtual void itemChange(ItemChange change, const ItemChangeData &data);
-#else
-    virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
-#endif
     void componentComplete();
 
 signals:

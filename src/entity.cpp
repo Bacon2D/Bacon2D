@@ -52,11 +52,7 @@ Entity::~Entity()
     if (!m_world || !m_body)
         return;
 
-#if QT_VERSION >= 0x050000
     QQuickItem *child;
-#else
-    QGraphicsItem *child;
-#endif
 
     foreach (child, childItems())
         if (Fixture *fixture = dynamic_cast<Fixture *>(child))
@@ -79,11 +75,7 @@ void Entity::update(const int &delta)
         }
     }
 
-#if QT_VERSION >= 0x050000
     QQuickItem *child;
-#else
-    QGraphicsItem *child;
-#endif
     foreach (child, childItems())
         if (Entity *item = dynamic_cast<Entity *>(child))
             item->update(delta);
@@ -365,11 +357,7 @@ void Entity::geometryChanged(const QRectF &newGeometry,
         }
     }
 
-#if QT_VERSION >= 0x050000
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
-#else
-    QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
-#endif
 }
 
 b2Vec2 Entity::b2TransformOrigin() const
@@ -394,11 +382,7 @@ float Entity::b2Angle() const
 
 void Entity::initializeFixtures()
 {
-#if QT_VERSION >= 0x050000
     QQuickItem *item;
-#else
-    QGraphicsItem *item;
-#endif
 
     bool createSensor = true;
     foreach (item, childItems()) {
@@ -414,18 +398,10 @@ void Entity::initializeFixtures()
         createSensorFixture();
 }
 
-#if QT_VERSION >= 0x050000
 void Entity::itemChange(ItemChange change, const ItemChangeData &data)
-#else
-QVariant Entity::itemChange(GraphicsItemChange change, const QVariant &value)
-#endif
 {
     if (isComponentComplete() && change == ItemChildAddedChange) {
-#if QT_VERSION >= 0x050000
         QQuickItem *child = data.item;
-#else
-        QGraphicsItem *child = value.value<QGraphicsItem *>();
-#endif
         if (Fixture *fixture = dynamic_cast<Fixture *>(child)) {
             destroySensorFixture();
             fixture->setWorld(m_world);
@@ -434,11 +410,7 @@ QVariant Entity::itemChange(GraphicsItemChange change, const QVariant &value)
         }
     }
 
-#if QT_VERSION >= 0x050000
     Box2DBase::itemChange(change, data);
-#else
-    return Box2DBase::itemChange(change, value);
-#endif
 }
 
 void Entity::createSensorFixture()

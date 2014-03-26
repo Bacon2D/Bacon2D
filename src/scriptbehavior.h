@@ -21,45 +21,26 @@
 
 #include "behavior.h"
 
-#if QT_VERSION >= 0x050000
 #include <QtQml/QQmlScriptString>
 class QQmlExpression;
-#else
-#include <QtDeclarative/QDeclarativeScriptString>
-class QDeclarativeExpression;
-#endif
 
 class ScriptBehavior : public  Behavior
 {
     Q_OBJECT
 
-#if QT_VERSION >= 0x050000
     Q_PROPERTY(QQmlScriptString script READ script WRITE setScript NOTIFY scriptChanged)
-#else
-    Q_PROPERTY(QDeclarativeScriptString script READ script WRITE setScript NOTIFY scriptChanged)
-#endif
 
 public:
     ScriptBehavior(QObject *parent = 0);
 
-#if QT_VERSION >= 0x050000
     QQmlScriptString script() const;
     void setScript(const QQmlScriptString &script);
-#else
-    QDeclarativeScriptString script() const;
-    void setScript(const QDeclarativeScriptString &script);
-#endif
     void update(const int &delta);
 
 signals:
     void scriptChanged();
 
 private:
-#if QT_VERSION >= 0x050000
     QQmlScriptString m_script;
     QQmlExpression *m_expression;
-#else
-    QDeclarativeScriptString m_script;
-    QDeclarativeExpression *m_expression;
-#endif
 };

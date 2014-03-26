@@ -24,26 +24,14 @@
 
 #include <QtCore/QtGlobal>
 
-#if QT_VERSION >= 0x050000
 #include <QtQuick/QQuickItem>
-#else
-#include <QtDeclarative/QDeclarativeItem>
-#endif
 
 class QuasiDeclarativeItem
-#if QT_VERSION >= 0x050000
     : public QQuickItem
-#else
-    : public QDeclarativeItem
-#endif
 {
 public:
     QuasiDeclarativeItem(QuasiDeclarativeItem *parent = 0)
-#if QT_VERSION >= 0x050000
         : QQuickItem(parent) {}
-#else
-        : QDeclarativeItem(parent) {}
-#endif
     virtual ~QuasiDeclarativeItem() {}
 };
 

@@ -1,4 +1,4 @@
-import QtQuick 1.1
+import QtQuick 2.0
 import QuasiGame 1.0
 
 QuasiEntity {
@@ -99,7 +99,7 @@ QuasiEntity {
         id: paratrooperImage
         width: sourceSize.width / 2
         height: sourceSize.height / 2
-        source: ":/paratrooper.png"
+        source: "qrc:/paratrooper.png"
         smooth: true
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom

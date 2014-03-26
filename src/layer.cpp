@@ -23,9 +23,7 @@
 
 #include <QtCore/QDebug>
 #include <QtGui/QPainter>
-#if QT_VERSION >= 0x050000
 #include <QtQml/QQmlProperty>
-#endif
 
 //! Class constructor
 Layer::Layer(QuasiDeclarativeItem *parent)
@@ -34,10 +32,8 @@ Layer::Layer(QuasiDeclarativeItem *parent)
     , m_horizontalStep(1.0)
     , m_type(Quasi::InfiniteType)
 {
-#if QT_VERSION >= 0x050000
     // this activates the item layered mode
     QQmlProperty(this, "layer.enabled").write(true);
-#endif
 }
 
 //! Class destructor

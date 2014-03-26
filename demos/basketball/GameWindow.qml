@@ -48,7 +48,7 @@ QuasiGame {
         Image {
             id: backboardHandler
             anchors.bottom: parent.bottom
-            source: ":/images/backboardhandler.png"
+            source: "qrc:/images/backboardhandler.png"
         }
 
         QuasiMaterial {
@@ -100,7 +100,7 @@ QuasiGame {
             anchors.left: basketHandler.right
             anchors.top: basketHandler.top
             z: 10
-            source: ":/images/basket.png"
+            source: "qrc:/images/basket.png"
         }
 
         QuasiEntity {
@@ -183,7 +183,7 @@ QuasiGame {
             Image {
                 id: ballImage
                 anchors.fill: parent
-                source: ":/images/ball.png"
+                source: "qrc:/images/ball.png"
                 smooth: true
             }
 
@@ -206,9 +206,9 @@ QuasiGame {
                         score++;
                         console.log("score = " + score);
                     }
-                    basket.source = ":/images/scorebasket.png"
+                    basket.source = "qrc:/images/scorebasket.png"
                 } else {
-                    basket.source = ":/images/basket.png"
+                    basket.source = "qrc:/images/basket.png"
                 }
             }
         }
@@ -287,7 +287,7 @@ QuasiGame {
                 width: 50
                 height: 50
 
-                source: ":/images/" + type + "ball.png"
+                source: "qrc:/images/" + type + "ball.png"
             }
         }
     }

@@ -46,11 +46,7 @@ public:
 
     b2Shape *box2DShape() { return m_shape; }
 
-#if QT_VERSION >= 0x050000
     void paint(QPainter *painter);
-#else
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-#endif
 
     virtual void updateShape(qreal penWidth) = 0;
 

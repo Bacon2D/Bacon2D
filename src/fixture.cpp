@@ -92,11 +92,7 @@ void Fixture::setMaterial(Material *material)
     emit materialChanged();
 }
 
-#if QT_VERSION >= 0x050000
 void Fixture::setShapeItem(QQuickItem *shapeItem)
-#else
-void Fixture::setShapeItem(QDeclarativeItem *shapeItem)
-#endif
 {
     if (m_shapeItem == shapeItem)
         return;

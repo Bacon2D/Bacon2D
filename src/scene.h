@@ -27,11 +27,7 @@
 
 #include <QtCore/QtGlobal>
 
-#if QT_VERSION >= 0x050000
 #include <QtQml/QQmlComponent>
-#else
-#include <QtDeclarative/QDeclarativeComponent>
-#endif
 
 class Game;
 class b2World;
@@ -101,11 +97,7 @@ protected slots:
 
 protected:
     virtual void componentComplete();
-#if QT_VERSION >= 0x050000
     virtual void itemChange(ItemChange change, const ItemChangeData &data);
-#else
-    virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
-#endif
 
 protected:
     bool m_running;

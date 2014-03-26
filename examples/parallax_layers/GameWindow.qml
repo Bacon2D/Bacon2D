@@ -78,7 +78,7 @@ QuasiGame {
 
             Image {
                 id: shipImage
-                source: ":/images/rocketship.png"
+                source: "qrc:/images/rocketship.png"
             }
 
             Behavior on y { SmoothedAnimation {}}

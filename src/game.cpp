@@ -23,11 +23,7 @@
 
 #include "scene.h"
 
-#if QT_VERSION >= 0x050000
 #include <QtQuick/QQuickWindow>
-#else
-#include <QtGui/QApplication>
-#endif
 
 #include <QtGui/QCursor>
 
@@ -106,15 +102,5 @@ void Game::update()
 
 QPointF Game::mouse()
 {
-#if QT_VERSION >= 0x050000
     return window()->mapFromGlobal(QCursor::pos());
-#else
-    m_mousePos = QCursor::pos();
-    QWidget *widget = QApplication::widgetAt(m_mousePos);
-
-    if (widget)
-        return widget->mapFromGlobal(m_mousePos);
-    else
-        return m_mousePos;
-#endif
 }

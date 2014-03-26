@@ -30,11 +30,7 @@
 
 #include <QtCore/QtGlobal>
 
-#if QT_VERSION >= 0x050000
 #include <QtQml/QQmlEngine>
-#else
-#include <QtDeclarative/QDeclarativeEngine>
-#endif
 
 #include <Box2D/Box2D.h>
 
@@ -77,11 +73,7 @@ void Scene::update(const int &delta)
     if (!m_running) // TODO: stop Qt animations as well
         return;
 
-#if QT_VERSION >= 0x050000
     QQuickItem *item;
-#else
-    QGraphicsItem *item;
-#endif
     foreach (item, childItems()) {
         if (Entity *entity = qobject_cast<Entity *>(item))
             entity->update(delta);
@@ -152,11 +144,7 @@ void Scene::componentComplete()
 {
     QuasiDeclarativeItem::componentComplete();
 
-#if QT_VERSION >= 0x050000
     QQuickItem *item;
-#else
-    QGraphicsItem *item;
-#endif
 
     QList<Box2DJoint *> jointItems;
 
@@ -184,18 +172,10 @@ void Scene::componentComplete()
     }
 }
 
-#if QT_VERSION >= 0x050000
 void Scene::itemChange(ItemChange change, const ItemChangeData &data)
-#else
-QVariant Scene::itemChange(GraphicsItemChange change, const QVariant &value)
-#endif
 {
     if (isComponentComplete() && change == ItemChildAddedChange) {
-#if QT_VERSION >= 0x050000
         QQuickItem *child = data.item;
-#else
-        QGraphicsItem *child = value.value<QGraphicsItem *>();
-#endif
         if (Entity *entity = dynamic_cast<Entity *>(child))
             entity->setScene(this);
 
@@ -205,11 +185,7 @@ QVariant Scene::itemChange(GraphicsItemChange change, const QVariant &value)
         }
     }
 
-#if QT_VERSION >= 0x050000
     QuasiDeclarativeItem::itemChange(change, data);
-#else
-    return QuasiDeclarativeItem::itemChange(change, value);
-#endif
 }
 
 b2World *Scene::world() const

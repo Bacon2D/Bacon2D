@@ -43,11 +43,7 @@ Box2DDebugDraw::Box2DDebugDraw(Scene *parent)
              | e_pairBit
              | e_centerOfMassBit);
 
-#if QT_VERSION >= 0x050000
     setZ(Quasi::MaxOrdering);
-#else
-    setZValue(Quasi::MaxOrdering);
-#endif
 }
 
 void Box2DDebugDraw::draw()
@@ -128,15 +124,8 @@ void Box2DDebugDraw::DrawTransform(const b2Transform &xf)
     Q_UNUSED(xf)
 }
 
-#if QT_VERSION >= 0x050000
 void Box2DDebugDraw::paint(QPainter *painter)
 {
-#else
-void Box2DDebugDraw::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-    Q_UNUSED(option)
-    Q_UNUSED(widget)
-#endif
     m_painter = painter;
 
     draw();

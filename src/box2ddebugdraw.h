@@ -38,11 +38,7 @@ class Box2DDebugDraw : public QuasiPaintedItem, public b2Draw
 public:
     Box2DDebugDraw(Scene *parent = 0);
 
-#if QT_VERSION >= 0x050000
     void paint(QPainter *painter);
-#else
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-#endif
 
     void DrawPolygon(const b2Vec2 *vertices, int32 vertexCount, const b2Color &color);
     void DrawSolidPolygon(const b2Vec2 *vertices, int32 vertexCount, const b2Color &color);

@@ -23,10 +23,7 @@
 
 #include <QtGui/QPixmap>
 #include <QtGui/QPainter>
-
-#if QT_VERSION >= 0x050000
 #include <QtQml/QQmlProperty>
-#endif
 
 SpriteSheet::SpriteSheet(QuasiDeclarativeItem *parent)
     : QuasiPaintedItem(parent)
@@ -41,9 +38,7 @@ SpriteSheet::SpriteSheet(QuasiDeclarativeItem *parent)
 {
     setVisible(false);
 
-#if QT_VERSION >= 0x050000
     QQmlProperty(this, "layer.enabled").write(true);
-#endif
 }
 
 QString SpriteSheet::source() const
@@ -70,15 +65,8 @@ void SpriteSheet::setSource(const QString &source)
     }
 }
 
-#if QT_VERSION >= 0x050000
 void SpriteSheet::paint(QPainter *painter)
 {
-#else
-void SpriteSheet::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-    Q_UNUSED(option)
-    Q_UNUSED(widget)
-#endif
     if (m_pixMap) {
         if (!m_frames)
             painter->drawPixmap(0, 0, *m_pixMap);
