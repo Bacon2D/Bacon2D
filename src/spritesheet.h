@@ -55,11 +55,7 @@ public:
     bool horizontalMirror() const;
     void setHorizontalMirror(const bool &horizontalMirror);
 
-#if QT_VERSION >= 0x050000
     void paint(QPainter *painter);
-#else
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-#endif
 
 signals:
     void sourceChanged();

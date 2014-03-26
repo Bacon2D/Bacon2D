@@ -61,9 +61,6 @@ private:
     QTime m_gameTime;
     int m_fps;
     int m_timerId;
-#if QT_VERSION < 0x050000
-    QPoint m_mousePos;
-#endif
 };
 
 #endif /* _GAME_H_ */

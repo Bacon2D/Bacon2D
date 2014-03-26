@@ -72,11 +72,7 @@ public:
     void moveX(const qreal &x);
     void moveY(const qreal &y);
 
-#if QT_VERSION >= 0x050000
     void paint(QPainter *painter);
-#else
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-#endif
 
 signals:
     void tilesChanged();

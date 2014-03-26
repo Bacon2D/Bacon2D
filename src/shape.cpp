@@ -58,16 +58,8 @@ void Shape::setFill(Fill *fill)
     emit fillChanged();
 }
 
-#if QT_VERSION >= 0x050000
 void Shape::paint(QPainter *painter)
 {
-#else
-void Shape::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-    Q_UNUSED(option);
-    Q_UNUSED(widget);
-#endif
-
     if (!m_fill)
         return;
 

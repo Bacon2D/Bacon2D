@@ -1,8 +1,7 @@
 TEMPLATE = lib
 CONFIG += qt plugin
 
-contains(QT_VERSION, ^5.*) QT += quick
-else: QT += declarative
+QT += quick
 
 TARGET = quasigameplugin
 TARGETPATH = QuasiGame

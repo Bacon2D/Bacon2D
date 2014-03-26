@@ -39,11 +39,7 @@ class Fixture : public QuasiDeclarativeItem
     Q_OBJECT
 
     Q_PROPERTY(Material *material READ material WRITE setMaterial NOTIFY materialChanged)
-#if QT_VERSION >= 0x050000
     Q_PROPERTY(QQuickItem *shape READ shapeItem WRITE setShapeItem NOTIFY shapeChanged)
-#else
-    Q_PROPERTY(QDeclarativeItem *shape READ shapeItem WRITE setShapeItem NOTIFY shapeChanged)
-#endif
     Q_PROPERTY(Entity *entity READ entity)
     Q_PROPERTY(bool sensor READ sensor WRITE setSensor NOTIFY sensorChanged)
 
@@ -54,13 +50,8 @@ public:
     Material *material() const { return m_material; }
     void setMaterial(Material *material);
 
-#if QT_VERSION >= 0x050000
     QQuickItem *shapeItem() const { return m_shapeItem; }
     void setShapeItem(QQuickItem *shapeItem);
-#else
-    QDeclarativeItem *shapeItem() const { return m_shapeItem; }
-    void setShapeItem(QDeclarativeItem *shapeItem);
-#endif
 
     void setWorld(QSharedPointer<b2World> world);
 
@@ -93,11 +84,7 @@ protected:
 protected:
     b2Fixture *m_fixture;
     Material *m_material;
-#if QT_VERSION >= 0x050000
     QQuickItem *m_shapeItem;
-#else
-    QDeclarativeItem *m_shapeItem;
-#endif
     QWeakPointer<b2World> m_world;
     b2Body *m_body;
     Entity *m_entity;

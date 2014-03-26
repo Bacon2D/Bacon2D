@@ -23,15 +23,9 @@
 #define _PLUGINS_H_
 
 #include <QtCore/QtGlobal>
-#if QT_VERSION >= 0x050000
 #include <QtQml/QQmlExtensionPlugin>
  
 class Plugins : public QQmlExtensionPlugin
-#else
-#include <QtDeclarative/QDeclarativeExtensionPlugin>
-
-class Plugins : public QDeclarativeExtensionPlugin
-#endif
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")

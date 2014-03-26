@@ -6,18 +6,11 @@ A simple Qt-based 2D game engine.
 
 1.1) Dependencies
 
-* Qt4.x or Qt5
-  	Qt4 download: http://qt.nokia.com/downloads/
+* Qt5
   	Qt5 source repository: https://qt.gitorious.org/qt/qt5
 
 * Box2D >= 2.2.1
 	http://box2d.org
-
-If you are using Qt5, we strongly recommend you to install Qt5 to a different prefix from Qt4.
-If you have Qt4 installed at /usr, we suggest one of the following prefixes:
-
-* /opt/Qt5
-* /usr/local/Qt5
 
 1.2) Building
 
@@ -26,7 +19,7 @@ Available QMake parameters:
 * QTPATH (Optional)
 	Prefix where Qt has been installed. It is required to install
 	Quasi's QML import plugin and related files.
-	The default path is /usr/lib/qt
+	The default path is /usr/lib/qt5
 
 * BOX2DPATH (Optional)
 	Path to Box2D installation. If your Linux distro packaging system

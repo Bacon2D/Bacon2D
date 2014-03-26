@@ -87,25 +87,13 @@ float Box2DDistanceJoint::length() const
     return 0;
 }
 
-#if QT_VERSION >= 0x050000
 void Box2DDistanceJoint::itemChange(ItemChange change, const ItemChangeData &data)
-#else
-QVariant Box2DDistanceJoint::itemChange(GraphicsItemChange change, const QVariant &value)
-#endif
 {
     if (change == ItemChildAddedChange) {
-#if QT_VERSION >= 0x050000
         QQuickItem *child = data.item;
-#else
-        QDeclarativeItem *child = value.value<QDeclarativeItem *>();
-#endif
         if (width() < child->width())
             setWidth(child->width());
     }
 
-#if QT_VERSION >= 0x050000
     QQuickItem::itemChange(change, data);
-#else
-    return QDeclarativeItem::itemChange(change, value);
-#endif
 }

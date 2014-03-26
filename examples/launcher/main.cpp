@@ -23,17 +23,10 @@
 
 #include <QtCore/qglobal.h>
 
-#if QT_VERSION >= 0x050000
 #include <QtGui/QGuiApplication>
 #include <QtQml/QQmlContext>
 #include <QtQml/QQmlEngine>
 #include <QtQuick/QQuickView>
-#else
-#include <QtGui/QApplication>
-#include <QtDeclarative/QDeclarativeContext>
-#include <QtDeclarative/QDeclarativeView>
-#include <QtDeclarative/QDeclarativeEngine>
-#endif
 
 #ifdef QT_OPENGL_LIB
 #include <QtOpenGL/QGLWidget>
@@ -44,24 +37,15 @@ int main(int argc, char *argv[])
     QByteArray data = "1";
     qputenv("QML_IMPORT_TRACE", data);
 
-#if QT_VERSION >= 0x050000
     QGuiApplication app(argc, argv);
     QQuickView view;
-#else
-    QApplication app(argc, argv);
-    QDeclarativeView view;
-#endif
 
     Launcher launcher;
 
     view.engine()->rootContext()->setContextProperty("launcher", &launcher);
     view.engine()->addImportPath("../../src/imports");
 
-#if QT_VERSION >= 0x050000
-    view.setSource(QUrl("qrc:/main-qt5.qml"));
-#else
-    view.setSource(QUrl("qrc:/main-qt4.qml"));
-#endif
+    view.setSource(QUrl("qrc:/main.qml"));
 
 #ifdef QT_OPENGL_LIB
     view.setViewport(new QGLWidget);

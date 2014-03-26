@@ -34,11 +34,7 @@ class Sprite : public Entity
 {
     Q_OBJECT
 
-#if QT_VERSION >= 0x050000
     Q_PROPERTY(QQmlListProperty<SpriteAnimation> animations READ animations)
-#else
-    Q_PROPERTY(QDeclarativeListProperty<SpriteAnimation> animations READ animations)
-#endif
     Q_PROPERTY(QString animation READ animation WRITE setAnimation NOTIFY animationChanged)
     Q_PROPERTY(bool verticalMirror READ verticalMirror WRITE setVerticalMirror NOTIFY verticalMirrorChanged)
     Q_PROPERTY(bool horizontalMirror READ horizontalMirror WRITE setHorizontalMirror NOTIFY horizontalMirrorChanged)
@@ -46,11 +42,7 @@ class Sprite : public Entity
 public:
     Sprite(Scene *parent = 0);
 
-#if QT_VERSION >= 0x050000
     QQmlListProperty<SpriteAnimation> animations() const;
-#else
-    QDeclarativeListProperty<SpriteAnimation> animations() const;
-#endif
 
     QString animation() const;
     void setAnimation(const QString &animation, const bool &force = false);
@@ -73,11 +65,7 @@ private:
     void initializeMachine();
 
 private:
-#if QT_VERSION >= 0x050000
     static void append_animation(QQmlListProperty<SpriteAnimation> *list, SpriteAnimation *animation);
-#else
-    static void append_animation(QDeclarativeListProperty<SpriteAnimation> *list, SpriteAnimation *animation);
-#endif
 
     QStateMachine *m_stateMachine;
     QState *m_stateGroup;
