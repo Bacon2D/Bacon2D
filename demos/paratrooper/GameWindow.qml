@@ -111,7 +111,7 @@ QuasiGame {
 
         Image {
             id: sun
-            source: ":/sun.png"
+            source: "qrc:/sun.png"
             anchors.top: parent.top
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.margins: -sun.height / 2
@@ -248,7 +248,7 @@ QuasiGame {
 
             Image {
                 id: target
-                source: ":/target.png"
+                source: "qrc:/target.png"
                 width: sourceSize.width / 2
                 height: sourceSize.height / 2
                 anchors.centerIn: parent
