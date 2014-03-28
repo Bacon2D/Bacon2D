@@ -44,14 +44,12 @@ QQmlScriptString ScriptBehavior::script() const
 
 void ScriptBehavior::setScript(const QQmlScriptString &script)
 {
-    if (m_script.stringLiteral() != script.stringLiteral()) {
-        m_script = script;
+    m_script = script;
 
-        if (m_expression)
-            delete m_expression;
+    if (m_expression)
+        delete m_expression;
 
-        m_expression = new QQmlExpression(m_script);
+    m_expression = new QQmlExpression(m_script);
 
-        emit scriptChanged();
-    }
+    emit scriptChanged();
 }
