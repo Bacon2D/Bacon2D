@@ -1,0 +1,18 @@
+project = Quasi-Engine
+description = Quasi-Engine - 2D game engine
+sourcedirs = ../src
+
+sources.fileextensions = "*.cpp *.qdoc *.mm *.qml"
+headers.fileextensions = "*.h *.ch *.h++ *.hh *.hpp *.hxx"
+
+outputdir = ../build/doc/html
+outputformats = HTML
+outputencoding = UTF-8
+
+include($QT_INSTALL_DOCS/global/macros.qdocconf) 
+include($QT_INSTALL_DOCS/global/qt-cpp-defines.qdocconf)
+include($QT_INSTALL_DOCS/global/compat.qdocconf)
+include($QT_INSTALL_DOCS/global/fileextensions.qdocconf)
+include($QT_INSTALL_DOCS/global/qt-html-templates-offline.qdocconf)
+
+HTML.footer = ""
