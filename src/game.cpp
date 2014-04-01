@@ -31,11 +31,11 @@
   \qmltype Game
   \instantiates Game
   \inqmlmodule Bacon2D 1.0
-  \brief The root element containing one or more QuasiScene.
+  \brief The root element containing one or more Scene.
 
-  The QuasiGame component is the root game component which
-  contains one or more QuasiScene components.  Only one
-  QuasiScene will be set as currentScene.
+  The Game component is the root game component which
+  contains one or more Scene components.  Only one
+  Scene will be set as currentScene.
 
   Example usage:
   \qml
