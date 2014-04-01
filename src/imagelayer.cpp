@@ -23,6 +23,16 @@
 
 #include <QtCore/QDebug>
 
+/*!
+   \qmltype ImageLayer
+   \instantiates Bacon2D::ImageLayer
+   \inqmlmodule Bacon2D 1.0
+   \brief A layer created from a image
+
+   This can be used to create parallax effects like scrolling
+   a background and other images from different layers
+ */
+
 ImageLayer::ImageLayer(Layer *parent)
     : Layer((QQuickItem *)parent)
     , m_currentImage(0)
@@ -46,10 +56,16 @@ ImageLayer::~ImageLayer()
     m_pixmaps.clear();
 }
 
-//! Stores the source path for the image
 /*!
- * \param source the image path
- */
+ * \qmlproperty string ImageLayer::source
+ *
+ * \brief The source path for the image
+*/
+QString ImageLayer::source() const
+{
+    return m_source;
+}
+
 void ImageLayer::setSource(const QString &source)
 {
     if (m_source == source)
@@ -60,32 +76,32 @@ void ImageLayer::setSource(const QString &source)
     emit sourceChanged();
 }
 
-//! Gets the image source path
+
 /*!
- * \return the source path for the image
- */
-QString ImageLayer::source() const
+   \qmlproperty Bacon2D::DrawType ImageLayer::drawType
+   \table
+   \header
+     \li {2, 1} \e {Bacon2D::DrawType} is an enumeration:
+   \header
+     \li Type
+     \li Description
+   \row
+     \li Bacon2D.TiledDrawType (default)
+     \li Tiled Draw Type
+   \row
+     \li Bacon2D.PlaneDrawType
+     \li Plane Draw Type
+   \endtable
+*/
+Bacon2D::DrawType ImageLayer::drawType() const
 {
-    return m_source;
+    return m_drawType;
 }
 
-//! Stores the layer type
-/*!
- * \param drawType can be Tiled (default) or Plane
- */
 void ImageLayer::setDrawType(Bacon2D::DrawType drawType)
 {
     if (m_drawType != drawType)
         m_drawType = drawType;
-}
-
-//! Gets the layer type
-/*!
- * \return Tiled or Plane according the layer draw type
- */
-Bacon2D::DrawType ImageLayer::drawType() const
-{
-    return m_drawType;
 }
 
 void ImageLayer::setTileHeight(const int &value)
@@ -110,8 +126,8 @@ void ImageLayer::setTileWidth(const int &value)
 
 //! Adds a tile on the list
 /*!
- * \param pix the pixmap to append on the list
- * \return the list actual size or -1 if the layer can not accept tiled pixmaps
+ * \a pix the pixmap to append on the list
+ * \brief the list actual size or -1 if the layer can not accept tiled pixmaps
  */
 int ImageLayer::addTile(const QPixmap &pixmap)
 {
@@ -122,8 +138,8 @@ int ImageLayer::addTile(const QPixmap &pixmap)
 
 //! Gets a tile from the list
 /*!
- * \param pos the tile position on the list
- * \return the tile pixmap of position pos on the list or null, if none
+ * \a pos the tile position on the list
+ * \brief the tile pixmap of position pos on the list or null, if none
  */
 QPixmap ImageLayer::getTile(int pos) const
 {
@@ -148,7 +164,7 @@ void ImageLayer::setGridColor(const QColor &color)
 
 //! Gets the tiles pixmap list size
 /*!
- * \return the tiles pixmap list size
+ * \brief the tiles pixmap list size
  */
 int ImageLayer::count() const
 {
