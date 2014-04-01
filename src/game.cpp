@@ -27,6 +27,13 @@
 
 #include <QtGui/QCursor>
 
+
+/*!
+ * \qmltype QuasiGame
+ * \instantiates Game
+ * \inqmlmodule QuasiGame 1.0
+ * \brief FIXME
+*/
 Game::Game(QuasiDeclarativeItem *parent)
     : QuasiDeclarativeItem(parent)
     , m_currentScene(0)
@@ -37,6 +44,10 @@ Game::Game(QuasiDeclarativeItem *parent)
     m_timerId = startTimer(1000 / m_fps);
 }
 
+/*!
+ * \qmlproperty QuasiScene QuasiGame::currentScene
+ * \brief FIXME
+ */
 Scene *Game::currentScene() const
 {
     return m_currentScene;
@@ -67,6 +78,10 @@ void Game::setCurrentScene(Scene *currentScene)
     emit currentSceneChanged();
 }
 
+/*!
+ * \qmlproperty int QuasiGame::fps
+ * \brief The current frame rate
+ */
 int Game::fps() const
 {
     return m_fps;
@@ -100,6 +115,10 @@ void Game::update()
         m_currentScene->update(elapsedTime);
 }
 
+/*!
+ * \qmlproperty QPointF QuasiGame::mouse
+ * \brief The point in the plane of the mouse pointer
+ */
 QPointF Game::mouse()
 {
     return window()->mapFromGlobal(QCursor::pos());

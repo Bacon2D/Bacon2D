@@ -39,6 +39,12 @@ static void deleteWorld(b2World *world)
     delete world;
 }
 
+/*!
+ * \qmltype QuasiScene
+ * \instantiates Scene
+ * \inqmlmodule QuasiGame 1.0
+ * \brief FIXME
+ */
 Scene::Scene(Game *parent)
     : QuasiDeclarativeItem(parent)
     , m_running(true)
@@ -104,6 +110,10 @@ void Scene::setRunning(const bool &running)
     emit runningChanged();
 }
 
+/*!
+ * \qmlproperty QuasiGame QuasiScene::game
+ * \brief FIXME
+ */
 Game *Scene::game() const
 {
     return m_game;
@@ -125,6 +135,10 @@ void Scene::setGame(Game *game)
     m_physicsTimeStep = 1.0 / m_game->fps();
 }
 
+/*!
+ * \qmlproperty bool QuasiScene::debug
+ * \brief FIXME
+ */
 bool Scene::debug() const
 {
     return m_debug;
@@ -200,6 +214,10 @@ void Scene::setGravity(const QPointF &gravity)
     m_world->SetGravity(b2Vec2(gravity.x(), gravity.y()));
 }
 
+/*!
+ * \qmlproperty QPointF QuasiScene::gravity
+ * \brief FIXME
+ */
 QPointF Scene::gravity() const
 {
     return m_gravity;
