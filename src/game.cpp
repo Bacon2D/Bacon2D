@@ -27,6 +27,12 @@
 
 #include <QtGui/QCursor>
 
+/*!
+ * \qmltype Game
+ * \instantiates Game
+ * \inqmlmodule Bacon2D 1.0
+ * \brief FIXME
+*/
 Game::Game(Bacon2DItem *parent)
     : Bacon2DItem(parent)
     , m_currentScene(0)
@@ -37,6 +43,10 @@ Game::Game(Bacon2DItem *parent)
     m_timerId = startTimer(1000 / m_fps);
 }
 
+/*!
+ * \qmlproperty Scene Game::currentScene
+ * \brief FIXME
+ */
 Scene *Game::currentScene() const
 {
     return m_currentScene;
@@ -67,6 +77,10 @@ void Game::setCurrentScene(Scene *currentScene)
     emit currentSceneChanged();
 }
 
+/*!
+ * \qmlproperty int Game::fps
+ * \brief The current frame rate
+ */
 int Game::fps() const
 {
     return m_fps;
@@ -100,6 +114,10 @@ void Game::update()
         m_currentScene->update(elapsedTime);
 }
 
+/*!
+ * \qmlproperty QPointF Game::mouse
+ * \brief The point in the plane of the mouse pointer
+ */
 QPointF Game::mouse()
 {
     return window()->mapFromGlobal(QCursor::pos());
