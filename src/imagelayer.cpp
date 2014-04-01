@@ -75,7 +75,6 @@ void ImageLayer::setSource(const QString &source)
     emit sourceChanged();
 }
 
-
 /*!
    \qmlproperty Bacon2D::DrawType ImageLayer::drawType
    \table
