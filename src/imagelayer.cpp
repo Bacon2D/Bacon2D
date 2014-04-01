@@ -58,7 +58,6 @@ ImageLayer::~ImageLayer()
 
 /*!
  * \qmlproperty string ImageLayer::source
- *
  * \brief The source path for the image
 */
 QString ImageLayer::source() const

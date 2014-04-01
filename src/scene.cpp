@@ -39,7 +39,6 @@ static void deleteWorld(b2World *world)
     delete world;
 }
 
-
 /*!
   \qmltype Scene
   \instantiates Scene
