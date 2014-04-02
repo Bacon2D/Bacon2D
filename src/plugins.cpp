@@ -48,29 +48,29 @@ void Plugins::registerTypes(const char *uri)
 {
     Q_UNUSED(uri)
 
-    qmlRegisterUncreatableType<Quasi>("QuasiGame", 1, 0, "Quasi", "Exporting Quasi enums to QML");
-    qmlRegisterUncreatableType<Layer>("QuasiGame", 1, 0, "Layer", "Registering Layer as we use it on QuasiLayers");
-    qmlRegisterUncreatableType<Box2DContact>("QuasiGame", 1, 0, "Contact", "This type is used to control scene's (pre)contact event");
-    qmlRegisterUncreatableType<Behavior>("QuasiGame", 1, 0, "QuasiBehavior", "Don't use QuasiBehavior directly, use one specialized behavior");
-    qmlRegisterUncreatableType<Shape>("QuasiGame", 1, 0, "QuasiShape", "Don't use QuasiShape directly, use one specialized shape");
-    qmlRegisterUncreatableType<Fill>("QuasiGame", 1, 0, "QuasiFill", "Don't use QuasiFill directly, use one specialized fill");
+    qmlRegisterUncreatableType<Bacon2D>("Bacon2D", 1, 0, "Bacon2D", "Exporting Bacon2D enums to QML");
+    qmlRegisterUncreatableType<Layer>("Bacon2D", 1, 0, "Layer", "Registering Layer as we use it on Layers");
+    qmlRegisterUncreatableType<Box2DContact>("Bacon2D", 1, 0, "Contact", "This type is used to control scene's (pre)contact event");
+    qmlRegisterUncreatableType<Behavior>("Bacon2D", 1, 0, "Bacon2DBehavior", "Don't use Bacon2DBehavior directly, use one specialized behavior");
+    qmlRegisterUncreatableType<Shape>("Bacon2D", 1, 0, "Shape", "Don't use Shape directly, use one specialized shape");
+    qmlRegisterUncreatableType<Fill>("Bacon2D", 1, 0, "Fill", "Don't use Fill directly, use one specialized fill");
 
-    qmlRegisterType<Game>("QuasiGame", 1, 0, "QuasiGame");
-    qmlRegisterType<Scene>("QuasiGame", 1, 0, "QuasiScene");
-    qmlRegisterType<Entity>("QuasiGame", 1, 0, "QuasiEntity");
-    qmlRegisterType<Sprite>("QuasiGame", 1, 0, "QuasiSprite");
-    qmlRegisterType<SpriteAnimation>("QuasiGame", 1, 0, "QuasiSpriteAnimation");
-    qmlRegisterType<Box2DDistanceJoint>("QuasiGame", 1, 0, "QuasiDistanceJoint");
-    qmlRegisterType<Box2DMouseJoint>("QuasiGame", 1, 0, "QuasiMouseJoint");
-    qmlRegisterType<ImageLayer>("QuasiGame", 1, 0, "QuasiImageLayer");
-    qmlRegisterType<ScriptBehavior>("QuasiGame", 1, 0, "QuasiScriptBehavior");
-    qmlRegisterType<Rectangle>("QuasiGame", 1, 0, "QuasiRectangle");
-    qmlRegisterType<ColorFill>("QuasiGame", 1, 0, "QuasiColorFill");
-    qmlRegisterType<Triangle>("QuasiGame", 1, 0, "QuasiTriangle");
-    qmlRegisterType<Polygon>("QuasiGame", 1, 0, "QuasiPolygon");
-    qmlRegisterType<Polyline>("QuasiGame", 1, 0, "QuasiPolyline");
-    qmlRegisterType<Circle>("QuasiGame", 1, 0, "QuasiCircle");
-    qmlRegisterType<Line>("QuasiGame", 1, 0, "QuasiLine");
-    qmlRegisterType<Material>("QuasiGame", 1, 0, "QuasiMaterial");
-    qmlRegisterType<Fixture>("QuasiGame", 1, 0, "QuasiFixture");
+    qmlRegisterType<Game>("Bacon2D", 1, 0, "Game");
+    qmlRegisterType<Scene>("Bacon2D", 1, 0, "Scene");
+    qmlRegisterType<Entity>("Bacon2D", 1, 0, "Entity");
+    qmlRegisterType<Sprite>("Bacon2D", 1, 0, "Sprite");
+    qmlRegisterType<SpriteAnimation>("Bacon2D", 1, 0, "SpriteAnimation");
+    qmlRegisterType<Box2DDistanceJoint>("Bacon2D", 1, 0, "DistanceJoint");
+    qmlRegisterType<Box2DMouseJoint>("Bacon2D", 1, 0, "MouseJoint");
+    qmlRegisterType<ImageLayer>("Bacon2D", 1, 0, "ImageLayer");
+    qmlRegisterType<ScriptBehavior>("Bacon2D", 1, 0, "ScriptBehavior");
+    qmlRegisterType<Rectangle>("Bacon2D", 1, 0, "Box");
+    qmlRegisterType<ColorFill>("Bacon2D", 1, 0, "ColorFill");
+    qmlRegisterType<Triangle>("Bacon2D", 1, 0, "Triangle");
+    qmlRegisterType<Polygon>("Bacon2D", 1, 0, "Polygon");
+    qmlRegisterType<Polyline>("Bacon2D", 1, 0, "Polyline");
+    qmlRegisterType<Circle>("Bacon2D", 1, 0, "Circle");
+    qmlRegisterType<Line>("Bacon2D", 1, 0, "Line");
+    qmlRegisterType<Material>("Bacon2D", 1, 0, "Material");
+    qmlRegisterType<Fixture>("Bacon2D", 1, 0, "Fixture");
 }

@@ -21,8 +21,8 @@
 
 #include "shape.h"
 
-Shape::Shape(QuasiDeclarativeItem *parent)
-    : QuasiPaintedItem(parent)
+Shape::Shape(Bacon2DItem *parent)
+    : Bacon2DPaintedItem(parent)
     , m_shape(0)
     , m_fill(0)
     , m_initialized(false)

@@ -19,7 +19,7 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-QuasiGame {
+Game {
     id: game
 
     width: 400
@@ -27,13 +27,13 @@ QuasiGame {
 
     currentScene: scene
 
-    QuasiScene {
+    Scene {
         id: scene
 
-        QuasiEntity {
+        Entity {
             updateInterval: 1000
 
-            behavior: QuasiScriptBehavior {
+            behavior: ScriptBehavior {
                 script: console.log("update")
             }
 

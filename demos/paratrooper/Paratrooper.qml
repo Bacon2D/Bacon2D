@@ -1,12 +1,12 @@
 import QtQuick 2.0
-import QuasiGame 1.0
+import Bacon2D 1.0
 
-QuasiEntity {
+Entity {
     id: trooperBody
     width: paratrooperImage.width
     height: paratrooperImage.height
 
-    entityType: Quasi.DynamicType
+    entityType: Bacon2D.DynamicType
 
     property variant explosionObj: null
 
@@ -27,9 +27,9 @@ QuasiEntity {
         player.y = 0
     }
 
-    QuasiFixture {
+    Fixture {
         shape: paratrooperImage
-        material: QuasiMaterial {
+        material: Material {
             friction: 0.3
             density: 6
             restitution: 0
@@ -79,7 +79,7 @@ QuasiEntity {
         applyLinearImpulse(windImpulse, center)
     }
 
-    QuasiScriptBehavior {
+    ScriptBehavior {
         id: trooperBehavior
         script: {
             applyWind()
@@ -108,11 +108,11 @@ QuasiEntity {
 
     Component {
         id: explosionComponent
-        QuasiSprite {
+        Sprite {
             anchors.centerIn: parent
             animation: "explosion"
 
-            animations: QuasiSpriteAnimation {
+            animations: SpriteAnimation {
                 name: "explosion"
                 source: ":/explosion.png"
                 frames: 5

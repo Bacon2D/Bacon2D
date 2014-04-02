@@ -22,20 +22,20 @@
 #ifndef _SHAPE_H_
 #define _SHAPE_H_
 
-#include "quasipainteditem.h"
+#include "bacon2dpainteditem.h"
 #include "fill.h"
 
 #include <Box2D/Box2D.h>
 #include <QtGui/QPainter>
 
-class Shape : public QuasiPaintedItem
+class Shape : public Bacon2DPaintedItem
 {
     Q_OBJECT
 
     Q_PROPERTY(Fill *fill READ fill WRITE setFill NOTIFY fillChanged)
 
 public:
-    Shape(QuasiDeclarativeItem *parent = 0);
+    Shape(Bacon2DItem *parent = 0);
     virtual ~Shape();
 
     virtual void initialize();

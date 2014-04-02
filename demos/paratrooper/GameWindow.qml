@@ -19,7 +19,7 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-QuasiGame {
+Game {
     id: game
 
     width: 1024
@@ -82,7 +82,7 @@ QuasiGame {
         scene.running = !scene.running
     }
 
-    QuasiScene {
+    Scene {
         id: scene
 
         anchors.fill: parent
@@ -98,13 +98,13 @@ QuasiGame {
             }
         }
 
-        QuasiImageLayer {
+        ImageLayer {
             width: 1350
             height: 900
             animated: true
             source: ":/background_clouds.png"
             horizontalStep: player.windReversed ? -1 : 1
-            layerType: Quasi.MirroredType
+            layerType: Bacon2D.MirroredType
             tileWidth: 90
             tileHeight: 90
         }
@@ -117,7 +117,7 @@ QuasiGame {
             anchors.margins: -sun.height / 2
         }
 
-        QuasiImageLayer {
+        ImageLayer {
             width: 1350
             height: 900
             animated: true
@@ -128,12 +128,12 @@ QuasiGame {
                 else
                     5 * (player.windImpulseFactor / player.playerImpulseFactor)
             }
-            layerType: Quasi.MirroredType
+            layerType: Bacon2D.MirroredType
             tileWidth: 90
             tileHeight: 90
         }
 
-        QuasiEntity {
+        Entity {
             id: topWall
 
             height: game.wallHeight
@@ -141,20 +141,20 @@ QuasiGame {
             anchors.right: parent.right
             anchors.top: parent.top
 
-            QuasiFixture {
+            Fixture {
                 shape: Rectangle {
                     color: "lightGray"
                     anchors.fill: parent
                 }
 
-                material: QuasiMaterial {
+                material: Material {
                     density: 50
                     restitution: 0
                 }
             }
         }
 
-        QuasiEntity {
+        Entity {
             id: leftWall
 
             width: game.wallHeight
@@ -162,20 +162,20 @@ QuasiGame {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
-            QuasiFixture {
+            Fixture {
                 shape: Rectangle {
                     color: "lightGray"
                     anchors.fill: parent
                 }
 
-                material: QuasiMaterial {
+                material: Material {
                     density: 50
                     restitution: 0.1
                 }
             }
         }
 
-        QuasiEntity {
+        Entity {
             id: rightWall
 
             width: game.wallHeight
@@ -183,20 +183,20 @@ QuasiGame {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
-            QuasiFixture {
+            Fixture {
                 shape: Rectangle {
                     color: "lightGray"
                     anchors.fill: parent
                 }
 
-                material: QuasiMaterial {
+                material: Material {
                     density: 50
                     restitution: 0.1
                 }
             }
         }
 
-        QuasiEntity {
+        Entity {
             id: ground
 
             height: 50
@@ -204,7 +204,7 @@ QuasiGame {
             anchors.right: parent.right
             anchors.bottom: parent.bottom
 
-            QuasiFixture {
+            Fixture {
                 shape: Rectangle {
                     anchors.fill: parent
                     gradient: Gradient {
@@ -213,14 +213,14 @@ QuasiGame {
                     }
                 }
 
-                material: QuasiMaterial {
+                material: Material {
                     density: 50
                     restitution: 0.1
                 }
             }
         }
 
-        QuasiEntity {
+        Entity {
             id: landingArea
 
             width: target.width
@@ -233,8 +233,8 @@ QuasiGame {
                 anchors.fill: parent
             }
 
-            QuasiFixture {
-                material: QuasiMaterial {
+            Fixture {
+                material: Material {
                     density: 100
                     restitution: 0
                     friction: 50

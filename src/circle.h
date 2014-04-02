@@ -31,7 +31,7 @@ class Circle : public Shape
     Q_PROPERTY(qreal radius READ radius WRITE setRadius NOTIFY radiusChanged)
 
 public:
-    Circle(QuasiDeclarativeItem *parent = 0);
+    Circle(Bacon2DItem *parent = 0);
 
     qreal radius() const { return m_radius; }
     void setRadius(qreal radius);

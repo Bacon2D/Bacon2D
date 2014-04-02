@@ -19,7 +19,7 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-QuasiGame {
+Game {
     id: game
 
     width: 300
@@ -32,13 +32,13 @@ QuasiGame {
         color: "black"
     }
 
-    QuasiScene {
+    Scene {
         id: scene
 
         width: parent.width
         height: parent.height
 
-        QuasiEntity {
+        Entity {
             id: static1
 
             width: 30
@@ -47,7 +47,7 @@ QuasiGame {
             y: 100
             x: 100
 
-            QuasiFixture {
+            Fixture {
                 material: randomMaterial
 
                 anchors.fill: parent
@@ -59,7 +59,7 @@ QuasiGame {
             }
         }
 
-        QuasiDistanceJoint {
+        DistanceJoint {
             entityA: static1
             entityB: dynamic1
 
@@ -72,13 +72,13 @@ QuasiGame {
             }
         }
 
-        QuasiEntity {
+        Entity {
             id: dynamic1
 
             property int centerX: x + (width / 2)
             property int centerY: y + (height / 2)
 
-            entityType: Quasi.DynamicType
+            entityType: Bacon2D.DynamicType
 
             width: 30
             height: 30
@@ -86,21 +86,21 @@ QuasiGame {
             y: 200
             x: 100
 
-            QuasiFixture {
+            Fixture {
                 material: randomMaterial
 
                 anchors.fill: parent
 
-                shape: QuasiCircle {
+                shape: Circle {
                     anchors.fill: parent
-                    fill: QuasiColorFill {
+                    fill: ColorFill {
                         brushColor: "red"
                     }
                 }
             }
         }
 
-        QuasiEntity {
+        Entity {
             id: static2
 
             width: 30
@@ -109,7 +109,7 @@ QuasiGame {
             y: 100
             x: 135
 
-            QuasiFixture {
+            Fixture {
                 material: randomMaterial
 
                 anchors.fill: parent
@@ -121,7 +121,7 @@ QuasiGame {
             }
         }
 
-        QuasiDistanceJoint {
+        DistanceJoint {
             entityA: static2
             entityB: dynamic2
 
@@ -134,10 +134,10 @@ QuasiGame {
             }
         }
 
-        QuasiEntity {
+        Entity {
             id: dynamic2
 
-            entityType: Quasi.DynamicType
+            entityType: Bacon2D.DynamicType
 
             width: 30
             height: 30
@@ -145,21 +145,21 @@ QuasiGame {
             y: 200
             x: 135
 
-            QuasiFixture {
+            Fixture {
                 material: randomMaterial
 
                 anchors.fill: parent
 
-                shape: QuasiCircle {
+                shape: Circle {
                     anchors.fill: parent
-                    fill: QuasiColorFill {
+                    fill: ColorFill {
                         brushColor: "red"
                     }
                 }
             }
         }
 
-        QuasiEntity {
+        Entity {
             id: static3
 
             width: 30
@@ -168,7 +168,7 @@ QuasiGame {
             y: 100
             x: 170
 
-            QuasiFixture {
+            Fixture {
                 material: randomMaterial
 
                 anchors.fill: parent
@@ -180,7 +180,7 @@ QuasiGame {
             }
         }
 
-        QuasiDistanceJoint {
+        DistanceJoint {
             entityA: static3
             entityB: dynamic3
 
@@ -193,10 +193,10 @@ QuasiGame {
             }
         }
 
-        QuasiEntity {
+        Entity {
             id: dynamic3
 
-            entityType: Quasi.DynamicType
+            entityType: Bacon2D.DynamicType
 
             width: 30
             height: 30
@@ -204,21 +204,21 @@ QuasiGame {
             y: 200
             x: 170
 
-            QuasiFixture {
+            Fixture {
                 material: randomMaterial
 
                 anchors.fill: parent
 
-                shape: QuasiCircle {
+                shape: Circle {
                     anchors.fill: parent
-                    fill: QuasiColorFill {
+                    fill: ColorFill {
                         brushColor: "red"
                     }
                 }
             }
         }
 
-        QuasiEntity {
+        Entity {
             id: static4
 
             width: 30
@@ -227,7 +227,7 @@ QuasiGame {
             y: 100
             x: 205
 
-            QuasiFixture {
+            Fixture {
                 material: randomMaterial
 
                 anchors.fill: parent
@@ -239,7 +239,7 @@ QuasiGame {
             }
         }
 
-        QuasiDistanceJoint {
+        DistanceJoint {
             entityA: static4
             entityB: dynamic4
 
@@ -252,10 +252,10 @@ QuasiGame {
             }
         }
 
-        QuasiEntity {
+        Entity {
             id: dynamic4
 
-            entityType: Quasi.DynamicType
+            entityType: Bacon2D.DynamicType
 
             width: 30
             height: 30
@@ -263,14 +263,14 @@ QuasiGame {
             y: 200
             x: 205
 
-            QuasiFixture {
+            Fixture {
                 material: randomMaterial
 
                 anchors.fill: parent
 
-                shape: QuasiCircle {
+                shape: Circle {
                     anchors.fill: parent
-                    fill: QuasiColorFill {
+                    fill: ColorFill {
                         brushColor: "red"
                     }
                 }
@@ -280,7 +280,7 @@ QuasiGame {
         Component.onCompleted: dynamic1.applyLinearImpulse(Qt.point(-1000, 0), Qt.point(dynamic1.centerX, dynamic1.centerY))
     }
 
-    QuasiMaterial {
+    Material {
         id: randomMaterial
 
         friction: 0.3 + Math.random() * 1.0

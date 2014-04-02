@@ -31,7 +31,7 @@
 #include <QtGui/QPainter>
 
 Box2DDebugDraw::Box2DDebugDraw(Scene *parent)
-    : QuasiPaintedItem((QuasiDeclarativeItem*)parent)
+    : Bacon2DPaintedItem((Bacon2DItem*)parent)
     , b2Draw()
     , m_painter(0)
     , m_scene(parent)
@@ -43,7 +43,7 @@ Box2DDebugDraw::Box2DDebugDraw(Scene *parent)
              | e_pairBit
              | e_centerOfMassBit);
 
-    setZ(Quasi::MaxOrdering);
+    setZ(Bacon2D::MaxOrdering);
 }
 
 void Box2DDebugDraw::draw()

@@ -24,7 +24,7 @@
 
 #include "enums.h"
 #include "entity.h"
-#include "quasipainteditem.h"
+#include "bacon2dpainteditem.h"
 
 #include <QtCore/QList>
 #include <QtCore/QString>
@@ -65,16 +65,16 @@ private:
 };
 
 //! A layer class
-class Layer: public QuasiPaintedItem
+class Layer: public Bacon2DPaintedItem
 {
     Q_OBJECT
 
     Q_PROPERTY(bool animated READ isAnimated WRITE setAnimated NOTIFY animatedChanged)
     Q_PROPERTY(qreal horizontalStep READ horizontalStep WRITE setHorizontalStep NOTIFY horizontalStepChanged)
-    Q_PROPERTY(Quasi::LayerType layerType READ layerType WRITE setLayerType NOTIFY layerTypeChanged)
+    Q_PROPERTY(Bacon2D::LayerType layerType READ layerType WRITE setLayerType NOTIFY layerTypeChanged)
 
 public:
-    Layer(QuasiDeclarativeItem *parent = 0);
+    Layer(Bacon2DItem *parent = 0);
     virtual ~Layer();
 
     bool isAnimated() const { return m_isAnimated; }
@@ -83,8 +83,8 @@ public:
     qreal horizontalStep() const { return m_horizontalStep; }
     void setHorizontalStep(const qreal &step);
 
-    Quasi::LayerType layerType() const { return m_type; };
-    void setLayerType(const Quasi::LayerType &type);
+    Bacon2D::LayerType layerType() const { return m_type; };
+    void setLayerType(const Bacon2D::LayerType &type);
 
 signals:
     void animatedChanged();
@@ -95,7 +95,7 @@ signals:
 protected:
     bool m_isAnimated;
     qreal m_horizontalStep;
-    Quasi::LayerType m_type;
+    Bacon2D::LayerType m_type;
 };
 
 #endif /* _LAYER */

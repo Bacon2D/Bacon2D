@@ -19,7 +19,7 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-QuasiGame {
+Game {
     id: game
 
     width: 400
@@ -27,7 +27,7 @@ QuasiGame {
 
     currentScene: scene
 
-    QuasiScriptBehavior {
+    ScriptBehavior {
         id: sideScrollBehavior
 
         script: {
@@ -37,7 +37,7 @@ QuasiGame {
         }
     }
 
-    QuasiScriptBehavior {
+    ScriptBehavior {
         id: verticalScrollBehavior
 
         script: {
@@ -47,13 +47,13 @@ QuasiGame {
         }
     }
 
-    QuasiScene {
+    Scene {
         id: scene
 
         width: parent.width
         height: parent.height
 
-        QuasiEntity {
+        Entity {
             id: square
             property int scrollStep: 3
 

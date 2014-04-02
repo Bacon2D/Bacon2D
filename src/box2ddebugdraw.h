@@ -22,7 +22,7 @@
 #ifndef _BOX2DDEBUGDRAW_H_
 #define _BOX2DDEBUGDRAW_H_
 
-#include "quasipainteditem.h"
+#include "bacon2dpainteditem.h"
 
 #include <Box2D/Box2D.h>
 
@@ -31,7 +31,7 @@
 class QPainter;
 class Scene;
 
-class Box2DDebugDraw : public QuasiPaintedItem, public b2Draw
+class Box2DDebugDraw : public Bacon2DPaintedItem, public b2Draw
 {
     Q_OBJECT
 

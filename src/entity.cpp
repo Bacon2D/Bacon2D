@@ -36,7 +36,7 @@ Entity::Entity(Scene *parent)
     , m_body(0)
     , m_linearDamping(0.0f)
     , m_angularDamping(0.0f)
-    , m_entityType(Quasi::StaticType)
+    , m_entityType(Bacon2D::StaticType)
     , m_bullet(false)
     , m_sleepingAllowed(true)
     , m_fixedRotation(false)
@@ -217,12 +217,12 @@ void Entity::setAngularDamping(const qreal &angularDamping)
     emit angularDampingChanged();
 }
 
-Quasi::EntityType Entity::entityType() const
+Bacon2D::EntityType Entity::entityType() const
 {
     return m_entityType;
 }
 
-void Entity::setEntityType(const Quasi::EntityType &entityType)
+void Entity::setEntityType(const Bacon2D::EntityType &entityType)
 {
     if (m_entityType == entityType)
         return;
@@ -415,7 +415,7 @@ void Entity::itemChange(ItemChange change, const ItemChangeData &data)
 
 void Entity::createSensorFixture()
 {
-    setEntityType(Quasi::DynamicType);
+    setEntityType(Bacon2D::DynamicType);
     m_body->SetGravityScale(0);
 
     m_sensorFixture = new Fixture(this);

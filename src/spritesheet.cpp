@@ -25,8 +25,8 @@
 #include <QtGui/QPainter>
 #include <QtQml/QQmlProperty>
 
-SpriteSheet::SpriteSheet(QuasiDeclarativeItem *parent)
-    : QuasiPaintedItem(parent)
+SpriteSheet::SpriteSheet(Bacon2DItem *parent)
+    : Bacon2DPaintedItem(parent)
     , m_pixMap(0)
     , m_frames(0)
     , m_frame(0)

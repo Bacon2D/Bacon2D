@@ -24,7 +24,7 @@
 #include "box2dbase.h"
 #include "util.h"
 
-Rectangle::Rectangle(QuasiDeclarativeItem *parent)
+Rectangle::Rectangle(Bacon2DItem *parent)
     : Shape(parent)
 {
 }

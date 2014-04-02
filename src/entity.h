@@ -42,7 +42,7 @@ class Entity : public Box2DBase
     Q_PROPERTY(Behavior *behavior READ behavior WRITE setBehavior NOTIFY behaviorChanged)
     Q_PROPERTY(qreal linearDamping READ linearDamping WRITE setLinearDamping NOTIFY linearDampingChanged)
     Q_PROPERTY(qreal angularDamping READ angularDamping WRITE setAngularDamping NOTIFY angularDampingChanged)
-    Q_PROPERTY(Quasi::EntityType entityType READ entityType WRITE setEntityType NOTIFY entityTypeChanged)
+    Q_PROPERTY(Bacon2D::EntityType entityType READ entityType WRITE setEntityType NOTIFY entityTypeChanged)
     Q_PROPERTY(bool bullet READ bullet WRITE setBullet NOTIFY bulletChanged)
     Q_PROPERTY(bool sleepingAllowed READ sleepingAllowed WRITE setSleepingAllowed NOTIFY sleepingAllowedChanged)
     Q_PROPERTY(bool fixedRotation READ fixedRotation WRITE setFixedRotation NOTIFY fixedRotationChanged)
@@ -73,8 +73,8 @@ public:
     qreal angularDamping() const;
     void setAngularDamping(const qreal &angularDamping);
 
-    Quasi::EntityType entityType() const;
-    void setEntityType(const Quasi::EntityType &entityType);
+    Bacon2D::EntityType entityType() const;
+    void setEntityType(const Bacon2D::EntityType &entityType);
 
     bool bullet() const;
     void setBullet(const bool &bullet);
@@ -131,7 +131,7 @@ private:
     b2Body *m_body;
     qreal m_linearDamping;
     qreal m_angularDamping;
-    Quasi::EntityType m_entityType;
+    Bacon2D::EntityType m_entityType;
     bool m_bullet;
     bool m_sleepingAllowed;
     bool m_fixedRotation;

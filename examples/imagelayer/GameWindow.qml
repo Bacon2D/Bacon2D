@@ -19,7 +19,7 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-QuasiGame {
+Game {
     id: game
 
     width: 800
@@ -27,33 +27,33 @@ QuasiGame {
 
     currentScene: scene
 
-    QuasiScene {
+    Scene {
         id: scene
 
         focus: true
         width: parent.width
         height: parent.height
 
-        QuasiImageLayer {
+        ImageLayer {
             id: layer
             anchors.fill: parent
-            drawType: Quasi.TiledDrawType
+            drawType: Bacon2D.TiledDrawType
             tileWidth: 32
             tileHeight: 32
             animated: true
             source: ":/large_enough.png"
             horizontalStep: -5
-            layerType: Quasi.MirroredType
+            layerType: Bacon2D.MirroredType
         }
 
-        QuasiSprite {
+        Sprite {
             id: spriteItem
 
             y: 175
 
             animation: "sliding"
 
-            animations: QuasiSpriteAnimation {
+            animations: SpriteAnimation {
                 name: "sliding"
                 source: ":/sliding.png"
                 frames: 4

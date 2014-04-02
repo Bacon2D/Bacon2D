@@ -19,25 +19,20 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _QUASIPAINTEDITEM_H_
-#define _QUASIPAINTEDITEM_H_
+#ifndef _BACON2DITEM_H_
+#define _BACON2DITEM_H_
 
 #include <QtCore/QtGlobal>
 
-#include <QtQuick/QQuickPaintedItem>
+#include <QtQuick/QQuickItem>
 
-#include "quasideclarativeitem.h"
-
-class QuasiPaintedItem
-    : public QQuickPaintedItem
+class Bacon2DItem
+    : public QQuickItem
 {
 public:
-    QuasiPaintedItem(QuasiDeclarativeItem *parent = 0)
-        : QQuickPaintedItem(parent) {}
-
-    virtual void paint(QPainter *painter) { Q_UNUSED(painter); };
-
-    virtual ~QuasiPaintedItem() {}
+    Bacon2DItem(Bacon2DItem *parent = 0)
+        : QQuickItem(parent) {}
+    virtual ~Bacon2DItem() {}
 };
 
-#endif /* _QUASIPAINTEDITEM_H_ */
+#endif /* _BACON2DITEM_H_ */

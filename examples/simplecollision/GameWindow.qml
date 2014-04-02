@@ -19,7 +19,7 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-QuasiGame {
+Game {
     id: game
 
     width: 400
@@ -27,7 +27,7 @@ QuasiGame {
 
     currentScene: scene
 
-    QuasiScriptBehavior {
+    ScriptBehavior {
         id: sideScrollBehavior
 
         script: {
@@ -37,7 +37,7 @@ QuasiGame {
         }
     }
 
-    QuasiScriptBehavior {
+    ScriptBehavior {
         id: verticalScrollBehavior
 
         script: {
@@ -47,7 +47,7 @@ QuasiGame {
         }
     }
 
-    QuasiScene {
+    Scene {
         id: scene
 
         width: parent.width
@@ -69,7 +69,7 @@ QuasiGame {
             console.log("endContact:", contact.fixtureA.entity, "collided with", contact.fixtureB.entity)
         }
 
-        QuasiEntity {
+        Entity {
             id: item
 
             property string name: "RED"
@@ -92,7 +92,7 @@ QuasiGame {
             }
         }
 
-        QuasiEntity {
+        Entity {
             id: item2
 
             property string name: "BLUE"
@@ -115,7 +115,7 @@ QuasiGame {
             }
         }
 
-        QuasiEntity {
+        Entity {
             id: item3
 
             property string name: "YELLOW"
@@ -139,7 +139,7 @@ QuasiGame {
             }
         }
 
-        QuasiEntity {
+        Entity {
             id: item4
 
             property string name: "GRAY"

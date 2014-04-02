@@ -26,11 +26,11 @@
 #include <QtQml/QQmlProperty>
 
 //! Class constructor
-Layer::Layer(QuasiDeclarativeItem *parent)
-    : QuasiPaintedItem(parent)
+Layer::Layer(Bacon2DItem *parent)
+    : Bacon2DPaintedItem(parent)
     , m_isAnimated(false)
     , m_horizontalStep(1.0)
-    , m_type(Quasi::InfiniteType)
+    , m_type(Bacon2D::InfiniteType)
 {
     // this activates the item layered mode
     QQmlProperty(this, "layer.enabled").write(true);
@@ -64,7 +64,7 @@ void Layer::setHorizontalStep(const qreal &step)
     emit horizontalStepChanged();
 }
 
-void Layer::setLayerType(const Quasi::LayerType &type)
+void Layer::setLayerType(const Bacon2D::LayerType &type)
 {
     if (type == m_type)
         return;

@@ -3,11 +3,11 @@ CONFIG += qt plugin
 
 QT += quick
 
-TARGET = quasigameplugin
-TARGETPATH = QuasiGame
+TARGET = bacon2dplugin
+TARGETPATH = Bacon2D
 
 API_VER=1.0
-DESTDIR = $$OUT_PWD/imports/QuasiGame
+DESTDIR = $$OUT_PWD/imports/Bacon2D
 
 OBJECTS_DIR = tmp
 MOC_DIR = tmp
@@ -18,8 +18,8 @@ INCLUDEPATH += .
 INCLUDEPATH += $$BOX2DPATH/include
 LIBS += -L$$BOX2DPATH/lib -lBox2D
 
-HEADERS += quasideclarativeitem.h \
-           quasipainteditem.h \
+HEADERS += bacon2ditem.h \
+           bacon2dpainteditem.h \
            entity.h \
            scene.h \
            game.h \
@@ -86,7 +86,7 @@ SOURCES += entity.cpp \
            fixture.cpp \
            material.cpp
 
-QMAKE_POST_LINK = $$QMAKE_COPY $$PWD/qmldir $$OUT_PWD/imports/QuasiGame
+QMAKE_POST_LINK = $$QMAKE_COPY $$PWD/qmldir $$OUT_PWD/imports/Bacon2D
 
 !isEmpty(QTPATH): target.path = $$QTPATH/imports/$$TARGETPATH
 else: target.path = $$[QT_INSTALL_QML]/$$replace(TARGETPATH, \\., /).$$API_VER
@@ -94,6 +94,6 @@ else: target.path = $$[QT_INSTALL_QML]/$$replace(TARGETPATH, \\., /).$$API_VER
 qmlpluginfiles.path = $$target.path
 qmlpluginfiles.files += \
     $$PWD/qmldir \
-    $$OUT_PWD/imports/QuasiGame/*
+    $$OUT_PWD/imports/Bacon2D/*
 
 INSTALLS += target qmlpluginfiles

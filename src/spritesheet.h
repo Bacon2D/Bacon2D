@@ -22,20 +22,20 @@
 #ifndef _SPRITESHEET_H_
 #define _SPRITESHEET_H_
 
-#include "quasipainteditem.h"
+#include "bacon2dpainteditem.h"
 
 #include <QtCore/QtGlobal>
 
 class QPixmap;
 
-class SpriteSheet : public QuasiPaintedItem
+class SpriteSheet : public Bacon2DPaintedItem
 {
     Q_OBJECT
 
     Q_PROPERTY(int frame READ frame WRITE setFrame NOTIFY frameChanged)
 
 public:
-    SpriteSheet(QuasiDeclarativeItem *parent = 0);
+    SpriteSheet(Bacon2DItem *parent = 0);
 
     QString source() const;
     void setSource(const QString &source);

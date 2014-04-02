@@ -26,8 +26,8 @@
 
 #include <Box2D/Box2D.h>
 
-Fixture::Fixture(QuasiDeclarativeItem *parent)
-    : QuasiDeclarativeItem(parent)
+Fixture::Fixture(Bacon2DItem *parent)
+    : Bacon2DItem(parent)
     , m_fixture(0)
     , m_material(0)
     , m_shapeItem(0)
@@ -201,7 +201,7 @@ void Fixture::updateFixture()
 
 void Fixture::componentComplete()
 {
-    QuasiDeclarativeItem::componentComplete();
+    Bacon2DItem::componentComplete();
 
     if (Shape *shape = qobject_cast<Shape*>(m_shapeItem))
         shape->initialize();

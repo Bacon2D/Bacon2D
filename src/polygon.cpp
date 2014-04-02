@@ -3,7 +3,7 @@
 #include "util.h"
 #include "box2dbase.h"
 
-Polygon::Polygon(QuasiDeclarativeItem *parent)
+Polygon::Polygon(Bacon2DItem *parent)
     : Shape(parent)
 {
 }
