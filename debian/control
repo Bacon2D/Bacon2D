@@ -1,0 +1,22 @@
+Source: bacon2d
+Priority: extra
+Maintainer: Ken VanDine <ken.vandine@ubuntu.com>
+Build-Depends: debhelper (>= 9),
+               libbox2d-dev (>= 2.3.0),
+               pkg-config,
+               qt5-default,
+               qtbase5-dev,
+               qtdeclarative5-dev,
+               qtdeclarative5-qtquick2-plugin,
+Standards-Version: 3.9.5
+Section: libs
+Homepage:  http://bacon2d.github.io/Bacon2D
+
+Package: qtdeclarative5-bacon2d1.0
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+Description: 2D Game Engine for QML
+ Bacon2D is a framework to ease 2d game development, providing ready-to-use 
+ QML elements representing basic game entities needed by most of games.
