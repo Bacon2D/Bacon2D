@@ -27,8 +27,8 @@
 
 #include <QtGui/QCursor>
 
-Game::Game(QuasiDeclarativeItem *parent)
-    : QuasiDeclarativeItem(parent)
+Game::Game(Bacon2DItem *parent)
+    : Bacon2DItem(parent)
     , m_currentScene(0)
     , m_fps(30)
     , m_timerId(0)

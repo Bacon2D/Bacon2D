@@ -3,7 +3,7 @@
 #include "util.h"
 #include "box2dbase.h"
 
-Line::Line(QuasiDeclarativeItem *parent)
+Line::Line(Bacon2DItem *parent)
     : Shape(parent)
 {
 }

@@ -26,8 +26,8 @@
 #include <QtQml/QQmlProperty>
 
 //! Class constructor
-Layer::Layer(QuasiDeclarativeItem *parent)
-    : QuasiPaintedItem(parent)
+Layer::Layer(Bacon2DItem *parent)
+    : Bacon2DPaintedItem(parent)
     , m_isAnimated(false)
     , m_horizontalStep(1.0)
     , m_type(Quasi::InfiniteType)

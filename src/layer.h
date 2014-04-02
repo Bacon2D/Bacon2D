@@ -74,7 +74,7 @@ class Layer: public Bacon2DPaintedItem
     Q_PROPERTY(Quasi::LayerType layerType READ layerType WRITE setLayerType NOTIFY layerTypeChanged)
 
 public:
-    Layer(QuasiDeclarativeItem *parent = 0);
+    Layer(Bacon2DItem *parent = 0);
     virtual ~Layer();
 
     bool isAnimated() const { return m_isAnimated; }

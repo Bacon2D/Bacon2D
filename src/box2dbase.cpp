@@ -28,7 +28,7 @@
 float Box2DBase::m_scaleRatio = 32.0f;
 
 Box2DBase::Box2DBase(Scene *parent )
-    : QuasiDeclarativeItem((QuasiDeclarativeItem*)parent)
+    : Bacon2DItem((Bacon2DItem*)parent)
     , m_initialized(false)
     , m_synchronizing(false)
     , m_worldPtr(0)

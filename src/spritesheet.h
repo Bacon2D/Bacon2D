@@ -35,7 +35,7 @@ class SpriteSheet : public Bacon2DPaintedItem
     Q_PROPERTY(int frame READ frame WRITE setFrame NOTIFY frameChanged)
 
 public:
-    SpriteSheet(QuasiDeclarativeItem *parent = 0);
+    SpriteSheet(Bacon2DItem *parent = 0);
 
     QString source() const;
     void setSource(const QString &source);

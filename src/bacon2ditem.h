@@ -19,20 +19,20 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _QUASIDECLARATIVEITEM_H_
-#define _QUASIDECLARATIVEITEM_H_
+#ifndef _BACON2DITEM_H_
+#define _BACON2DITEM_H_
 
 #include <QtCore/QtGlobal>
 
 #include <QtQuick/QQuickItem>
 
-class QuasiDeclarativeItem
+class Bacon2DItem
     : public QQuickItem
 {
 public:
-    QuasiDeclarativeItem(QuasiDeclarativeItem *parent = 0)
+    Bacon2DItem(Bacon2DItem *parent = 0)
         : QQuickItem(parent) {}
-    virtual ~QuasiDeclarativeItem() {}
+    virtual ~Bacon2DItem() {}
 };
 
-#endif /* _QUASIDECLARATIVEITEM_H_ */
+#endif /* _BACON2DITEM_H_ */

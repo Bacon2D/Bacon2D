@@ -35,7 +35,7 @@ class Shape : public Bacon2DPaintedItem
     Q_PROPERTY(Fill *fill READ fill WRITE setFill NOTIFY fillChanged)
 
 public:
-    Shape(QuasiDeclarativeItem *parent = 0);
+    Shape(Bacon2DItem *parent = 0);
     virtual ~Shape();
 
     virtual void initialize();

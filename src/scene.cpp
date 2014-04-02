@@ -40,7 +40,7 @@ static void deleteWorld(b2World *world)
 }
 
 Scene::Scene(Game *parent)
-    : QuasiDeclarativeItem(parent)
+    : Bacon2DItem(parent)
     , m_running(true)
     , m_game(parent)
     , m_debug(false)
@@ -142,7 +142,7 @@ void Scene::setDebug(const bool &debug)
 
 void Scene::componentComplete()
 {
-    QuasiDeclarativeItem::componentComplete();
+    Bacon2DItem::componentComplete();
 
     QQuickItem *item;
 
@@ -185,7 +185,7 @@ void Scene::itemChange(ItemChange change, const ItemChangeData &data)
         }
     }
 
-    QuasiDeclarativeItem::itemChange(change, data);
+    Bacon2DItem::itemChange(change, data);
 }
 
 b2World *Scene::world() const

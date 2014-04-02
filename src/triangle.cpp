@@ -24,7 +24,7 @@
 #include "util.h"
 #include "box2dbase.h"
 
-Triangle::Triangle(QuasiDeclarativeItem *parent)
+Triangle::Triangle(Bacon2DItem *parent)
     : Shape(parent)
 {
 }
