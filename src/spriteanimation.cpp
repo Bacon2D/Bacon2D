@@ -26,9 +26,9 @@
 #include <QtCore/QPropertyAnimation>
 
 /*!
-  \qmltype QuasiSpriteAnimation
+  \qmltype SpriteAnimation
   \instantiates SpriteAnimation
-  \inqmlmodule QuasiGame 1.0
+  \inqmlmodule Bacon2D 1.0
   \brief FIXME
  */
 SpriteAnimation::SpriteAnimation(QState *parent)
@@ -50,7 +50,7 @@ SpriteAnimation::SpriteAnimation(QState *parent)
 }
 
 /*!
- * \qmlproperty string QuasiSpriteAnimation::name
+ * \qmlproperty string SpriteAnimation::name
  * \brief FIXME
  */
 QString SpriteAnimation::name() const
@@ -64,7 +64,7 @@ void SpriteAnimation::setName(const QString &name)
 }
 
 /*!
- * \qmlproperty bool QuasiSpriteAnimation::running
+ * \qmlproperty bool SpriteAnimation::running
  * \brief FIXME
  */
 bool SpriteAnimation::running() const
@@ -87,7 +87,7 @@ void SpriteAnimation::setRunning(const bool &running)
 }
 
 /*!
- * \qmlproperty int QuasiSpriteAnimation::loops
+ * \qmlproperty int SpriteAnimation::loops
  * \brief FIXME
  */
 int SpriteAnimation::loops() const
@@ -107,7 +107,7 @@ void SpriteAnimation::setLoops(const int &loops)
 }
 
 /*!
- * \qmlproperty string QuasiSpriteAnimation::source
+ * \qmlproperty string SpriteAnimation::source
  * \brief FIXME
  */
 QString SpriteAnimation::source() const
@@ -121,7 +121,7 @@ void SpriteAnimation::setSource(const QString &source)
 }
 
 /*!
- * \qmlproperty int QuasiSpriteAnimation::frames
+ * \qmlproperty int SpriteAnimation::frames
  * \brief FIXME
  */
 int SpriteAnimation::frames() const
@@ -136,7 +136,7 @@ void SpriteAnimation::setFrames(const int &frames)
 }
 
 /*!
- * \qmlproperty int QuasiSpriteAnimation::frame
+ * \qmlproperty int SpriteAnimation::frame
  * \brief FIXME
  */
 int SpriteAnimation::frame() const
@@ -150,7 +150,7 @@ void SpriteAnimation::setFrame(const int &frame)
 }
 
 /*!
- * \qmlproperty int QuasiSpriteAnimation::initialFrame
+ * \qmlproperty int SpriteAnimation::initialFrame
  * \brief FIXME
  */
 int SpriteAnimation::initialFrame() const
@@ -165,7 +165,7 @@ void SpriteAnimation::setInitialFrame(const int &initialFrame)
 }
 
 /*!
- * \qmlproperty bool QuasiSpriteAnimation::visible
+ * \qmlproperty bool SpriteAnimation::visible
  * \brief FIXME
  */
 bool SpriteAnimation::visible() const
@@ -189,7 +189,7 @@ SpriteSheet *SpriteAnimation::spriteSheet()
 }
 
 /*!
- * \qmlproperty int QuasiSpriteAnimation::duration
+ * \qmlproperty int SpriteAnimation::duration
  * \brief FIXME
  */
 int SpriteAnimation::duration() const
@@ -208,7 +208,7 @@ void SpriteAnimation::setDuration(const int &duration)
 }
 
 /*!
- * \qmlproperty bool QuasiSpriteAnimation::inverse
+ * \qmlproperty bool SpriteAnimation::inverse
  * \brief FIXME
  */
 bool SpriteAnimation::inverse() const

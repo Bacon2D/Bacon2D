@@ -24,9 +24,9 @@
 #include <QtQml/QQmlExpression>
 
 /*!
-  \qmltype QuasiScriptBehavior
+  \qmltype ScriptBehavior
   \instantiates ScriptBehavior
-  \inqmlmodule QuasiGame 1.0
+  \inqmlmodule Bacon2D 1.0
   \brief FIXME
  */
 ScriptBehavior::ScriptBehavior(QObject *parent)
