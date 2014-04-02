@@ -25,6 +25,13 @@
 #include <QtGui/QPainter>
 #include <QtQml/QQmlProperty>
 
+
+/*!
+  \qmltype QuasiSpriteSheet
+  \instantiates SpriteSheet
+  \inqmlmodule QuasiGame 1.0
+  \brief FIXME
+ */
 SpriteSheet::SpriteSheet(QuasiDeclarativeItem *parent)
     : QuasiPaintedItem(parent)
     , m_pixMap(0)
@@ -105,6 +112,10 @@ int SpriteSheet::frame() const
     return m_frame;
 }
 
+/*!
+ * \qmlproperty int QuasiSpriteSheet::frame
+ * \brief FIXME
+ */
 void SpriteSheet::setFrame(const int &frame)
 {
     if (m_frame != frame

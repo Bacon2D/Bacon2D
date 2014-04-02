@@ -29,10 +29,32 @@
 
 
 /*!
- * \qmltype QuasiGame
- * \instantiates Game
- * \inqmlmodule QuasiGame 1.0
- * \brief FIXME
+  \qmltype QuasiGame
+  \instantiates Game
+  \inqmlmodule QuasiGame 1.0
+  \brief The root element containing one or more QuasiScene.
+
+  The QuasiGame component is the root game component which
+  contains one or more QuasiScene components.  Only one
+  QuasiScene will be set as currentScene.
+
+  Example usage:
+  \qml
+   import QtQuick 2.0
+   import QuasiGame 1.0
+
+   QuasiGame {
+       id: game
+       width: 800
+       height: 600
+
+       QuasiScene {
+           id: scene
+           width: 300
+           height: 300
+       }
+   }
+   \endqml
 */
 Game::Game(QuasiDeclarativeItem *parent)
     : QuasiDeclarativeItem(parent)
@@ -46,7 +68,7 @@ Game::Game(QuasiDeclarativeItem *parent)
 
 /*!
  * \qmlproperty QuasiScene QuasiGame::currentScene
- * \brief FIXME
+ * \brief The current QuasiScene
  */
 Scene *Game::currentScene() const
 {

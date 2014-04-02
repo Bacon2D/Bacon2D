@@ -21,6 +21,12 @@
 
 #include "shape.h"
 
+/*!
+  \qmltype QuasiShape
+  \instantiates Shape
+  \inqmlmodule QuasiGame 1.0
+  \brief FIXME
+ */
 Shape::Shape(QuasiDeclarativeItem *parent)
     : QuasiPaintedItem(parent)
     , m_shape(0)
@@ -45,6 +51,10 @@ void Shape::initialize()
     m_initialized = true;
 }
 
+/*!
+ * \qmlproperty Fill QuasiShape::fill
+ * \brief FIXME
+ */
 void Shape::setFill(Fill *fill)
 {
     if (m_fill == fill)

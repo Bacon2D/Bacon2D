@@ -21,6 +21,12 @@
 
 #include "fill.h"
 
+/*!
+  \qmltype QuasiFill
+  \instantiates Fill
+  \inqmlmodule QuasiGame 1.0
+  \brief FIXME
+ */
 Fill::Fill(QObject *parent)
     : QObject(parent)
     , m_brush(0)
@@ -34,6 +40,10 @@ Fill::Fill(QObject *parent)
 {
 }
 
+/*!
+ * \qmlproperty Qt::BrushStyle brushStyle
+ * \brief FIXME
+ */
 void Fill::setBrushStyle(const Qt::BrushStyle &brushStyle)
 {
     if (m_brushStyle == brushStyle)
@@ -44,6 +54,10 @@ void Fill::setBrushStyle(const Qt::BrushStyle &brushStyle)
     emit brushStyleChanged();
 }
 
+/*!
+ * \qmlproperty Qt::PenStyle penStyle
+ * \brief FIXME
+ */
 void Fill::setPenStyle(const Qt::PenStyle &penStyle)
 {
     if (m_penStyle == penStyle)
@@ -54,6 +68,10 @@ void Fill::setPenStyle(const Qt::PenStyle &penStyle)
     emit penStyleChanged();
 }
 
+/*!
+ * \qmlproperty Qt::PenCapStyle penCapStyle
+ * \brief FIXME
+ */
 void Fill::setPenCapStyle(const Qt::PenCapStyle &penCapStyle)
 {
     if (m_penCapStyle == penCapStyle)
@@ -64,6 +82,10 @@ void Fill::setPenCapStyle(const Qt::PenCapStyle &penCapStyle)
     emit penCapStyleChanged();
 }
 
+/*!
+ * \qmlproperty Qt::PenJoinStyle penJoinStyle
+ * \brief FIXME
+ */
 void Fill::setPenJoinStyle(const Qt::PenJoinStyle &penJoinStyle)
 {
     if (m_penJoinStyle == penJoinStyle)
@@ -74,6 +96,10 @@ void Fill::setPenJoinStyle(const Qt::PenJoinStyle &penJoinStyle)
     emit penJoinStyleChanged();
 }
 
+/*!
+ * \qmlproperty qreal penWidth
+ * \brief FIXME
+ */
 void Fill::setPenWidth(const qreal &penWidth)
 {
     if (m_penWidth == penWidth)
