@@ -18,7 +18,7 @@ Available QMake parameters:
 
 * QTPATH (Optional)
 	Prefix where Qt has been installed. It is required to install
-	Quasi's QML import plugin and related files.
+	Bacon2D's QML import plugin and related files.
 	The default path is /usr/lib/qt5
 
 * BOX2DPATH (Optional)
@@ -29,7 +29,7 @@ Available QMake parameters:
 * BUILD_EXAMPLES (Optional)
 	Use BUILD_EXAMPLES=1 to build usage examples.
 
-Sample build from Quasi's root source tree:
+Sample build from Bacon2D's root source tree:
 
 $ mkdir build && cd build
 $ qmake QTPATH=/opt/Qt5 BOX2DPATH=/usr BUILD_EXAMPLES=1 ..
@@ -49,7 +49,7 @@ Example:
 $ cd $(QUASI_BUILD_TREE)/examples/box2dpolygon_circle/
 $ ./box2dpolygon_circle
 
-If Quasi QML plugin was not installed you need first to export QML_IMPORT_PATH
+If Bacon2D QML plugin was not installed you need first to export QML_IMPORT_PATH
 environment variable:
 
 $ export QML_IMPORT_PATH=$(QUASI_BUILD_TREE)/src/imports
