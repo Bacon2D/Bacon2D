@@ -24,7 +24,7 @@
 
 #include "enums.h"
 #include "entity.h"
-#include "quasipainteditem.h"
+#include "bacon2dpainteditem.h"
 
 #include <QtCore/QList>
 #include <QtCore/QString>
@@ -65,7 +65,7 @@ private:
 };
 
 //! A layer class
-class Layer: public QuasiPaintedItem
+class Layer: public Bacon2DPaintedItem
 {
     Q_OBJECT
 

@@ -26,13 +26,13 @@
 
 #include <QtQuick/QQuickPaintedItem>
 
-#include "quasideclarativeitem.h"
+#include "bacon2ditem.h"
 
 class QuasiPaintedItem
     : public QQuickPaintedItem
 {
 public:
-    QuasiPaintedItem(QuasiDeclarativeItem *parent = 0)
+    QuasiPaintedItem(Bacon2DItem *parent = 0)
         : QQuickPaintedItem(parent) {}
 
     virtual void paint(QPainter *painter) { Q_UNUSED(painter); };

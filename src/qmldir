@@ -1,2 +1,2 @@
-module QuasiGame
-plugin quasigameplugin
+module Bacon2D
+plugin bacon2dplugin

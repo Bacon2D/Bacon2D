@@ -22,14 +22,14 @@
 #ifndef _GAME_H_
 #define _GAME_H_
 
-#include "quasideclarativeitem.h"
+#include "bacon2ditem.h"
 
 #include <QtCore/QTime>
 #include <QtCore/QtGlobal>
 
 class Scene;
 
-class Game : public QuasiDeclarativeItem
+class Game : public Bacon2DItem
 {
     Q_OBJECT
 
@@ -38,7 +38,7 @@ class Game : public QuasiDeclarativeItem
     Q_PROPERTY(QPointF mouse READ mouse)
 
 public:
-    Game(QuasiDeclarativeItem *parent = 0);
+    Game(Bacon2DItem *parent = 0);
 
     Scene *currentScene() const;
     void setCurrentScene(Scene *currentScene);

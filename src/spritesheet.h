@@ -22,13 +22,13 @@
 #ifndef _SPRITESHEET_H_
 #define _SPRITESHEET_H_
 
-#include "quasipainteditem.h"
+#include "bacon2dpainteditem.h"
 
 #include <QtCore/QtGlobal>
 
 class QPixmap;
 
-class SpriteSheet : public QuasiPaintedItem
+class SpriteSheet : public Bacon2DPaintedItem
 {
     Q_OBJECT
 

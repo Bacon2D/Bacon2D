@@ -22,13 +22,13 @@
 #ifndef _SHAPE_H_
 #define _SHAPE_H_
 
-#include "quasipainteditem.h"
+#include "bacon2dpainteditem.h"
 #include "fill.h"
 
 #include <Box2D/Box2D.h>
 #include <QtGui/QPainter>
 
-class Shape : public QuasiPaintedItem
+class Shape : public Bacon2DPaintedItem
 {
     Q_OBJECT
 

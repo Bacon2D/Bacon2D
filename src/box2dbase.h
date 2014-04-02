@@ -22,13 +22,13 @@
 #ifndef _BOX2DBASE_H_
 #define _BOX2DBASE_H_
 
-#include "quasideclarativeitem.h"
+#include "bacon2ditem.h"
 
 #include <Box2D/Box2D.h>
 
 class Scene;
 
-class Box2DBase : public QuasiDeclarativeItem
+class Box2DBase : public Bacon2DItem
 {
     Q_OBJECT
 
