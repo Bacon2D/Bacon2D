@@ -25,7 +25,12 @@
 #include <QtGui/QPainter>
 #include <QtQml/QQmlProperty>
 
-//! Class constructor
+/*!
+   \qmltype Layer
+   \instantiates Bacon2D::Layer
+   \inqmlmodule Bacon2D 1.0
+   \brief FIXME
+ */
 Layer::Layer(QQuickItem *parent)
     : QQuickPaintedItem(parent)
     , m_isAnimated(false)
@@ -41,6 +46,10 @@ Layer::~Layer()
 {
 }
 
+/*!
+ * \qmlproperty bool Layer::animated
+ * \brief FIXME
+ */
 void Layer::setAnimated(bool animated)
 {
     if (m_isAnimated == animated)
@@ -51,6 +60,10 @@ void Layer::setAnimated(bool animated)
     emit animatedChanged();
 }
 
+/*!
+ * \qmlproperty qreal Layer::horizontalStep
+ * \brief FIXME
+ */
 void Layer::setHorizontalStep(const qreal &step)
 {
     if (m_horizontalStep == step)
@@ -64,6 +77,10 @@ void Layer::setHorizontalStep(const qreal &step)
     emit horizontalStepChanged();
 }
 
+/*!
+ * \qmlproperty Bacon2D::LayerType Layer::layerType
+ * \brief FIXME
+ */
 void Layer::setLayerType(const Bacon2D::LayerType &type)
 {
     if (type == m_type)

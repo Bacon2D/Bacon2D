@@ -21,6 +21,12 @@
 
 #include "shape.h"
 
+/*!
+  \qmltype Shape
+  \instantiates Shape
+  \inqmlmodule Bacon2D 1.0
+  \brief FIXME
+ */
 Shape::Shape(QQuickItem *parent)
     : QQuickPaintedItem(parent)
     , m_shape(0)
@@ -45,6 +51,10 @@ void Shape::initialize()
     m_initialized = true;
 }
 
+/*!
+ * \qmlproperty Fill Shape::fill
+ * \brief FIXME
+ */
 void Shape::setFill(Fill *fill)
 {
     if (m_fill == fill)

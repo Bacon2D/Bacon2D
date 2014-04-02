@@ -25,6 +25,12 @@
 #include <QtGui/QPainter>
 #include <QtQml/QQmlProperty>
 
+/*!
+  \qmltype SpriteSheet
+  \instantiates SpriteSheet
+  \inqmlmodule Bacon2D 1.0
+  \brief FIXME
+ */
 SpriteSheet::SpriteSheet(QQuickItem *parent)
     : QQuickPaintedItem(parent)
     , m_pixMap(0)
@@ -105,6 +111,10 @@ int SpriteSheet::frame() const
     return m_frame;
 }
 
+/*!
+ * \qmlproperty int SpriteSheet::frame
+ * \brief FIXME
+ */
 void SpriteSheet::setFrame(const int &frame)
 {
     if (m_frame != frame
