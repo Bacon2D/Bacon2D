@@ -19,7 +19,7 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-QuasiGame {
+Game {
     id: game
 
     width: 800
@@ -32,10 +32,10 @@ QuasiGame {
     Component {
         id: spriteComponent
 
-        QuasiSprite {
+        Sprite {
             animation: "explosion"
 
-            animations: QuasiSpriteAnimation {
+            animations: SpriteAnimation {
                 name: "explosion"
                 source: ":/explosion.png"
                 frames: 4
@@ -45,7 +45,7 @@ QuasiGame {
         }
     }
 
-    QuasiScene {
+    Scene {
         id: scene
 
         width: parent.width

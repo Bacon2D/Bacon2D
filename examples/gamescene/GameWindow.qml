@@ -35,7 +35,7 @@ Item {
     Component {
         id: sceneComponent
 
-        QuasiScene {
+        Scene {
             id: scene
 
             width: 300
@@ -55,55 +55,55 @@ Item {
                 color: "white"
             }
 
-            QuasiMaterial {
+            Material {
                 id: wallMaterial
                 density: 10
                 restitution: 0.1
             }
 
-            QuasiEntity {
+            Entity {
                 anchors.left: parent.left
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 width: 1
 
-                QuasiFixture {
+                Fixture {
                     material: wallMaterial
                     shape: Item { anchors.fill: parent }
                 }
             }
 
-            QuasiEntity {
+            Entity {
                 anchors.right: parent.right
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 width: 1
 
-                QuasiFixture {
+                Fixture {
                     material: wallMaterial
                     shape: Item { anchors.fill: parent }
                 }
             }
 
-            QuasiEntity {
+            Entity {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.top: parent.top
                 height: 1
 
-                QuasiFixture {
+                Fixture {
                     material: wallMaterial
                     shape: Item { anchors.fill: parent }
                 }
             }
 
-            QuasiEntity {
+            Entity {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
                 height: 1
 
-                QuasiFixture {
+                Fixture {
                     material: wallMaterial
                     shape: Item {
                         anchors.fill: parent
@@ -111,26 +111,26 @@ Item {
                 }
             }
 
-            QuasiMaterial {
+            Material {
                 id: ballMaterial
                 density: Math.random()
                 restitution: density
             }
 
-            QuasiEntity {
+            Entity {
                 id: ball
                 width: 40
                 height: 40
                 x: scene.width / 2 - width / 2
                 y: scene.height / 3
 
-                entityType: Quasi.DynamicType
+                entityType: Bacon2D.DynamicType
 
-                QuasiFixture {
+                Fixture {
                     material: ballMaterial
-                    shape: QuasiCircle {
+                    shape: Circle {
                         anchors.fill: parent
-                        fill: QuasiColorFill {
+                        fill: ColorFill {
                             brushColor: {
                                 switch (currentSceneIndex) {
                                 case 0: return "black"
@@ -157,7 +157,7 @@ Item {
         }
     }
 
-    QuasiGame {
+    Game {
         id: game
 
         anchors.fill: parent

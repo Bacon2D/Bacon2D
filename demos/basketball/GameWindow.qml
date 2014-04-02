@@ -18,7 +18,7 @@
  * @author
  */
 
-QuasiGame {
+Game {
     id: game
 
     property int score: 0
@@ -31,7 +31,7 @@ QuasiGame {
 
     currentScene: scene
 
-    QuasiScene {
+    Scene {
         id: scene
 
         width: parent.width
@@ -51,14 +51,14 @@ QuasiGame {
             source: "qrc:/images/backboardhandler.png"
         }
 
-        QuasiMaterial {
+        Material {
             id: boardMaterial
             friction: 1.0
             density: 0.1
             restitution: 0.0
         }
 
-        QuasiEntity {
+        Entity {
             id: backboard
 
             anchors.top: backboardHandler.top
@@ -67,7 +67,7 @@ QuasiGame {
             width: 4
             height: 203
 
-            QuasiFixture {
+            Fixture {
                 material: boardMaterial
                 shape: Rectangle {
                     color: "white"
@@ -76,7 +76,7 @@ QuasiGame {
             }
         }
 
-        QuasiEntity {
+        Entity {
             id: basketHandler
 
             anchors.left: backboard.right
@@ -86,7 +86,7 @@ QuasiGame {
             width: 20
             height: 8
 
-            QuasiFixture {
+            Fixture {
                 material: boardMaterial
                 shape: Rectangle {
                     color: "white"
@@ -103,7 +103,7 @@ QuasiGame {
             source: "qrc:/images/basket.png"
         }
 
-        QuasiEntity {
+        Entity {
             id: basketRight
 
             anchors.right: basket.right
@@ -112,13 +112,13 @@ QuasiGame {
             width: 4
             height: ball.height / 2
 
-            QuasiFixture {
+            Fixture {
                 material: boardMaterial
                 shape: Item { anchors.fill: parent }
             }
         }
 
-        QuasiEntity {
+        Entity {
             id: basketLeft
 
             anchors.left: basket.left
@@ -127,13 +127,13 @@ QuasiGame {
             width: 4
             height: ball.height / 2
 
-            QuasiFixture {
+            Fixture {
                 material: boardMaterial
                 shape: Item { anchors.fill: parent }
             }
         }
 
-        QuasiEntity {
+        Entity {
             id: ground
 
             x: 0
@@ -142,8 +142,8 @@ QuasiGame {
             width: parent.width
             height: 10
 
-            QuasiFixture {
-                material: QuasiMaterial {
+            Fixture {
+                material: Material {
                     friction: 0.3
                     density: 5
                     restitution: 0.6
@@ -156,28 +156,28 @@ QuasiGame {
             }
         }
 
-        QuasiEntity {
+        Entity {
             id: ball
             property int centerX: x + (width / 2)
             property int centerY: y + (height / 2)
             property bool threw: false
             property bool scored: false
 
-            entityType: Quasi.DynamicType
+            entityType: Bacon2D.DynamicType
 
             width: 0.25 * game.scale
             height: 0.25 * game.scale
 
             sleepingAllowed: false
 
-            QuasiFixture {
-                material: QuasiMaterial {
+            Fixture {
+                material: Material {
                     friction: 0.3
                     density: 50
                     restitution: 0.6
                 }
 
-                shape: QuasiCircle { anchors.fill: parent }
+                shape: Circle { anchors.fill: parent }
             }
 
             Image {

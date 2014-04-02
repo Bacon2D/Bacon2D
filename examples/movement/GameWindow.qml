@@ -19,7 +19,7 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-QuasiGame {
+Game {
     id: game
 
     width: 400
@@ -27,19 +27,19 @@ QuasiGame {
 
     currentScene: scene
 
-    QuasiScene {
+    Scene {
         id: scene
 
         width: parent.width
         height: parent.height
 
-        QuasiEntity {
+        Entity {
             width: parent.width
             height: parent.height
 
             updateInterval: 50
 
-            behavior: QuasiScriptBehavior {
+            behavior: ScriptBehavior {
                 script: {
                     var newPos = entity.x + 5
                     entity.x = newPos > parent.width ? 0 : newPos

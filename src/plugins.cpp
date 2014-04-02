@@ -51,7 +51,7 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterUncreatableType<Bacon2D>("Bacon2D", 1, 0, "Bacon2D", "Exporting Bacon2D enums to QML");
     qmlRegisterUncreatableType<Layer>("Bacon2D", 1, 0, "Layer", "Registering Layer as we use it on Layers");
     qmlRegisterUncreatableType<Box2DContact>("Bacon2D", 1, 0, "Contact", "This type is used to control scene's (pre)contact event");
-    qmlRegisterUncreatableType<Behavior>("Bacon2D", 1, 0, "Behavior", "Don't use Behavior directly, use one specialized behavior");
+    qmlRegisterUncreatableType<Behavior>("Bacon2D", 1, 0, "Bacon2DBehavior", "Don't use Bacon2DBehavior directly, use one specialized behavior");
     qmlRegisterUncreatableType<Shape>("Bacon2D", 1, 0, "Shape", "Don't use Shape directly, use one specialized shape");
     qmlRegisterUncreatableType<Fill>("Bacon2D", 1, 0, "Fill", "Don't use Fill directly, use one specialized fill");
 
@@ -64,7 +64,7 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<Box2DMouseJoint>("Bacon2D", 1, 0, "MouseJoint");
     qmlRegisterType<ImageLayer>("Bacon2D", 1, 0, "ImageLayer");
     qmlRegisterType<ScriptBehavior>("Bacon2D", 1, 0, "ScriptBehavior");
-    qmlRegisterType<Rectangle>("Bacon2D", 1, 0, "Rectangle");
+    qmlRegisterType<Rectangle>("Bacon2D", 1, 0, "Box");
     qmlRegisterType<ColorFill>("Bacon2D", 1, 0, "ColorFill");
     qmlRegisterType<Triangle>("Bacon2D", 1, 0, "Triangle");
     qmlRegisterType<Polygon>("Bacon2D", 1, 0, "Polygon");

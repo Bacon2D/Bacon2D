@@ -16,8 +16,8 @@ public:
 public slots:
     QString qmlData() const
     {
-        QString import("import QuasiGame 1.0\n");
-        import += "import QtQuick 2.0\n";
+        QString import("import QtQuick 2.0\n");
+        import += "import Bacon2D 1.0\n";
         QFile qmlFile(":/GameWindow.qml");
         if (!qmlFile.open(QIODevice::ReadOnly)) {
             qWarning("Error opening GameWindow.qml");

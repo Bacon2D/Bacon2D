@@ -19,7 +19,7 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-QuasiGame {
+Game {
     id: game
 
     focus: true
@@ -41,7 +41,7 @@ QuasiGame {
             shipImage.mirror = false;
     }
 
-    QuasiScene {
+    Scene {
         id: scene
 
         width: parent.width
@@ -49,29 +49,29 @@ QuasiGame {
 
         property real scrollFactor: 1
 
-        QuasiImageLayer {
+        ImageLayer {
             id: layer1
             anchors.fill: parent
             animated: true
             source: ":/images/space.png"
             horizontalStep: -10 * scene.scrollFactor
-            layerType: Quasi.MirroredType
+            layerType: Bacon2D.MirroredType
             tileWidth: 40
             tileHeight: 40
         }
 
-        QuasiImageLayer {
+        ImageLayer {
             id: layer2
             anchors.fill: parent
             animated: true
             source: ":/images/planet.png"
             horizontalStep: -15 * scene.scrollFactor
-            layerType: Quasi.InfiniteType
+            layerType: Bacon2D.InfiniteType
             tileWidth: 40
             tileHeight: 40
         }
 
-        QuasiEntity {
+        Entity {
             id: ship
             y: (game.height / 2) - (shipImage.height / 2)
             x: (game.width / 2) - (shipImage.width / 2)
@@ -84,24 +84,24 @@ QuasiGame {
             Behavior on y { SmoothedAnimation {}}
         }
 
-        QuasiImageLayer {
+        ImageLayer {
             id: layer3
             anchors.fill: parent
             animated: true
             source: ":/images/stars.png"
             horizontalStep: -20 * scene.scrollFactor
-            layerType: Quasi.InfiniteType
+            layerType: Bacon2D.InfiniteType
             tileWidth: 40
             tileHeight: 40
         }
 
-        QuasiImageLayer {
+        ImageLayer {
             id: layer4
             anchors.fill: parent
             animated: true
             source: ":/images/moon.png"
             horizontalStep: -23 * scene.scrollFactor
-            layerType: Quasi.InfiniteType
+            layerType: Bacon2D.InfiniteType
             tileWidth: 40
             tileHeight: 40
         }

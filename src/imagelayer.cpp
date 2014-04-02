@@ -28,7 +28,7 @@ ImageLayer::ImageLayer(Layer *parent)
     , m_currentImage(0)
     , m_tileWidth(32)
     , m_tileHeight(32)
-    , m_drawType(Quasi::TiledDrawType)
+    , m_drawType(Bacon2D::TiledDrawType)
     , m_areaToDraw(2.0)
     , m_columnOffset(0)
     , m_latestPoint(0)
@@ -73,7 +73,7 @@ QString ImageLayer::source() const
 /*!
  * \param drawType can be Tiled (default) or Plane
  */
-void ImageLayer::setDrawType(Quasi::DrawType drawType)
+void ImageLayer::setDrawType(Bacon2D::DrawType drawType)
 {
     if (m_drawType != drawType)
         m_drawType = drawType;
@@ -83,7 +83,7 @@ void ImageLayer::setDrawType(Quasi::DrawType drawType)
 /*!
  * \return Tiled or Plane according the layer draw type
  */
-Quasi::DrawType ImageLayer::drawType() const
+Bacon2D::DrawType ImageLayer::drawType() const
 {
     return m_drawType;
 }
@@ -239,13 +239,13 @@ void ImageLayer::updateTiles()
         pixmap = pixmap.scaledToHeight(height()); 
     }
 
-    if (m_drawType == Quasi::PlaneDrawType) {
+    if (m_drawType == Bacon2D::PlaneDrawType) {
         m_tileWidth = width();
         m_tileHeight = height();
 
         if (pixmap.width() % (int)width() != 0) {
             // XXX create some log system?
-            qCritical() << QString("Quasi>>Image \'%1\' doesn't contains a proper size... CROPPING!").arg(source());
+            qCritical() << QString("Bacon2D>>Image \'%1\' doesn't contains a proper size... CROPPING!").arg(source());
 
             int newWidth = pixmap.width() - (pixmap.width() % (int)width());
             pixmap = pixmap.copy(0, 0, newWidth, height());
@@ -261,7 +261,7 @@ void ImageLayer::updateTiles()
         pixmap = temp;
     }
 
-    if (m_type == Quasi::MirroredType) {
+    if (m_type == Bacon2D::MirroredType) {
         QPixmap temp(pixmap.width() * 2, pixmap.height());
 
         QPainter p(&temp);

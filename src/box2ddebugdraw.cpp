@@ -43,7 +43,7 @@ Box2DDebugDraw::Box2DDebugDraw(Scene *parent)
              | e_pairBit
              | e_centerOfMassBit);
 
-    setZ(Quasi::MaxOrdering);
+    setZ(Bacon2D::MaxOrdering);
 }
 
 void Box2DDebugDraw::draw()

@@ -19,7 +19,7 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-QuasiGame {
+Game {
     id: game
 
     width: 400
@@ -27,20 +27,20 @@ QuasiGame {
 
     currentScene: scene
 
-    QuasiScene {
+    Scene {
         id: scene
 
         width: parent.width
         height: parent.height
 
-        QuasiSprite {
+        Sprite {
             id: spriteItem
 
 
             animation: "sliding"
 
             animations: [
-                QuasiSpriteAnimation {
+                SpriteAnimation {
                     name: "sliding"
 
                     source: ":/sliding.png"
@@ -48,7 +48,7 @@ QuasiGame {
                     duration: 400
                     loops: Animation.Infinite
                 },
-                QuasiSpriteAnimation {
+                SpriteAnimation {
                     name: "jumping"
 
                     source: ":/jumping.png"

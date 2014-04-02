@@ -19,7 +19,7 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-QuasiGame {
+Game {
     id: game
 
     width: 800
@@ -32,7 +32,7 @@ QuasiGame {
         color: "black"
     }
 
-    QuasiScene {
+    Scene {
         id: scene
 
         width: parent.width
@@ -51,25 +51,25 @@ QuasiGame {
             }
         }
 
-        QuasiEntity {
+        Entity {
             id: mouseItem
 
             width: 60
             height: 60
 
-            entityType: Quasi.DynamicType
+            entityType: Bacon2D.DynamicType
 
-            QuasiFixture {
+            Fixture {
                 width: parent.width
                 height: parent.height
 
                 material: randomMaterial
 
-                shape: QuasiRectangle {
+                shape: Box {
                     width: parent.width
                     height: parent.height
 
-                    fill: QuasiColorFill {
+                    fill: ColorFill {
                         brushColor: "green"
                     }
                 }
@@ -81,24 +81,24 @@ QuasiGame {
             y: 160
         }
 
-        QuasiMouseJoint {
+        MouseJoint {
             target: mouseItem
         }
 
-        QuasiEntity {
+        Entity {
             id: ground
 
-            entityType: Quasi.StaticType
+            entityType: Bacon2D.StaticType
 
             width: 790
             height: 5
 
-            QuasiFixture {
+            Fixture {
                 anchors.fill: parent
                 material: randomMaterial
-                shape: QuasiRectangle {
+                shape: Box {
                     anchors.fill: parent
-                    fill: QuasiColorFill {
+                    fill: ColorFill {
                         brushColor: "green"
                     }
                 }
@@ -109,7 +109,7 @@ QuasiGame {
         }
     }
 
-    QuasiMaterial {
+    Material {
         id: randomMaterial
 
         friction: 0.3 + Math.random() * 1.0
@@ -120,7 +120,7 @@ QuasiGame {
     Component {
         id: bodyComponent
 
-        QuasiEntity {
+        Entity {
             id: body
 
             width: 30
@@ -128,16 +128,16 @@ QuasiGame {
             x: Math.random() * scene.width
             y: Math.random() * 200
 
-            entityType: Quasi.DynamicType
+            entityType: Bacon2D.DynamicType
             sleepingAllowed: false
 
-            QuasiFixture {
+            Fixture {
                 material: randomMaterial
 
-                shape: QuasiCircle {
+                shape: Circle {
                     anchors.fill: parent
 
-                    fill: QuasiColorFill {
+                    fill: ColorFill {
                         brushColor: "red"
                     }
                 }

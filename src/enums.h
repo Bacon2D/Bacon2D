@@ -24,7 +24,7 @@
 
 #include <QtCore/QObject>
 
-class Quasi : public QObject {
+class Bacon2D : public QObject {
     Q_OBJECT
 
     Q_ENUMS (
