@@ -22,9 +22,9 @@
 #include "fill.h"
 
 /*!
-  \qmltype QuasiFill
+  \qmltype Fill
   \instantiates Fill
-  \inqmlmodule QuasiGame 1.0
+  \inqmlmodule Bacon2D 1.0
   \brief FIXME
  */
 Fill::Fill(QObject *parent)

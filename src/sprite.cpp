@@ -39,9 +39,9 @@ void Sprite::append_animation(QQmlListProperty<SpriteAnimation> *list, SpriteAni
 }
 
 /*!
-  \qmltype QuasiSprite
+  \qmltype Sprite
   \instantiates Sprite
-  \inqmlmodule QuasiGame 1.0
+  \inqmlmodule Bacon2D 1.0
   \brief FIXME
  */
 Sprite::Sprite(Scene *parent)
@@ -59,7 +59,7 @@ QQmlListProperty<SpriteAnimation> Sprite::animations() const
 }
 
 /*!
- * \qmlproperty string QuasiSprite::animation
+ * \qmlproperty string Sprite::animation
  * \brief FIXME
  */
 QString Sprite::animation() const
@@ -119,7 +119,7 @@ void Sprite::initializeAnimation()
 }
 
 /*!
- * \qmlproperty bool QuasiSprite::verticalMirror
+ * \qmlproperty bool Sprite::verticalMirror
  * \brief FIXME
  */
 bool Sprite::verticalMirror() const
@@ -141,7 +141,7 @@ void Sprite::setVerticalMirror(const bool &verticalMirror)
 }
 
 /*!
- * \qmlproperty bool QuasiSprite::horizontalMirror
+ * \qmlproperty bool Sprite::horizontalMirror
  * \brief FIXME
  */
 bool Sprite::horizontalMirror() const
