@@ -1,5 +1,5 @@
-project = Quasi-Engine
-description = Quasi-Engine - 2D game engine
+project = Bacon2D
+description = Bacon2D - 2D game engine
 sourcedirs = ../src
 
 sources.fileextensions = "*.cpp *.qdoc *.mm *.qml"

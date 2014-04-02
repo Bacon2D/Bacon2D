@@ -5,10 +5,10 @@ QT_INSTALL_DOCS = /usr/share/qt5/doc/global/
 QMAKE_EXTRA_TARGETS += docs clean-docs docs-html clean-docs-html
 
 docs-html.commands = \
-        "$${QDOC} $${PWD}/quasi.qdocconf"
+        "$${QDOC} $${PWD}/bacon2d.qdocconf"
 
 docs.files = $$PWD/html
-docs.path = $${INSTALL_PREFIX}/share/quasi/doc
+docs.path = $${INSTALL_PREFIX}/share/bacon2d/doc
 docs.depends = docs-html
 
 INSTALLS += docs
