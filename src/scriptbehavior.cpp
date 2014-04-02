@@ -23,6 +23,12 @@
 
 #include <QtQml/QQmlExpression>
 
+/*!
+  \qmltype QuasiScriptBehavior
+  \instantiates ScriptBehavior
+  \inqmlmodule QuasiGame 1.0
+  \brief FIXME
+ */
 ScriptBehavior::ScriptBehavior(QObject *parent)
     : Behavior(parent)
     , m_expression(0)
@@ -37,6 +43,10 @@ void ScriptBehavior::update(const int &delta) {
     }
 }
 
+/*!
+ * \qmlproperty string ScriptBehavior::script
+ * \brief FIXME
+ */
 QQmlScriptString ScriptBehavior::script() const
 {
     return m_script;

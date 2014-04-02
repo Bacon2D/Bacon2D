@@ -39,12 +39,33 @@ static void deleteWorld(b2World *world)
     delete world;
 }
 
+
 /*!
- * \qmltype QuasiScene
- * \instantiates Scene
- * \inqmlmodule QuasiGame 1.0
- * \brief FIXME
- */
+  \qmltype QuasiScene
+  \instantiates Scene
+  \inqmlmodule QuasiGame 1.0
+  \brief The root view in the QuasiGame.
+
+  The QuasiScene component is the root view for the QuasiGame.
+
+  Example usage:
+  \qml
+   import QtQuick 2.0
+   import QuasiGame 1.0
+
+   QuasiGame {
+       id: game
+       width: 800
+       height: 600
+
+       QuasiScene {
+           id: scene
+           width: 300
+           height: 300
+       }
+   }
+   \endqml
+*/
 Scene::Scene(Game *parent)
     : QuasiDeclarativeItem(parent)
     , m_running(true)
@@ -95,6 +116,10 @@ void Scene::update(const int &delta)
         m_debugDraw->step();
 }
 
+/*!
+ * \qmlproperty bool QuasiScene::running
+ * \brief The current running state of QuasiScene
+ */
 bool Scene::running() const
 {
     return m_running;
@@ -112,7 +137,7 @@ void Scene::setRunning(const bool &running)
 
 /*!
  * \qmlproperty QuasiGame QuasiScene::game
- * \brief FIXME
+ * \brief Holds the a reference to the QuasiGame that contains the QuasiScene.
  */
 Game *Scene::game() const
 {
@@ -137,7 +162,7 @@ void Scene::setGame(Game *game)
 
 /*!
  * \qmlproperty bool QuasiScene::debug
- * \brief FIXME
+ * \brief Debug mode
  */
 bool Scene::debug() const
 {
@@ -216,7 +241,7 @@ void Scene::setGravity(const QPointF &gravity)
 
 /*!
  * \qmlproperty QPointF QuasiScene::gravity
- * \brief FIXME
+ * \brief The gravity vector for the QuasiScene, as a QPointF
  */
 QPointF Scene::gravity() const
 {
@@ -256,6 +281,10 @@ void Scene::onEndContact(Box2DContact *contact)
     emit contactEnd(contact);
 }
 
+/*!
+ * \qmlproperty qreal QuasiScene::physicsTimeStep
+ * \brief FIXME
+ */
 
 qreal Scene::physicsTimeStep() const
 {
@@ -272,6 +301,10 @@ void Scene::setPhysicsTimestep(const qreal &physicsTimeStep)
     emit physicsTimeStepChanged();
 }
 
+/*!
+ * \qmlproperty int QuasiScene::physicsVelocityIterations
+ * \brief FIXME
+ */
 int Scene::physicsVelocityIterations() const
 {
     return m_physicsVelocityIterations;
@@ -287,6 +320,10 @@ void Scene::setPhysicsVelocityIterations(const int &physicsVelocityIterations)
     emit physicsVelocityIterationsChanged();
 }
 
+/*!
+ * \qmlproperty QuasiScene::physicsPositionIterations
+ * \brief FIXME
+ */
 int Scene::physicsPositionIterations() const
 {
     return m_physicsPositionIterations;
