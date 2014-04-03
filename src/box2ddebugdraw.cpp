@@ -31,7 +31,7 @@
 #include <QtGui/QPainter>
 
 Box2DDebugDraw::Box2DDebugDraw(Scene *parent)
-    : Bacon2DPaintedItem((Bacon2DItem*)parent)
+    : QQuickPaintedItem((QQuickItem*)parent)
     , b2Draw()
     , m_painter(0)
     , m_scene(parent)

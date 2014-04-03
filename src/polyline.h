@@ -32,7 +32,7 @@ class Polyline : public Shape
     Q_PROPERTY(QVariantList points READ points WRITE setPoints NOTIFY pointsChanged)
 
 public:
-    Polyline(Bacon2DItem *parent = 0);
+    Polyline(QQuickItem *parent = 0);
 
     QVariantList points() const { return m_points; }
     void setPoints(const QVariantList &points);

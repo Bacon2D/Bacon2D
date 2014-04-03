@@ -18,9 +18,7 @@ INCLUDEPATH += .
 INCLUDEPATH += $$BOX2DPATH/include
 LIBS += -L$$BOX2DPATH/lib -lBox2D
 
-HEADERS += bacon2ditem.h \
-           bacon2dpainteditem.h \
-           entity.h \
+HEADERS += entity.h \
            scene.h \
            game.h \
            plugins.h \

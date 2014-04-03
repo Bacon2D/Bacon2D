@@ -24,7 +24,7 @@
 #include "box2dbase.h"
 #include "util.h"
 
-Circle::Circle(Bacon2DItem *parent)
+Circle::Circle(QQuickItem *parent)
     : Shape(parent)
     , m_radius(0)
 {

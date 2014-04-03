@@ -22,8 +22,7 @@
 #ifndef _FIXTURE_H_
 #define _FIXTURE_H_
 
-#include "bacon2ditem.h"
-
+#include <QtQuick/QQuickItem>
 #include <QtCore/QtGlobal>
 #include <QtCore/QSharedPointer>
 
@@ -34,7 +33,7 @@ class b2Fixture;
 class b2World;
 class b2Body;
 
-class Fixture : public Bacon2DItem
+class Fixture : public QQuickItem
 {
     Q_OBJECT
 
@@ -44,7 +43,7 @@ class Fixture : public Bacon2DItem
     Q_PROPERTY(bool sensor READ sensor WRITE setSensor NOTIFY sensorChanged)
 
 public:
-    Fixture(Bacon2DItem *parent = 0);
+    Fixture(QQuickItem *parent = 0);
     ~Fixture();
 
     Material *material() const { return m_material; }

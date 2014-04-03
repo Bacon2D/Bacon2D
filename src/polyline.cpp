@@ -24,7 +24,7 @@
 #include "util.h"
 #include "box2dbase.h"
 
-Polyline::Polyline(Bacon2DItem *parent)
+Polyline::Polyline(QQuickItem *parent)
     : Shape(parent)
     , m_loop(false)
 {

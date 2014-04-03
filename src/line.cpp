@@ -3,7 +3,7 @@
 #include "util.h"
 #include "box2dbase.h"
 
-Line::Line(Bacon2DItem *parent)
+Line::Line(QQuickItem *parent)
     : Shape(parent)
 {
 }

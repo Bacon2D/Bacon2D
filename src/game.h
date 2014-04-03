@@ -22,14 +22,13 @@
 #ifndef _GAME_H_
 #define _GAME_H_
 
-#include "bacon2ditem.h"
-
+#include <QtQuick/QQuickItem>
 #include <QtCore/QTime>
 #include <QtCore/QtGlobal>
 
 class Scene;
 
-class Game : public Bacon2DItem
+class Game : public QQuickItem
 {
     Q_OBJECT
 
@@ -38,7 +37,7 @@ class Game : public Bacon2DItem
     Q_PROPERTY(QPointF mouse READ mouse)
 
 public:
-    Game(Bacon2DItem *parent = 0);
+    Game(QQuickItem *parent = 0);
 
     Scene *currentScene() const;
     void setCurrentScene(Scene *currentScene);

@@ -32,7 +32,7 @@ class Line : public Shape
     Q_PROPERTY(QPointF p2 READ p2 WRITE setP2 NOTIFY p2Changed)
 
 public:
-    Line(Bacon2DItem *parent = 0);
+    Line(QQuickItem *parent = 0);
 
     QPointF p1() const { return m_p1; }
     void setP1(const QPointF &p1);
