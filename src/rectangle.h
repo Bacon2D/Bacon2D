@@ -29,7 +29,7 @@ class Rectangle : public Shape
     Q_OBJECT
 
 public:
-    Rectangle(Bacon2DItem *parent = 0);
+    Rectangle(QQuickItem *parent = 0);
 
     void drawShape(QPainter *painter);
 

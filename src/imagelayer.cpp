@@ -24,7 +24,7 @@
 #include <QtCore/QDebug>
 
 ImageLayer::ImageLayer(Layer *parent)
-    : Layer((Bacon2DItem *)parent)
+    : Layer((QQuickItem *)parent)
     , m_currentImage(0)
     , m_tileWidth(32)
     , m_tileHeight(32)

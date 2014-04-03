@@ -24,8 +24,8 @@
 
 #include "enums.h"
 #include "entity.h"
-#include "bacon2dpainteditem.h"
 
+#include <QtQuick/QQuickPaintedItem>
 #include <QtCore/QList>
 #include <QtCore/QString>
 
@@ -65,7 +65,7 @@ private:
 };
 
 //! A layer class
-class Layer: public Bacon2DPaintedItem
+class Layer: public QQuickPaintedItem
 {
     Q_OBJECT
 
@@ -74,7 +74,7 @@ class Layer: public Bacon2DPaintedItem
     Q_PROPERTY(Bacon2D::LayerType layerType READ layerType WRITE setLayerType NOTIFY layerTypeChanged)
 
 public:
-    Layer(Bacon2DItem *parent = 0);
+    Layer(QQuickItem *parent = 0);
     virtual ~Layer();
 
     bool isAnimated() const { return m_isAnimated; }

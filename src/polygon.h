@@ -31,7 +31,7 @@ class Polygon : public Shape
     Q_PROPERTY(QVariantList points READ points WRITE setPoints NOTIFY pointsChanged)
 
 public:
-    Polygon(Bacon2DItem *parent = 0);
+    Polygon(QQuickItem *parent = 0);
 
     QVariantList points() const { return m_points; }
     void setPoints(const QVariantList &points);

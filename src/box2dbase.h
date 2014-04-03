@@ -22,13 +22,12 @@
 #ifndef _BOX2DBASE_H_
 #define _BOX2DBASE_H_
 
-#include "bacon2ditem.h"
-
+#include <QtQuick/QQuickItem>
 #include <Box2D/Box2D.h>
 
 class Scene;
 
-class Box2DBase : public Bacon2DItem
+class Box2DBase : public QQuickItem
 {
     Q_OBJECT
 
