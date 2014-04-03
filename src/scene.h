@@ -23,7 +23,6 @@
 #define _SCENE_H_
 
 #include "entity.h"
-#include "bacon2ditem.h"
 
 #include <QtCore/QtGlobal>
 
@@ -35,7 +34,7 @@ class Fixture;
 class Box2DContact;
 class Box2DDebugDraw;
 
-class Scene : public Bacon2DItem
+class Scene : public QQuickItem
 {
     Q_OBJECT
 

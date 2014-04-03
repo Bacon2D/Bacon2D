@@ -3,7 +3,7 @@
 #include "util.h"
 #include "box2dbase.h"
 
-Polygon::Polygon(Bacon2DItem *parent)
+Polygon::Polygon(QQuickItem *parent)
     : Shape(parent)
 {
 }

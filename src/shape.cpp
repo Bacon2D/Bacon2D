@@ -21,8 +21,8 @@
 
 #include "shape.h"
 
-Shape::Shape(Bacon2DItem *parent)
-    : Bacon2DPaintedItem(parent)
+Shape::Shape(QQuickItem *parent)
+    : QQuickPaintedItem(parent)
     , m_shape(0)
     , m_fill(0)
     , m_initialized(false)

@@ -26,8 +26,8 @@
 #include <QtQml/QQmlProperty>
 
 //! Class constructor
-Layer::Layer(Bacon2DItem *parent)
-    : Bacon2DPaintedItem(parent)
+Layer::Layer(QQuickItem *parent)
+    : QQuickPaintedItem(parent)
     , m_isAnimated(false)
     , m_horizontalStep(1.0)
     , m_type(Bacon2D::InfiniteType)

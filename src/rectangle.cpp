@@ -24,7 +24,7 @@
 #include "box2dbase.h"
 #include "util.h"
 
-Rectangle::Rectangle(Bacon2DItem *parent)
+Rectangle::Rectangle(QQuickItem *parent)
     : Shape(parent)
 {
 }

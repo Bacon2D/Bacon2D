@@ -31,7 +31,7 @@ class Triangle : public Shape
     Q_PROPERTY(QVariantList points READ points WRITE setPoints NOTIFY pointsChanged)
 
 public:
-    Triangle(Bacon2DItem *parent = 0);
+    Triangle(QQuickItem *parent = 0);
 
     QVariantList points() const { return m_points; }
     void setPoints(QVariantList &points);
