@@ -1,6 +1,7 @@
 TEMPLATE = subdirs
 
 SUBDIRS += imagelayer \
+           angrymemes \
            box2dscene \
            gamescene \
            gamewindow \
