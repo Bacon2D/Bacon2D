@@ -55,8 +55,13 @@
    }
    \endqml
 */
+<<<<<<< HEAD
 Game::Game(QQuickItem *parent)
     : QQuickItem(parent)
+=======
+Game::Game(Bacon2DItem *parent)
+    : Bacon2DItem(parent)
+>>>>>>> ce52dc52594c929a540b4c40a1f65d586eea0d9d
     , m_currentScene(0)
     , m_fps(30)
     , m_timerId(0)
