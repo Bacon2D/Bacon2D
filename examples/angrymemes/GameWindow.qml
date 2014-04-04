@@ -17,35 +17,12 @@ Game {
             source: "qrc:/images/background.png"
         }
 
-        Material {
-            id: mat
-            friction: 0.3
-            density: 50
-            restitution: 0.35
-        }
-
-        Entity {
+        TrollFace {
             id: projectile
             x: parent.width * 0.1
             y: parent.height * 0.8
-            width: trollface.width
-            height: trollface.height
-            sleepingAllowed: false
-            entityType: Bacon2D.DynamicType
-            bullet: true
-
-            Fixture {
-                material: mat
-                shape: Circle {
-                    anchors.fill: parent
-                }
-
-                Image {
-                    id: trollface
-                    source: "qrc:/images/trollface.png"
-                }
-            }
         }
+
         Entity {
             id: ground
             anchors.bottom: parent.bottom
@@ -55,7 +32,11 @@ Game {
             height: 20
 
             Fixture {
-                material: mat
+                material: Material {
+                    friction: 0.3
+                    density: 50
+                    restitution: 0.35
+                }
                 shape: Box {
                     anchors.fill: parent
                     fill: ColorFill {
