@@ -25,8 +25,8 @@ Game {
 
         Entity {
             id: projectile
-            x: 100
-            y: 500
+            x: parent.width * 0.1
+            y: parent.height * 0.8
             width: trollface.width
             height: trollface.height
             sleepingAllowed: false
@@ -47,7 +47,7 @@ Game {
         }
         Entity {
             id: ground
-            y: 750
+            anchors.bottom: parent.bottom
             entityType: Bacon2D.StaticType
             sleepingAllowed: false
             width: scene.width
