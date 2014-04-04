@@ -3,6 +3,7 @@
     <file>GameWindow.qml</file>
     <file>Wood.qml</file>
     <file>Enemy.qml</file>
+    <file>TrollFace.qml</file>
     <file>images/alone.png</file>
     <file>images/background.png</file>
     <file>images/enemy.png</file>
