@@ -52,6 +52,12 @@ Game {
             source: ":/images/layer_01.png"
         }
 
+        ImageLayer {
+            anchors.fill: parent
+            drawType: Bacon2D.PlaneDrawType
+            source: ":/images/layer_02.png"
+        }
+
         Sprite {
             id: gameSprite
 
@@ -80,12 +86,6 @@ Game {
                 }
             ]
 
-        }
-
-        ImageLayer {
-            anchors.fill: parent
-            drawType: Bacon2D.PlaneDrawType
-            source: ":/images/layer_02.png"
         }
 
         viewport: Viewport {

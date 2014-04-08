@@ -25,6 +25,7 @@
 #include "layer.h"
 #include "viewport.h"
 #include "box2dworld.h"
+#include "viewport.h"
 
 #include <QtCore/QtGlobal>
 #include <QtQml/QQmlEngine>
