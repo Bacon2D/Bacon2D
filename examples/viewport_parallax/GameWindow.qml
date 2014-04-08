@@ -52,12 +52,6 @@ Game {
             source: ":/images/layer_01.png"
         }
 
-        ImageLayer {
-            anchors.fill: parent
-            drawType: Bacon2D.PlaneDrawType
-            source: ":/images/layer_02.png"
-        }
-
         Sprite {
             id: gameSprite
 
@@ -86,7 +80,12 @@ Game {
                 }
             ]
 
-            //order: Bacon2D.InteractionLayerOrdering_01
+        }
+
+        ImageLayer {
+            anchors.fill: parent
+            drawType: Bacon2D.PlaneDrawType
+            source: ":/images/layer_02.png"
         }
 
         viewport: Viewport {
