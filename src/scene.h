@@ -30,12 +30,14 @@
 #include <QtQuick/QQuickItem>
 
 class Game;
+class Viewport;
 
 class Scene : public QQuickItem
 {
     Q_OBJECT
 
     Q_PROPERTY(bool running READ running WRITE setRunning NOTIFY runningChanged)
+    Q_PROPERTY(Viewport *viewport READ viewport WRITE setViewport NOTIFY viewportChanged)
     Q_PROPERTY(Game *game READ game WRITE setGame)
     Q_PROPERTY(bool debug READ debug WRITE setDebug NOTIFY debugChanged)
 
@@ -45,6 +47,9 @@ public:
 
     bool running() const;
     void setRunning(const bool &running);
+
+    Viewport *viewport() const;
+    void setViewport(Viewport *viewport);
 
     Game *game() const;
     void setGame(Game *game);
@@ -56,6 +61,7 @@ public:
 
 signals:
     void runningChanged();
+    void viewportChanged();
     void debugChanged();
 
 protected slots:
@@ -67,6 +73,7 @@ protected:
 
 protected:
     bool m_running;
+    Viewport *m_viewport;
     Game *m_game;
     bool m_debug;
 };

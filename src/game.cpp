@@ -22,6 +22,7 @@
 #include "game.h"
 
 #include "scene.h"
+#include "viewport.h"
 
 #include <QtQuick/QQuickWindow>
 
@@ -48,6 +49,11 @@ void Game::setCurrentScene(Scene *currentScene)
         return;
 
     if (m_currentScene) {
+        if (m_viewport) {
+            m_viewport->setVisible(false);
+            m_viewport = 0;
+        }
+
         m_currentScene->setRunning(false);
         m_currentScene->setVisible(false);
     }
@@ -57,8 +63,22 @@ void Game::setCurrentScene(Scene *currentScene)
     if (m_currentScene) {
         m_currentScene->setGame(this);
 
-        m_currentScene->setParent(this);
-        m_currentScene->setParentItem(this);
+        if ((m_viewport = m_currentScene->viewport())) {
+            m_viewport->setParent(this);
+            m_viewport->setParentItem(this);
+            m_viewport->setScene(m_currentScene);
+            m_viewport->setWidth(width());
+            m_viewport->setHeight(height());
+            m_viewport->setContentWidth(m_currentScene->width());
+            m_viewport->setContentHeight(m_currentScene->height());
+            m_viewport->updateMaxOffsets();
+            m_viewport->setVisible(true);
+
+            m_currentScene->setParentItem(m_viewport);
+        } else {
+            m_currentScene->setParent(this);
+            m_currentScene->setParentItem(this);
+        }
 
         m_currentScene->setRunning(true);
         m_currentScene->setVisible(true);
@@ -98,9 +118,27 @@ void Game::update()
     long elapsedTime = m_gameTime.restart();
     if (m_currentScene)
         m_currentScene->update(elapsedTime);
+    if (m_viewport)
+        m_viewport->update(elapsedTime);
 }
 
 QPointF Game::mouse()
 {
     return window()->mapFromGlobal(QCursor::pos());
 }
+
+#if QT_VERSION < 0x050000
+// this function is needed on Qt4 to fix viewport's width and height
+void Game::componentComplete()
+{
+    if (m_viewport && m_currentScene) {
+        m_viewport->setWidth(width());
+        m_viewport->setHeight(height());
+        m_viewport->setContentWidth(m_currentScene->width());
+        m_viewport->setContentHeight(m_currentScene->height());
+        m_viewport->updateMaxOffsets();
+    }
+
+    QDeclarativeItem::componentComplete();
+}
+#endif

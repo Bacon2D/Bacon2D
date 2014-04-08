@@ -30,6 +30,7 @@ HEADERS += entity.h \
            animationchangeevent.h \
            layer.h \
            imagelayer.h \
+           viewport.h \
            enums.h \
            behavior.h \
            scriptbehavior.h \
@@ -53,6 +54,7 @@ SOURCES += entity.cpp \
            animationtransition.cpp \
            layer.cpp \
            imagelayer.cpp \
+           viewport.cpp \
            behavior.cpp \
            scriptbehavior.cpp \
            fill.cpp \
