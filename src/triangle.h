@@ -38,10 +38,6 @@ public:
 
     void drawShape(QPainter *painter);
 
-    void initialize();
-
-    void updateShape(qreal penWidth);
-
 signals:
     void pointsChanged();
 

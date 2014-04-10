@@ -42,10 +42,6 @@ public:
     bool loop() const { return m_loop; }
     void setLoop(const bool &loop);
 
-    void initialize();
-
-    void updateShape(qreal penWidth);
-
 signals:
     void loopChanged();
     void pointsChanged();

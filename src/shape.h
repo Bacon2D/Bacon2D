@@ -24,10 +24,9 @@
 
 #include "fill.h"
 
-#include <Box2D/Box2D.h>
-
 #include <QtQuick/QQuickPaintedItem>
 #include <QtGui/QPainter>
+
 
 class Shape : public QQuickPaintedItem
 {
@@ -45,11 +44,7 @@ public:
     Fill *fill() const { return m_fill; }
     void setFill(Fill *fill);
 
-    b2Shape *box2DShape() { return m_shape; }
-
     void paint(QPainter *painter);
-
-    virtual void updateShape(qreal penWidth) = 0;
 
     qreal penWidth() const;
 
@@ -61,7 +56,6 @@ signals:
     void shapeUpdated();
 
 protected:
-    b2Shape *m_shape;
     Fill *m_fill;
     bool m_initialized;
 };

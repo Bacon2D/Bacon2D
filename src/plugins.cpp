@@ -21,9 +21,6 @@
 
 #include "plugins.h"
 
-#include "box2ddistancejoint.h"
-#include "box2dmousejoint.h"
-#include "box2dcontact.h"
 #include "entity.h"
 #include "scene.h"
 #include "spriteanimation.h"
@@ -41,7 +38,6 @@
 #include "polyline.h"
 #include "circle.h"
 #include "line.h"
-#include "fixture.h"
 #include "material.h"
 
 void Plugins::registerTypes(const char *uri)
@@ -50,7 +46,6 @@ void Plugins::registerTypes(const char *uri)
 
     qmlRegisterUncreatableType<Bacon2D>("Bacon2D", 1, 0, "Bacon2D", "Exporting Bacon2D enums to QML");
     qmlRegisterUncreatableType<Layer>("Bacon2D", 1, 0, "Layer", "Registering Layer as we use it on Layers");
-    qmlRegisterUncreatableType<Box2DContact>("Bacon2D", 1, 0, "Contact", "This type is used to control scene's (pre)contact event");
     qmlRegisterUncreatableType<Behavior>("Bacon2D", 1, 0, "Bacon2DBehavior", "Don't use Bacon2DBehavior directly, use one specialized behavior");
     qmlRegisterUncreatableType<Shape>("Bacon2D", 1, 0, "Shape", "Don't use Shape directly, use one specialized shape");
     qmlRegisterUncreatableType<Fill>("Bacon2D", 1, 0, "Fill", "Don't use Fill directly, use one specialized fill");
@@ -60,8 +55,6 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<Entity>("Bacon2D", 1, 0, "Entity");
     qmlRegisterType<Sprite>("Bacon2D", 1, 0, "Sprite");
     qmlRegisterType<SpriteAnimation>("Bacon2D", 1, 0, "SpriteAnimation");
-    qmlRegisterType<Box2DDistanceJoint>("Bacon2D", 1, 0, "DistanceJoint");
-    qmlRegisterType<Box2DMouseJoint>("Bacon2D", 1, 0, "MouseJoint");
     qmlRegisterType<ImageLayer>("Bacon2D", 1, 0, "ImageLayer");
     qmlRegisterType<ScriptBehavior>("Bacon2D", 1, 0, "ScriptBehavior");
     qmlRegisterType<Rectangle>("Bacon2D", 1, 0, "Box");
@@ -72,5 +65,4 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<Circle>("Bacon2D", 1, 0, "Circle");
     qmlRegisterType<Line>("Bacon2D", 1, 0, "Line");
     qmlRegisterType<Material>("Bacon2D", 1, 0, "Material");
-    qmlRegisterType<Fixture>("Bacon2D", 1, 0, "Fixture");
 }
