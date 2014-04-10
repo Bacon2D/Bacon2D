@@ -1,8 +1,5 @@
 #include "line.h"
 
-#include "util.h"
-#include "box2dbase.h"
-
 Line::Line(QQuickItem *parent)
     : Shape(parent)
 {
@@ -37,31 +34,4 @@ void Line::setP2(const QPointF &p2)
 void Line::drawShape(QPainter *painter)
 {
     painter->drawLine(m_p1, m_p2);
-}
-
-void Line::initialize()
-{
-    Shape::initialize();
-
-    updateShape(penWidth());
-}
-
-void Line::updateShape(qreal penWidth)
-{
-    //FIXME: Use penWidth to calculate the new points.
-    // When using big penWidth values, the shape will overflow
-    // it's own boundingRect and we have to fix it somehow.
-    Q_UNUSED(penWidth);
-
-    qreal xOffset = x() - parentItem()->width() / 2.0;
-    qreal yOffset = y() - parentItem()->height() / 2.0;
-
-    if (!m_shape)
-        m_shape = new b2EdgeShape;
-
-    b2EdgeShape *edgeShape = static_cast<b2EdgeShape *>(m_shape);
-    edgeShape->Set(b2Util::b2Vec(QPointF(m_p1.x() + xOffset,
-                                         m_p1.y() + yOffset), Box2DBase::m_scaleRatio),
-                   b2Util::b2Vec(QPointF(m_p2.x() + xOffset,
-                                         m_p2.y() + yOffset), Box2DBase::m_scaleRatio));
 }

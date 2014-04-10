@@ -27,12 +27,9 @@
 #include <QtCore/QtGlobal>
 
 #include <QtQml/QQmlComponent>
+#include <QtQuick/QQuickItem>
 
 class Game;
-class b2World;
-class Fixture;
-class Box2DContact;
-class Box2DDebugDraw;
 
 class Scene : public QQuickItem
 {
@@ -41,10 +38,6 @@ class Scene : public QQuickItem
     Q_PROPERTY(bool running READ running WRITE setRunning NOTIFY runningChanged)
     Q_PROPERTY(Game *game READ game WRITE setGame)
     Q_PROPERTY(bool debug READ debug WRITE setDebug NOTIFY debugChanged)
-    Q_PROPERTY(QPointF gravity READ gravity WRITE setGravity)
-    Q_PROPERTY(qreal physicsTimeStep READ physicsTimeStep WRITE setPhysicsTimestep NOTIFY physicsTimeStepChanged)
-    Q_PROPERTY(int physicsVelocityIterations READ physicsVelocityIterations WRITE setPhysicsVelocityIterations NOTIFY physicsVelocityIterationsChanged)
-    Q_PROPERTY(int physicsPositionIterations READ physicsPositionIterations WRITE setPhysicsPositionIterations NOTIFY physicsPositionIterationsChanged)
 
 public:
     Scene(Game *parent = 0);
@@ -61,35 +54,9 @@ public:
 
     virtual void update(const int &delta);
 
-    b2World *world() const;
-
-    void setGravity(const QPointF &gravity);
-    QPointF gravity() const;
-
-    qreal physicsTimeStep() const;
-    void setPhysicsTimestep(const qreal &physicsTimeStep);
-
-    int physicsVelocityIterations() const;
-    void setPhysicsVelocityIterations(const int &physicsVelocityIterations);
-
-    int physicsPositionIterations() const;
-    void setPhysicsPositionIterations(const int &physicsPositionIterations);
-
-    void onPostSolve(Box2DContact *contact);
-    void onPreSolve(Box2DContact *contact);
-    void onBeginContact(Box2DContact *contact);
-    void onEndContact(Box2DContact *contact);
-
 signals:
     void runningChanged();
     void debugChanged();
-    void contactPostSolve(Box2DContact *contact);
-    void contactPreSolve(Box2DContact *contact);
-    void contactBegin(Box2DContact *contact);
-    void contactEnd(Box2DContact *contact);
-    void physicsTimeStepChanged();
-    void physicsVelocityIterationsChanged();
-    void physicsPositionIterationsChanged();
 
 protected slots:
     void onDebugChanged();
@@ -102,12 +69,6 @@ protected:
     bool m_running;
     Game *m_game;
     bool m_debug;
-    QSharedPointer<b2World> m_world;
-    QPointF m_gravity;
-    Box2DDebugDraw *m_debugDraw;
-    qreal m_physicsTimeStep;
-    int m_physicsVelocityIterations;
-    int m_physicsPositionIterations;
 };
 
 #endif /* _SCENE_H_ */

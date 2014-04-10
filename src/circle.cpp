@@ -21,9 +21,6 @@
 
 #include "circle.h"
 
-#include "box2dbase.h"
-#include "util.h"
-
 Circle::Circle(QQuickItem *parent)
     : Shape(parent)
     , m_radius(0)
@@ -53,13 +50,6 @@ void Circle::drawShape(QPainter *painter)
     painter->drawEllipse(rect);
 }
 
-void Circle::initialize()
-{
-    Shape::initialize();
-
-    updateShape(penWidth());
-}
-
 qreal Circle::getDiameter() const
 {
     qreal diameter = 0.0;
@@ -70,24 +60,4 @@ qreal Circle::getDiameter() const
         diameter = width() > height() ? height() : width();
 
     return diameter;
-}
-
-void Circle::updateShape(qreal penWidth)
-{
-    //FIXME: Use penWidth to calculate the new points.
-    // When using big penWidth values, the shape will overflow
-    // it's own boundingRect and we have to fix it somehow.
-    Q_UNUSED(penWidth);
-
-    if (!m_shape)
-        m_shape = new b2CircleShape;
-
-    b2CircleShape *circleShape = static_cast<b2CircleShape*>(m_shape);
-
-    qreal diameter = getDiameter();
-    QPointF shapePos(x() - parentItem()->width() / 2.0 + diameter / 2.0,
-                     y() - parentItem()->height() / 2.0 + diameter / 2.0);
-
-    circleShape->m_radius = diameter / 2.0 / Box2DBase::m_scaleRatio;
-    circleShape->m_p = b2Util::b2Vec(shapePos, Box2DBase::m_scaleRatio);
 }
