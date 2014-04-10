@@ -9,9 +9,6 @@ A simple Qt-based 2D game engine.
 * Qt5
   	Qt5 source repository: https://qt.gitorious.org/qt/qt5
 
-* Box2D >= 2.2.1
-	http://box2d.org
-
 1.2) Building
 
 Available QMake parameters:
@@ -20,11 +17,6 @@ Available QMake parameters:
 	Prefix where Qt has been installed. It is required to install
 	Bacon2D's QML import plugin and related files.
 	The default path is /usr/lib/qt5
-
-* BOX2DPATH (Optional)
-	Path to Box2D installation. If your Linux distro packaging system
-	provides the required version, it is recommended to use it to install
-	the library and devel files.
 
 * BUILD_EXAMPLES (Optional)
 	Use BUILD_EXAMPLES=1 to build usage examples.
@@ -46,10 +38,10 @@ you can run the examples directly from their specific build directories.
 
 Example:
 
-$ cd $(QUASI_BUILD_TREE)/examples/box2dpolygon_circle/
-$ ./box2dpolygon_circle
+$ cd $(QUASI_BUILD_TREE)/examples/box2ddistancejoints/
+$ ./box2ddistancejoints
 
-If Bacon2D QML plugin was not installed you need first to export QML_IMPORT_PATH
+If Bacon2D QML plugin was not installed you need first to export QML2_IMPORT_PATH
 environment variable:
 
-$ export QML_IMPORT_PATH=$(QUASI_BUILD_TREE)/src/imports
+$ export QML2_IMPORT_PATH=$(QUASI_BUILD_TREE)/src/imports

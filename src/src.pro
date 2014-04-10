@@ -13,10 +13,8 @@ OBJECTS_DIR = tmp
 MOC_DIR = tmp
 
 DEPENDPATH += .
-INCLUDEPATH += .
-
-INCLUDEPATH += $$BOX2DPATH/include
-LIBS += -L$$BOX2DPATH/lib -lBox2D
+INCLUDEPATH += . ../
+include(../Box2D/box2d.pri)
 
 HEADERS += entity.h \
            scene.h \
