@@ -1,0 +1,7 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file>GameWindow.qml</file>
+    <file>Ball.qml</file>
+    <file>Wall.qml</file>
+</qresource>
+</RCC>
