@@ -12,4 +12,10 @@ SUBDIRS += imagelayer \
            updateInterval \
            manysprites \
            behaviorchange \
-           box2ddistancejoints
+           box2ddistancejoints \
+           impulse \
+           cannon \
+           contacts \
+           rope \
+           weld \
+           fixtures
