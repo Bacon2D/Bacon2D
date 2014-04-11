@@ -2,5 +2,7 @@
 <qresource>
     <file>GameWindow.qml</file>
     <file>Wall.qml</file>
+    <file>images/wall.jpg</file>
+    <file>images/wheel.png</file>
 </qresource>
 </RCC>
