@@ -14,8 +14,8 @@ Game {
 
         // BOX2D WORLD
         World {
-        id: world;
-        anchors.fill: parent
+            id: world;
+            anchors.fill: parent
 
             Wall {
                 id: ground
@@ -39,22 +39,22 @@ Game {
             }
 
             Ball {
-            id: ball
-            x: parent.width /2
-            y: parent.height /2
-            rotation: 0
-            width: 100
-            height: 100
-        }
+                id: ball
+                x: parent.width /2
+                y: parent.height /2
+                rotation: 0
+                width: 100
+                height: 100
+            }
 
-        // Debug
-        DebugDraw {
-            id: debugDraw
-            world: world
-            anchors.fill: world
-            opacity: 0.75
-            visible: false
-        }
+            // Debug
+            DebugDraw {
+                id: debugDraw
+                world: world
+                anchors.fill: world
+                opacity: 0.75
+                visible: false
+            }
 
             MouseArea {
                 anchors.fill: parent
