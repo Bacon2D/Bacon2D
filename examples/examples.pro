@@ -2,6 +2,7 @@ TEMPLATE = subdirs
 
 SUBDIRS += imagelayer \
            gamewindow \
+           gamescene \
            movement \
            parallax_layers \
            sprite \
