@@ -25,7 +25,6 @@
 #include "scene.h"
 #include "game.h"
 #include "behavior.h"
-#include "material.h"
 
 Entity::Entity(Scene *parent)
     : QQuickItem(parent)
