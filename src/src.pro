@@ -41,8 +41,7 @@ HEADERS += entity.h \
            polygon.h \
            polyline.h \
            circle.h \
-           line.h \
-           material.h
+           line.h
 
 SOURCES += entity.cpp \
            scene.cpp \
@@ -64,8 +63,7 @@ SOURCES += entity.cpp \
            line.cpp \
            triangle.cpp \
            polygon.cpp \
-           polyline.cpp \
-           material.cpp
+           polyline.cpp
 
 QMAKE_POST_LINK = $$QMAKE_COPY $$PWD/qmldir $$OUT_PWD/imports/Bacon2D
 
