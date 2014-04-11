@@ -24,7 +24,7 @@
 
 #include <QtCore/QtGlobal>
 #include <QtQml/QQmlExtensionPlugin>
- 
+
 class Plugins : public QQmlExtensionPlugin
 {
     Q_OBJECT
@@ -35,4 +35,3 @@ public:
 };
 
 #endif /* _PLUGINS_H_ */
-

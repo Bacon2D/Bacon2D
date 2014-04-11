@@ -47,19 +47,6 @@ public:
         PlaneDrawType,
         TiledDrawType
     };
-
-    // Enums for the Box2D body types
-    enum EntityType {
-        StaticType,
-        KinematicType,
-        DynamicType
-    };
-
-    // Internal use onlu, not exported to QML
-    enum Internal {
-        // Box2D debug mode
-        MaxOrdering = 9999
-    };
 };
 
 #endif /* _ENUMS_H_ */

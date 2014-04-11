@@ -14,9 +14,10 @@ MOC_DIR = tmp
 
 DEPENDPATH += .
 INCLUDEPATH += .
+INCLUDEPATH += ../3rdparty/qml-box2d/
 
-INCLUDEPATH += $$BOX2DPATH/include
-LIBS += -L$$BOX2DPATH/lib -lBox2D
+DEFINES += STATIC_PLUGIN_BOX2D
+include(../3rdparty/qml-box2d/box2d-static.pri)
 
 HEADERS += entity.h \
            scene.h \
@@ -27,19 +28,11 @@ HEADERS += entity.h \
            spriteanimation.h \
            animationtransition.h \
            animationchangeevent.h \
-           box2djoint.h \
-           box2dbase.h \
-           box2ddistancejoint.h \
-           box2dmousejoint.h \
            layer.h \
            imagelayer.h \
-           util.h \
-           box2ddebugdraw.h \
            enums.h \
            behavior.h \
            scriptbehavior.h \
-           box2dcontact.h \
-           box2dcontactlistener.h \
            fill.h \
            colorfill.h \
            shape.h \
@@ -49,7 +42,6 @@ HEADERS += entity.h \
            polyline.h \
            circle.h \
            line.h \
-           fixture.h \
            material.h
 
 SOURCES += entity.cpp \
@@ -60,18 +52,10 @@ SOURCES += entity.cpp \
            sprite.cpp \
            spriteanimation.cpp \
            animationtransition.cpp \
-           box2djoint.cpp \
-           box2dbase.cpp \
-           box2ddistancejoint.cpp \
-           box2dmousejoint.cpp \
            layer.cpp \
            imagelayer.cpp \
-           util.cpp \
-           box2ddebugdraw.cpp \
            behavior.cpp \
            scriptbehavior.cpp \
-           box2dcontact.cpp \
-           box2dcontactlistener.cpp \
            fill.cpp \
            colorfill.cpp \
            shape.cpp \
@@ -81,7 +65,6 @@ SOURCES += entity.cpp \
            triangle.cpp \
            polygon.cpp \
            polyline.cpp \
-           fixture.cpp \
            material.cpp
 
 QMAKE_POST_LINK = $$QMAKE_COPY $$PWD/qmldir $$OUT_PWD/imports/Bacon2D

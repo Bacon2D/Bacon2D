@@ -38,11 +38,6 @@ public:
 
     void drawShape(QPainter *painter);
 
-    void initialize();
-
-protected:
-    void updateShape(qreal penWidth);
-
 signals:
     void radiusChanged();
 

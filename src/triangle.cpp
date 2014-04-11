@@ -21,9 +21,6 @@
 
 #include "triangle.h"
 
-#include "util.h"
-#include "box2dbase.h"
-
 Triangle::Triangle(QQuickItem *parent)
     : Shape(parent)
 {
@@ -44,40 +41,4 @@ void Triangle::setPoints(QVariantList &points)
 void Triangle::drawShape(QPainter *painter)
 {
     painter->drawPolygon(m_triangle);
-}
-
-void Triangle::initialize()
-{
-    Shape::initialize();
-
-    if (m_points.size() == 3)
-        updateShape(penWidth());
-}
-
-void Triangle::updateShape(qreal penWidth)
-{
-    //FIXME: Use penWidth to calculate the new points.
-    // When using big penWidth values, the shape will overflow
-    // it's own boundingRect and we have to fix it somehow.
-    Q_UNUSED(penWidth);
-
-    b2Vec2 triangle[3];
-    qreal xOffset = x() - parentItem()->width() / 2.0;
-    qreal yOffset = y() - parentItem()->height() / 2.0;
-
-    m_triangle.clear();
-    for (int i = 0; i < 3; i++) {
-        QPointF point = m_points.at(i).toPointF();
-
-        m_triangle.append(point);
-        triangle[i] = b2Util::b2Vec(QPointF(point.x() + xOffset,
-                                            point.y() + yOffset), Box2DBase::m_scaleRatio);
-    }
-
-    if (m_shape)
-        delete m_shape;
-
-    m_shape = new b2PolygonShape;
-    b2PolygonShape *polygonShape = static_cast<b2PolygonShape*>(m_shape);
-    polygonShape->Set(triangle, 3);
 }

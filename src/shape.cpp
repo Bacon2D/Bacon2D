@@ -23,7 +23,6 @@
 
 Shape::Shape(QQuickItem *parent)
     : QQuickPaintedItem(parent)
-    , m_shape(0)
     , m_fill(0)
     , m_initialized(false)
 {
@@ -31,7 +30,6 @@ Shape::Shape(QQuickItem *parent)
 
 Shape::~Shape()
 {
-    delete m_shape;
 }
 
 void Shape::initialize()
