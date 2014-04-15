@@ -27,12 +27,11 @@
 #include "behavior.h"
 
 Entity::Entity(Scene *parent)
-    : QQuickItem(parent)
+    : Box2DBody(parent)
     , m_updateInterval(0)
     , m_scene(0)
     , m_behavior(0)
 {
-    setTransformOrigin(Center);
 }
 
 Entity::~Entity()
