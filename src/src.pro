@@ -32,16 +32,7 @@ HEADERS += entity.h \
            imagelayer.h \
            enums.h \
            behavior.h \
-           scriptbehavior.h \
-           fill.h \
-           colorfill.h \
-           shape.h \
-           rectangle.h \
-           triangle.h \
-           polygon.h \
-           polyline.h \
-           circle.h \
-           line.h
+           scriptbehavior.h 
 
 SOURCES += entity.cpp \
            scene.cpp \
@@ -54,16 +45,7 @@ SOURCES += entity.cpp \
            layer.cpp \
            imagelayer.cpp \
            behavior.cpp \
-           scriptbehavior.cpp \
-           fill.cpp \
-           colorfill.cpp \
-           shape.cpp \
-           rectangle.cpp \
-           circle.cpp \
-           line.cpp \
-           triangle.cpp \
-           polygon.cpp \
-           polyline.cpp
+           scriptbehavior.cpp
 
 QMAKE_POST_LINK = $$QMAKE_COPY $$PWD/qmldir $$OUT_PWD/imports/Bacon2D
 
