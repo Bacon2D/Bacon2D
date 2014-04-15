@@ -64,11 +64,15 @@ protected slots:
 protected:
     virtual void componentComplete();
     virtual void itemChange(ItemChange change, const ItemChangeData &data);
+    void updateEntities(QQuickItem *parent, const int &delta);
+    void initializeEntities(QQuickItem *parent);
 
 protected:
     bool m_running;
     Game *m_game;
     bool m_debug;
 };
+
+
 
 #endif /* _SCENE_H_ */
