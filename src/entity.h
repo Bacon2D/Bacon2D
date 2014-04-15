@@ -24,6 +24,8 @@
 
 #include "enums.h"
 
+#include "box2dbody.h"
+
 #include <QtCore/QtGlobal>
 #include <QtCore/QTime>
 #include <QtQuick/QQuickItem>
@@ -32,7 +34,7 @@ class Game;
 class Scene;
 class Behavior;
 
-class Entity : public QQuickItem
+class Entity : public Box2DBody
 {
     Q_OBJECT
 

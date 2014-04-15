@@ -24,6 +24,7 @@
 #include "game.h"
 #include "layer.h"
 #include "viewport.h"
+#include "box2dworld.h"
 
 #include <QtCore/QtGlobal>
 #include <QtQml/QQmlEngine>
@@ -44,18 +45,25 @@ Scene::~Scene()
 {
 }
 
+void Scene::updateEntities(QQuickItem *parent, const int &delta)
+{
+    QQuickItem *item;
+    foreach (item, parent->childItems()) {
+        if (Entity *entity = qobject_cast<Entity *>(item))
+            entity->update(delta);
+        else if (Layer *layer = qobject_cast<Layer *>(item))
+            layer->update();
+        else if (Box2DWorld *world = dynamic_cast<Box2DWorld *>(item))
+            updateEntities(item, delta);
+    }
+}
+
 void Scene::update(const int &delta)
 {
     if (!m_running) // TODO: stop Qt animations as well
         return;
 
-    QQuickItem *item;
-    foreach (item, childItems()) {
-        if (Entity *entity = qobject_cast<Entity *>(item))
-            entity->update(delta);
-        else if (Layer *layer = qobject_cast<Layer *>(item))
-            layer->update();
-    }
+    updateEntities(this, delta);
 }
 
 bool Scene::running() const
@@ -113,16 +121,21 @@ void Scene::setDebug(const bool &debug)
     emit debugChanged();
 }
 
+void Scene::initializeEntities(QQuickItem *parent)
+{
+    QQuickItem *item;
+    foreach (item, parent->childItems()) {
+        if (Entity *entity = dynamic_cast<Entity *>(item))
+            entity->setScene(this);
+        else if (Box2DWorld *world = dynamic_cast<Box2DWorld *>(item))
+            initializeEntities(item);
+    }
+}
+
 void Scene::componentComplete()
 {
     QQuickItem::componentComplete();
-
-    QQuickItem *item;
-
-    foreach (item, childItems()) {
-        if (Entity *entity = dynamic_cast<Entity *>(item))
-            entity->setScene(this);
-    }
+    initializeEntities(this);
 }
 
 void Scene::itemChange(ItemChange change, const ItemChangeData &data)
@@ -131,6 +144,7 @@ void Scene::itemChange(ItemChange change, const ItemChangeData &data)
         QQuickItem *child = data.item;
         if (Entity *entity = dynamic_cast<Entity *>(child))
             entity->setScene(this);
+        initializeEntities(child);
     }
 
     QQuickItem::itemChange(change, data);
