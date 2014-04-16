@@ -61,9 +61,9 @@ Game {
             anchors.fill: parent
             onPreSolve : {
                 if(contact.fixtureA.isBall && contact.fixtureB === topBeltFixture)
-                    contact.tangentSpeed = -100.0;
+                    contact.tangentSpeed = -3.0;
                 else if(contact.fixtureB.isBall && contact.fixtureA === topBeltFixture)
-                    contact.tangentSpeed = 100.0;
+                    contact.tangentSpeed = 3.0;
             }
             Body {
                 id: topWall
@@ -286,12 +286,12 @@ Game {
                     sensor: true
                     onContactChanged: {
                         other.parent.gravityScale = 0.5;
-                        other.parent.applyForce(Qt.point(-100,0),Qt.point(24,24));
+                        other.parent.applyForce(Qt.point(-5,0),Qt.point(24,24));
                     }
                     onEndContact: {
                         var body = other.parent;
                         body.gravityScale = 1;
-                        body.applyForce(Qt.point(100,0),Qt.point(24,24));
+                        body.applyForce(Qt.point(5,0),Qt.point(24,24));
                         var index = body.colorIndex;
                         index ++;
                         body.colorIndex = index;
