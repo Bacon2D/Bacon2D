@@ -449,7 +449,7 @@ Game {
                 anchors.fill: parent
                 world: world
                 opacity: 1
-                visible: true
+                visible: false
             }
         }
     }
