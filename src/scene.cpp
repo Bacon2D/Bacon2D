@@ -51,8 +51,11 @@ void Scene::updateEntities(QQuickItem *parent, const int &delta)
             entity->update(delta);
         else if (Layer *layer = qobject_cast<Layer *>(item))
             layer->update();
-        else if (Box2DWorld *world = dynamic_cast<Box2DWorld *>(item))
+        else if (Box2DWorld *world = dynamic_cast<Box2DWorld *>(item)) {
+            if (!world->isRunning())
+                world->step();
             updateEntities(item, delta);
+        }
     }
 }
 
@@ -110,8 +113,10 @@ void Scene::initializeEntities(QQuickItem *parent)
     foreach (item, parent->childItems()) {
         if (Entity *entity = dynamic_cast<Entity *>(item))
             entity->setScene(this);
-        else if (Box2DWorld *world = dynamic_cast<Box2DWorld *>(item))
+        else if (Box2DWorld *world = dynamic_cast<Box2DWorld *>(item)) {
+            world->setRunning(false);
             initializeEntities(item);
+        }
     }
 }
 
