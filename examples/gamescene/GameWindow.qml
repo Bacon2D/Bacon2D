@@ -21,7 +21,6 @@
 
 Item {
     id: container
-
     width: 900
     height: 300
 
@@ -55,96 +54,73 @@ Item {
                 color: "white"
             }
 
-            Material {
-                id: wallMaterial
-                density: 10
-                restitution: 0.1
-            }
+            World {
+                id: world
+                anchors.fill: parent
 
-            Entity {
-                anchors.left: parent.left
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                width: 1
-
-                Fixture {
-                    material: wallMaterial
-                    shape: Item { anchors.fill: parent }
+                Wall {
+                    anchors.right: parent.left
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    width: 1
                 }
-            }
 
-            Entity {
-                anchors.right: parent.right
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                width: 1
-
-                Fixture {
-                    material: wallMaterial
-                    shape: Item { anchors.fill: parent }
+                Wall {
+                    anchors.left: parent.right
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    width: 1
                 }
-            }
 
-            Entity {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.top: parent.top
-                height: 1
-
-                Fixture {
-                    material: wallMaterial
-                    shape: Item { anchors.fill: parent }
+                Wall {
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.bottom: parent.top
+                    height: 1
                 }
-            }
 
-            Entity {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
-                height: 1
+                Wall {
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.top: parent.bottom
+                    height: 1
+                }
 
-                Fixture {
-                    material: wallMaterial
-                    shape: Item {
+                Body {
+                    id: ball
+                    width: 40
+                    height: 40
+                    x: scene.width / 2 - width / 2
+                    y: scene.height / 3
+                    fixedRotation: false
+                    sleepingAllowed: false
+                    bodyType: Body.Dynamic
+                    fixtures: Circle {
+                        id: circleShape
+                        radius: parent.width / 2
                         anchors.fill: parent
+                        density: 1;
+                        friction: 1;
+                        restitution: 0.5;
                     }
-                }
-            }
 
-            Material {
-                id: ballMaterial
-                density: Math.random()
-                restitution: density
-            }
-
-            Entity {
-                id: ball
-                width: 40
-                height: 40
-                x: scene.width / 2 - width / 2
-                y: scene.height / 3
-
-                entityType: Bacon2D.DynamicType
-
-                Fixture {
-                    material: ballMaterial
-                    shape: Circle {
-                        anchors.fill: parent
-                        fill: ColorFill {
-                            brushColor: {
-                                switch (currentSceneIndex) {
+                    Rectangle {
+                        id: itemShape
+                        color: {
+                            switch (currentSceneIndex) {
                                 case 0: return "black"
                                 case 1: return "red"
                                 case 2: return "blue"
-                                }
                             }
                         }
+                        radius: parent.width / 2
+                        width: parent.width
+                        height: parent.height
                     }
                 }
             }
         }
     }
-
     Timer {
         interval: 2000
         running: true

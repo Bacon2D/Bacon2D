@@ -23,30 +23,24 @@
 #define _ENTITY_H_
 
 #include "enums.h"
-#include "box2dbase.h"
+
+#include "box2dbody.h"
 
 #include <QtCore/QtGlobal>
 #include <QtCore/QTime>
+#include <QtQuick/QQuickItem>
 
 class Game;
 class Scene;
 class Behavior;
-class Fixture;
 
-class Entity : public Box2DBase
+class Entity : public Box2DBody
 {
     Q_OBJECT
 
     Q_PROPERTY(int updateInterval READ updateInterval WRITE setUpdateInterval NOTIFY updateIntervalChanged)
     Q_PROPERTY(Game *game READ game)
     Q_PROPERTY(Behavior *behavior READ behavior WRITE setBehavior NOTIFY behaviorChanged)
-    Q_PROPERTY(qreal linearDamping READ linearDamping WRITE setLinearDamping NOTIFY linearDampingChanged)
-    Q_PROPERTY(qreal angularDamping READ angularDamping WRITE setAngularDamping NOTIFY angularDampingChanged)
-    Q_PROPERTY(Bacon2D::EntityType entityType READ entityType WRITE setEntityType NOTIFY entityTypeChanged)
-    Q_PROPERTY(bool bullet READ bullet WRITE setBullet NOTIFY bulletChanged)
-    Q_PROPERTY(bool sleepingAllowed READ sleepingAllowed WRITE setSleepingAllowed NOTIFY sleepingAllowedChanged)
-    Q_PROPERTY(bool fixedRotation READ fixedRotation WRITE setFixedRotation NOTIFY fixedRotationChanged)
-    Q_PROPERTY(bool active READ active WRITE setActive)
 
 public:
     Entity(Scene *parent = 0);
@@ -65,78 +59,17 @@ public:
 
     virtual void update(const int &delta);
 
-    b2Body *body() const;
-
-    qreal linearDamping() const;
-    void setLinearDamping(const qreal &linearDamping);
-
-    qreal angularDamping() const;
-    void setAngularDamping(const qreal &angularDamping);
-
-    Bacon2D::EntityType entityType() const;
-    void setEntityType(const Bacon2D::EntityType &entityType);
-
-    bool bullet() const;
-    void setBullet(const bool &bullet);
-
-    bool sleepingAllowed() const;
-    void setSleepingAllowed(const bool &allowed);
-
-    bool fixedRotation() const;
-    void setFixedRotation(const bool &fixedRotation);
-
-    bool active() const;
-    void setActive(const bool &active);
-
     void initialize();
-
-    b2Vec2 b2TransformOrigin() const;
-    float b2Angle() const;
-
-    Q_INVOKABLE void applyTorque(const float &torque);
-    Q_INVOKABLE void applyLinearImpulse(const QPointF &impulse, const QPointF &point);
-    Q_INVOKABLE void setLinearVelocity(const QPointF &velocity);
-    Q_INVOKABLE void setAngularVelocity(const float &velocity);
-
-protected:
-    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
-    virtual void itemChange(ItemChange change, const ItemChangeData &data);
-    void componentComplete();
 
 signals:
     void updateIntervalChanged();
     void behaviorChanged();
-    void activeChanged();
-    void linearDampingChanged();
-    void angularDampingChanged();
-    void entityTypeChanged();
-    void bulletChanged();
-    void sleepingAllowedChanged();
-    void fixedRotationChanged();
-    void linearVelocityChanged();
-
-private slots:
-    void onRotationChanged();
-
-private:
-    void initializeFixtures();
-    void createSensorFixture();
-    void destroySensorFixture();
 
 private:
     int m_updateInterval;
     QTime m_updateTime;
     Scene *m_scene;
     Behavior *m_behavior;
-    b2Body *m_body;
-    qreal m_linearDamping;
-    qreal m_angularDamping;
-    Bacon2D::EntityType m_entityType;
-    bool m_bullet;
-    bool m_sleepingAllowed;
-    bool m_fixedRotation;
-    bool m_active;
-    Fixture *m_sensorFixture;
 };
 
 #endif /* _ENTITY_H_ */
