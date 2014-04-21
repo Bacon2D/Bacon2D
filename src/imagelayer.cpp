@@ -416,13 +416,12 @@ void ImageLayer::paint(QPainter *painter)
 
 void ImageLayer::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
-    if (newGeometry.isEmpty() || m_initialized || !isComponentComplete())
+    if (newGeometry.isEmpty() || !isComponentComplete())
         return;
 
     updateTiles();
 
     m_initialized = true;
-
     Layer::geometryChanged(newGeometry, oldGeometry);
 }
 
