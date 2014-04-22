@@ -32,7 +32,8 @@ HEADERS += entity.h \
            imagelayer.h \
            enums.h \
            behavior.h \
-           scriptbehavior.h 
+           scriptbehavior.h \
+           world.h
 
 SOURCES += entity.cpp \
            scene.cpp \
@@ -45,7 +46,8 @@ SOURCES += entity.cpp \
            layer.cpp \
            imagelayer.cpp \
            behavior.cpp \
-           scriptbehavior.cpp
+           scriptbehavior.cpp \
+           world.cpp
 
 QMAKE_POST_LINK = $$QMAKE_COPY $$PWD/qmldir $$OUT_PWD/imports/Bacon2D
 

@@ -29,6 +29,7 @@
 #include "game.h"
 #include "behavior.h"
 #include "scriptbehavior.h"
+#include "world.h"
 
 #include "box2dworld.h"
 #include "box2dbody.h"
@@ -64,7 +65,7 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<ImageLayer>("Bacon2D", 1, 0, "ImageLayer");
     qmlRegisterType<ScriptBehavior>("Bacon2D", 1, 0, "ScriptBehavior");
 
-    qmlRegisterType<Box2DWorld>("Bacon2D", 1, 0, "World");
+    qmlRegisterType<World>("Bacon2D", 1, 0, "World");
     qmlRegisterType<Box2DBody>("Bacon2D", 1, 0, "Body");
     qmlRegisterUncreatableType<Box2DFixture>("Bacon2D", 1,0, "Fixture",
                                              QStringLiteral("Base type for Box, Circle etc."));
@@ -89,4 +90,5 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<Box2DRopeJoint>("Bacon2D", 1, 0, "RopeJoint");
 
     qmlRegisterUncreatableType<Box2DContact>("Bacon2D", 1,0, "Contact",QStringLiteral("Contact class"));
+    qmlRegisterUncreatableType<Box2DWorld>("Bacon2D", 1,0, "Box2DWorld",QStringLiteral("Box2DWorld class"));
 }
