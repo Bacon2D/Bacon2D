@@ -23,6 +23,7 @@
 
 #include "game.h"
 #include "layer.h"
+#include "viewport.h"
 #include "box2dworld.h"
 
 #include <QtCore/QtGlobal>
@@ -31,6 +32,7 @@
 Scene::Scene(Game *parent)
     : QQuickItem(parent)
     , m_running(true)
+    , m_viewport(0)
     , m_game(parent)
     , m_debug(false)
 {
@@ -77,6 +79,21 @@ void Scene::setRunning(const bool &running)
     m_running = running;
 
     emit runningChanged();
+}
+
+Viewport *Scene::viewport() const
+{
+    return m_viewport;
+}
+
+void Scene::setViewport(Viewport *viewport)
+{
+    if (m_viewport == viewport)
+        return;
+
+    m_viewport = viewport;
+
+    emit viewportChanged();
 }
 
 Game *Scene::game() const
