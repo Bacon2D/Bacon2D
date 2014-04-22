@@ -127,8 +127,6 @@ QPointF Game::mouse()
     return window()->mapFromGlobal(QCursor::pos());
 }
 
-#if QT_VERSION < 0x050000
-// this function is needed on Qt4 to fix viewport's width and height
 void Game::componentComplete()
 {
     if (m_viewport && m_currentScene) {
@@ -139,6 +137,5 @@ void Game::componentComplete()
         m_viewport->updateMaxOffsets();
     }
 
-    QDeclarativeItem::componentComplete();
+    QQuickItem::componentComplete();
 }
-#endif
