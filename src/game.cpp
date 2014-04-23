@@ -25,7 +25,6 @@
 #include "viewport.h"
 
 #include <QtQuick/QQuickWindow>
-
 #include <QtGui/QCursor>
 
 Game::Game(QQuickItem *parent)
@@ -37,6 +36,22 @@ Game::Game(QQuickItem *parent)
     m_gameTime.start();
     m_timerId = startTimer(1000 / m_fps);
 }
+
+QString Game::gameName()
+{
+    return QCoreApplication::applicationName();
+}
+
+void Game::setGameName(const QString& gameName)
+{
+    // applicationName is needed for QSettings to create path to file
+    QCoreApplication::setApplicationName(gameName);
+    // Set the organizationName to match the applicationName, it's redundant 
+    // but creates path that plays well accross platforms
+    QCoreApplication::setOrganizationName(gameName);
+    Q_EMIT gameNameChanged();
+}
+
 
 Scene *Game::currentScene() const
 {

@@ -36,6 +36,7 @@ class Game : public QQuickItem
     Q_PROPERTY(Scene *currentScene READ currentScene WRITE setCurrentScene NOTIFY currentSceneChanged)
     Q_PROPERTY(int fps READ fps WRITE setFps NOTIFY fpsChanged)
     Q_PROPERTY(QPointF mouse READ mouse)
+    Q_PROPERTY(QString gameName READ gameName WRITE setGameName NOTIFY gameNameChanged)
 
 public:
     Game(QQuickItem *parent = 0);
@@ -47,6 +48,10 @@ public:
     void setFps(const int &fps);
 
     QPointF mouse();
+
+    QString gameName();
+    void setGameName(const QString& gameName);
+
     virtual void componentComplete();
 
 protected:
@@ -56,6 +61,7 @@ protected:
 signals:
     void currentSceneChanged();
     void fpsChanged();
+    void gameNameChanged();
 
 private:
     Scene *m_currentScene;
