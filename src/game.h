@@ -27,6 +27,7 @@
 #include <QtCore/QtGlobal>
 
 class Scene;
+class Viewport;
 
 class Game : public QQuickItem
 {
@@ -46,6 +47,7 @@ public:
     void setFps(const int &fps);
 
     QPointF mouse();
+    virtual void componentComplete();
 
 protected:
     void timerEvent(QTimerEvent *event);
@@ -59,6 +61,7 @@ private:
     Scene *m_currentScene;
     QTime m_gameTime;
     int m_fps;
+    Viewport *m_viewport;
     int m_timerId;
 };
 
