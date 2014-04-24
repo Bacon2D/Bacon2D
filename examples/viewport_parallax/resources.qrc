@@ -1,9 +1,0 @@
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource>
-    <file>GameWindow.qml</file>
-    <file>images/layer_01.png</file>
-    <file>images/layer_02.png</file>
-    <file>images/moving.png</file>
-    <file>images/stopped.png</file>
-</qresource>
-</RCC>
