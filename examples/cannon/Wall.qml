@@ -9,7 +9,7 @@ Body {
         density: 1
     }
     Image {
-        source: "qrc:/images/wall.jpg"
+        source: "images/wall.jpg"
         fillMode: Image.Tile
         anchors.fill: parent
     }

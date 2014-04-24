@@ -18,13 +18,10 @@ Available QMake parameters:
 	Bacon2D's QML import plugin and related files.
 	The default path is /usr/lib/qt5
 
-* BUILD_EXAMPLES (Optional)
-	Use BUILD_EXAMPLES=1 to build usage examples.
-
 Sample build from Bacon2D's root source tree:
 
 $ mkdir build && cd build
-$ qmake QTPATH=/opt/Qt5 BUILD_EXAMPLES=1 ..
+$ qmake QTPATH=/opt/Qt5 ..
 $ make
 $ sudo make install
 
@@ -34,14 +31,19 @@ $ sudo make install
 ===========
 
 If you have installed the QML plugin to the proper Qt import directory,
-you can run the examples directly from their specific build directories.
+you can run the examples directly from their specific source directories.
 
-Example:
+Each example can be opened and run from QtCreator, to open the fixtures 
+example, open examples/fixtures/fixtures.qmlproject from QtCreator
 
-$ cd $(QUASI_BUILD_TREE)/examples/behaviorchange/
-$ ./behaviorchange
+To run the fixtures example without QtCreator:
 
-If Bacon2D QML plugin was not installed you need first to export QML_IMPORT_PATH
-environment variable:
+$ cd examples/fixtures
+$ qmlscene main.qml
 
-$ export QML_IMPORT_PATH=$(QUASI_BUILD_TREE)/src/imports
+If Bacon2D QML plugin was not installed you can export QML2_IMPORT_PATH 
+environment variable or specify the path to your built plugin on 
+the command line.
+
+$ cd examples/fixtures
+$ qmlscene -I ../../build/src/imports main.qml
