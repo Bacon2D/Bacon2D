@@ -50,7 +50,7 @@ ImageLayer::~ImageLayer()
 /*!
  * \param source the image path
  */
-void ImageLayer::setSource(const QString &source)
+void ImageLayer::setSource(const QUrl &source)
 {
     if (m_source == source)
         return;
@@ -64,7 +64,7 @@ void ImageLayer::setSource(const QString &source)
 /*!
  * \return the source path for the image
  */
-QString ImageLayer::source() const
+QUrl ImageLayer::source() const
 {
     return m_source;
 }
@@ -233,10 +233,15 @@ void ImageLayer::updateTiles()
         return;
 
     // TODO create enums to define image aspect, auto tile, etc...
-    QPixmap pixmap(source()); // TODO
+    QPixmap pixmap;
+    if (m_source.url().startsWith("qrc:/"))
+        pixmap.load(m_source.url().replace(QString("qrc:/"), QString(":/")));
+    else
+        pixmap.load(m_source.toLocalFile());
+
     // If item height doesn't match pixmap height, scaleToHeight
     if (pixmap.height() != (int)height()) {
-        pixmap = pixmap.scaledToHeight(height()); 
+        pixmap = pixmap.scaledToHeight(height());
     }
 
     if (m_drawType == Bacon2D::PlaneDrawType) {
@@ -245,7 +250,7 @@ void ImageLayer::updateTiles()
 
         if (pixmap.width() % (int)width() != 0) {
             // XXX create some log system?
-            qCritical() << QString("Bacon2D>>Image \'%1\' doesn't contains a proper size... CROPPING!").arg(source());
+            qCritical() << QString("Bacon2D>>Image \'%1\' doesn't contains a proper size... CROPPING!").arg(m_source.url());
 
             int newWidth = pixmap.width() - (pixmap.width() % (int)width());
             pixmap = pixmap.copy(0, 0, newWidth, height());

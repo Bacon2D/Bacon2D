@@ -23,6 +23,7 @@
 #define _SPRITESHEET_H_
 
 #include <QtQuick/QQuickPaintedItem>
+#include <QUrl>
 #include <QtCore/QtGlobal>
 
 class QPixmap;
@@ -36,8 +37,8 @@ class SpriteSheet : public QQuickPaintedItem
 public:
     SpriteSheet(QQuickItem *parent = 0);
 
-    QString source() const;
-    void setSource(const QString &source);
+    QUrl source() const;
+    void setSource(const QUrl &source);
 
     int frames() const;
     void setFrames(const int &frames);
@@ -67,7 +68,7 @@ private:
 
 private:
     QPixmap *m_pixMap;
-    QString m_source;
+    QUrl m_source;
     int m_frames;
     int m_frame;
     int m_initialFrame;
