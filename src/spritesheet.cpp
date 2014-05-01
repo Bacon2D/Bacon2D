@@ -37,32 +37,38 @@ SpriteSheet::SpriteSheet(QQuickItem *parent)
     , m_mirror(false)
 {
     setVisible(false);
-
     QQmlProperty(this, "layer.enabled").write(true);
 }
 
-QString SpriteSheet::source() const
+QUrl SpriteSheet::source() const
 {
     return m_source;
 }
 
-void SpriteSheet::setSource(const QString &source)
+void SpriteSheet::setSource(const QUrl &source)
 {
-    if (m_source != source) {
-        if (m_pixMap)
-            delete m_pixMap;
+    if (m_source == source)
+        return;
 
-        m_source = source;
+    if (m_pixMap)
+        delete m_pixMap;
 
-        m_pixMap = new QPixmap(m_source);
+    m_source = source;
 
-        if (m_frames)
-            updateSizeInfo();
+    if (m_source.url().startsWith("qrc:/"))
+        m_pixMap = new QPixmap(m_source.url().replace(QString("qrc:/"), QString(":/")));
+    else
+        m_pixMap = new QPixmap(m_source.toLocalFile());
 
-        update();
+    if (!m_pixMap)
+        qCritical() << QString("Bacon2D>>Image \'%1\' failed to load!").arg(m_source.url());
 
-        emit sourceChanged();
-    }
+    if (m_frames)
+        updateSizeInfo();
+
+    update();
+
+    emit sourceChanged();
 }
 
 void SpriteSheet::paint(QPainter *painter)

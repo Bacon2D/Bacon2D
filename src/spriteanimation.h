@@ -24,6 +24,7 @@
 
 #include <QtCore/QState>
 #include <QtCore/QPropertyAnimation>
+#include <QUrl>
 
 class SpriteSheet;
 class QPropertyAnimation;
@@ -33,7 +34,7 @@ class SpriteAnimation : public QState
     Q_OBJECT
 
     Q_PROPERTY(QString name READ name WRITE setName)
-    Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
+    Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(int frames READ frames WRITE setFrames NOTIFY framesChanged)
     Q_PROPERTY(int frame READ frame WRITE setFrame NOTIFY frameChanged)
     Q_PROPERTY(int initialFrame READ initialFrame WRITE setInitialFrame NOTIFY initialFrameChanged)
@@ -55,8 +56,8 @@ public:
     int loops() const;
     void setLoops(const int &loops);
 
-    QString source() const;
-    void setSource(const QString &source);
+    QUrl source() const;
+    void setSource(const QUrl &source);
 
     int frames() const;
     void setFrames(const int &frames);
