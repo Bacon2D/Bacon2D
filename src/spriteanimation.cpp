@@ -88,12 +88,12 @@ void SpriteAnimation::setLoops(const int &loops)
     }
 }
 
-QString SpriteAnimation::source() const
+QUrl SpriteAnimation::source() const
 {
     return m_spriteSheet->source();
 }
 
-void SpriteAnimation::setSource(const QString &source)
+void SpriteAnimation::setSource(const QUrl &source)
 {
     m_spriteSheet->setSource(source);
 }

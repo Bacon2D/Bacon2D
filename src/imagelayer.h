@@ -32,7 +32,7 @@ class ImageLayer : public Layer
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
+    Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
 
     // From Layers
     Q_PROPERTY(int tileHeight READ tileHeight WRITE setTileHeight)
@@ -46,8 +46,8 @@ public:
     ImageLayer(Layer *parent = 0);
     ~ImageLayer();
 
-    void setSource(const QString &source);
-    QString source() const;
+    void setSource(const QUrl &source);
+    QUrl source() const;
 
     void setDrawType(Bacon2D::DrawType drawType);
     Bacon2D::DrawType drawType() const;
@@ -106,7 +106,7 @@ private:
     QList<Offsets::OffsetsList> m_offsets;
     QList<QPixmap> m_pixmaps;
 
-    QString m_source;
+    QUrl m_source;
     Bacon2D::DrawType m_drawType;
 
     const float m_areaToDraw;
