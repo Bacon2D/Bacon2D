@@ -30,6 +30,7 @@
 #include "viewport.h"
 #include "behavior.h"
 #include "scriptbehavior.h"
+#include "settings.h"
 
 #include "box2dworld.h"
 #include "box2dbody.h"
@@ -65,6 +66,8 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<ImageLayer>("Bacon2D", 1, 0, "ImageLayer");
     qmlRegisterType<Viewport>("Bacon2D", 1, 0, "Viewport");
     qmlRegisterType<ScriptBehavior>("Bacon2D", 1, 0, "ScriptBehavior");
+    qmlRegisterType<Settings>("Bacon2D", 1, 0, "Settings");
+
 
     qmlRegisterType<Box2DWorld>("Bacon2D", 1, 0, "World");
     qmlRegisterType<Box2DBody>("Bacon2D", 1, 0, "Body");
