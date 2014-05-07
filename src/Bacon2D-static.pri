@@ -38,7 +38,8 @@ HEADERS += \
         $$PWD/spriteanimation.h \
         $$PWD/sprite.h \
         $$PWD/spritesheet.h \
-        $$PWD/viewport.h 
+        $$PWD/viewport.h \
+        $$PWD/settings.h 
 
 SOURCES += \
         $$PWD/animationtransition.cpp \
@@ -53,4 +54,5 @@ SOURCES += \
         $$PWD/spriteanimation.cpp \
         $$PWD/sprite.cpp \
         $$PWD/spritesheet.cpp \
-        $$PWD/viewport.cpp 
+        $$PWD/viewport.cpp \
+        $$PWD/settings.cpp
