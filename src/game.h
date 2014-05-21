@@ -52,9 +52,8 @@ public:
     QString gameName();
     void setGameName(const QString& gameName);
 
-    virtual void componentComplete();
-
 protected:
+    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
     void timerEvent(QTimerEvent *event);
     void update();
 

@@ -40,8 +40,8 @@ Item {
         Scene {
             id: scene
 
-            width: 300
-            height: 300
+            width: container.width/3
+            height: container.height
 
             function applyLinearImpulse() {
                 var center = Qt.point(x + width / 2, y + height / 2)
