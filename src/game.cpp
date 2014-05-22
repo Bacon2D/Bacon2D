@@ -142,8 +142,11 @@ QPointF Game::mouse()
     return window()->mapFromGlobal(QCursor::pos());
 }
 
-void Game::componentComplete()
+void Game::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
+    if (newGeometry.isEmpty() || !isComponentComplete() || (newGeometry == oldGeometry))
+        return;
+
     if (m_viewport && m_currentScene) {
         m_viewport->setWidth(width());
         m_viewport->setHeight(height());
@@ -152,5 +155,5 @@ void Game::componentComplete()
         m_viewport->updateMaxOffsets();
     }
 
-    QQuickItem::componentComplete();
+    QQuickItem::geometryChanged(newGeometry, oldGeometry);
 }
