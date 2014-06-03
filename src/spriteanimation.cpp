@@ -20,11 +20,15 @@
  */
 
 #include "spriteanimation.h"
-
 #include "spritesheet.h"
 
 #include <QtCore/QPropertyAnimation>
 
+/*!
+  \qmltype SpriteAnimation
+  \inqmlmodule Bacon2D
+  \brief FIXME
+ */
 SpriteAnimation::SpriteAnimation(QState *parent)
     : QState(parent)
     , m_spriteSheet(new SpriteSheet)
@@ -43,6 +47,10 @@ SpriteAnimation::SpriteAnimation(QState *parent)
     m_spriteAnimation->setStartValue(0);
 }
 
+/*!
+ * \qmlproperty string SpriteAnimation::name
+ * \brief FIXME
+ */
 QString SpriteAnimation::name() const
 {
     return m_name;
@@ -53,6 +61,10 @@ void SpriteAnimation::setName(const QString &name)
     m_name = name;
 }
 
+/*!
+ * \qmlproperty bool SpriteAnimation::running
+ * \brief FIXME
+ */
 bool SpriteAnimation::running() const
 {
     return m_spriteAnimation->state() == QAbstractAnimation::Running;
@@ -72,6 +84,10 @@ void SpriteAnimation::setRunning(const bool &running)
     }
 }
 
+/*!
+ * \qmlproperty int SpriteAnimation::loops
+ * \brief FIXME
+ */
 int SpriteAnimation::loops() const
 {
     return m_spriteAnimation->loopCount();
@@ -88,6 +104,10 @@ void SpriteAnimation::setLoops(const int &loops)
     }
 }
 
+/*!
+ * \qmlproperty string SpriteAnimation::source
+ * \brief FIXME
+ */
 QUrl SpriteAnimation::source() const
 {
     return m_spriteSheet->source();
@@ -98,6 +118,10 @@ void SpriteAnimation::setSource(const QUrl &source)
     m_spriteSheet->setSource(source);
 }
 
+/*!
+ * \qmlproperty int SpriteAnimation::frames
+ * \brief FIXME
+ */
 int SpriteAnimation::frames() const
 {
     return m_spriteSheet->frames();
@@ -109,6 +133,10 @@ void SpriteAnimation::setFrames(const int &frames)
     m_spriteAnimation->setEndValue(frames);
 }
 
+/*!
+ * \qmlproperty int SpriteAnimation::frame
+ * \brief FIXME
+ */
 int SpriteAnimation::frame() const
 {
     return m_spriteSheet->frame();
@@ -119,6 +147,10 @@ void SpriteAnimation::setFrame(const int &frame)
     m_spriteSheet->setFrame(frame);
 }
 
+/*!
+ * \qmlproperty int SpriteAnimation::initialFrame
+ * \brief FIXME
+ */
 int SpriteAnimation::initialFrame() const
 {
     return m_spriteSheet->initialFrame();
@@ -130,6 +162,10 @@ void SpriteAnimation::setInitialFrame(const int &initialFrame)
     m_spriteAnimation->setStartValue(initialFrame);
 }
 
+/*!
+ * \qmlproperty bool SpriteAnimation::visible
+ * \brief FIXME
+ */
 bool SpriteAnimation::visible() const
 {
     return m_spriteSheet->isVisible();
@@ -145,11 +181,20 @@ void SpriteAnimation::setVisible(const bool &visible)
     }
 }
 
+/*!
+ * \qmlproperty SpriteSheet SpriteAnimation::spriteSheet
+ * \brief FIXME
+ * \internal
+ */
 SpriteSheet *SpriteAnimation::spriteSheet()
 {
     return m_spriteSheet;
 }
 
+/*!
+ * \qmlproperty int SpriteAnimation::duration
+ * \brief FIXME
+ */
 int SpriteAnimation::duration() const
 {
     return m_spriteAnimation->duration();
@@ -165,6 +210,10 @@ void SpriteAnimation::setDuration(const int &duration)
     }
 }
 
+/*!
+ * \qmlproperty bool SpriteAnimation::inverse
+ * \brief FIXME
+ */
 bool SpriteAnimation::inverse() const
 {
     return m_inverse;
@@ -187,6 +236,10 @@ void SpriteAnimation::setInverse(const bool &inverse)
     }
 }
 
+/*!
+ * \qmlproperty bool SpriteAnimation::verticalMirror
+ * \brief FIXME
+ */
 bool SpriteAnimation::verticalMirror() const
 {
     return m_spriteSheet->verticalMirror();
@@ -197,6 +250,10 @@ void SpriteAnimation::setVerticalMirror(const bool &verticalMirror)
     m_spriteSheet->setVerticalMirror(verticalMirror);
 }
 
+/*!
+ * \qmlproperty bool SpriteAnimation::horizontalMirror
+ * \brief FIXME
+ */
 bool SpriteAnimation::horizontalMirror() const
 {
     return m_spriteSheet->horizontalMirror();

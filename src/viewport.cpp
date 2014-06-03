@@ -22,6 +22,11 @@
 #include "viewport.h"
 #include "scene.h"
 
+/*!
+  \qmltype Viewport
+  \inqmlmodule Bacon2D
+  \brief FIXME
+*/
 Viewport::Viewport(Scene *parent)
     : Entity(parent)
     , m_animationEasingCurve(QEasingCurve::Linear)
@@ -38,6 +43,10 @@ Viewport::Viewport(Scene *parent)
     m_yGroupAnimation = new QParallelAnimationGroup(this);
 }
 
+/*!
+  \qmlproperty float Viewport::xOffset
+  \brief FIXME
+*/
 float Viewport::xOffset()
 {
     return m_xOffset;
@@ -81,6 +90,10 @@ void Viewport::setXOffset(float xOffset)
     }
 }
 
+/*!
+  \qmlproperty float Viewport::yOffset
+  \brief FIXME
+*/
 float Viewport::yOffset()
 {
     return m_yOffset;
@@ -157,6 +170,10 @@ void Viewport::setContentHeight(const float &contentHeight)
     }
 }
 
+/*!
+ * \qmlproperty int Viewport::animationDuration
+ * \brief FIXME
+ */
 int Viewport::animationDuration() const
 {
     return m_animationDuration;

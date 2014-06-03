@@ -38,6 +38,11 @@ void Sprite::append_animation(QQmlListProperty<SpriteAnimation> *list, SpriteAni
     animation->spriteSheet()->setParentItem(spriteItem);
 }
 
+/*!
+  \qmltype Sprite
+  \inqmlmodule Bacon2D
+  \brief FIXME
+ */
 Sprite::Sprite(Scene *parent)
     : Entity(parent)
     , m_stateMachine(0)
@@ -52,6 +57,10 @@ QQmlListProperty<SpriteAnimation> Sprite::animations() const
     return QQmlListProperty<SpriteAnimation>(const_cast<Sprite *>(this), 0, &Sprite::append_animation, 0, 0, 0);
 }
 
+/*!
+ * \qmlproperty string Sprite::animation
+ * \brief FIXME
+ */
 QString Sprite::animation() const
 {
     return m_animation;
@@ -108,6 +117,10 @@ void Sprite::initializeAnimation()
         setAnimation(m_animation, true);
 }
 
+/*!
+ * \qmlproperty bool Sprite::verticalMirror
+ * \brief FIXME
+ */
 bool Sprite::verticalMirror() const
 {
     return m_verticalMirror;
@@ -126,6 +139,10 @@ void Sprite::setVerticalMirror(const bool &verticalMirror)
     emit verticalMirrorChanged();
 }
 
+/*!
+ * \qmlproperty bool Sprite::horizontalMirror
+ * \brief FIXME
+ */
 bool Sprite::horizontalMirror() const
 {
     return m_horizontalMirror;

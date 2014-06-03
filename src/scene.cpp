@@ -29,6 +29,42 @@
 #include <QtCore/QtGlobal>
 #include <QtQml/QQmlEngine>
 
+/*!
+  \qmltype Scene
+  \inqmlmodule Bacon2D
+  \inherits Item
+  \brief The root view in the Game.
+
+  The Scene component is the root view for the \l Game.
+
+  The size of the Scene can be larger than the size of the \l Game, accessible 
+  using a \l Viewport.  The \l Viewport provides xOffset and yOffset properties
+  which can be used to control movement of the Viewport.
+
+  Example usage:
+  \qml
+   import QtQuick 2.0
+   import Bacon2D 1.0
+
+   Game {
+       id: game
+       width: 800
+       height: 600
+
+       Scene {
+           id: scene
+           width: 1200
+           height: 800
+           viewport: Viewport {
+               yOffset: player.y - 100
+           }
+           Entity {
+               id: player
+           }
+       }
+   }
+   \endqml
+*/
 Scene::Scene(Game *parent)
     : QQuickItem(parent)
     , m_running(true)
@@ -66,6 +102,10 @@ void Scene::update(const int &delta)
     updateEntities(this, delta);
 }
 
+/*!
+ * \qmlproperty bool Scene::running
+ * \brief The current running state of Scene
+ */
 bool Scene::running() const
 {
     return m_running;
@@ -81,6 +121,10 @@ void Scene::setRunning(const bool &running)
     emit runningChanged();
 }
 
+/*!
+ * \qmlproperty Viewport Scene::viewport
+ * \brief Holds the a reference to the Viewport for the current Scene.
+ */
 Viewport *Scene::viewport() const
 {
     return m_viewport;
@@ -96,6 +140,10 @@ void Scene::setViewport(Viewport *viewport)
     emit viewportChanged();
 }
 
+/*!
+ * \qmlproperty Game Scene::game
+ * \brief Holds the a reference to the Game that contains the Scene.
+ */
 Game *Scene::game() const
 {
     return m_game;
@@ -106,6 +154,10 @@ void Scene::setGame(Game *game)
     m_game = game;
 }
 
+/*!
+ * \qmlproperty bool Scene::debug
+ * \brief Debug mode
+ */
 bool Scene::debug() const
 {
     return m_debug;

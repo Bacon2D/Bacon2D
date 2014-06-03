@@ -29,6 +29,9 @@
 class Scene;
 class Viewport;
 
+/*!
+  \class Game
+ */
 class Game : public QQuickItem
 {
     Q_OBJECT
