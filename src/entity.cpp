@@ -25,6 +25,12 @@
 #include "game.h"
 #include "behavior.h"
 
+/*!
+  \qmltype Entity
+  \inqmlmodule Bacon2D
+  \inherits Body
+  \brief FIXME
+*/
 Entity::Entity(Scene *parent)
     : Box2DBody(parent)
     , m_updateInterval(0)
@@ -56,6 +62,10 @@ void Entity::update(const int &delta)
             item->update(delta);
 }
 
+/*!
+  \qmlproperty int Entity::updateInterval
+  \brief FIXME
+*/
 int Entity::updateInterval() const
 {
     return m_updateInterval;
@@ -91,6 +101,10 @@ Game *Entity::game() const
     return 0;
 }
 
+/*!
+  \qmlproperty Behavior Entity::behavior
+  \brief Behavior to be run on on each \l updateInterval
+*/
 Behavior *Entity::behavior() const
 {
     return m_behavior;

@@ -20,13 +20,40 @@
  */
 
 #include "game.h"
-
 #include "scene.h"
 #include "viewport.h"
 
 #include <QtQuick/QQuickWindow>
 #include <QtGui/QCursor>
 
+/*!
+  \qmltype Game
+  \inqmlmodule Bacon2D
+  \inherits Item
+  \brief The root element containing one or more Scene.
+
+  The Game component is the root game component which
+  contains one or more Scene components.  Only one
+  Scene will be set as currentScene.
+  
+  Example usage:
+  \qml
+   import QtQuick 2.0
+   import Bacon2D 1.0
+
+   Game {
+       id: game
+       width: 800
+       height: 600
+
+       Scene {
+           id: scene
+           width: 300
+           height: 300
+       }
+   }
+   \endqml
+*/
 Game::Game(QQuickItem *parent)
     : QQuickItem(parent)
     , m_currentScene(0)
@@ -37,6 +64,10 @@ Game::Game(QQuickItem *parent)
     m_timerId = startTimer(1000 / m_fps);
 }
 
+/*!
+ * \qmlproperty string Game::gameName
+ * \brief Name of the game, required if using Settings
+ */
 QString Game::gameName()
 {
     return QCoreApplication::applicationName();
@@ -52,7 +83,10 @@ void Game::setGameName(const QString& gameName)
     Q_EMIT gameNameChanged();
 }
 
-
+/*!
+ * \qmlproperty Scene Game::currentScene
+ * \brief The current Scene
+ */
 Scene *Game::currentScene() const
 {
     return m_currentScene;
@@ -102,6 +136,10 @@ void Game::setCurrentScene(Scene *currentScene)
     emit currentSceneChanged();
 }
 
+/*!
+ * \qmlproperty int Game::fps
+ * \brief The current frame rate
+ */
 int Game::fps() const
 {
     return m_fps;
@@ -137,6 +175,10 @@ void Game::update()
         m_viewport->update(elapsedTime);
 }
 
+/*!
+ * \qmlproperty QPointF Game::mouse
+ * \brief The point in the plane of the mouse pointer
+ */
 QPointF Game::mouse()
 {
     return window()->mapFromGlobal(QCursor::pos());

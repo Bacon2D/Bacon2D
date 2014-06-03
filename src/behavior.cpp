@@ -23,6 +23,11 @@
 
 #include "entity.h"
 
+/*!
+  \qmltype Behavior
+  \inqmlmodule Bacon2D
+  \brief FIXME
+*/
 Behavior::Behavior(QObject *parent)
     : QObject(parent)
     , m_entity(0)

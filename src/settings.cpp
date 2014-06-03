@@ -42,6 +42,11 @@
 
 #include "settings.h"
 
+/*!
+ * \qmltype Settings
+ * \inqmlmodule Bacon2D
+ * \brief FIXME
+ */
 Settings::Settings(QObject *parent)
     : QObject(parent)
     , initialPropertyCount(metaObject()->propertyCount())

@@ -1,0 +1,31 @@
+/*!
+  \qmltype World
+  \inqmlmodule Bacon2D
+  \brief A World manages the physics simulation.
+
+  \qml
+   Scene {
+       width: 300
+       height: 150
+       World {
+           id: world
+           anchors.fill: parent
+       }
+   }
+  \endqml
+*/
+
+/*!
+  \qmlproperty bool World::running
+  \brief If the world is currently running or not
+*/
+
+/*!
+  \qmlproperty float World::pixelsPerMeter
+  \brief FIXME
+*/
+
+/*!
+  \qmlproperty QPointF World::gravity
+  \brief FIXME
+*/

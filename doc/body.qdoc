@@ -1,0 +1,51 @@
+/*!
+  \qmltype Body
+  \inqmlmodule Bacon2D
+  \brief FIXME
+*/
+
+/*!
+  \qmlproperty Body::BodyType Body::bodyType
+  \brief FIXME
+*/
+
+/*!
+  \qmlproperty float Body::linearDamping
+  \brief FIXME
+*/
+/*!
+  \qmlproperty float Body::angularDamping
+  \brief FIXME
+*/
+/*!
+  \qmlproperty float Body::angularVelocity
+  \brief FIXME
+*/
+/*!
+  \qmlproperty QPointF Body::linearVelocity
+  \brief FIXME
+*/
+/*!
+  \qmlproperty bool Body::bullet
+  \brief FIXME
+*/
+/*!
+  \qmlproperty bool Body::sleepingAllowed
+  \brief FIXME
+*/
+/*!
+  \qmlproperty bool Body::fixedRotation
+  \brief FIXME
+*/
+/*!
+  \qmlproperty bool Body::active
+  \brief FIXME
+*/
+/*!
+  \qmlproperty bool Body::awake
+  \brief FIXME
+*/
+/*!
+  \qmlproperty QQmlListProperty<Fixture> Body::fixtures
+  \brief FIXME
+*/

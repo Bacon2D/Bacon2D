@@ -25,7 +25,11 @@
 #include <QtGui/QPainter>
 #include <QtQml/QQmlProperty>
 
-//! Class constructor
+/*!
+   \qmltype Layer
+   \inqmlmodule Bacon2D
+   \brief FIXME
+ */
 Layer::Layer(QQuickItem *parent)
     : QQuickPaintedItem(parent)
     , m_isAnimated(false)
@@ -41,6 +45,10 @@ Layer::~Layer()
 {
 }
 
+/*!
+ * \qmlproperty bool Layer::animated
+ * \brief FIXME
+ */
 void Layer::setAnimated(bool animated)
 {
     if (m_isAnimated == animated)
@@ -51,6 +59,10 @@ void Layer::setAnimated(bool animated)
     emit animatedChanged();
 }
 
+/*!
+ * \qmlproperty qreal Layer::horizontalStep
+ * \brief FIXME
+ */
 void Layer::setHorizontalStep(const qreal &step)
 {
     if (m_horizontalStep == step)
@@ -65,6 +77,23 @@ void Layer::setHorizontalStep(const qreal &step)
 }
 
 void Layer::setLayerType(const Layer::LayerType &type)
+/*!
+   \qmlproperty Bacon2D::LayerType Layer::layerType
+   \table
+   \header
+     \li {2, 1} \e {Bacon2D::LayerType} is an enumeration:
+   \header
+     \li Type
+     \li Description
+   \row
+     \li Bacon2D.InfiniteType (default)
+     \li Infinite Layer Type
+   \row
+     \li Bacon2D.MirrorType
+     \li Mirror Layer Type
+   \endtable
+ */
+void Layer::setLayerType(const Bacon2D::LayerType &type)
 {
     if (type == m_type)
         return;

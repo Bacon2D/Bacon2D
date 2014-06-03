@@ -1,0 +1,97 @@
+/*!
+  \qmltype Fixture
+  \inqmlmodule Bacon2D
+  \brief FIXME
+*/
+/*!
+  \qmlproperty float Fixture::density
+  \brief FIXME
+*/
+/*!
+  \qmlproperty float Fixture::friction
+  \brief FIXME
+*/
+/*!
+  \qmlproperty float Fixture::restitution
+  \brief FIXME
+*/
+/*!
+  \qmlproperty bool Fixture::sensor
+  \brief FIXME
+*/
+/*!
+  \qmlproperty int Fixture::groupIndex
+  \brief FIXME
+*/
+/*!
+  \qmlproperty CategoryFlags Fixture::categories
+  \brief FIXME
+*/
+/*!
+  \qmlproperty CategoryFlags Fixture::collidesWith
+  \brief FIXME
+*/
+
+/*!
+  \qmltype Box
+  \inqmlmodule Bacon2D
+  \inherits Fixture
+  \brief FIXME
+*/
+
+/*!
+  \qmltype Circle
+  \inqmlmodule Bacon2D
+  \inherits Fixture
+  \brief FIXME
+*/
+/*!
+  \qmlproperty float Circle::radius
+  \brief FIXME
+*/
+
+/*!
+  \qmltype Polygon
+  \inqmlmodule Bacon2D
+  \inherits Fixture
+  \brief FIXME
+*/
+/*!
+  \qmlproperty QVariantList Polygon::vertices
+  \brief FIXME
+*/
+
+
+/*!
+  \qmltype Edge
+  \inqmlmodule Bacon2D
+  \inherits Fixture
+  \brief FIXME
+*/
+/*!
+  \qmlproperty QVariantList Edge::vertices
+  \brief FIXME
+*/
+
+/*!
+  \qmltype Chain
+  \inqmlmodule Bacon2D
+  \inherits Fixture
+  \brief FIXME
+*/
+/*!
+  \qmlproperty QVariantList Chain::vertices
+  \brief FIXME
+*/
+/*!
+  \qmlproperty QPointF Chain::prevVertex
+  \brief FIXME
+*/
+/*!
+  \qmlproperty QPointF Chain::nextVertex
+  \brief FIXME
+*/
+/*!
+  \qmlproperty bool Chain::loop
+  \brief FIXME
+*/
