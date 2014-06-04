@@ -1,10 +1,7 @@
 /*!
 \page index.html overview
-\title Bacon2D
 
 \contentspage {Bacon2D} {Contents}
-
-\part Game development with Bacon2D
 
 \chapter Introduction
 
@@ -13,12 +10,13 @@ FIXME
 \section1 Definitions
 
 \list
-  \li \b {Game}: FIXME. See also \l Game.
-  \li \b {Scene}: FIXME. See also \l Scene.
+  \li \b {Game}: The top-level container, provides the game loop and manages Scene changes.  See also \l Game.
+  \li \b {Scene}: Container of game entities.  Performs updates on each Entity in the Scene for each tick of the Game loop.  See also \l Scene.
   \li \b {Viewport}: FIXME. See also \l Viewport.
-  \li \b {Behaviors}: FIXME. See also \l ScriptBehavior.
-  \li \b {Box2D}: FIXME. See also \l World.
-  \li \b {Layer}: FIXME. See also \l ImageLayer.
+  \li \b {Behaviors}: Provides a means for AI in the game.  See also \l ScriptBehavior.
+  \li \b {Box2D}: Physics engine for simulating rigid bodies in 2D.  See also \l World.
+  \li \b {Parallax}: Infinite scrolling backgrounds with options to mirror images. See also \l ImageLayer.
+  \li \b {Entity}: The basic game entity, includes physics (Box2D) properties, responds to scene updates and can contain game logic. See also \l ImageLayer.
 
 \endlist
 
@@ -78,6 +76,8 @@ Game {
     \li \l {World}
     \li \l {Layer}
     \li \l {ImageLayer}
+    \li \l {Entity}
+    \li \l {Fixture}
     \li \l {Sprite}
     \li \l {SpriteAnimation}
     \li \l {ScriptBehavior}

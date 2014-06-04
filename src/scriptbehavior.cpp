@@ -26,8 +26,8 @@
   \qmltype ScriptBehavior
   \inqmlmodule Bacon2D
   \inherits Behavior
-  \brief FIXME
-  
+  \brief Specialization of Behavior element that contains a update script, called each time the Scene update its entities. Can be used to build custom behavior, like movement logic and AI.
+
   \qml
   Game {
       width: 800
