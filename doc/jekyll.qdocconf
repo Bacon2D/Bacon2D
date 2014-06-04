@@ -1,0 +1,47 @@
+project = Bacon2D
+description = Bacon2D - 2D game engine
+sourcedirs = . ../src ../src/doc/pages
+
+sources.fileextensions = "*.cpp *.qdoc *.mm *.qml"
+headers.fileextensions = "*.h *.ch *.h++ *.hh *.hpp *.hxx"
+
+outputdir = ../build/doc/jekyll
+outputformats = HTML
+outputencoding = UTF-8
+
+include($QT_INSTALL_DOCS/global/macros.qdocconf) 
+include($QT_INSTALL_DOCS/global/qt-cpp-defines.qdocconf)
+include($QT_INSTALL_DOCS/global/compat.qdocconf)
+include($QT_INSTALL_DOCS/global/fileextensions.qdocconf)
+#include($QT_INSTALL_DOCS/global/qt-html-templates-offline.qdocconf)
+
+HTML.headerstyles = \
+    "  <link href=\"//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic\" rel=\"stylesheet\" type=\"text/css\">\n" \
+    "  <link href=\"//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic\" rel=\"stylesheet\" type=\"text/css\">\n" \
+    "  <link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\"/stylesheets/online.css\" />\n" \
+    "  <link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\"/stylesheets/stylesheet.css\" />\n"
+
+HTML.endheader = \
+    "</head>\n"
+
+HTML.postpostheader = \
+  "<body>\n" \
+  " <div id=\"header_wrap\" class=\"outer\">\n" \
+  "     <header class=\"inner\">\n" \
+  "       <a id=\"forkme_banner\" href=\"https://github.com/Bacon2D/Bacon2D\">Fork me on GitHub</a>\n" \
+  "       <p id=\"logo\"/>\n" \
+  "       <h1 id=\"project_title\">Bacon2D</h1>\n" \
+  "       <h2 id=\"project_tagline\">2D Game Engine for QML</h2>\n" \
+  "     </header>\n" \
+  " </div>\n" \
+  " <div id=\"main_content_wrap\" class=\"outer\">\n" \
+  "   <section id=\"main_content\" class=\"inner\">\n" \
+
+HTML.footer = \
+  " </div>\n" \
+  " <div id=\"footer_wrap\" class=\"outer\">\n" \
+  "   <footer class=\"inner\">\n" \
+  "     <!-- <p>Published with <a href=\"http://pages.github.com\">GitHub Pages</a></p> -->\n" \
+  "   </footer>\n" \
+  " </div>\n" \
+  "</body>\n" 
