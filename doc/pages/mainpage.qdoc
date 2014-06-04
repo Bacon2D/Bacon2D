@@ -14,17 +14,13 @@ Starting with the top-level \l Game container, which provides a game loop and \l
 \list
   \li \b {Game}: The top-level container, provides the game loop and manages Scene changes.  See also \l Game.
   \li \b {Scene}: Container of game entities.  Performs updates on each Entity in the Scene for each tick of the Game loop.  See also \l Scene.
-  \li \b {Viewport}: FIXME. See also \l Viewport.
+  \li \b {Viewport}: The visible portion of a larger Scene.  See also \l Viewport.
   \li \b {Behaviors}: Provides a means for AI in the game.  See also \l ScriptBehavior.
   \li \b {Box2D}: Physics engine for simulating rigid bodies in 2D.  See also \l World.
   \li \b {Parallax}: Infinite scrolling backgrounds with options to mirror images. See also \l ImageLayer.
   \li \b {Entity}: The basic game entity, includes physics (Box2D) properties, responds to scene updates and can contain game logic. See also \l ImageLayer.
 
 \endlist
-
-\section1 Architectural Overview
-
-FIXME - insert diagram here
 
 \section1 Example usage - Basic Scene
 
@@ -71,7 +67,7 @@ Game {
 }
 \endqml
 
-\part General Topics
+\part Components
 \list
     \li \l {Game}
     \li \l {Scene}
@@ -84,13 +80,12 @@ Game {
     \li \l {SpriteAnimation}
     \li \l {ScriptBehavior}
 \endlist
-
-\part Reporting Bugs
-Please file a bugs on \l {https://github.com/Bacon2D} {Github}
-
-\part Components
 Available through:
 \code
     import Bacon2D 1.0
 \endcode
+
+\part Reporting Bugs
+Please file a bugs on \l {https://github.com/Bacon2D} {Github}
+
 */

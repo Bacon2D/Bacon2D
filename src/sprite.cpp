@@ -41,7 +41,9 @@ void Sprite::append_animation(QQmlListProperty<SpriteAnimation> *list, SpriteAni
 /*!
   \qmltype Sprite
   \inqmlmodule Bacon2D
-  \brief FIXME
+  \inherits Entity
+  \brief A Sprite representation of an Entity, providing state based 
+   management of multiple SpriteAnimation animations.
  */
 Sprite::Sprite(Scene *parent)
     : Entity(parent)
@@ -59,7 +61,7 @@ QQmlListProperty<SpriteAnimation> Sprite::animations() const
 
 /*!
  * \qmlproperty string Sprite::animation
- * \brief FIXME
+ * \brief The current SpriteAnimation state of the Sprite as a string
  */
 QString Sprite::animation() const
 {
@@ -119,7 +121,7 @@ void Sprite::initializeAnimation()
 
 /*!
  * \qmlproperty bool Sprite::verticalMirror
- * \brief FIXME
+ * \brief Shows the Sprite mirrored vertically (upside down)
  */
 bool Sprite::verticalMirror() const
 {
@@ -141,7 +143,7 @@ void Sprite::setVerticalMirror(const bool &verticalMirror)
 
 /*!
  * \qmlproperty bool Sprite::horizontalMirror
- * \brief FIXME
+ * \brief Shows the Sprite mirrored horizontally
  */
 bool Sprite::horizontalMirror() const
 {

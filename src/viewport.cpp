@@ -25,7 +25,10 @@
 /*!
   \qmltype Viewport
   \inqmlmodule Bacon2D
-  \brief FIXME
+  \brief The visible portion of a larger \l Scene.
+
+   The Viewport is the visible area of a larger \l Scene and can be scrolled
+   horizontally or vertically showing different parts of the larger \l Scene.
 */
 Viewport::Viewport(Scene *parent)
     : Entity(parent)
@@ -45,7 +48,8 @@ Viewport::Viewport(Scene *parent)
 
 /*!
   \qmlproperty float Viewport::xOffset
-  \brief FIXME
+  \brief This property holds the horizontal offset of the Viewport's x property from the
+   Scene's x property.
 */
 float Viewport::xOffset()
 {
@@ -92,7 +96,8 @@ void Viewport::setXOffset(float xOffset)
 
 /*!
   \qmlproperty float Viewport::yOffset
-  \brief FIXME
+  \brief This property holds the vertical offset of the Viewport's y property from the
+   Scene's y property.
 */
 float Viewport::yOffset()
 {
@@ -132,11 +137,19 @@ void Viewport::setYOffset(float yOffset)
     }
 }
 
+/*!
+  \qmlmethod Viewport::hScroll(float step)
+  \brief Scroll the Viewport horizontally by \a step
+*/
 void Viewport::hScroll(float step)
 {
     setXOffset(step);
 }
 
+/*!
+  \qmlmethod Viewport::yScroll(float step)
+  \brief Scroll the Viewport vertically by \a step
+*/
 void Viewport::vScroll(float step)
 {
     setYOffset(step);
@@ -171,9 +184,12 @@ void Viewport::setContentHeight(const float &contentHeight)
 }
 
 /*!
- * \qmlproperty int Viewport::animationDuration
- * \brief FIXME
- */
+  \qmlproperty int Viewport::animationDuration
+  \brief Viewport scrolling uses an animation, the animationDuration
+   property sets the duration in milliseconds of that animation.  You can
+   change this duration for smooth panning of the Viewport.  The default
+   is 100ms.
+*/
 int Viewport::animationDuration() const
 {
     return m_animationDuration;

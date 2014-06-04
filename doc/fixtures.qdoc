@@ -1,65 +1,165 @@
 /*!
   \qmltype Fixture
   \inqmlmodule Bacon2D
-  \brief A fixture binds a shape to a \l Body and adds material properties such as density, friction, and restitution.  A fixture puts a shape into the collision system (broad-phase) so that it can collide with other shapes. 
+  \brief A fixture binds a shape to a \l Body and adds material properties
+   such as density, friction, and restitution.
 
+   A fixture puts a shape into the collision system (broad-phase) so that
+   it can collide with other shapes. 
+
+   \section3 Filtering
+
+   Collision filtering allows you to prevent collision between fixtures. For example, say you make a
+   character that rides a bicycle. You want the bicycle to collide with the terrain and the character to
+   collide with the terrain, but you don't want the character to collide with the bicycle (because they must
+   overlap). Box2D supports such collision filtering using categories and groups.
+
+   Box2D supports 16 collision categories. For each fixture you can specify which category it belongs to.
+   You also specify what other categories this fixture can collide with. For example, you could specify in a
+   multiplayer game that all players don't collide with each other and monsters don't collide with each
+   other, but players and monsters should collide. This is done with masking bits. For example:
+
+   Collision groups let you specify an integral group index. You can have all fixtures with the same group
+   index always collide (positive index) or never collide (negative index). Group indices are usually used for
+   things that are somehow related, like the parts of a bicycle. In the following example, fixture1 and
+   fixture2 always collide, but fixture3 and fixture4 never collide.
+
+   Collisions between fixtures of different group indices are filtered according the category and mask bits.
+   In other words, group filtering has higher precedence than category filtering.
+
+   Note that additional collision filtering occurs in Box2D. Here is a list:
+
+   \list
+     \li A fixture on a static body can only collide with a dynamic body.
+     \li A fixture on a kinematic body can only collide with a dynamic body.
+     \li Fixtures on the same body never collide with each other.
+     \li You can optionally enable/disable collision between fixtures on bodies connected by a joint.
+   \endlist
+
+  \section3 CategoryFlags
+   CategoryFlag is an enumeration of 16 Categories
+   \list
+    \li Category1
+    \li Category2
+    \li ... 
+    \li Category15
+    \li Category16
+   \endlist
 */
+
 /*!
   \qmlproperty float Fixture::density
-  \brief FIXME
+  \brief This property represents the density used to compute the mass
+   properties of the parent body.
+
+   The density can be zero or positive. You should generally use similar
+   densities for all your fixtures. This will improve stacking stability.
 */
 /*!
   \qmlproperty float Fixture::friction
-  \brief FIXME
+  \brief Friction is used to make objects slide along each other realistically.
+
+   Box2D supports static and dynamic friction, but uses the same parameter for
+   both. Friction is simulated accurately in Box2D and the friction strength is
+   proportional to the normal force (this is called Coulomb friction). The
+   friction parameter is usually set between 0 and 1, but can be any
+   non-negative value. A friction value of 0 turns off friction and a value of 1
+   makes the friction strong. When the friction force is computed between two
+   shapes, Box2D must combine the friction parameters of the two parent
+   fixtures. This is done with the geometric mean:
+
+   \code
+     var friction = Math.sqrt(fixtureA.friction * fixtureB.friction);
+   \endcode
+
+   So if one fixture has zero friction then the contact will have zero friction.
 */
 /*!
   \qmlproperty float Fixture::restitution
-  \brief FIXME
+  \brief Restitution is used to make objects bounce.
+
+   The restitution value is usually set to be between 0 and 1.
+   Consider dropping a ball on a table. A value of zero means the ball won't bounce. This is called an
+   inelastic collision. A value of one means the ball's velocity will be exactly reflected. This is called a
+   perfectly elastic collision.  Restitution is combined using the following formula.
+
+   \code
+     var restitution = Math.max(fixtureA.restitution,  fixtureB.restitution);
+   \endcode
+
+   Restitution is combined this way so that you can have a bouncy super ball without having a bouncy
+   floor.
 */
 /*!
   \qmlproperty bool Fixture::sensor
-  \brief FIXME
+  \brief This property determines if the fixtures is considered a sensor
+   during collision detection.
+
+   Sometimes game logic needs to know when two fixtures overlap yet there should be no collision
+   response. This is done by using sensors. A sensor is a fixture that detects collision but does not produce
+   a response.
+
+   You can flag any fixture as being a sensor. Sensors may be static, kinematic, or dynamic. Remember that
+   you may have multiple fixtures per body and you can have any mix of sensors and solid fixtures. Also,
+   sensors only form contacts when at least one body is dynamic, so you will not get a contact for
+   kinematic versus kinematic, kinematic versus static, or static versus static.
 */
 /*!
   \qmlproperty int Fixture::groupIndex
-  \brief FIXME
+  \brief This property represents the index of a group the Fixture should
+   be considered part of for Collision filtering. \sa Filtering
 */
 /*!
-  \qmlproperty CategoryFlags Fixture::categories
-  \brief FIXME
+  \qmlproperty list<CategoryFlag> Fixture::categories
+  \brief This property represents a list of \l CategoryFlags assigned to the Fixture.
+
+   These categories are used for Collision filtering. \sa Filtering
+
 */
 /*!
-  \qmlproperty CategoryFlags Fixture::collidesWith
-  \brief FIXME
+  \qmlproperty list<CategoryFlag> Fixture::collidesWith
+  \brief This property represents a list of \l CategoryFlags the Fixture
+   should collide with.
+
+   These categories are used for Collision filtering. \sa Filtering
 */
 
 /*!
   \qmltype Box
   \inqmlmodule Bacon2D
   \inherits Fixture
-  \brief FIXME
+  \brief A convienence shape that creates a \l Polygon based on the
+   geometry of declared item, rather than by a list of vertices.
 */
 
 /*!
   \qmltype Circle
   \inqmlmodule Bacon2D
   \inherits Fixture
-  \brief FIXME
+  \brief Circle shapes have a position and radius.
+
+   Circles are solid. You cannot make a hollow circle using the circle shape.
 */
 /*!
   \qmlproperty float Circle::radius
-  \brief FIXME
+  \brief This property holds the current radius of the Circle
 */
 
 /*!
   \qmltype Polygon
   \inqmlmodule Bacon2D
   \inherits Fixture
-  \brief FIXME
+  \brief Polygon shapes are solid convex polygons. 
+
+   A polygon is convex when all line segments connecting two points in the
+   interior do not cross any edge of the polygon. Polygons are solid and
+   never hollow. A polygon must have 3 or more vertices.
 */
 /*!
-  \qmlproperty QVariantList Polygon::vertices
-  \brief FIXME
+  \qmlproperty list<QPointF> Polygon::vertices
+  \brief This property holds a list of vertices that when connected define the Polygon.
+
+   The vertices will be connected in a counter clockwise direction.
 */
 
 
@@ -73,8 +173,8 @@
    shapes have volume. Edge shapes have no volume, so edge-edge collision is not possible. 
 */
 /*!
-  \qmlproperty QVariantList Edge::vertices
-  \brief FIXME
+  \qmlproperty list<QPointF> Edge::vertices
+  \brief This property holds a list of vertices that when connected define the Edge.
 */
 
 /*!
@@ -85,18 +185,21 @@
    worlds. Chain shapes automatically eliminate ghost collisions and provide two-sided collision. 
 */
 /*!
-  \qmlproperty QVariantList Chain::vertices
-  \brief FIXME
+  \qmlproperty list<QPointF> Chain::vertices
+  \brief This property holds a list of vertices that when connected define the Chain.
 */
 /*!
   \qmlproperty QPointF Chain::prevVertex
-  \brief FIXME
+  \brief This property holds the vertices of the previous Chain, used for 
+   connecting multiple chains together by creating ghost vertices.
 */
 /*!
   \qmlproperty QPointF Chain::nextVertex
-  \brief FIXME
+  \brief This property holds the vertices of the next Chain, used for 
+   connecting multiple chains together by creating ghost vertices.
 */
 /*!
   \qmlproperty bool Chain::loop
-  \brief FIXME
+  \brief This property connects the last vertices to the first vertices
+   completing a loop.  This requires at least 3 vertices.
 */

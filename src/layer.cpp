@@ -26,10 +26,11 @@
 #include <QtQml/QQmlProperty>
 
 /*!
-   \qmltype Layer
-   \inqmlmodule Bacon2D
-   \brief FIXME
- */
+  \qmltype Layer
+  \inqmlmodule Bacon2D
+  \brief Is the base component providing common properties and functionality
+   needed by other Layer types.  See \l ImageLayer.
+*/
 Layer::Layer(QQuickItem *parent)
     : QQuickPaintedItem(parent)
     , m_isAnimated(false)
@@ -46,9 +47,9 @@ Layer::~Layer()
 }
 
 /*!
- * \qmlproperty bool Layer::animated
- * \brief FIXME
- */
+  \qmlproperty bool Layer::animated
+  \brief This property represents the current state of the Layer's animation.
+*/
 void Layer::setAnimated(bool animated)
 {
     if (m_isAnimated == animated)
@@ -60,9 +61,9 @@ void Layer::setAnimated(bool animated)
 }
 
 /*!
- * \qmlproperty qreal Layer::horizontalStep
- * \brief FIXME
- */
+  \qmlproperty qreal Layer::horizontalStep
+  \brief FIXME
+*/
 void Layer::setHorizontalStep(const qreal &step)
 {
     if (m_horizontalStep == step)
@@ -78,21 +79,21 @@ void Layer::setHorizontalStep(const qreal &step)
 
 void Layer::setLayerType(const Layer::LayerType &type)
 /*!
-   \qmlproperty Bacon2D::LayerType Layer::layerType
-   \table
-   \header
-     \li {2, 1} \e {Bacon2D::LayerType} is an enumeration:
-   \header
-     \li Type
-     \li Description
-   \row
-     \li Bacon2D.InfiniteType (default)
-     \li Infinite Layer Type
-   \row
-     \li Bacon2D.MirrorType
-     \li Mirror Layer Type
-   \endtable
- */
+  \qmlproperty enumeration Layer::layerType
+  \table
+  \header
+    \li {2, 1} \e {Bacon2D::LayerType} is an enumeration:
+  \header
+    \li Type
+    \li Description
+  \row
+    \li Bacon2D.InfiniteType (default)
+    \li Infinite Layer Type
+  \row
+    \li Bacon2D.MirrorType
+    \li Mirror Layer Type
+  \endtable
+*/
 void Layer::setLayerType(const Bacon2D::LayerType &type)
 {
     if (type == m_type)
