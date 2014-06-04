@@ -1,7 +1,7 @@
 /*!
   \qmltype World
   \inqmlmodule Bacon2D
-  \brief A World manages the physics simulation.
+  \brief A physics world is a collection of bodies, fixtures, and constraints that interact together.
 
   \qml
    Scene {
