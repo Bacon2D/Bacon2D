@@ -27,7 +27,7 @@
 /*!
   \qmltype SpriteAnimation
   \inqmlmodule Bacon2D
-  \brief FIXME
+  \brief An animation representing a state of a \l Sprite
  */
 SpriteAnimation::SpriteAnimation(QState *parent)
     : QState(parent)
@@ -49,7 +49,7 @@ SpriteAnimation::SpriteAnimation(QState *parent)
 
 /*!
  * \qmlproperty string SpriteAnimation::name
- * \brief FIXME
+ * \brief Unique name for the Sprite state
  */
 QString SpriteAnimation::name() const
 {
@@ -63,7 +63,7 @@ void SpriteAnimation::setName(const QString &name)
 
 /*!
  * \qmlproperty bool SpriteAnimation::running
- * \brief FIXME
+ * \brief Current running state of the animation
  */
 bool SpriteAnimation::running() const
 {
@@ -86,7 +86,7 @@ void SpriteAnimation::setRunning(const bool &running)
 
 /*!
  * \qmlproperty int SpriteAnimation::loops
- * \brief FIXME
+ * \brief Number of loops to run before stopping
  */
 int SpriteAnimation::loops() const
 {
@@ -106,7 +106,7 @@ void SpriteAnimation::setLoops(const int &loops)
 
 /*!
  * \qmlproperty string SpriteAnimation::source
- * \brief FIXME
+ * \brief QUrl for the source image
  */
 QUrl SpriteAnimation::source() const
 {
@@ -120,7 +120,7 @@ void SpriteAnimation::setSource(const QUrl &source)
 
 /*!
  * \qmlproperty int SpriteAnimation::frames
- * \brief FIXME
+ * \brief Number of frames included in the source image
  */
 int SpriteAnimation::frames() const
 {
@@ -135,7 +135,7 @@ void SpriteAnimation::setFrames(const int &frames)
 
 /*!
  * \qmlproperty int SpriteAnimation::frame
- * \brief FIXME
+ * \brief Current frame shown in the SpriteAnimation
  */
 int SpriteAnimation::frame() const
 {
@@ -149,7 +149,7 @@ void SpriteAnimation::setFrame(const int &frame)
 
 /*!
  * \qmlproperty int SpriteAnimation::initialFrame
- * \brief FIXME
+ * \brief Starting frame to be shown in the SpriteAnimation
  */
 int SpriteAnimation::initialFrame() const
 {
@@ -165,6 +165,7 @@ void SpriteAnimation::setInitialFrame(const int &initialFrame)
 /*!
  * \qmlproperty bool SpriteAnimation::visible
  * \brief FIXME
+ * \internal
  */
 bool SpriteAnimation::visible() const
 {
@@ -193,7 +194,7 @@ SpriteSheet *SpriteAnimation::spriteSheet()
 
 /*!
  * \qmlproperty int SpriteAnimation::duration
- * \brief FIXME
+ * \brief Duration in milliseconds of all frames in the animation per loop.  
  */
 int SpriteAnimation::duration() const
 {
@@ -212,7 +213,7 @@ void SpriteAnimation::setDuration(const int &duration)
 
 /*!
  * \qmlproperty bool SpriteAnimation::inverse
- * \brief FIXME
+ * \brief Reverse the animation, showing frames from right to left
  */
 bool SpriteAnimation::inverse() const
 {
@@ -238,7 +239,7 @@ void SpriteAnimation::setInverse(const bool &inverse)
 
 /*!
  * \qmlproperty bool SpriteAnimation::verticalMirror
- * \brief FIXME
+ * \brief Shows the Sprite mirrored (flipped) vertically
  */
 bool SpriteAnimation::verticalMirror() const
 {
@@ -252,7 +253,7 @@ void SpriteAnimation::setVerticalMirror(const bool &verticalMirror)
 
 /*!
  * \qmlproperty bool SpriteAnimation::horizontalMirror
- * \brief FIXME
+ * \brief Shows the Sprite mirrored (flipped) horizontally
  */
 bool SpriteAnimation::horizontalMirror() const
 {
