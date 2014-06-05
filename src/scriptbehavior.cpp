@@ -22,11 +22,14 @@
 #include "scriptbehavior.h"
 
 #include <QtQml/QQmlExpression>
+
 /*!
   \qmltype ScriptBehavior
   \inqmlmodule Bacon2D
   \inherits Behavior
-  \brief Specialization of Behavior element that contains a update script, called each time the Scene update its entities. Can be used to build custom behavior, like movement logic and AI.
+  \brief ScriptBehavior is a \l Behavior including a script to evaluate on each update.
+
+   The ScriptBehavior's script gets called each time the Scene update its entities. Can be used to build custom behavior, like movement logic and AI.
 
   \qml
   Game {
