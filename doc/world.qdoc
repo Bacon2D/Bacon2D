@@ -17,15 +17,18 @@
 
 /*!
   \qmlproperty bool World::running
-  \brief If the world is currently running or not
+  \brief This property represents the current running state of the World
 */
 
 /*!
   \qmlproperty float World::pixelsPerMeter
-  \brief FIXME
+  \brief This property holds the number of pixels per meter.
+
+   The physics world uses meters to measure velocity, movement, etc.
+
 */
 
 /*!
   \qmlproperty QPointF World::gravity
-  \brief FIXME
+  \brief This property holds the global gravity vector. 
 */
