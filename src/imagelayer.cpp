@@ -28,7 +28,7 @@ ImageLayer::ImageLayer(Layer *parent)
     , m_currentImage(0)
     , m_tileWidth(32)
     , m_tileHeight(32)
-    , m_drawType(Bacon2D::TiledDrawType)
+    , m_drawType(Layer::TiledDraw)
     , m_areaToDraw(2.0)
     , m_columnOffset(0)
     , m_latestPoint(0)
@@ -73,7 +73,7 @@ QUrl ImageLayer::source() const
 /*!
  * \param drawType can be Tiled (default) or Plane
  */
-void ImageLayer::setDrawType(Bacon2D::DrawType drawType)
+void ImageLayer::setDrawType(Layer::DrawType drawType)
 {
     if (m_drawType != drawType)
         m_drawType = drawType;
@@ -83,7 +83,7 @@ void ImageLayer::setDrawType(Bacon2D::DrawType drawType)
 /*!
  * \return Tiled or Plane according the layer draw type
  */
-Bacon2D::DrawType ImageLayer::drawType() const
+Layer::DrawType ImageLayer::drawType() const
 {
     return m_drawType;
 }
@@ -244,7 +244,7 @@ void ImageLayer::updateTiles()
         pixmap = pixmap.scaledToHeight(height());
     }
 
-    if (m_drawType == Bacon2D::PlaneDrawType) {
+    if (m_drawType == Layer::PlaneDraw) {
         m_tileWidth = width();
         m_tileHeight = height();
 
@@ -266,7 +266,7 @@ void ImageLayer::updateTiles()
         pixmap = temp;
     }
 
-    if (m_type == Bacon2D::MirroredType) {
+    if (m_type == Layer::Mirrored) {
         QPixmap temp(pixmap.width() * 2, pixmap.height());
 
         QPainter p(&temp);

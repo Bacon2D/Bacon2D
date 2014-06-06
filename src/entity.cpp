@@ -21,7 +21,6 @@
 
 #include "entity.h"
 
-#include "enums.h"
 #include "scene.h"
 #include "game.h"
 #include "behavior.h"

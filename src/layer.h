@@ -22,7 +22,6 @@
 #ifndef _LAYER_H_
 #define _LAYER_H_
 
-#include "enums.h"
 #include "entity.h"
 
 #include <QtQuick/QQuickPaintedItem>
@@ -71,7 +70,12 @@ class Layer: public QQuickPaintedItem
 
     Q_PROPERTY(bool animated READ isAnimated WRITE setAnimated NOTIFY animatedChanged)
     Q_PROPERTY(qreal horizontalStep READ horizontalStep WRITE setHorizontalStep NOTIFY horizontalStepChanged)
-    Q_PROPERTY(Bacon2D::LayerType layerType READ layerType WRITE setLayerType NOTIFY layerTypeChanged)
+    Q_PROPERTY(Layer::LayerType layerType READ layerType WRITE setLayerType NOTIFY layerTypeChanged)
+
+    Q_ENUMS (
+        LayerType
+        DrawType
+    )
 
 public:
     Layer(QQuickItem *parent = 0);
@@ -83,8 +87,19 @@ public:
     qreal horizontalStep() const { return m_horizontalStep; }
     void setHorizontalStep(const qreal &step);
 
-    Bacon2D::LayerType layerType() const { return m_type; };
-    void setLayerType(const Bacon2D::LayerType &type);
+    enum LayerType {
+        Infinite,
+        Mirrored
+    };
+
+    enum DrawType {
+        PlaneDraw,
+        TiledDraw
+    };
+
+    Layer::LayerType layerType() const { return m_type; };
+    void setLayerType(const Layer::LayerType &type);
+
 
 signals:
     void animatedChanged();
@@ -95,7 +110,7 @@ signals:
 protected:
     bool m_isAnimated;
     qreal m_horizontalStep;
-    Bacon2D::LayerType m_type;
+    Layer::LayerType m_type;
 };
 
 #endif /* _LAYER */

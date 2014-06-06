@@ -40,13 +40,13 @@ Game {
         ImageLayer {
             id: layer
             anchors.fill: parent
-            drawType: Bacon2D.TiledDrawType
+            drawType: Layer.TiledDraw
             tileWidth: 32
             tileHeight: 32
             animated: true
             source: "large_enough.png"
             horizontalStep: -5
-            layerType: Bacon2D.MirroredType
+            layerType: Layer.Mirrored
         }
 
         Sprite {

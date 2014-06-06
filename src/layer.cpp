@@ -30,7 +30,7 @@ Layer::Layer(QQuickItem *parent)
     : QQuickPaintedItem(parent)
     , m_isAnimated(false)
     , m_horizontalStep(1.0)
-    , m_type(Bacon2D::InfiniteType)
+    , m_type(Layer::Infinite)
 {
     // this activates the item layered mode
     QQmlProperty(this, "layer.enabled").write(true);
@@ -64,7 +64,7 @@ void Layer::setHorizontalStep(const qreal &step)
     emit horizontalStepChanged();
 }
 
-void Layer::setLayerType(const Bacon2D::LayerType &type)
+void Layer::setLayerType(const Layer::LayerType &type)
 {
     if (type == m_type)
         return;

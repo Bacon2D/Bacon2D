@@ -22,8 +22,6 @@
 #ifndef _ENTITY_H_
 #define _ENTITY_H_
 
-#include "enums.h"
-
 #include "box2dbody.h"
 
 #include <QtCore/QtGlobal>
