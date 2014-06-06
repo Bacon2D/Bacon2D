@@ -77,24 +77,23 @@ void Layer::setHorizontalStep(const qreal &step)
     emit horizontalStepChanged();
 }
 
-void Layer::setLayerType(const Layer::LayerType &type)
 /*!
   \qmlproperty enumeration Layer::layerType
   \table
   \header
-    \li {2, 1} \e {Bacon2D::LayerType} is an enumeration:
+    \li {2, 1} \e {Layer::LayerType} is an enumeration:
   \header
     \li Type
     \li Description
   \row
-    \li Bacon2D.InfiniteType (default)
-    \li Infinite Layer Type
+    \li Layer.Infinite (default)
+    \li Infinite Layer
   \row
-    \li Bacon2D.MirrorType
-    \li Mirror Layer Type
+    \li Layer.Mirrored
+    \li Mirrored Layer
   \endtable
 */
-void Layer::setLayerType(const Bacon2D::LayerType &type)
+void Layer::setLayerType(const Layer::LayerType &type)
 {
     if (type == m_type)
         return;
