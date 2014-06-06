@@ -31,7 +31,6 @@ HEADERS += entity.h \
            layer.h \
            imagelayer.h \
            viewport.h \
-           enums.h \
            behavior.h \
            scriptbehavior.h \ 
            settings.h

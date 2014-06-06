@@ -58,7 +58,7 @@ Game {
             animated: true
             source: "images/space.png"
             horizontalStep: -10 * scene.scrollFactor
-            layerType: Bacon2D.MirroredType
+            layerType: Layer.Mirrored
             tileWidth: 40
             tileHeight: 40
         }
@@ -69,7 +69,7 @@ Game {
             animated: true
             source: "images/planet.png"
             horizontalStep: -15 * scene.scrollFactor
-            layerType: Bacon2D.InfiniteType
+            layerType: Layer.Infinite
             tileWidth: 40
             tileHeight: 40
         }
@@ -93,7 +93,7 @@ Game {
             animated: true
             source: "images/stars.png"
             horizontalStep: -20 * scene.scrollFactor
-            layerType: Bacon2D.InfiniteType
+            layerType: Layer.Infinite
             tileWidth: 40
             tileHeight: 40
         }
@@ -104,7 +104,7 @@ Game {
             animated: true
             source: "images/moon.png"
             horizontalStep: -23 * scene.scrollFactor
-            layerType: Bacon2D.InfiniteType
+            layerType: Layer.Infinite
             tileWidth: 40
             tileHeight: 40
         }

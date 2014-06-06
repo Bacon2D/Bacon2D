@@ -54,7 +54,6 @@ void Plugins::registerTypes(const char *uri)
 {
     Q_UNUSED(uri)
 
-    qmlRegisterUncreatableType<Bacon2D>("Bacon2D", 1, 0, "Bacon2D", "Exporting Bacon2D enums to QML");
     qmlRegisterUncreatableType<Layer>("Bacon2D", 1, 0, "Layer", "Registering Layer as we use it on Layers");
     qmlRegisterUncreatableType<Behavior>("Bacon2D", 1, 0, "Bacon2DBehavior", "Don't use Bacon2DBehavior directly, use one specialized behavior");
 

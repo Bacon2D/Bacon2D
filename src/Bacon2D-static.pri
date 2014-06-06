@@ -28,7 +28,6 @@ HEADERS += \
         $$PWD/animationtransition.h \
         $$PWD/behavior.h \
         $$PWD/entity.h \
-        $$PWD/enums.h \
         $$PWD/game.h \
         $$PWD/imagelayer.h \
         $$PWD/layer.h \

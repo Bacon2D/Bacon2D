@@ -38,7 +38,7 @@ class ImageLayer : public Layer
     Q_PROPERTY(int tileHeight READ tileHeight WRITE setTileHeight)
     Q_PROPERTY(int tileWidth READ tileWidth WRITE setTileWidth)
 
-    Q_PROPERTY(Bacon2D::DrawType drawType READ drawType WRITE setDrawType)
+    Q_PROPERTY(Layer::DrawType drawType READ drawType WRITE setDrawType)
     Q_PROPERTY(bool drawGrid READ drawGrid WRITE setDrawGrid)
     Q_PROPERTY(QColor gridColor READ gridColor WRITE setGridColor)
 
@@ -49,8 +49,8 @@ public:
     void setSource(const QUrl &source);
     QUrl source() const;
 
-    void setDrawType(Bacon2D::DrawType drawType);
-    Bacon2D::DrawType drawType() const;
+    void setDrawType(Layer::DrawType drawType);
+    Layer::DrawType drawType() const;
 
     int tileHeight() const { return m_tileHeight; }
     void setTileHeight(const int &value);
@@ -107,7 +107,7 @@ private:
     QList<QPixmap> m_pixmaps;
 
     QUrl m_source;
-    Bacon2D::DrawType m_drawType;
+    Layer::DrawType m_drawType;
 
     const float m_areaToDraw;
     int m_columnOffset;
