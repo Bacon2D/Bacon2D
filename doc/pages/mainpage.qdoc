@@ -1,0 +1,91 @@
+/*!
+\page index.html overview
+
+\contentspage {Bacon2D} {Contents}
+
+\chapter Introduction
+
+Bacon2D includes useful QML components for creating 2D games with ease.  QML simplifies creating native applications in a declarative way.  Bacon2D adds essentials for creating appealing games.
+
+Starting with the top-level \l Game container, which provides a game loop and \l Scene management, all the way down to entities with Box2D physics and parallax layers with infinite scrolling.  You should find Bacon2D gives you everything you need to create a great game.
+
+\section1 Definitions
+
+\list
+  \li \b {Game}: The top-level container, provides the game loop and manages Scene changes.  See also \l Game.
+  \li \b {Scene}: Container of game entities.  Performs updates on each Entity in the Scene for each tick of the Game loop.  See also \l Scene.
+  \li \b {Viewport}: The visible portion of a larger Scene.  See also \l Viewport.
+  \li \b {Behaviors}: Provides a means for AI in the game.  See also \l ScriptBehavior.
+  \li \b {Box2D}: Physics engine for simulating rigid bodies in 2D.  See also \l World.
+  \li \b {Parallax}: Infinite scrolling backgrounds with options to mirror images. See also \l ImageLayer.
+  \li \b {Entity}: The basic game entity, includes physics (Box2D) properties, responds to scene updates and can contain game logic. See also \l ImageLayer.
+
+\endlist
+
+\section1 Example usage - Basic Scene
+
+\qml
+import QtQuick 2.2
+import Bacon2D 1.0
+
+Game {
+    id: game
+    width: 400
+    height: 250
+    currentScene: scene
+
+    Settings {
+        id: settings
+        property int highScore: 0
+        property bool noSound: false
+    }
+
+    Scene {
+        id: scene
+        width: parent.width
+        height: parent.height
+
+        Entity {
+            width: parent.width
+            height: parent.height
+            updateInterval: 50
+            behavior: ScriptBehavior {
+                script: {
+                    var newPos = entity.x + 5
+                    entity.x = newPos > parent.width ? 0 : newPos
+                    console.log("update: x -> ", entity.x)
+                }
+            }
+
+            Rectangle {
+                width: 50
+                height: 50
+                color: "red"
+            }
+        }
+    }
+}
+\endqml
+
+\part Components
+\list
+    \li \l {Game}
+    \li \l {Scene}
+    \li \l {World}
+    \li \l {Layer}
+    \li \l {ImageLayer}
+    \li \l {Entity}
+    \li \l {Fixture}
+    \li \l {Sprite}
+    \li \l {SpriteAnimation}
+    \li \l {ScriptBehavior}
+\endlist
+Available through:
+\code
+    import Bacon2D 1.0
+\endcode
+
+\part Reporting Bugs
+Please file bugs on \l {https://github.com/Bacon2D} {Github}
+
+*/

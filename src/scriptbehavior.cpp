@@ -23,6 +23,37 @@
 
 #include <QtQml/QQmlExpression>
 
+/*!
+  \qmltype ScriptBehavior
+  \inqmlmodule Bacon2D
+  \inherits Behavior
+  \brief ScriptBehavior is a \l Behavior including a script to evaluate on each update.
+
+   The ScriptBehavior's script gets called each time the Scene update its entities. Can be used to build custom behavior, like movement logic and AI.
+
+  \qml
+  Game {
+      width: 800
+      height: 600
+      Scene {
+          width: parent.width
+          height: parent.height
+          Entity {
+              width: parent.width
+              height: parent.height
+              updateInterval: 50
+              behavior: ScriptBehavior {
+                  script: {
+                      var newPos = entity.x + 5
+                      entity.x = newPos > parent.width ? 0 : newPos
+                      console.log("update: x -> ", entity.x)
+                  }
+              }
+          }
+      }
+  }
+  \endqml
+ */
 ScriptBehavior::ScriptBehavior(QObject *parent)
     : Behavior(parent)
     , m_expression(0)
@@ -37,6 +68,10 @@ void ScriptBehavior::update(const int &delta) {
     }
 }
 
+/*!
+ * \qmlproperty string ScriptBehavior::script
+ * \brief FIXME
+ */
 QQmlScriptString ScriptBehavior::script() const
 {
     return m_script;

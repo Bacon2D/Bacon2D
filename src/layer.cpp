@@ -25,7 +25,12 @@
 #include <QtGui/QPainter>
 #include <QtQml/QQmlProperty>
 
-//! Class constructor
+/*!
+  \qmltype Layer
+  \inqmlmodule Bacon2D
+  \brief Is the base component providing common properties and functionality
+   needed by other Layer types.  See \l ImageLayer.
+*/
 Layer::Layer(QQuickItem *parent)
     : QQuickPaintedItem(parent)
     , m_isAnimated(false)
@@ -41,6 +46,10 @@ Layer::~Layer()
 {
 }
 
+/*!
+  \qmlproperty bool Layer::animated
+  \brief This property represents the current state of the Layer's animation.
+*/
 void Layer::setAnimated(bool animated)
 {
     if (m_isAnimated == animated)
@@ -51,6 +60,10 @@ void Layer::setAnimated(bool animated)
     emit animatedChanged();
 }
 
+/*!
+  \qmlproperty qreal Layer::horizontalStep
+  \brief FIXME
+*/
 void Layer::setHorizontalStep(const qreal &step)
 {
     if (m_horizontalStep == step)
@@ -64,6 +77,22 @@ void Layer::setHorizontalStep(const qreal &step)
     emit horizontalStepChanged();
 }
 
+/*!
+  \qmlproperty enumeration Layer::layerType
+  \table
+  \header
+    \li {2, 1} \e {Layer::LayerType} is an enumeration:
+  \header
+    \li Type
+    \li Description
+  \row
+    \li Layer.Infinite (default)
+    \li Infinite Layer
+  \row
+    \li Layer.Mirrored
+    \li Mirrored Layer
+  \endtable
+*/
 void Layer::setLayerType(const Layer::LayerType &type)
 {
     if (type == m_type)

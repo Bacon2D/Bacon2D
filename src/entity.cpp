@@ -25,6 +25,21 @@
 #include "game.h"
 #include "behavior.h"
 
+/*!
+  \qmltype Entity
+  \inqmlmodule Bacon2D
+  \inherits Body
+  \brief Entity is the base for any component used in your game.
+
+   Entity inherits from the Box2D \l Body giving it physics properties,
+   fixtures, collision detection, etc.
+
+   Each Entity gets updated from the \l Scene on each step of the
+   game loop.  The Entity can include a Behavior, which gets run on each
+   update.  You can also change the updateInterval so your Behavior
+   doesn't get run on each update of the Entity, reducing
+   processing time.
+*/
 Entity::Entity(Scene *parent)
     : Box2DBody(parent)
     , m_updateInterval(0)
@@ -56,6 +71,11 @@ void Entity::update(const int &delta)
             item->update(delta);
 }
 
+/*!
+  \qmlproperty int Entity::updateInterval
+  \brief This property holds the interval in milliseconds between 
+   execution of the Behavior.
+*/
 int Entity::updateInterval() const
 {
     return m_updateInterval;
@@ -91,6 +111,11 @@ Game *Entity::game() const
     return 0;
 }
 
+/*!
+  \qmlproperty Behavior Entity::behavior
+  \brief This property holds the \l Behavior to be run on on
+   each \l updateInterval
+*/
 Behavior *Entity::behavior() const
 {
     return m_behavior;

@@ -1,0 +1,34 @@
+/*!
+  \qmltype World
+  \inqmlmodule Bacon2D
+  \brief A physics world is a collection of bodies, fixtures, and constraints that interact together.
+
+  \qml
+   Scene {
+       width: 300
+       height: 150
+       World {
+           id: world
+           anchors.fill: parent
+       }
+   }
+  \endqml
+*/
+
+/*!
+  \qmlproperty bool World::running
+  \brief This property represents the current running state of the World
+*/
+
+/*!
+  \qmlproperty float World::pixelsPerMeter
+  \brief This property holds the number of pixels per meter.
+
+   The physics world uses meters to measure velocity, movement, etc.
+
+*/
+
+/*!
+  \qmlproperty QPointF World::gravity
+  \brief This property holds the global gravity vector. 
+*/

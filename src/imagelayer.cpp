@@ -23,6 +23,15 @@
 
 #include <QtCore/QDebug>
 
+/*!
+  \qmltype ImageLayer
+  \inqmlmodule Bacon2D
+  \inherits Layer
+  \brief A layer created from a image
+
+  An ImageLayer can be used to create parallax effects like an infinite 
+  scrolling background useful in creating side-scrolling games.
+*/
 ImageLayer::ImageLayer(Layer *parent)
     : Layer((QQuickItem *)parent)
     , m_currentImage(0)
@@ -46,10 +55,6 @@ ImageLayer::~ImageLayer()
     m_pixmaps.clear();
 }
 
-//! Stores the source path for the image
-/*!
- * \param source the image path
- */
 void ImageLayer::setSource(const QUrl &source)
 {
     if (m_source == source)
@@ -60,29 +65,37 @@ void ImageLayer::setSource(const QUrl &source)
     emit sourceChanged();
 }
 
-//! Gets the image source path
 /*!
- * \return the source path for the image
- */
+  \qmlproperty string ImageLayer::source
+  \brief This property represents the source path for the image
+*/
 QUrl ImageLayer::source() const
 {
     return m_source;
 }
 
-//! Stores the layer type
-/*!
- * \param drawType can be Tiled (default) or Plane
- */
 void ImageLayer::setDrawType(Layer::DrawType drawType)
 {
     if (m_drawType != drawType)
         m_drawType = drawType;
 }
 
-//! Gets the layer type
 /*!
- * \return Tiled or Plane according the layer draw type
- */
+  \qmlproperty enumeration ImageLayer::drawType
+  \table
+  \header
+    \li {2, 1} \e {Layer::DrawType} is an enumeration:
+  \header
+    \li Type
+    \li Description
+  \row
+    \li Layer.TiledDraw (default)
+    \li Tiled
+  \row
+    \li Layer.PlaneDraw
+    \li Plane
+  \endtable
+*/
 Layer::DrawType ImageLayer::drawType() const
 {
     return m_drawType;

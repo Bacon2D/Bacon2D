@@ -70,7 +70,7 @@ void Plugins::registerTypes(const char *uri)
 
     qmlRegisterType<Box2DWorld>("Bacon2D", 1, 0, "World");
     qmlRegisterType<Box2DBody>("Bacon2D", 1, 0, "Body");
-    qmlRegisterUncreatableType<Box2DFixture>("Bacon2D", 1,0, "Fixture",
+    qmlRegisterUncreatableType<Box2DFixture>("Bacon2D", 1, 0, "Fixture",
                                              QStringLiteral("Base type for Box, Circle etc."));
     qmlRegisterType<Box2DBox>("Bacon2D", 1, 0, "Box");
     qmlRegisterType<Box2DCircle>("Bacon2D", 1, 0, "Circle");
@@ -92,5 +92,5 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<Box2DGearJoint>("Bacon2D", 1, 0, "GearJoint");
     qmlRegisterType<Box2DRopeJoint>("Bacon2D", 1, 0, "RopeJoint");
 
-    qmlRegisterUncreatableType<Box2DContact>("Bacon2D", 1,0, "Contact",QStringLiteral("Contact class"));
+    qmlRegisterUncreatableType<Box2DContact>("Bacon2D", 1, 0, "Contact", QStringLiteral("Contact class"));
 }
