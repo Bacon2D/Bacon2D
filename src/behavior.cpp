@@ -26,7 +26,8 @@
 /*!
   \qmltype Behavior
   \inqmlmodule Bacon2D
-  \brief FIXME
+  \brief Provides an easy way to add custom behaviors to the game, like 
+         artificial intelligence or other game logic
 */
 Behavior::Behavior(QObject *parent)
     : QObject(parent)
@@ -44,6 +45,11 @@ void Behavior::setEntity(Entity *entity)
 {
     m_entity = entity;
 }
+
+/*!
+  \qmlproperty int Behavior::delta
+  \brief This property holds the delta in milliseconds since the last update tick.
+*/
 
 int Behavior::delta() const
 {

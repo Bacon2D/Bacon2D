@@ -70,7 +70,7 @@ void ScriptBehavior::update(const int &delta) {
 
 /*!
  * \qmlproperty string ScriptBehavior::script
- * \brief FIXME
+ * \brief This property contains the javascript to evaluate on each update
  */
 QQmlScriptString ScriptBehavior::script() const
 {

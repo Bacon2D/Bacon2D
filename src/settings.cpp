@@ -43,9 +43,12 @@
 #include "settings.h"
 
 /*!
- * \qmltype Settings
- * \inqmlmodule Bacon2D
- * \brief FIXME
+  \qmltype Settings
+  \inqmlmodule Bacon2D
+  \brief Provides local storage for settings or any in game data 
+
+   Persistent Local storage for settings or any in game data, limited to 
+   key/value pair.
  */
 Settings::Settings(QObject *parent)
     : QObject(parent)
@@ -123,6 +126,13 @@ void Settings::timerEvent(QTimerEvent *)
     store();
 }
 
+/*!
+  \qmlproperty string Settings::category
+  \brief This property holds a category to use for grouping settings.
+
+   This is useful to separate game settings from game saved data like 
+   high scores, etc.
+*/
 QString Settings::category() const
 {
     return m_settings.group();
