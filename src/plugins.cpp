@@ -48,6 +48,7 @@
 #include "box2dmousejoint.h"
 #include "box2dgearjoint.h"
 #include "box2dropejoint.h"
+#include "box2draycast.h"
 #include "box2dcontact.h"
 
 void Plugins::registerTypes(const char *uri)
@@ -91,6 +92,7 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<Box2DMouseJoint>("Bacon2D", 1, 0, "MouseJoint");
     qmlRegisterType<Box2DGearJoint>("Bacon2D", 1, 0, "GearJoint");
     qmlRegisterType<Box2DRopeJoint>("Bacon2D", 1, 0, "RopeJoint");
+    qmlRegisterType<Box2DRayCast>("Bacon2D", 1, 0, "RayCast");
 
     qmlRegisterUncreatableType<Box2DContact>("Bacon2D", 1, 0, "Contact", QStringLiteral("Contact class"));
 }
