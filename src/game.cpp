@@ -57,17 +57,17 @@
 Game::Game(QQuickItem *parent)
     : QQuickItem(parent)
     , m_currentScene(0)
-    , m_fps(30)
+    , m_ups(30)
     , m_timerId(0)
 {
     m_gameTime.start();
-    m_timerId = startTimer(1000 / m_fps);
+    m_timerId = startTimer(1000 / m_ups);
 }
 
 /*!
- * \qmlproperty string Game::gameName
- * \brief Name of the game, required if using Settings
- */
+  \qmlproperty string Game::gameName
+  \brief Name of the game, required if using Settings
+*/
 QString Game::gameName()
 {
     return QCoreApplication::applicationName();
@@ -84,9 +84,9 @@ void Game::setGameName(const QString& gameName)
 }
 
 /*!
- * \qmlproperty Scene Game::currentScene
- * \brief The current Scene
- */
+  \qmlproperty Scene Game::currentScene
+  \brief The current Scene
+*/
 Scene *Game::currentScene() const
 {
     return m_currentScene;
@@ -137,26 +137,29 @@ void Game::setCurrentScene(Scene *currentScene)
 }
 
 /*!
- * \qmlproperty int Game::fps
- * \brief The current frame rate
+  \qmlproperty int Game::ups
+  \brief This property holds the number of times update is called per second.
+    
+    Updates per second can be used to control the speed of the game 
+    loop.  The default is 30.
  */
-int Game::fps() const
+int Game::ups() const
 {
-    return m_fps;
+    return m_ups;
 }
 
-void Game::setFps(const int &fps)
+void Game::setUps(const int &ups)
 {
-    if (m_fps == fps)
+    if (m_ups == ups)
         return;
 
-    m_fps = fps;
+    m_ups = ups;
 
     killTimer(m_timerId);
     m_gameTime.restart();
-    m_timerId = startTimer(1000 / m_fps);
+    m_timerId = startTimer(1000 / m_ups);
 
-    emit fpsChanged();
+    emit upsChanged();
 }
 
 void Game::timerEvent(QTimerEvent *event)
@@ -176,9 +179,9 @@ void Game::update()
 }
 
 /*!
- * \qmlproperty QPointF Game::mouse
- * \brief The point in the plane of the mouse pointer
- */
+  \qmlproperty QPointF Game::mouse
+  \brief The point in the plane of the mouse pointer
+*/
 QPointF Game::mouse()
 {
     return window()->mapFromGlobal(QCursor::pos());
