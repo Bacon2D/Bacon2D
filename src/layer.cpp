@@ -62,7 +62,8 @@ void Layer::setAnimated(bool animated)
 
 /*!
   \qmlproperty qreal Layer::horizontalStep
-  \brief FIXME
+  \brief This property holds the distance to move horizontally in each 
+   step of the animation
 */
 void Layer::setHorizontalStep(const qreal &step)
 {

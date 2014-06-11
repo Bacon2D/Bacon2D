@@ -79,6 +79,7 @@ Game {
     \li \l {Sprite}
     \li \l {SpriteAnimation}
     \li \l {ScriptBehavior}
+    \li \l {Settings}
 \endlist
 Available through:
 \code
