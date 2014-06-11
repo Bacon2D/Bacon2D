@@ -37,7 +37,7 @@ class Game : public QQuickItem
     Q_OBJECT
 
     Q_PROPERTY(Scene *currentScene READ currentScene WRITE setCurrentScene NOTIFY currentSceneChanged)
-    Q_PROPERTY(int fps READ fps WRITE setFps NOTIFY fpsChanged)
+    Q_PROPERTY(int ups READ ups WRITE setUps NOTIFY upsChanged)
     Q_PROPERTY(QPointF mouse READ mouse)
     Q_PROPERTY(QString gameName READ gameName WRITE setGameName NOTIFY gameNameChanged)
 
@@ -47,8 +47,8 @@ public:
     Scene *currentScene() const;
     void setCurrentScene(Scene *currentScene);
 
-    int fps() const;
-    void setFps(const int &fps);
+    int ups() const;
+    void setUps(const int &ups);
 
     QPointF mouse();
 
@@ -62,13 +62,13 @@ protected:
 
 signals:
     void currentSceneChanged();
-    void fpsChanged();
+    void upsChanged();
     void gameNameChanged();
 
 private:
     Scene *m_currentScene;
     QTime m_gameTime;
-    int m_fps;
+    int m_ups;
     Viewport *m_viewport;
     int m_timerId;
 };
