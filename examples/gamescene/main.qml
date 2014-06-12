@@ -39,7 +39,7 @@ Item {
 
         Scene {
             id: scene
-
+            physics: true
             width: container.width/3
             height: container.height
 
@@ -57,69 +57,64 @@ Item {
                 color: "white"
             }
 
-            World {
-                id: world
-                anchors.fill: parent
+            Wall {
+                anchors.right: parent.left
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                width: 1
+            }
 
-                Wall {
-                    anchors.right: parent.left
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    width: 1
+            Wall {
+                anchors.left: parent.right
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                width: 1
+            }
+
+            Wall {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.top
+                height: 1
+            }
+
+            Wall {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.top: parent.bottom
+                height: 1
+            }
+
+            Body {
+                id: ball
+                width: 40
+                height: 40
+                x: scene.width / 2 - width / 2
+                y: scene.height / 3
+                fixedRotation: false
+                sleepingAllowed: false
+                bodyType: Body.Dynamic
+                fixtures: Circle {
+                    id: circleShape
+                    radius: parent.width / 2
+                    anchors.fill: parent
+                    density: 1;
+                    friction: 1;
+                    restitution: 0.5;
                 }
 
-                Wall {
-                    anchors.left: parent.right
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    width: 1
-                }
-
-                Wall {
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.bottom: parent.top
-                    height: 1
-                }
-
-                Wall {
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.top: parent.bottom
-                    height: 1
-                }
-
-                Body {
-                    id: ball
-                    width: 40
-                    height: 40
-                    x: scene.width / 2 - width / 2
-                    y: scene.height / 3
-                    fixedRotation: false
-                    sleepingAllowed: false
-                    bodyType: Body.Dynamic
-                    fixtures: Circle {
-                        id: circleShape
-                        radius: parent.width / 2
-                        anchors.fill: parent
-                        density: 1;
-                        friction: 1;
-                        restitution: 0.5;
-                    }
-
-                    Rectangle {
-                        id: itemShape
-                        color: {
-                            switch (currentSceneIndex) {
-                                case 0: return "black"
-                                case 1: return "red"
-                                case 2: return "blue"
-                            }
+                Rectangle {
+                    id: itemShape
+                    color: {
+                        switch (currentSceneIndex) {
+                            case 0: return "black"
+                            case 1: return "red"
+                            case 2: return "blue"
                         }
-                        radius: parent.width / 2
-                        width: parent.width
-                        height: parent.height
                     }
+                    radius: parent.width / 2
+                    width: parent.width
+                    height: parent.height
                 }
             }
         }

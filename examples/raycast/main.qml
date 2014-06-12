@@ -2,69 +2,72 @@ import QtQuick 2.2
 import Bacon2D 1.0
 import QtQuick.Controls 1.1
 
-Rectangle {
+Game {
+    id: game
     width: 800
     height: 600
+    currentScene: scene
 
-    Component {
-        id: ballComponent
-        Body {
-            id: ball
-            width: 20
-            height: 20
-            sleepingAllowed: true
-            bodyType: Body.Dynamic
-            property bool burn: false
-            function doDestroy() {
-                destroy();
-            }
-            fixtures: Circle {
-                property bool isBall: true
-                anchors.fill: parent
-                radius: 10
-                density: 0.5
-                friction: 1
-                restitution: 0.2
-            }
-            Rectangle {
-                id: ballShape
-                border.color: "#999"
-                color: "#DEDEDE"
-                width: parent.width
-                height: parent.height
-                radius: 10
-                SequentialAnimation {
-                    running: ball.burn
-                    PropertyAnimation {
-                        target: ballShape
-                        property: "color"
-                        to: "red"
-                        duration: 50
-                    }
-                    PropertyAnimation {
-                        target: ballShape
-                        property: "color"
-                        to: "yellow"
-                        duration: 50
-                    }
-                    PropertyAnimation {
-                        target: ballShape
-                        property: "opacity"
-                        to: 0
-                        duration: 50
-                    }
-                    onRunningChanged: {
-                        if(!running)
-                            ball.doDestroy();
+    Scene {
+        id: scene
+        anchors.fill: parent
+        physics: true
+
+        Component {
+            id: ballComponent
+            Body {
+                id: ball
+                width: 20
+                height: 20
+                sleepingAllowed: true
+                bodyType: Body.Dynamic
+                property bool burn: false
+                function doDestroy() {
+                    destroy();
+                }
+                fixtures: Circle {
+                    property bool isBall: true
+                    anchors.fill: parent
+                    radius: 10
+                    density: 0.5
+                    friction: 1
+                    restitution: 0.2
+                }
+                Rectangle {
+                    id: ballShape
+                    border.color: "#999"
+                    color: "#DEDEDE"
+                    width: parent.width
+                    height: parent.height
+                    radius: 10
+                    SequentialAnimation {
+                        running: ball.burn
+                        PropertyAnimation {
+                            target: ballShape
+                            property: "color"
+                            to: "red"
+                            duration: 50
+                        }
+                        PropertyAnimation {
+                            target: ballShape
+                            property: "color"
+                            to: "yellow"
+                            duration: 50
+                        }
+                        PropertyAnimation {
+                            target: ballShape
+                            property: "opacity"
+                            to: 0
+                            duration: 50
+                        }
+                        onRunningChanged: {
+                            if(!running)
+                                ball.doDestroy();
+                        }
                     }
                 }
             }
         }
-    }
-
-    World {
-        id: world
-        anchors.fill: parent
 
         Wall {
             id: leftWall
@@ -140,8 +143,8 @@ Rectangle {
             }
         }
         Connections {
-            target: world
-            onStepped: world.rayCast(sensorRay,
+            target: scene.world
+            onStepped: scene.world.rayCast(sensorRay,
                                      sensorRay.point1,
                                      sensorRay.point2)
         }
@@ -159,7 +162,7 @@ Rectangle {
             id: laserRay
             onFixtureReported: fixture.parent.burn = true
             function cast() {
-                world.rayCast(this, Qt.point(40, 300), Qt.point(700, 300))
+                scene.world.rayCast(this, Qt.point(40, 300), Qt.point(700, 300))
             }
         }
 
@@ -259,61 +262,62 @@ Rectangle {
         DebugDraw {
             id: debugDraw
             anchors.fill: parent
-            world: world
+            world: scene.world
             opacity: 0.7
             visible: false
         }
-    }
 
-    Slider {
-        id: fractionSlider
-        x: 180
-        y: 10
-        width: 200
-        height: 30
-        minimumValue: 1
-        maximumValue: 70
-        value: 70
-    }
 
-    Rectangle {
-        id: intersectionPoint
-        width: 10
-        height: 10
-        radius: 5
-        color: "red"
-        border.color: "yellow"
-        opacity: 0
-        PropertyAnimation {
-            id: pointHideAnimation
-            target: intersectionPoint
-            property: "opacity"
-            to: 0
-            duration: 200
+        Slider {
+            id: fractionSlider
+            x: 180
+            y: 10
+            width: 200
+            height: 30
+            minimumValue: 1
+            maximumValue: 70
+            value: 70
         }
-    }
 
-    Timer {
-        id: rectTimer
-        interval: 1000
-        running: true
-        repeat: true
-        onTriggered: {
-            var newBall = ballComponent.createObject(world);
-            newBall.x = 100 + (Math.random() * 600);
-            newBall.y = 50;
+        Rectangle {
+            id: intersectionPoint
+            width: 10
+            height: 10
+            radius: 5
+            color: "red"
+            border.color: "yellow"
+            opacity: 0
+            PropertyAnimation {
+                id: pointHideAnimation
+                target: intersectionPoint
+                property: "opacity"
+                to: 0
+                duration: 200
+            }
         }
-    }
 
-    Timer {
-        id: impulseTimer
-        interval: 600
-        running: true
-        repeat: true
-        onTriggered: {
-            laserRay.cast();
-            laser.opacity = 1;
-            rayImpulseFadeoutAnimation.running = true;
+        Timer {
+            id: rectTimer
+            interval: 1000
+            running: true
+            repeat: true
+            onTriggered: {
+                var newBall = ballComponent.createObject(scene.world);
+                newBall.x = 100 + (Math.random() * 600);
+                newBall.y = 50;
+            }
+        }
+
+        Timer {
+            id: impulseTimer
+            interval: 600
+            running: true
+            repeat: true
+            onTriggered: {
+                laserRay.cast();
+                laser.opacity = 1;
+                rayImpulseFadeoutAnimation.running = true;
+            }
         }
     }
 }
