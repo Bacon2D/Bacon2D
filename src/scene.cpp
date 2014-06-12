@@ -55,6 +55,7 @@
            id: scene
            width: 1200
            height: 800
+           physics: true
            viewport: Viewport {
                yOffset: player.y - 100
            }
@@ -70,6 +71,8 @@ Scene::Scene(Game *parent)
     , m_running(true)
     , m_viewport(0)
     , m_game(parent)
+    , m_world(0)
+    , m_physics(false)
     , m_debug(false)
 {
     setVisible(false);
@@ -90,7 +93,7 @@ void Scene::updateEntities(QQuickItem *parent, const int &delta)
         else if (Layer *layer = qobject_cast<Layer *>(item))
             layer->update();
         else if (Box2DWorld *world = dynamic_cast<Box2DWorld *>(item))
-            updateEntities(item, delta);
+            updateEntities(world, delta);
     }
 }
 
@@ -117,6 +120,8 @@ void Scene::setRunning(const bool &running)
         return;
 
     m_running = running;
+    if (m_physics && m_world)
+        m_world->setRunning(m_running);
 
     emit runningChanged();
 }
@@ -155,6 +160,47 @@ void Scene::setGame(Game *game)
 }
 
 /*!
+ * \qmlproperty World Scene::world
+ * \brief Holds the a reference to the World attached to the Scene.
+ */
+Box2DWorld *Scene::world() const
+{
+    return m_world;
+}
+
+void Scene::createWorld()
+{
+    if (m_physics && !m_world) {
+        m_world = new Box2DWorld(this);
+        m_world->setParentItem(this);
+        m_world->componentComplete();
+        m_world->setRunning(m_running);
+        emit worldChanged();
+    }
+}
+
+/*!
+ * \qmlproperty bool Scene::physics
+ * \brief This property determines if the Scene contains a Box2D physics world
+ */
+bool Scene::physics() const
+{
+    return m_physics;
+}
+
+void Scene::setPhysics(const bool &physics)
+{
+    if (m_physics == physics)
+        return;
+
+    m_physics = physics;
+
+    if (m_physics && !m_world) {
+        createWorld();
+    }
+}
+
+/*!
  * \qmlproperty bool Scene::debug
  * \brief Debug mode
  */
@@ -179,8 +225,13 @@ void Scene::initializeEntities(QQuickItem *parent)
     foreach (item, parent->childItems()) {
         if (Entity *entity = dynamic_cast<Entity *>(item))
             entity->setScene(this);
-        else if (Box2DWorld *world = dynamic_cast<Box2DWorld *>(item))
-            initializeEntities(item);
+        if (m_physics && m_world) {
+            if (Box2DBody *body = dynamic_cast<Box2DBody *>(item)) {
+                body->setParent(m_world);
+                body->initialize(m_world);
+            }
+        }
+        initializeEntities(item);
     }
 }
 
@@ -188,6 +239,8 @@ void Scene::componentComplete()
 {
     QQuickItem::componentComplete();
     initializeEntities(this);
+    if (m_world)
+        m_world->componentComplete();
 }
 
 void Scene::itemChange(ItemChange change, const ItemChangeData &data)
@@ -196,6 +249,12 @@ void Scene::itemChange(ItemChange change, const ItemChangeData &data)
         QQuickItem *child = data.item;
         if (Entity *entity = dynamic_cast<Entity *>(child))
             entity->setScene(this);
+        if (m_physics && m_world) {
+            if (Box2DBody *body = dynamic_cast<Box2DBody *>(child)) {
+                body->setParent(m_world);
+                body->initialize(m_world);
+            }
+        }
         initializeEntities(child);
     }
 

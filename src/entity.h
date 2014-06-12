@@ -57,7 +57,7 @@ public:
 
     virtual void update(const int &delta);
 
-    void initialize();
+    void initialize(Box2DWorld *world);
 
 signals:
     void updateIntervalChanged();
