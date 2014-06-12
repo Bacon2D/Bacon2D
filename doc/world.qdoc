@@ -25,10 +25,13 @@
   \brief This property holds the number of pixels per meter.
 
    The physics world uses meters to measure velocity, movement, etc.
-
 */
 
 /*!
   \qmlproperty QPointF World::gravity
   \brief This property holds the global gravity vector. 
+*/
+
+/*!
+  \qmlmethod void World::rayCast(RayCast ray, QPointF point1, QPointF point2)
 */

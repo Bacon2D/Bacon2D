@@ -1,5 +1,5 @@
 project = Bacon2D
-description = Bacon2D - 2D game engine
+description = Bacon2D - QML 2D Game engine
 sourcedirs = . ../src ../src/doc/pages
 
 sources.fileextensions = "*.cpp *.qdoc *.mm *.qml"

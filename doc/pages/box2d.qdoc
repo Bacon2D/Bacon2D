@@ -1,0 +1,97 @@
+/*!
+\page box2d.html overview
+\title Box2D
+\indexpage Bacon2D
+\contentspage {Bacon2D} {Contents}
+\previouspage index.html
+
+\section1 Physics simulation
+
+Bacon2D includes Box2D for physics simulation, making it easy to add physics properties to game entities.
+
+Box2D is a 2D rigid body simulation library for games.  Programmers can use it in their games to make
+objects move in realistic ways and make the game world more interactive.
+
+\section1 Core concepts
+
+\list
+  \li \b {Shape}: A shape is 2D geometrical object, such as a circle or polygon.  See also \l Fixture.
+
+  \li \b {Body}: A chunk of matter that is so strong that the distance between any two bits of matter on the chunk is
+constant..  See also \l Body.
+
+  \li \b {Fixture}: A fixture binds a shape to a body and adds material properties such as density, friction, and restitution.
+A fixture puts a shape into the collision system (broad-phase) so that it can collide with other shapes.  See also \l Fixture.
+
+  \li \b {Constraint}: A constraint is a physical connection that removes degrees of freedom from bodies. A 2D body has 3
+degrees of freedom (two translation coordinates and one rotation coordinate). If we take a body and pin
+it to the wall (like a pendulum) we have constrained the body to the wall. At this point the body can only
+rotate about the pin, so the constraint has removed 2 degrees of freedom.
+
+  \li \b {Contact constraint}: A special constraint designed to prevent penetration of rigid bodies and to simulate friction and
+restitution. You do not create contact constraints; they are created automatically by Box2D.
+
+  \li \b {Joint}: This is a constraint used to hold two or more bodies together.  Box2D supports several joint types:
+revolute, prismatic, distance, and more. Some joints may have limits and motors.
+
+  \li \b {Joint limit}: A joint limit restricts the range of motion of a joint.  For example, the human elbow only allows a certain
+range of angles.
+
+  \li \b {Joint motor}: A joint motor drives the motion of the connected bodies according to the joint's degrees of freedom. For
+example, you can use a motor to drive the rotation of an elbow.
+
+  \li \b {World}: A physics world is a collection of bodies, fixtures, and constraints that interact together. Box2D supports
+the creation of multiple worlds, but this is usually not necessary or desirable.  See also \l World.
+
+  \li \b {Solver}: The physics world has a solver that is used to advance time and to resolve contact and joint constraints.
+The Box2D solver is a high performance iterative solver that operates in order N time, where N is the
+number of constraints.
+
+  \li \b {Continuous collision}: The solver advances bodies in time using discrete time steps. Without intervention this can lead to
+tunneling.
+
+\endlist
+
+\section1 Forces and Impulses
+
+You can apply forces, torques, and impulses to a body. When you apply a force or an impulse, you
+provide a world point where the load is applied. This often results in a torque about the center of mass.
+
+Applying a force, torque, or impulse wakes the body. Sometimes this is undesirable. For example, you
+may be applying a steady force and want to allow the body to sleep to improve performance. In this
+case you can use the following code.
+
+
+
+\part Components
+\list
+    \li \l {World}
+    \li \l {Body}
+    \li \l {Fixture}
+    \li \l {Joint}
+    \li \l {DistanceJoint}
+    \li \l {PrismaticJoint}
+    \li \l {RevoluteJoint}
+    \li \l {MotorJoint}
+    \li \l {WeldJoint}
+    \li \l {PulleyJoint}
+    \li \l {FrictionJoint}
+    \li \l {WheelJoint}
+    \li \l {MouseJoint}
+    \li \l {GearJoint}
+    \li \l {RopeJoint}
+    \li \l {RayCast}
+
+\endlist
+
+Available through:
+\code
+    import Bacon2D 1.0
+\endcode
+
+\part Reporting Bugs
+Please file bugs on \l {https://github.com/Bacon2D} {Github}
+
+*/
+
+
