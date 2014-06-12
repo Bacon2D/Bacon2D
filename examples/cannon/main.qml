@@ -350,7 +350,7 @@ Game {
 
                 Text {
                     id: shotButtonText
-                    text: "shot!"
+                    text: "shoot!"
                     anchors.centerIn: parent
                 }
                 color: "#DEDEDE"
