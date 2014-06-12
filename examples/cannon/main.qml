@@ -91,6 +91,11 @@ Game {
         anchors.fill: parent
         physics: true
 
+        onInitialized: {
+            createDominos();
+            createChain();
+        }
+
         function createDominos() {
             for(var i = 0;i < 5;i ++) {
                 var newDomino = dominoComponent.createObject(scene.world);
@@ -128,14 +133,6 @@ Game {
                 newJoint.bodyA = prev;
                 newJoint.bodyB = newLink;
                 prev = newLink;
-            }
-        }
-
-        Connections {
-            target: scene.world
-            onInitialized: {
-                scene.createDominos();
-                scene.createChain();
             }
         }
 

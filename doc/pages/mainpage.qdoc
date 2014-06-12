@@ -16,7 +16,7 @@ Starting with the top-level \l Game container, which provides a game loop and \l
   \li \b {Scene}: Container of game entities.  Performs updates on each Entity in the Scene for each tick of the Game loop.  See also \l Scene.
   \li \b {Viewport}: The visible portion of a larger Scene.  See also \l Viewport.
   \li \b {Behaviors}: Provides a means for AI in the game.  See also \l ScriptBehavior.
-  \li \b {Box2D}: Physics engine for simulating rigid bodies in 2D.  See also \l World.
+  \li \b {Box2D}: Physics engine for simulating rigid bodies in 2D.  See also \l Box2D.
   \li \b {Parallax}: Infinite scrolling backgrounds with options to mirror images. See also \l ImageLayer.
   \li \b {Entity}: The basic game entity, includes physics (Box2D) properties, responds to scene updates and can contain game logic. See also \l ImageLayer.
 
@@ -71,7 +71,6 @@ Game {
 \list
     \li \l {Game}
     \li \l {Scene}
-    \li \l {World}
     \li \l {Layer}
     \li \l {ImageLayer}
     \li \l {Entity}
