@@ -13,6 +13,8 @@ Game {
         anchors.fill: parent
         physics: true
 
+        onStepped: rayCast(sensorRay, sensorRay.point1, sensorRay.point2)
+
         Component {
             id: ballComponent
             Body {
@@ -142,12 +144,6 @@ Game {
                 }
             }
         }
-        Connections {
-            target: scene.world
-            onStepped: scene.world.rayCast(sensorRay,
-                                     sensorRay.point1,
-                                     sensorRay.point2)
-        }
 
         Rectangle {
             x: 40
@@ -162,7 +158,7 @@ Game {
             id: laserRay
             onFixtureReported: fixture.parent.burn = true
             function cast() {
-                scene.world.rayCast(this, Qt.point(40, 300), Qt.point(700, 300))
+                scene.rayCast(this, Qt.point(40, 300), Qt.point(700, 300))
             }
         }
 
