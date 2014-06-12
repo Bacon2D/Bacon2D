@@ -57,15 +57,13 @@ Game {
         anchors.fill: parent
         physics: true
 
-        Connections {
-            target: scene.world
-            onPreSolve : {
-                if(contact.fixtureA.isBall && contact.fixtureB === topBeltFixture)
-                    contact.tangentSpeed = -3.0;
-                else if(contact.fixtureB.isBall && contact.fixtureA === topBeltFixture)
-                    contact.tangentSpeed = 3.0;
-            }
+        onPreSolve: {
+            if(contact.fixtureA.isBall && contact.fixtureB === topBeltFixture)
+                contact.tangentSpeed = -3.0;
+            else if(contact.fixtureB.isBall && contact.fixtureA === topBeltFixture)
+                contact.tangentSpeed = 3.0;
         }
+
         Body {
             id: topWall
             height: 10

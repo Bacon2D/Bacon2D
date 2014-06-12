@@ -72,7 +72,6 @@ Game {
 \list
     \li \l {Game}
     \li \l {Scene}
-    \li \l {World}
     \li \l {Layer}
     \li \l {ImageLayer}
     \li \l {Entity}

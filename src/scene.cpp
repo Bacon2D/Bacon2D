@@ -173,6 +173,18 @@ void Scene::createWorld()
     if (m_physics && !m_world) {
         m_world = new Box2DWorld(this);
         m_world->setParentItem(this);
+        /* Wrap signals from Box2DWorld */
+        connect(m_world, SIGNAL(initialized()), this, SIGNAL(initialized()));
+        connect(m_world, SIGNAL(preSolve(Box2DContact *)), this, SIGNAL(preSolve(Box2DContact *)));
+        connect(m_world, SIGNAL(postSolve(Box2DContact *)), this, SIGNAL(postSolve(Box2DContact *)));
+        connect(m_world, SIGNAL(timeStepChanged()), this, SIGNAL(timeStepChanged()));
+        connect(m_world, SIGNAL(velocityIterationsChanged()), this, SIGNAL(velocityIterationsChanged()));
+        connect(m_world, SIGNAL(positionIterationsChanged()), this, SIGNAL(positionIterationsChanged()));
+        connect(m_world, SIGNAL(gravityChanged()), this, SIGNAL(gravityChanged()));
+        connect(m_world, SIGNAL(autoClearForcesChanged()), this, SIGNAL(autoClearForcesChanged()));
+        connect(m_world, SIGNAL(stepped()), this, SIGNAL(stepped()));
+        connect(m_world, SIGNAL(pixelsPerMeterChanged()), this, SIGNAL(pixelsPerMeterChanged()));
+        /* End wrapped signals from Box2DWorld */
         m_world->componentComplete();
         m_world->setRunning(m_running);
         emit worldChanged();
@@ -218,6 +230,156 @@ void Scene::setDebug(const bool &debug)
 
     emit debugChanged();
 }
+
+/* These are wrapped around Box2DWorld */
+
+float Scene::timeStep() const
+{
+    if (!m_world)
+        return 0;
+
+    return m_world->timeStep();
+}
+
+void Scene::setTimeStep(float timeStep)
+{
+    if (!m_world)
+        return;
+
+    m_world->setTimeStep(timeStep);
+}
+
+int Scene::velocityIterations() const
+{
+    if (!m_world)
+        return 0;
+
+    return m_world->velocityIterations();
+}
+
+void Scene::setVelocityIterations(int iterations)
+{
+    if (!m_world)
+        return;
+
+    m_world->setVelocityIterations(iterations);
+}
+
+int Scene::positionIterations() const
+{
+    if (!m_world)
+        return 0;
+
+    return m_world->positionIterations();
+}
+
+void Scene::setPositionIterations(int iterations)
+{
+    if (!m_world)
+        return;
+
+    m_world->setPositionIterations(iterations);
+}
+
+/*!
+  \qmlproperty QPointF Scene::gravity
+  \brief This property holds the global gravity vector.
+  
+   The gravity property only applies if physics is enabled.
+*/
+QPointF Scene::gravity() const
+{
+    if (!m_world)
+        return QPointF(0, 0);
+
+    return m_world->gravity();
+}
+
+void Scene::setGravity(const QPointF &gravity)
+{
+    if (!m_world)
+        return;
+
+    m_world->setGravity(gravity);
+}
+
+bool Scene::autoClearForces() const
+{
+    if (!m_world)
+        return false;
+
+    return m_world->autoClearForces();
+}
+
+void Scene::setAutoClearForces(bool autoClearForces)
+{
+    if (!m_world)
+        return;
+
+    m_world->setAutoClearForces(autoClearForces);
+}
+
+Box2DProfile *Scene::profile() const
+{
+    if (!m_world)
+        return NULL;
+
+    return m_world->profile();
+}
+
+/*!
+  \qmlproperty float Scene::pixelsPerMeter
+  \brief This property holds the number of pixels per meter.
+
+   The physics world uses meters to measure velocity, movement, etc.  This
+   property only applies with physics enabled.
+*/
+float Scene::pixelsPerMeter() const
+{
+    if (!m_world)
+        return 0;
+
+    return m_world->pixelsPerMeter();
+}
+void Scene::setPixelsPerMeter(float pixelsPerMeter)
+{
+    if (!m_world)
+        return;
+
+    m_world->setPixelsPerMeter(pixelsPerMeter);
+}
+
+void Scene::step() 
+{
+    if (!m_world)
+        return;
+
+    m_world->step();
+}
+
+void Scene::clearForces()
+{
+    if (!m_world)
+        return;
+
+    m_world->clearForces();
+}
+
+/*!
+  \qmlmethod void Scene::rayCast(RayCast *rayCast, const QPointF &point1, const QPointF &point2)
+  \brief The rayCast method can be used to do line-of-sight checks, fire guns, etc.
+ 
+   The rayCast method is only useful with physics is enabled.
+*/
+void Scene::rayCast(Box2DRayCast *rayCast, const QPointF &point1, const QPointF &point2)
+{
+    if (!m_world)
+        return;
+
+    m_world->rayCast(rayCast, point1, point2);
+}
+/* End wrapped Box2DWorld  */
+
 
 void Scene::initializeEntities(QQuickItem *parent)
 {

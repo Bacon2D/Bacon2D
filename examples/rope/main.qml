@@ -58,27 +58,23 @@ Game {
         anchors.fill: parent
         physics: true
 
-        //FIXME: onInitialized is never fired
-        Connections {
-            target: scene.world
-            onInitialized: {
-                var prev = leftWall;
-                for(var i = 60;i < 740;i += 20) {
-                    var newLink = linkComponent.createObject(scene.world);
-                    newLink.color = "orange";
-                    newLink.x = i;
-                    newLink.y = 100;
-                    var newJoint = jointComponent.createObject(scene.world);
-                    if(i === 60) newJoint.localAnchorA = Qt.point(40,100);
-                    newJoint.bodyA = prev;
-                    newJoint.bodyB = newLink;
-                    prev = newLink;
-                }
-                newJoint = jointComponent.createObject(scene.world);
-                newJoint.localAnchorB = Qt.point(0,100);
+        onInitialized: {
+            var prev = leftWall;
+            for(var i = 60;i < 740;i += 20) {
+                var newLink = linkComponent.createObject(scene.world);
+                newLink.color = "orange";
+                newLink.x = i;
+                newLink.y = 100;
+                var newJoint = jointComponent.createObject(scene.world);
+                if(i === 60) newJoint.localAnchorA = Qt.point(40,100);
                 newJoint.bodyA = prev;
-                newJoint.bodyB = rightWall;
+                newJoint.bodyB = newLink;
+                prev = newLink;
             }
+            newJoint = jointComponent.createObject(scene.world);
+            newJoint.localAnchorB = Qt.point(0,100);
+            newJoint.bodyA = prev;
+            newJoint.bodyB = rightWall;
         }
 
         Body {

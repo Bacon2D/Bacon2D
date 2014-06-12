@@ -40,9 +40,6 @@ range of angles.
   \li \b {Joint motor}: A joint motor drives the motion of the connected bodies according to the joint's degrees of freedom. For
 example, you can use a motor to drive the rotation of an elbow.
 
-  \li \b {World}: A physics world is a collection of bodies, fixtures, and constraints that interact together. Box2D supports
-the creation of multiple worlds, but this is usually not necessary or desirable.  See also \l World.
-
   \li \b {Solver}: The physics world has a solver that is used to advance time and to resolve contact and joint constraints.
 The Box2D solver is a high performance iterative solver that operates in order N time, where N is the
 number of constraints.
@@ -65,7 +62,6 @@ case you can use the following code.
 
 \part Components
 \list
-    \li \l {World}
     \li \l {Body}
     \li \l {Fixture}
     \li \l {Joint}

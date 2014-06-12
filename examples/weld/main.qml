@@ -64,6 +64,27 @@ Game {
         id: scene
         anchors.fill: parent
         physics: true
+        onInitialized: {
+            var prevLink = bodyA;
+            for(var i = 0;i < 10;i ++) {
+                var newLink = linkComponent.createObject(scene.world);
+                newLink.x = 350 + i * 3;
+                newLink.y = 500 - (i * 40);
+                newLink.width = 20 - i * 1.5;
+                newLink.height = 40;
+                var newJoint = linkJoint.createObject(scene.world);
+                if (i == 0)
+                    newJoint.localAnchorA = Qt.point(bodyA.width / 2,0);
+                else
+                    newJoint.localAnchorA = Qt.point(newLink.width / 2,0);
+                newJoint.localAnchorB = Qt.point(newLink.width / 2,newLink.height);
+                newJoint.bodyA = prevLink;
+                newJoint.bodyB = newLink;
+                prevLink = newLink;
+                createBranch(newLink,10 - i);
+            }
+        }
+
 
 
         function createBranch(base,count) {
@@ -92,30 +113,6 @@ Game {
                 newJoint.bodyA = prevLink;
                 newJoint.bodyB = newLink;
                 prevLink = newLink;
-            }
-        }
-
-        Connections {
-            target: scene.world
-            onInitialized: {
-                var prevLink = bodyA;
-                for(var i = 0;i < 10;i ++) {
-                    var newLink = linkComponent.createObject(scene.world);
-                    newLink.x = 350 + i * 3;
-                    newLink.y = 500 - (i * 40);
-                    newLink.width = 20 - i * 1.5;
-                    newLink.height = 40;
-                    var newJoint = linkJoint.createObject(scene.world);
-                    if (i == 0)
-                        newJoint.localAnchorA = Qt.point(bodyA.width / 2,0);
-                    else
-                        newJoint.localAnchorA = Qt.point(newLink.width / 2,0);
-                    newJoint.localAnchorB = Qt.point(newLink.width / 2,newLink.height);
-                    newJoint.bodyA = prevLink;
-                    newJoint.bodyB = newLink;
-                    prevLink = newLink;
-                    scene.createBranch(newLink,10 - i);
-                }
             }
         }
 
