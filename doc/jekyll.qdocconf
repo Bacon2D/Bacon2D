@@ -13,13 +13,14 @@ include($QT_INSTALL_DOCS/global/macros.qdocconf)
 include($QT_INSTALL_DOCS/global/qt-cpp-defines.qdocconf)
 include($QT_INSTALL_DOCS/global/compat.qdocconf)
 include($QT_INSTALL_DOCS/global/fileextensions.qdocconf)
-#include($QT_INSTALL_DOCS/global/qt-html-templates-offline.qdocconf)
+include(html-templates-offline.qdocconf)
 
 HTML.headerstyles = \
     "  <link href=\"//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic\" rel=\"stylesheet\" type=\"text/css\">\n" \
     "  <link href=\"//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic\" rel=\"stylesheet\" type=\"text/css\">\n" \
     "  <link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\"/stylesheets/online.css\" />\n" \
-    "  <link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\"/stylesheets/stylesheet.css\" />\n"
+    "  <link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\"/stylesheets/stylesheet.css\" />\n" \
+    "  <link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\"/stylesheets/navbar.css\" />\n"
 
 HTML.endheader = \
     "</head>\n"
@@ -35,6 +36,12 @@ HTML.postpostheader = \
   "     </header>\n" \
   " </div>\n" \
   " <div id=\"main_content_wrap\" class=\"outer\">\n" \
+  "   <ul id=\"nav\">\n" \
+  "     <li><a href=\"\/\">About</a></li>\n" \
+  "     <li><a href=\"\/docs\">Documentation</a></li>\n" \
+  "     <li><a href=\"#\">FAQs</a></li>\n" \
+  "     <li><a href=\"#\">Contact</a></li>\n" \
+  "   </ul>\n" \
   "   <section id=\"main_content\" class=\"inner\">\n" \
 
 HTML.footer = \
