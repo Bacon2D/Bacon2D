@@ -12,13 +12,25 @@ Bacon2D includes Box2D for physics simulation, making it easy to add physics pro
 Box2D is a 2D rigid body simulation library for games.  Programmers can use it in their games to make
 objects move in realistic ways and make the game world more interactive.
 
+Box2D is widely used by many game engines and games, in multiple programming languages.  Thus
+there are lots of great references available to help learn how to effectlive use it in your
+game.  Please note, Box2D uses the term "body" for any item that is participating in the
+Box2D "world".  The world defines the physics world of the game, and all bodies found in the world
+can interact/react with other bodies in the world.  In Bacon2D the "world" is provided as part of the
+\l Scene, if the scene has the physics property set to true.  Bacon2D provides the \l Entity component,
+which when physics are enabled in the scene, becomes a body in the Box2D world.  When you see the terms
+body and world used, you can think of them as a scene and entity in Bacon2D.
+
 \section1 Core concepts
 
 \list
   \li \b {Shape}: A shape is 2D geometrical object, such as a circle or polygon.  See also \l Fixture.
 
   \li \b {Body}: A chunk of matter that is so strong that the distance between any two bits of matter on the chunk is
-constant..  See also \l Body.
+constant.  In Bacon2D, your entities are bodies in Box2D See also \l Entity.
+
+  \li \b {World}: In Box2D, the World defines the physics container in which all bodies become part of.  In
+Bacon2D, the world is provided by the \l Scene if physics is enabled.  See also \l Scene.
 
   \li \b {Fixture}: A fixture binds a shape to a body and adds material properties such as density, friction, and restitution.
 A fixture puts a shape into the collision system (broad-phase) so that it can collide with other shapes.  See also \l Fixture.
@@ -62,7 +74,7 @@ case you can use the following code.
 
 \part Components
 \list
-    \li \l {Body}
+    \li \l {Entity}
     \li \l {Fixture}
     \li \l {Joint}
     \li \l {DistanceJoint}

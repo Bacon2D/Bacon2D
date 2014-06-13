@@ -42,7 +42,7 @@ class Scene : public QQuickItem
     Q_PROPERTY(Viewport *viewport READ viewport WRITE setViewport NOTIFY viewportChanged)
     Q_PROPERTY(Game *game READ game WRITE setGame)
     Q_PROPERTY(Box2DWorld *world READ world NOTIFY worldChanged)
-    Q_PROPERTY(bool physics READ physics WRITE setPhysics)
+    Q_PROPERTY(bool physics READ physics WRITE setPhysics NOTIFY physicsChanged)
     Q_PROPERTY(bool debug READ debug WRITE setDebug NOTIFY debugChanged)
     /* These are wrapped around Box2DWorld */
     Q_PROPERTY(float timeStep READ timeStep WRITE setTimeStep NOTIFY timeStepChanged)
@@ -112,6 +112,7 @@ signals:
     void viewportChanged();
     void worldChanged();
     void debugChanged();
+    void physicsChanged();
 
     void initialized();
     void preSolve(Box2DContact * contact);

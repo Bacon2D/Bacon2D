@@ -25,6 +25,7 @@
 #include "layer.h"
 #include "viewport.h"
 #include "box2dworld.h"
+#include "box2ddebugdraw.h"
 
 #include <QtCore/QtGlobal>
 #include <QtQml/QQmlEngine>
@@ -185,7 +186,6 @@ void Scene::createWorld()
         connect(m_world, SIGNAL(stepped()), this, SIGNAL(stepped()));
         connect(m_world, SIGNAL(pixelsPerMeterChanged()), this, SIGNAL(pixelsPerMeterChanged()));
         /* End wrapped signals from Box2DWorld */
-        m_world->componentComplete();
         m_world->setRunning(m_running);
         emit worldChanged();
     }
@@ -391,6 +391,9 @@ void Scene::initializeEntities(QQuickItem *parent)
             if (Box2DBody *body = dynamic_cast<Box2DBody *>(item)) {
                 body->setParent(m_world);
                 body->initialize(m_world);
+            } else if (Box2DDebugDraw *debugDraw = dynamic_cast<Box2DDebugDraw *>(item)) {
+                /* Properly setWorld if a DebugDraw is added */
+                debugDraw->setWorld(m_world);
             }
         }
         initializeEntities(item);

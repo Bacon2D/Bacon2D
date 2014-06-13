@@ -21,11 +21,11 @@ Game {
 
     Component {
         id: linkComponent
-        Body {
+        Entity {
             width: 20
             height:20
             sleepingAllowed: true
-			bodyType: Body.Dynamic;
+			bodyType: Entity.Dynamic;
             property color color: "#EFEFEF"
             fixtures: Circle {
                 radius: parent.width / 2
@@ -77,10 +77,10 @@ Game {
             newJoint.bodyB = rightWall;
         }
 
-        Body {
+        Entity {
             id: ground
             height: 40
-            bodyType: Body.Static
+            bodyType: Entity.Static
             anchors {
                 left: parent.left
                 right: parent.right

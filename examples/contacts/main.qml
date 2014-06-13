@@ -10,12 +10,12 @@ Game {
 
     Component {
         id: rectComponent
-        Body {
+        Entity {
             id: rect
             width: 20
             height: 20
             sleepingAllowed: true
-            bodyType: Body.Dynamic
+            bodyType: Entity.Dynamic
             property variant colors : ["#FF0000","#FF8000","#FFFF00","#00FF00","#0080FF","#0000FF","#FF00FF","#FFFFFF"]
             property int colorIndex : 0
             property bool animateDeletion: false
@@ -64,11 +64,11 @@ Game {
                 contact.tangentSpeed = 3.0;
         }
 
-        Body {
+        Entity {
             id: topWall
             height: 10
             y: -10
-            bodyType: Body.Static
+            bodyType: Entity.Static
             anchors {
                 left: parent.left
                 right: parent.right
@@ -100,10 +100,10 @@ Game {
             }
         }
 
-        Body {
+        Entity {
             id: ground
             height: 40
-            bodyType: Body.Static
+            bodyType: Entity.Static
             anchors {
                 left: parent.left
                 right: parent.right
@@ -121,11 +121,11 @@ Game {
             }
         }
 
-        Body {
+        Entity {
             id: drivingWheel
             width: 48
             height: 48
-            bodyType: Body.Dynamic
+            bodyType: Entity.Dynamic
             fixtures: Circle {
                 anchors.fill: parent
                 radius: 24
@@ -137,11 +137,11 @@ Game {
             }
         }
 
-        Body {
+        Entity {
             id: drivenWheel
             width: 48
             height: 48
-            bodyType: Body.Dynamic
+            bodyType: Entity.Dynamic
             fixtures: Circle {
                 anchors.fill: parent
                 radius: 24
@@ -153,7 +153,7 @@ Game {
             }
         }
 
-        Body {
+        Entity {
             id: topBelt
             x: 65
             y: 500
@@ -201,7 +201,7 @@ Game {
             motorSpeed: 180
             maxMotorTorque: 100
         }
-        Body {
+        Entity {
             id: tube
             x: 500
             y: 10
@@ -260,7 +260,7 @@ Game {
             }
         }
 
-        Body {
+        Entity {
             id: flowVertical
             x: 680
             y: 60
@@ -274,7 +274,7 @@ Game {
                 }
             }
         }
-        Body {
+        Entity {
             id: flowHorizontal
             x: 500
             y: 10

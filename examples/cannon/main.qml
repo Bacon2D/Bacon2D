@@ -11,11 +11,11 @@ Game {
 
     Component {
         id: link
-        Body {
+        Entity {
             width: 20
             height: 20
             x: 400
-            bodyType: Body.Dynamic
+            bodyType: Entity.Dynamic
             fixtures: Circle {
                 radius: 10
                 anchors.centerIn: parent
@@ -42,11 +42,11 @@ Game {
 
     Component {
         id: ball
-        Body {
+        Entity {
             width: 10
             height: 10
             bullet: true
-            bodyType: Body.Dynamic
+            bodyType: Entity.Dynamic
             fixtures: Circle {
                 radius: 5
                 density: 0.9
@@ -66,12 +66,12 @@ Game {
 
     Component {
         id: dominoComponent
-        Body {
+        Entity {
             width: 10
             height:50
             x: 0
             y: 510
-            bodyType: Body.Dynamic
+            bodyType: Entity.Dynamic
             fixtures: Box {
                 anchors.fill: parent
                 density: 1
@@ -136,10 +136,10 @@ Game {
             }
         }
 
-        Body {
+        Entity {
             id: ground
             height: 40
-            bodyType: Body.Static
+            bodyType: Entity.Static
             anchors {
                 left: parent.left
                 right: parent.right
@@ -189,9 +189,9 @@ Game {
 
         }
 
-        Body {
+        Entity {
             id: canon
-            bodyType: Body.Dynamic
+            bodyType: Entity.Dynamic
             width: 98
             height: 37
             x: 150
@@ -207,9 +207,9 @@ Game {
             }
         }
 
-        Body {
+        Entity {
             id: canonBase
-            bodyType: Body.Static
+            bodyType: Entity.Static
             width: 130
             height: 67
             x: 50
@@ -239,13 +239,13 @@ Game {
             upperAngle: -60
         }
 
-        Body {
+        Entity {
             id: chainAnchor
             width: 20
             height: 20
             x: 400
             y: 230
-            bodyType: Body.Static
+            bodyType: Entity.Static
             Rectangle {
                 anchors.fill: parent
                 color: "black"

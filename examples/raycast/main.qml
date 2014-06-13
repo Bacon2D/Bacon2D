@@ -17,12 +17,12 @@ Game {
 
         Component {
             id: ballComponent
-            Body {
+            Entity {
                 id: ball
                 width: 20
                 height: 20
                 sleepingAllowed: true
-                bodyType: Body.Dynamic
+                bodyType: Entity.Dynamic
                 property bool burn: false
                 function doDestroy() {
                     destroy();
@@ -93,10 +93,10 @@ Game {
             }
         }
 
-        Body {
+        Entity {
             id: ground
             height: 40
-            bodyType: Body.Static
+            bodyType: Entity.Static
             anchors {
                 left: parent.left
                 right: parent.right
@@ -179,13 +179,13 @@ Game {
             }
         }
 
-        Body {
+        Entity {
             id: bucket
             x: 60
             y: 480
             height: 50
             width: 40
-            bodyType: Body.Kinematic
+            bodyType: Entity.Kinematic
             fixtures: [Polygon {
                     vertices: [
                         Qt.point(0,0),

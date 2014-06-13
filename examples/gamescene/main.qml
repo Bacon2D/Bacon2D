@@ -85,7 +85,7 @@ Item {
                 height: 1
             }
 
-            Body {
+            Entity {
                 id: ball
                 width: 40
                 height: 40
@@ -93,7 +93,7 @@ Item {
                 y: scene.height / 3
                 fixedRotation: false
                 sleepingAllowed: false
-                bodyType: Body.Dynamic
+                bodyType: Entity.Dynamic
                 fixtures: Circle {
                     id: circleShape
                     radius: parent.width / 2

@@ -9,12 +9,12 @@ Game {
 
     Component {
         id: ballComponent
-        Body {
+        Entity {
             id: box
             width: 20
             height: 20
             sleepingAllowed: true
-            bodyType: Body.Dynamic
+            bodyType: Entity.Dynamic
             fixtures: Circle {
                 radius: parent.width / 2
                 anchors.centerIn: parent
@@ -46,7 +46,7 @@ Game {
             horizontalAlignment: Text.AlignHCenter
         }
 
-        Body {
+        Entity {
             function getVertices(height) {
                 var pos = height;
                 var arr = [];
@@ -70,7 +70,7 @@ Game {
             anchors.right: parent.right
             z: 100
             id: ground
-            bodyType: Body.Static
+            bodyType: Entity.Static
             fixtures: Chain {
                 id: groundShape
                 vertices: ground.getVertices(ground.height)
@@ -129,9 +129,9 @@ Game {
             }
         }
 
-        Body {
+        Entity {
             id: dynamicTest
-            bodyType: Body.Static
+            bodyType: Entity.Static
             x: 200
             y: 150
             width: 200
@@ -157,9 +157,9 @@ Game {
             }
         }
 
-        Body {
+        Entity {
             id: staticTest
-            bodyType: Body.Static
+            bodyType: Entity.Static
             x: 350
             y: 250
             width: 100
@@ -176,9 +176,9 @@ Game {
             }
         }
 
-        Body {
+        Entity {
             id: radiusTest
-            bodyType: Body.Dynamic
+            bodyType: Entity.Dynamic
             x: 600
             y: 100
             fixtures: [
@@ -198,9 +198,9 @@ Game {
             }
         }
 
-        Body {
+        Entity {
             id: polygonTest
-            bodyType: Body.Dynamic
+            bodyType: Entity.Dynamic
             x: 450
             y: 50
             width: 100

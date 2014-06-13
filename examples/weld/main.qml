@@ -10,12 +10,12 @@ Game {
 
     Component {
         id: ballComponent
-        Body {
+        Entity {
             id: box
             width: 20
             height:20
             sleepingAllowed: true
-			bodyType: Body.Dynamic;
+			bodyType: Entity.Dynamic;
             fixtures: Circle {
                 radius: parent.width / 2
                 anchors.centerIn: parent
@@ -34,11 +34,11 @@ Game {
     }
     Component {
         id: linkComponent
-        Body {
+        Entity {
             width: 20
             height: 20
 			z: 1
-            bodyType: Body.Dynamic
+            bodyType: Entity.Dynamic
             fixtures: Box {
                 anchors.fill: parent
                 density: 0.2
@@ -116,10 +116,10 @@ Game {
             }
         }
 
-        Body {
+        Entity {
             id: ground
             height: 40
-            bodyType: Body.Static
+            bodyType: Entity.Static
             anchors {
                 left: parent.left
                 right: parent.right
@@ -168,9 +168,9 @@ Game {
 
         }
 
-        Body {
+        Entity {
             id: bodyA
-            bodyType: Body.Static
+            bodyType: Entity.Static
             width: 100
             height: 20
             x: 300
