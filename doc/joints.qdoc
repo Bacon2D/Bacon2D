@@ -1,0 +1,302 @@
+/*!
+  \qmltype Joint
+  \inqmlmodule Bacon2D
+  \brief The base joint class. Joints are used to constraint two bodies together in
+   various fashions. Some joints also feature limits and motors.
+*/
+
+/*!
+  \qmlproperty JointType Joint::jointType
+  \brief joint type is set automatically for concrete joint types.
+*/
+
+/*!
+  \qmlproperty bool Joint::collideConnected
+  \brief This property holds a flag to true if the attached bodies should collide.
+*/
+
+/*!
+  \qmlproperty Body Joint::bodyA
+  \brief This property holds a reference to the first attached body.
+*/
+
+/*!
+  \qmlproperty Body Joint::bodyB
+  \brief This property holds a reference to the second attached body.
+*/
+
+/*!
+  \qmltype DistanceJoint
+  \inqmlmodule Bacon2D
+  \inherits Joint
+  \brief Distance Joint
+
+   A distance joint constrains two points on two bodies
+   to remain at a fixed distance from each other. You can view
+   this as a massless, rigid rod.
+*/
+
+/*!
+  \qmlproperty QPointF DistanceJoint::localAnchorA
+  \brief This property holds the local anchor point relative to bodyA's origin
+*/
+
+/*!
+  \qmlproperty QPointF DistanceJoint::localAnchorB
+  \brief This property holds the local anchor point relative to bodyB's origin
+*/
+
+/*!
+  \qmlproperty float DistanceJoint::length
+  \brief This property holds the natural length between the anchor points.
+*/
+
+/*!
+  \qmlproperty float DistanceJoint::frequencyHz
+  \brief This property holds the mass-spring-damper frequency in Hertz. A value of 0
+   disables softness.
+
+*/
+
+/*!
+  \qmlproperty float DistanceJoint::dampingRatio
+  \brief This property holds the mass-spring-damper frequency in Hertz. A value of 0
+   disables softness.
+
+*/
+
+/*!
+  \qmlmethod QPointF DistanceJoint::getReactionForce(float inv_dt) const;
+  \brief Get the reaction force given the inverse time step.
+*/
+
+/*!
+  \qmlmethod float DistanceJoint::getReactionTorque(float inv_dt) const;
+  \brief Get the reaction torque given the inverse time step.
+   Unit is N*m. This is always zero for a distance joint.
+*/
+
+
+/*!
+  \qmltype PrismaticJoint
+  \inqmlmodule Bacon2D
+  \inherits Joint
+  \brief A prismatic joint
+
+   This joint provides one degree of freedom: translation
+   along an axis fixed in \a bodyA. Relative rotation is prevented. You can
+   use a joint limit to restrict the range of motion and a joint motor to
+   drive the motion or to model joint friction.
+*/
+
+/*!
+  \qmlproperty QPointF PrismaticJoint::localAnchorA
+  \brief This property holds the local anchor point relative to bodyA's origin
+*/
+
+/*!
+  \qmlproperty QPointF PrismaticJoint::localAnchorB
+  \brief This property holds the local anchor point relative to bodyB's origin
+*/
+
+/*!
+  \qmlproperty QPointF PrismaticJoint::localAxisA
+  \brief This property holds the local anchor point relative to bodyB's origin
+*/
+
+/*!
+  \qmlproperty float PrismaticJoint::referenceAngle
+  \brief This property holds the bodyB angle minus bodyA angle in the reference state (radians).
+*/
+
+/*!
+  \qmlproperty bool PrismaticJoint::enableLimit
+  \brief This property holds a flag to enable joint limits.
+*/
+
+/*!
+  \qmlproperty float PrismaticJoint::lowerTranslation
+*/
+
+/*!
+  \qmlproperty float PrismaticJoint::upperTranslation
+*/
+
+/*!
+  \qmlproperty bool PrismaticJoint::enableMotor
+  \brief This property holds a flag to enable the joint motor.
+*/
+
+/*!
+  \qmlproperty float PrismaticJoint::motorSpeed
+  \brief This property holds the desired motor speed. Usually in radians per second.
+*/
+
+/*!
+  \qmlproperty float PrismaticJoint::maxMotorTorque
+  \brief This property holds The maximum motor torque used to achieve the desired motor speed.
+*/
+
+/*!
+  \qmlmethod float PrismaticJoint::getJointTranslation() const;
+  \brief Get the current joint translation, usually in meters.
+*/
+
+/*!
+  \qmlmethod float PrismaticJoint::getJointSpeed() const;
+  \brief Get the current joint translation speed, usually in meters per second.
+*/
+
+
+
+
+
+
+/*!
+  \qmltype RevoluteJoint
+  \inqmlmodule Bacon2D
+  \inherits Joint
+  \brief Revolute Joint
+
+  A revolute joint constrains two bodies to share a common point while they
+  are free to rotate about the point. The relative rotation about the shared
+  point is the joint angle. You can limit the relative rotation with
+  a joint limit that specifies a lower and upper angle. You can use a motor
+  to drive the relative rotation about the shared point. A maximum motor torque
+  is provided so that infinite forces are not generated.
+*/
+
+/*!
+  \qmlproperty QPointF RevoluteJoint::localAnchorA
+  \brief This property holds the local anchor point relative to bodyA's origin
+*/
+
+/*!
+  \qmlproperty QPointF RevoluteJoint::localAnchorB
+  \brief This property holds the local anchor point relative to bodyB's origin
+*/
+
+/*!
+  \qmlproperty float RevoluteJoint::referenceAngle
+  \brief This property holds the bodyB angle minus bodyA angle in the reference state (radians).
+*/
+
+/*!
+  \qmlproperty bool RevoluteJoint::enableLimit
+  \brief This property holds a flag to enable joint limits.
+*/
+
+/*!
+  \qmlproperty float RevoluteJoint::lowerAngle
+  \brief This property holds the lower angle for the joint limit (radians)/
+*/
+
+/*!
+  \qmlproperty float RevoluteJoint::upperAngle
+  \brief This property holds the upper angle for the joint limit (radians).
+*/
+
+/*!
+  \qmlproperty bool RevoluteJoint::enableMotor
+  \brief This property holds a flag to enable the joint motor.
+*/
+
+/*!
+  \qmlproperty float RevoluteJoint::motorSpeed
+  \brief This property holds the desired motor speed. Usually in radians per second.
+*/
+
+/*!
+  \qmlproperty float RevoluteJoint::maxMotorTorque
+  \brief This property holds the maximum motor torque used to achieve the desired motor speed.
+*/
+
+/*!
+  \qmlmethod float RevoluteJoint::getJointAngle() const;
+  \brief Get the current joint angle in radians.
+*/
+
+/*!
+  \qmlmethod float RevoluteJoint::getJointSpeed() const;
+  \brief Get the current joint angle speed in radians per second.
+*/
+
+/*!
+  \qmltype MotorJoint
+  \inqmlmodule Bacon2D
+  \inherits Joint
+  \brief Motor Joint
+
+   A motor joint is used to control the relative motion
+   between two bodies. A typical usage is to control the movement
+   of a dynamic body with respect to the ground.
+*/
+
+/*!
+  \qmlproperty float MotorJoint::linearOffset
+  \brief The position of bodyB minus the position of bodyA, in bodyA's frame, in meters.
+*/
+
+
+/*!
+  \qmlproperty float MotorJoint::angularOffset
+  \brief This property holds the bodyB angle minus bodyA angle in radians.
+*/
+
+/*!
+  \qmlproperty float MotorJoint::maxForce
+  \brief This property holds The maximum motor force in N.
+*/
+
+/*!
+  \qmlproperty float MotorJoint::maxTorque
+  \brief This property holds the maximum motor torque in N-m.
+*/
+
+/*!
+  \qmlproperty float MotorJoint::correctionFactor
+  \brief This property holds the position correction factor in the range [0,1].
+*/
+
+
+/*!
+  \qmltype WeldJoint
+  \inqmlmodule Bacon2D
+  \inherits Joint
+*/
+
+/*!
+  \qmltype PulleyJoint
+  \inqmlmodule Bacon2D
+  \inherits Joint
+*/
+
+/*!
+  \qmltype FrictionJoint
+  \inqmlmodule Bacon2D
+  \inherits Joint
+*/
+
+/*!
+  \qmltype WheelJoint
+  \inqmlmodule Bacon2D
+  \inherits Joint
+*/
+
+/*!
+  \qmltype MouseJoint
+  \inqmlmodule Bacon2D
+  \inherits Joint
+*/
+
+/*!
+  \qmltype GearJoint
+  \inqmlmodule Bacon2D
+  \inherits Joint
+*/
+
+/*!
+  \qmltype RopeJoint
+  \inqmlmodule Bacon2D
+  \inherits Joint
+*/

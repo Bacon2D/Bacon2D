@@ -86,6 +86,7 @@
    Fast moving objects in Box2D can be labeled as bullets. Bullets will perform CCD with both static and
    dynamic bodies. You should decide what bodies should be bullets based on your game design.
 */
+
 /*!
   \qmlproperty bool Body::sleepingAllowed
   \brief What does sleep mean? Well it is expensive to simulate bodies, so the less we have to simulate the
@@ -103,15 +104,87 @@
   \brief You may want a rigid body, such as a character, to have a fixed rotation. Such a body should not rotate,
    even under load. You can use the fixedRotation property to achieve this.
 */
+
 /*!
   \qmlproperty bool Body::active
   \brief Returns true if the Body is active, or False if it is sleeping
 */
+
 /*!
   \qmlproperty bool Body::awake
   \brief Returns True if the Body is awake, or False if it is sleeping.
 */
+
 /*!
   \qmlproperty list<Fixture> Body::fixtures
   \brief This property holds a list of Box2D fixtures contained within the current Body.
+*/
+
+/*!
+  \qmlmethod void Body::applyForce(const QPointF force, const QPointF point)
+*/
+
+/*!
+  \qmlmethod void Body::applyForceToCenter(const QPointF &force)
+*/
+
+/*!
+  \qmlmethod void Body::applyTorque(qreal torque)
+*/
+
+/*!
+  \qmlmethod void Body::applyLinearImpulse(const QPointF &impulse, const QPointF &point)
+*/
+
+/*!
+  \qmlmethod void Body::applyAngularImpulse(qreal impulse)
+*/
+
+/*!
+  \qmlmethod QPointF Body::getWorldCenter() const
+*/
+
+/*!
+  \qmlmethod QPointF Body::getLocalCenter() const
+*/
+
+/*!
+  \qmlmethod float Body::getMass() const
+*/
+
+/*!
+  \qmlmethod float Body::resetMassData()
+*/
+
+/*!
+  \qmlmethod float Body::getInertia() const
+*/
+
+/*!
+  \qmlmethod QPointF Body::toWorldPoint(const QPointF &localPoint) const
+*/
+
+/*!
+  \qmlmethod QPointF Body::toWorldVector(const QPointF &localVector) const
+*/
+
+/*!
+  \qmlmethod QPointF Body::toLocalPoint(const QPointF &worldPoint) const
+*/
+
+/*!
+  \qmlmethod QPointF Body::toLocalVector(const QPointF &worldVector) const
+*/
+
+/*!
+  \qmlmethod QPointF Body::getLinearVelocityFromWorldPoint(const QPointF &point) const
+*/
+
+/*!
+  \qmlmethod QPointF Body::getLinearVelocityFromLocalPoint(const QPointF &point) const
+*/
+
+/*!
+  \qmlsignal void Body::bodyCreated()
+  \brief Emitted when the body has finished initialization
 */
