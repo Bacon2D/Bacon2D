@@ -102,6 +102,59 @@ void Scene::update(const int &delta)
     updateEntities(this, delta);
 }
 
+QObject *Scene::enterAnimation() const
+{
+    return m_enterAnimation;
+}
+
+void Scene::setEnterAnimation(QObject *animation)
+{
+    //TODO:
+    // if is_running -> complete
+    const QMetaObject *meta = animation->metaObject();
+    do{
+        if(QString("QQuickAbstractAnimation") == QString::fromLocal8Bit(meta->className())){
+            m_enterAnimation = animation;
+            break;
+        }
+    }
+    while( (meta = meta->superClass()) != 0);
+}
+
+QObject *Scene::exitAnimation() const
+{
+    return m_exitAnimation;
+}
+
+void Scene::setExitAnimation(QObject *animation)
+{
+    //TODO:
+    // if is_running -> complete
+    const QMetaObject *meta = animation->metaObject();
+    do{
+        if(QString("QQuickAbstractAnimation") == QString::fromLocal8Bit(meta->className())){
+            m_exitAnimation = animation;
+            break;
+        }
+    }
+    while( (meta = meta->superClass()) != 0);
+
+    for(int i=0; i < animation->metaObject()->methodCount(); i++){
+        qDebug() << animation->metaObject()->method(i).methodSignature();
+    }
+}
+
+void Scene::callExitAnimation()
+{
+    if(!m_exitAnimation)
+        return;
+    qDebug() << __FUNCTION__;
+    m_exitAnimation->metaObject()->method(
+                m_exitAnimation->metaObject()->indexOfMethod("start()"))
+            .invoke(m_exitAnimation, Qt::DirectConnection);
+
+}
+
 /*!
  * \qmlproperty bool Scene::running
  * \brief The current running state of Scene
