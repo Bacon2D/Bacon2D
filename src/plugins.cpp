@@ -68,9 +68,10 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<ScriptBehavior>("Bacon2D", 1, 0, "ScriptBehavior");
     qmlRegisterType<Settings>("Bacon2D", 1, 0, "Settings");
 
-
-    qmlRegisterType<Box2DWorld>("Bacon2D", 1, 0, "World");
-    qmlRegisterType<Box2DBody>("Bacon2D", 1, 0, "Body");
+    qmlRegisterUncreatableType<Box2DWorld>("Bacon2D", 1, 0, "World",
+                                           QStringLiteral("World created by Scene if physics is enabled"));
+    qmlRegisterUncreatableType<Box2DBody>("Bacon2D", 1, 0, "Body",
+                                          QStringLiteral("Body is the base class for Entity"));
     qmlRegisterUncreatableType<Box2DFixture>("Bacon2D", 1, 0, "Fixture",
                                              QStringLiteral("Base type for Box, Circle etc."));
     qmlRegisterType<Box2DBox>("Bacon2D", 1, 0, "Box");

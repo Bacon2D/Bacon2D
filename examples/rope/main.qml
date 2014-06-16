@@ -21,11 +21,11 @@ Game {
 
     Component {
         id: linkComponent
-        Body {
+        Entity {
             width: 20
             height:20
             sleepingAllowed: true
-			bodyType: Body.Dynamic;
+			bodyType: Entity.Dynamic;
             property color color: "#EFEFEF"
             fixtures: Circle {
                 radius: parent.width / 2
@@ -56,122 +56,119 @@ Game {
     Scene {
         id: scene
         anchors.fill: parent
+        physics: true
 
-        World {
-            id: world
-            anchors.fill: parent
-            onInitialized: {
-                var prev = leftWall;
-                for(var i = 60;i < 740;i += 20) {
-                    var newLink = linkComponent.createObject(world);
-                    newLink.color = "orange";
-                    newLink.x = i;
-                    newLink.y = 100;
-                    var newJoint = jointComponent.createObject(world);
-                    if(i === 60) newJoint.localAnchorA = Qt.point(40,100);
-                    newJoint.bodyA = prev;
-                    newJoint.bodyB = newLink;
-                    prev = newLink;
-                }
-                newJoint = jointComponent.createObject(world);
-                newJoint.localAnchorB = Qt.point(0,100);
+        onInitialized: {
+            var prev = leftWall;
+            for(var i = 60;i < 740;i += 20) {
+                var newLink = linkComponent.createObject(scene.world);
+                newLink.color = "orange";
+                newLink.x = i;
+                newLink.y = 100;
+                var newJoint = jointComponent.createObject(scene.world);
+                if(i === 60) newJoint.localAnchorA = Qt.point(40,100);
                 newJoint.bodyA = prev;
-                newJoint.bodyB = rightWall;
+                newJoint.bodyB = newLink;
+                prev = newLink;
             }
+            newJoint = jointComponent.createObject(scene.world);
+            newJoint.localAnchorB = Qt.point(0,100);
+            newJoint.bodyA = prev;
+            newJoint.bodyB = rightWall;
+        }
 
-            Body {
-                id: ground
-                height: 40
-                bodyType: Body.Static
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                    bottom: parent.bottom
-                }
-                fixtures: Box {
-                    anchors.fill: parent
-                    friction: 1
-                    density: 1
-                }
-                Rectangle {
-                    anchors.fill: parent
-                    color: "#DEDEDE"
-                }
+        Entity {
+            id: ground
+            height: 40
+            bodyType: Entity.Static
+            anchors {
+                left: parent.left
+                right: parent.right
+                bottom: parent.bottom
             }
-
-            Wall {
-                id: topWall
-                height: 40
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                    top: parent.top
-                }
-            }
-
-            Wall {
-                id: leftWall
-                width: 40
-                anchors {
-                    left: parent.left
-                    top: parent.top
-                    bottom: parent.bottom
-                    bottomMargin: 40
-                }
-            }
-
-            Wall {
-                id: rightWall
-                width: 40
-                anchors {
-                    right: parent.right
-                    top: parent.top
-                    bottom: parent.bottom
-                    bottomMargin: 40
-                }
-            }
-
-            Rectangle {
-                id: debugButton
-                x: 50
-                y: 50
-                width: 120
-                height: 30
-                Text {
-                    id: debugButtonText
-                    text: "Debug view: " + (debugDraw.visible ? "on" : "off")
-                    anchors.centerIn: parent
-                }
-                color: "#DEDEDE"
-                border.color: "#999"
-                radius: 5
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        debugDraw.visible = !debugDraw.visible;
-                        debugButtonText.text = debugDraw.visible ? "Debug view: on" : "Debug view: off";
-                    }
-                }
-            }
-
-            DebugDraw {
-                id: debugDraw
+            fixtures: Box {
                 anchors.fill: parent
-                world: world
-                opacity: 1
-                visible: false
+                friction: 1
+                density: 1
             }
+            Rectangle {
+                anchors.fill: parent
+                color: "#DEDEDE"
+            }
+        }
 
-            Timer {
-                id: ballsTimer
-                interval: 500
-                running: true
-                repeat: true
-                onTriggered: {
-                    var newBox = linkComponent.createObject(world);
-                    newBox.x = 40 + (Math.random() * world.width - 80);
-                    newBox.y = 50;
+        Wall {
+            id: topWall
+            height: 40
+            anchors {
+                left: parent.left
+                right: parent.right
+                top: parent.top
+            }
+        }
+
+        Wall {
+            id: leftWall
+            width: 40
+            anchors {
+                left: parent.left
+                top: parent.top
+                bottom: parent.bottom
+                bottomMargin: 40
+            }
+        }
+
+        Wall {
+            id: rightWall
+            width: 40
+            anchors {
+                right: parent.right
+                top: parent.top
+                bottom: parent.bottom
+                bottomMargin: 40
+            }
+        }
+
+        Rectangle {
+            id: debugButton
+            x: 50
+            y: 50
+            width: 120
+            height: 30
+            Text {
+                id: debugButtonText
+                text: "Debug view: " + (debugDraw.visible ? "on" : "off")
+                anchors.centerIn: parent
+            }
+            color: "#DEDEDE"
+            border.color: "#999"
+            radius: 5
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    debugDraw.visible = !debugDraw.visible;
+                    debugButtonText.text = debugDraw.visible ? "Debug view: on" : "Debug view: off";
                 }
+            }
+        }
+
+        DebugDraw {
+            id: debugDraw
+            anchors.fill: parent
+            world: scene.world
+            opacity: 1
+            visible: false
+        }
+
+        Timer {
+            id: ballsTimer
+            interval: 500
+            running: true
+            repeat: true
+            onTriggered: {
+                var newBox = linkComponent.createObject(scene.world);
+                newBox.x = 40 + (Math.random() * scene.width - 80);
+                newBox.y = 50;
             }
         }
     }
