@@ -43,15 +43,6 @@ Game {
             height: 100
         }
 
-        // Debug
-        DebugDraw {
-            id: debugDraw
-            world: scene.world
-            anchors.fill: parent
-            opacity: 0.75
-            visible: false
-        }
-
         MouseArea {
             anchors.fill: parent
             onClicked: {
@@ -59,6 +50,26 @@ Game {
                             Qt.point((mouseX - ball.x),
                                      (mouseY - ball.y)),
                             Qt.point(ball.x, ball.y))
+            }
+        }
+
+        Rectangle {
+            id: debugButton
+            x: 50
+            y: 10
+            width: 120
+            height: 30
+            Text {
+                id: debugButtonText
+                text: scene.debug ? "Debug view: on" : "Debug view: off"
+                anchors.centerIn: parent
+            }
+            color: "#DEDEDE"
+            border.color: "#999"
+            radius: 5
+            MouseArea {
+                anchors.fill: parent
+                onClicked: scene.debug = !scene.debug
             }
         }
     }

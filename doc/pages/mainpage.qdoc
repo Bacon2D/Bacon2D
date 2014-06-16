@@ -42,6 +42,7 @@ Game {
 
     Scene {
         id: scene
+        physics: true
         width: parent.width
         height: parent.height
 
