@@ -27,7 +27,7 @@
 #include <QtCore/QtGlobal>
 
 #include <QtQml/QQmlComponent>
-#include <QtQuick/QQuickItem>
+#include <QtQml/QQmlScriptString>
 
 class Game;
 class Viewport;
@@ -40,6 +40,8 @@ class Scene : public QQuickItem
     Q_PROPERTY(Viewport *viewport READ viewport WRITE setViewport NOTIFY viewportChanged)
     Q_PROPERTY(Game *game READ game WRITE setGame)
     Q_PROPERTY(bool debug READ debug WRITE setDebug NOTIFY debugChanged)
+    Q_PROPERTY(QObject *enterAnimation READ enterAnimation WRITE setEnterAnimation NOTIFY enterAnimationChanged)
+    Q_PROPERTY(QObject *exitAnimation READ exitAnimation WRITE setExitAnimation NOTIFY exitAnimationChanged)
 
 public:
     Scene(Game *parent = 0);
@@ -59,10 +61,21 @@ public:
 
     virtual void update(const int &delta);
 
+    QObject *enterAnimation() const;
+    void setEnterAnimation(QObject *animation);
+
+    QObject *exitAnimation() const;
+    void setExitAnimation(QObject *animation);
+
+    Q_INVOKABLE void callExitAnimation();
+
 signals:
     void runningChanged();
     void viewportChanged();
     void debugChanged();
+    void enterAnimationChanged();
+    void exitAnimationChanged();
+
 
 protected slots:
     void onDebugChanged();
@@ -78,6 +91,9 @@ protected:
     Viewport *m_viewport;
     Game *m_game;
     bool m_debug;
+
+    QObject *m_enterAnimation;
+    QObject *m_exitAnimation;
 };
 
 
