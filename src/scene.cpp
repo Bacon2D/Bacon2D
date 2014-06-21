@@ -111,7 +111,7 @@ void Scene::update(const int &delta)
   While Scene is executing the enter animation, running, enabled and focus
   properties will be set to false and there will be no user interaction until
   the animation is completed. It is also important to now that properties changed
-  by the enter and exit animation will be persisted when the Scene become the current Scene.
+  during enter and exit animation will be persisted when the Scene become the current Scene.
 
   Example usage:
   \qml
