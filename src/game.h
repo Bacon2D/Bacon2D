@@ -46,7 +46,6 @@ public:
 
     Scene *currentScene() const;
     void setCurrentScene(Scene *currentScene);
-
     int ups() const;
     void setUps(const int &ups);
 
@@ -71,6 +70,16 @@ private:
     int m_ups;
     Viewport *m_viewport;
     int m_timerId;
+
+    //for handling scene transition
+    Scene *m_nextScene;
+    Scene *m_prevScene;
+
+    QMetaMethod getMetaMethod(QObject *object, QString methodSignature) const;
+    void setCurrentSceneNoAnimation(Scene *currentScene);
+private slots:
+    void handleEnterAnimationRunningChanged(bool running);
+    void handleExitAnimationRunningChanged(bool running);
 };
 
 #endif /* _GAME_H_ */
