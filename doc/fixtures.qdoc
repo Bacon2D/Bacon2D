@@ -1,7 +1,7 @@
 /*!
   \qmltype Fixture
   \inqmlmodule Bacon2D
-  \brief A fixture binds a shape to a \l Body and adds material properties
+  \brief A fixture binds a shape to an \l Entity and adds material properties
    such as density, friction, and restitution.
 
    A fixture puts a shape into the collision system (broad-phase) so that
@@ -33,7 +33,7 @@
      \li A fixture on a static body can only collide with a dynamic body.
      \li A fixture on a kinematic body can only collide with a dynamic body.
      \li Fixtures on the same body never collide with each other.
-     \li You can optionally enable/disable collision between fixtures on bodies connected by a joint.
+     \li You can optionally enable/disable collision between fixtures on entities connected by a joint.
    \endlist
 
   \section3 CategoryFlags
@@ -50,7 +50,7 @@
 /*!
   \qmlproperty float Fixture::density
   \brief This property represents the density used to compute the mass
-   properties of the parent body.
+   properties of the parent entity.
 
    The density can be zero or positive. You should generally use similar
    densities for all your fixtures. This will improve stacking stability.

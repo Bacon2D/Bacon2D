@@ -1,10 +1,10 @@
 import QtQuick 2.2
 import Bacon2D 1.0
 
-Body {
+Entity {
     fixedRotation: false
     sleepingAllowed: false
-    bodyType: Body.Dynamic
+    bodyType: Entity.Dynamic
     fixtures: Circle {
         id: circleShape
         radius: parent.width / 2
