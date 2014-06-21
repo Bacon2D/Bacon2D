@@ -67,8 +67,6 @@ public:
     QObject *exitAnimation() const;
     void setExitAnimation(QObject *animation);
 
-    Q_INVOKABLE void callExitAnimation();
-
 signals:
     void runningChanged();
     void viewportChanged();

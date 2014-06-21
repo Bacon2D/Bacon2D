@@ -37,7 +37,7 @@
 
   The Scene component is the root view for the \l Game.
 
-  The size of the Scene can be larger than the size of the \l Game, accessible 
+  The size of the Scene can be larger than the size of the \l Game, accessible
   using a \l Viewport.  The \l Viewport provides xOffset and yOffset properties
   which can be used to control movement of the Viewport.
 
@@ -67,10 +67,12 @@
 */
 Scene::Scene(Game *parent)
     : QQuickItem(parent)
-    , m_running(true)
+    , m_running(false)
     , m_viewport(0)
     , m_game(parent)
     , m_debug(false)
+    , m_enterAnimation(0)
+    , m_exitAnimation(0)
 {
     setVisible(false);
 
@@ -102,6 +104,36 @@ void Scene::update(const int &delta)
     updateEntities(this, delta);
 }
 
+/*!
+  \qmlproperty Animation Scene::enterAnimation
+  \brief Animation that will be triggered when the Scene become the current Scene.
+
+  While Scene is executing the enter animation, running, enabled and focus
+  properties will be set to false and there will be no user interaction until
+  the animation is completed. It is also important to now that properties changed
+  by the enter and exit animation will be persisted when the Scene become the current Scene.
+
+  Example usage:
+  \qml
+   import QtQuick 2.0
+   import Bacon2D 1.0
+
+   Game {
+       id: game
+       width: 800
+       height: 600
+
+       Scene {
+           id: scene
+           width: 300
+           height: 300
+
+           enterAnimation: NumberAnimation{ target:scene; property: "x"; from: 500; to: 0; duration: 300}
+           enterAnimation: NumberAnimation{ target:scene; property: "x"; from: 0; to: 500; duration: 300}
+       }
+   }
+   \endqml
+ */
 QObject *Scene::enterAnimation() const
 {
     return m_enterAnimation;
@@ -109,8 +141,6 @@ QObject *Scene::enterAnimation() const
 
 void Scene::setEnterAnimation(QObject *animation)
 {
-    //TODO:
-    // if is_running -> complete
     const QMetaObject *meta = animation->metaObject();
     do{
         if(QString("QQuickAbstractAnimation") == QString::fromLocal8Bit(meta->className())){
@@ -121,6 +151,35 @@ void Scene::setEnterAnimation(QObject *animation)
     while( (meta = meta->superClass()) != 0);
 }
 
+/*!
+  \qmlproperty Animation Scene::exitAnimation
+  \brief Animation that will be triggered when the Scene exits the screen.
+  While Scene is executing the exit animation, running, enabled and focus
+  properties will be set to false and there will be no user interaction until
+  the animation is completed, but the Scene continue to be visible untile the animation ends.
+  It is also important to now that properties changed by the enter and exit animation will be persisted when the Scene become the current Scene.
+
+  Example usage:
+  \qml
+   import QtQuick 2.0
+   import Bacon2D 1.0
+
+   Game {
+       id: game
+       width: 800
+       height: 600
+
+       Scene {
+           id: scene
+           width: 300
+           height: 300
+
+           enterAnimation: NumberAnimation{ target:scene; property: "x"; from: 500; to: 0; duration: 300}
+           enterAnimation: NumberAnimation{ target:scene; property: "x"; from: 0; to: 500; duration: 300}
+       }
+   }
+   \endqml
+ */
 QObject *Scene::exitAnimation() const
 {
     return m_exitAnimation;
@@ -128,8 +187,6 @@ QObject *Scene::exitAnimation() const
 
 void Scene::setExitAnimation(QObject *animation)
 {
-    //TODO:
-    // if is_running -> complete
     const QMetaObject *meta = animation->metaObject();
     do{
         if(QString("QQuickAbstractAnimation") == QString::fromLocal8Bit(meta->className())){
@@ -138,21 +195,6 @@ void Scene::setExitAnimation(QObject *animation)
         }
     }
     while( (meta = meta->superClass()) != 0);
-
-    for(int i=0; i < animation->metaObject()->methodCount(); i++){
-        qDebug() << animation->metaObject()->method(i).methodSignature();
-    }
-}
-
-void Scene::callExitAnimation()
-{
-    if(!m_exitAnimation)
-        return;
-    qDebug() << __FUNCTION__;
-    m_exitAnimation->metaObject()->method(
-                m_exitAnimation->metaObject()->indexOfMethod("start()"))
-            .invoke(m_exitAnimation, Qt::DirectConnection);
-
 }
 
 /*!
