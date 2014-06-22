@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 by INdT
+ * Copyright (C) 2014 by Bacon2D
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -15,8 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @author Rodrigo Goncalves de Oliveira <rodrigo.goncalves@openbossa.org>
- * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
+ * @author Paulo Pinheiro <paulovictor.pinheiro@gmail.com>
  */
 
 import QtQuick 2.2
@@ -180,6 +179,10 @@ Game {
 
         exitAnimation: NumberAnimation{ target:scene5; properties: "opacity"; from:1; to:0; duration: 500}
         enterAnimation: NumberAnimation{ target:scene5; properties: "opacity"; from:0; to:1.0; duration: 500}
+
+        onRunningChanged: {
+            console.log("scene5 running: " + running)
+        }
 
         Text{
             anchors.left: parent.left
