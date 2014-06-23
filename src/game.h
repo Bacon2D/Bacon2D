@@ -25,10 +25,10 @@
 #include <QtQuick/QQuickItem>
 #include <QtCore/QTime>
 #include <QtCore/QtGlobal>
+#include <QtCore/QStack>
 
 class Scene;
 class Viewport;
-
 /*!
   \class Game
  */
@@ -46,6 +46,10 @@ public:
 
     Scene *currentScene() const;
     void setCurrentScene(Scene *currentScene);
+
+    void pushScene(Scene* scene);
+    Scene* popScene();
+
     int ups() const;
     void setUps(const int &ups);
 
@@ -65,18 +69,24 @@ signals:
     void gameNameChanged();
 
 private:
-    Scene *m_currentScene;
+
     QTime m_gameTime;
     int m_ups;
-    Viewport *m_viewport;
     int m_timerId;
 
     //for handling scene transition
-    Scene *m_nextScene;
-    Scene *m_prevScene;
+    Scene *m_enterScene;
+    Scene *m_exitScene;
+    QStack<Scene*> m_sceneStack;
 
     QMetaMethod getMetaMethod(QObject *object, QString methodSignature) const;
-    void setCurrentSceneNoAnimation(Scene *currentScene);
+
+    void attachScene(Scene *scene);
+    void activateScene(Scene *scene);
+    void deactivateScene(Scene *scene);
+    bool triggerExitAnimation(Scene *scene);
+    bool triggerEnterAnimation(Scene *scene);
+
 private slots:
     void handleEnterAnimationRunningChanged(bool running);
     void handleExitAnimationRunningChanged(bool running);

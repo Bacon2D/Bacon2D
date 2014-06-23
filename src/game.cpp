@@ -56,12 +56,12 @@
 */
 Game::Game(QQuickItem *parent)
     : QQuickItem(parent)
-    , m_currentScene(0)
     , m_ups(30)
     , m_timerId(0)
-    , m_nextScene(0)
-    , m_prevScene(0)
+    , m_enterScene(0)
+    , m_exitScene(0)
 {
+    m_sceneStack.clear();
     m_gameTime.start();
     m_timerId = startTimer(1000 / m_ups);
 }
@@ -91,143 +91,97 @@ void Game::setGameName(const QString& gameName)
 */
 Scene *Game::currentScene() const
 {
-    return m_currentScene;
-}
-
-
-void Game::setCurrentSceneNoAnimation(Scene *currentScene)
-{
-    if (m_currentScene == currentScene)
-        return;
-
-    if (m_currentScene) {
-        if (m_viewport) {
-            m_viewport->setVisible(false);
-            m_viewport = 0;
-        }
-
-        m_currentScene->setRunning(false);
-        m_currentScene->setVisible(false);
-        m_currentScene->setFocus(false, Qt::OtherFocusReason);
-    }
-
-    m_currentScene = currentScene;
-
-    if (m_currentScene) {
-        m_currentScene->setGame(this);
-
-        if ((m_viewport = m_currentScene->viewport())) {
-            m_viewport->setParent(this);
-            m_viewport->setParentItem(this);
-            m_viewport->setScene(m_currentScene);
-            m_viewport->setWidth(width());
-            m_viewport->setHeight(height());
-            m_viewport->setContentWidth(m_currentScene->width());
-            m_viewport->setContentHeight(m_currentScene->height());
-            m_viewport->updateMaxOffsets();
-            m_viewport->setVisible(true);
-
-            m_currentScene->setParentItem(m_viewport);
-        } else {
-            m_currentScene->setParent(this);
-            m_currentScene->setParentItem(this);
-        }
-
-        m_currentScene->setRunning(true);
-        m_currentScene->setVisible(true);
-        m_currentScene->setFocus(true, Qt::OtherFocusReason);
-    }
-
-    emit currentSceneChanged();
+    if(m_sceneStack.isEmpty())
+        return NULL;
+    return m_sceneStack.top();
 }
 
 void Game::setCurrentScene(Scene *currentScene)
 {
-    bool shouldAnimate = true;
 
-    if (m_currentScene == currentScene)
-        return;
-
-    m_prevScene = m_currentScene;
-    m_nextScene = currentScene;
-
-    // only animate when m_nextScene->enterAnimation != NULL
-
-    if(!m_nextScene ||
-            !m_prevScene ||
-            (m_nextScene && !m_nextScene->enterAnimation())){
-
-        shouldAnimate = false;
-    }
-
-    if(!shouldAnimate){
-        setCurrentSceneNoAnimation(currentScene);
-        return;
-    }
-
-    m_nextScene->setGame(this);
-
-    Viewport *nextViewPort = m_nextScene->viewport();
-
-    if (nextViewPort) {
-        nextViewPort->setParent(this);
-        nextViewPort->setParentItem(this);
-        nextViewPort->setScene(m_nextScene);
-        nextViewPort->setWidth(width());
-        nextViewPort->setHeight(height());
-        nextViewPort->setContentWidth(m_nextScene->width());
-        nextViewPort->setContentHeight(m_nextScene->height());
-        nextViewPort->updateMaxOffsets();
-        nextViewPort->setVisible(true);
-
-        m_nextScene->setParentItem(nextViewPort);
-    } else {
-        m_nextScene->setParent(this);
-        m_nextScene->setParentItem(this);
-    }
-
-    m_nextScene->setVisible(true);
-    m_nextScene->setRunning(false);
-    m_nextScene->setEnabled(false);
-    m_nextScene->setFocus(false, Qt::OtherFocusReason);
-
-    m_prevScene->setRunning(false);
-    m_prevScene->setEnabled(false);
-    m_prevScene->setFocus(false, Qt::OtherFocusReason);
-
-
-
-    QObject *enterAnimation = m_nextScene->enterAnimation();
-
-    int propIndex = enterAnimation->metaObject()->indexOfProperty("running");
-
-    QMetaProperty enterProperty = enterAnimation->metaObject()->property(propIndex);
-    QMetaMethod enterSignal = enterProperty.notifySignal();
-
-    connect(m_nextScene->enterAnimation(), enterSignal,
-            this, getMetaMethod(this, "handleEnterAnimationRunningChanged(bool)"));
-
-    getMetaMethod(enterAnimation, "start()")
-            .invoke(enterAnimation, Qt::AutoConnection);
-
-    QObject *exitAnimation = m_prevScene->exitAnimation();
-
-    if(exitAnimation){
-        propIndex = exitAnimation->metaObject()->indexOfProperty("running");
-
-        QMetaProperty exitRunningProperty = exitAnimation->metaObject()->property(propIndex);
-        QMetaMethod exitSignal  = exitRunningProperty.notifySignal();
-
-        connect(m_currentScene->exitAnimation(), exitSignal,
-                this, getMetaMethod(this, "handleExitAnimationRunningChanged(bool)"));
-        getMetaMethod(exitAnimation, "start()").invoke(exitAnimation, Qt::AutoConnection);
+    if(m_sceneStack.isEmpty()){
+        pushScene(currentScene);
     }else{
-        //in case of no exit animation, we wait for the end of enter animation
-        //to remove m_prevscene
-        connect(m_nextScene->enterAnimation(), enterSignal,
-                this, getMetaMethod(this, "handleExitAnimationRunningChanged(bool)"));
+        Scene *topScene = m_sceneStack.pop();
+
+        m_sceneStack.push(currentScene);
+        m_exitScene = topScene;
+
+        deactivateScene(topScene);
+
+        attachScene(currentScene);
+
+        triggerExitAnimation(m_exitScene);
+        if(!triggerEnterAnimation(currentScene)){
+            activateScene(currentScene);
+            if(topScene)
+                topScene->setVisible(false);
+            m_exitScene = NULL;
+        }
 
     }
+}
+
+
+
+/*!
+    \qmlmethod void Game::pushScene(Scene *scene)
+
+    Suspends the execution of the running scene, while add a new Scene to the Scene stack.
+    If the Scene has the enterAnimation property set, the push will be animated.
+
+\sa popScene
+*/
+void Game::pushScene(Scene *scene)
+{
+    if(scene){
+
+        Scene *topScene = NULL;
+
+        if(!m_sceneStack.isEmpty()){
+            topScene = m_sceneStack.top();
+            deactivateScene(topScene);
+        }
+
+        m_sceneStack.push(scene);
+        attachScene(scene);
+        if(!triggerEnterAnimation(scene)){
+            activateScene(scene);
+            if(topScene)
+                topScene->setVisible(false);
+        }
+    }
+}
+
+/*!
+    \qmlmethod void Game::popScene(Scene *scene)
+
+    Suspends and remove the current Scene from stack animating if exitAnimation property was set.
+    If there is no scene on stack, it will do nothing.
+
+\sa pushScene
+*/
+Scene* Game::popScene()
+{
+    if(m_sceneStack.isEmpty())
+        return NULL;
+
+    Scene *topScene = m_sceneStack.pop();
+
+    if(topScene){
+        deactivateScene(topScene);
+
+        if(!m_sceneStack.isEmpty()){
+            attachScene(m_sceneStack.top());
+        }
+        if(!triggerExitAnimation(topScene)){
+            if(!m_sceneStack.isEmpty()){
+                activateScene(m_sceneStack.top());
+            }
+            topScene->setVisible(false);
+        }
+    }
+    return topScene;
 }
 
 /*!
@@ -265,11 +219,17 @@ void Game::timerEvent(QTimerEvent *event)
 
 void Game::update()
 {
+    if(m_sceneStack.isEmpty())
+        return;
+
+    Scene *currentScene = m_sceneStack.top();
     long elapsedTime = m_gameTime.restart();
-    if (m_currentScene)
-        m_currentScene->update(elapsedTime);
-    if (m_viewport)
-        m_viewport->update(elapsedTime);
+
+    if (currentScene && currentScene->running())
+        currentScene->update(elapsedTime);
+
+    if (currentScene->viewport() && currentScene->running())
+        currentScene->viewport()->update(elapsedTime);
 }
 
 /*!
@@ -285,16 +245,147 @@ void Game::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     if (newGeometry.isEmpty() || !isComponentComplete() || (newGeometry == oldGeometry))
         return;
+    if(m_sceneStack.isEmpty())
+        return;
 
-    if (m_viewport && m_currentScene) {
-        m_viewport->setWidth(width());
-        m_viewport->setHeight(height());
-        m_viewport->setContentWidth(m_currentScene->width());
-        m_viewport->setContentHeight(m_currentScene->height());
-        m_viewport->updateMaxOffsets();
+    Scene *currentScene = m_sceneStack.top();
+    Viewport *viewport = currentScene->viewport();
+
+    if (viewport && currentScene) {
+        viewport->setWidth(width());
+        viewport->setHeight(height());
+        viewport->setContentWidth(currentScene->width());
+        viewport->setContentHeight(currentScene->height());
+        viewport->updateMaxOffsets();
     }
 
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
+}
+
+void Game::attachScene(Scene *scene)
+{
+    if(!scene)
+        return;
+
+    scene->setGame(this);
+
+    Viewport *viewport = scene->viewport();
+    if (viewport) {
+        viewport->setParent(this);
+        viewport->setParentItem(this);
+        viewport->setScene(scene);
+        viewport->setWidth(width());
+        viewport->setHeight(height());
+        viewport->setContentWidth(scene->width());
+        viewport->setContentHeight(scene->height());
+        viewport->updateMaxOffsets();
+        viewport->setVisible(true);
+
+        scene->setParentItem(viewport);
+    } else {
+        scene->setParent(this);
+        scene->setParentItem(this);
+    }
+    scene->setVisible(true);
+    scene->setRunning(false);
+    scene->setEnabled(false);
+    scene->setFocus(false, Qt::OtherFocusReason);
+
+
+}
+
+void Game::activateScene(Scene *scene)
+{
+    scene->setRunning(true);
+    scene->setEnabled(true);
+    scene->setFocus(true, Qt::OtherFocusReason);
+    emit currentSceneChanged();
+}
+
+void Game::deactivateScene(Scene *scene)
+{
+    if(!scene) return;
+
+    scene->setRunning(false);
+    scene->setEnabled(false);
+    scene->setFocus(false, Qt::OtherFocusReason);
+}
+
+bool Game::triggerEnterAnimation(Scene *scene)
+{
+    QObject *enterAnimation = scene->enterAnimation();
+
+    if(!enterAnimation)
+        return false;
+
+    m_enterScene = scene;
+    const QMetaObject *meta = enterAnimation->metaObject();
+
+    int propIndex = meta->indexOfProperty("running");
+
+    QMetaMethod enterSignal = meta->property(propIndex).notifySignal();
+
+    connect(enterAnimation, enterSignal,
+            this, getMetaMethod(this, "handleEnterAnimationRunningChanged(bool)"));
+
+    getMetaMethod(enterAnimation, "start()")
+            .invoke(enterAnimation, Qt::AutoConnection);
+    return true;
+}
+
+void Game::handleEnterAnimationRunningChanged(bool running)
+{
+    if(running)
+        return;
+
+    disconnect(sender(), 0, this, SLOT(handleEnterAnimationRunningChanged(bool)));
+
+   activateScene(m_enterScene);
+   m_enterScene = NULL;
+
+   if(m_exitScene)
+       m_exitScene->setVisible(false);
+}
+
+bool Game::triggerExitAnimation(Scene *scene)
+{
+    QObject *exitAnimation = scene->exitAnimation();
+
+    if(!exitAnimation)
+        return false;
+
+    m_exitScene = scene;
+    const QMetaObject *meta = exitAnimation->metaObject();
+
+    int propIndex = meta->indexOfProperty("running");
+
+    QMetaMethod signal  = meta->property(propIndex).notifySignal();
+
+    connect(exitAnimation, signal,
+            this, getMetaMethod(this, "handleExitAnimationRunningChanged(bool)"));
+
+    getMetaMethod(exitAnimation, "start()").invoke(exitAnimation, Qt::AutoConnection);
+
+    return true;
+}
+
+void Game::handleExitAnimationRunningChanged(bool running)
+{
+   if(running)
+       return;
+   disconnect(sender(), 0, this, SLOT(handleExitAnimationRunningChanged(bool)));
+
+   if(m_exitScene){
+       if(m_exitScene->viewport()){
+           m_exitScene->viewport()->setVisible(false);
+       }
+       m_exitScene->setVisible(false);
+   }
+   m_exitScene = NULL;
+
+   if(!m_sceneStack.isEmpty() && !m_sceneStack.top()->running()){
+        activateScene(m_sceneStack.top());
+   }
 }
 
 QMetaMethod Game::getMetaMethod(QObject *object, QString methodSignature) const
@@ -307,40 +398,3 @@ QMetaMethod Game::getMetaMethod(QObject *object, QString methodSignature) const
     return object->metaObject()->method(methodIndex);
 }
 
-void Game::handleEnterAnimationRunningChanged(bool running)
-{
-    if(running)
-        return;
-
-   m_nextScene->setRunning(true);
-   m_nextScene->setEnabled(true);
-   m_nextScene->setFocus(true, Qt::OtherFocusReason);
-
-    if(m_currentScene != m_nextScene)
-        m_currentScene = m_nextScene;
-
-    emit currentSceneChanged();
-
-    disconnect(sender(), 0, this, SLOT(handleEnterAnimationRunningChanged(bool)));
-
-    m_nextScene = NULL;
-}
-
-void Game::handleExitAnimationRunningChanged(bool running)
-{
-   if(running)
-       return;
-
-   Viewport *viewport = m_prevScene->viewport();
-
-   if (viewport) {
-           viewport->setVisible(false);
-           viewport = 0;
-   }
-
-   m_prevScene->setVisible(false);
-
-   disconnect(sender(), 0, this, SLOT(handleExitAnimationRunningChanged(bool)));
-
-   m_prevScene = NULL;
-}
