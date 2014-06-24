@@ -19,6 +19,7 @@
  */
 
 import QtQuick 2.2
+import QtQuick.Controls 1.1
 import Bacon2D 1.0
 
 Game {
@@ -41,10 +42,8 @@ Game {
 
     Scene {
         id: scene1
-
         width: parent.width
         height: parent.height
-
         focus:true
         enterAnimation: NumberAnimation{ target:scene1; properties: "x"; from: scene1.width; to:0; duration: 500}
         exitAnimation: NumberAnimation{ target:scene1; properties: "x";  from: 0; to: scene1.width; duration: 500}
@@ -54,14 +53,25 @@ Game {
             anchors.fill: parent
 
             Text{
+                id:text
                 anchors.centerIn: parent
                 color: "blue"
                 text:"Scene 1"
             }
-            MouseArea{
-                anchors.fill: parent
-                onClicked: {
-                    game.currentScene = scene2
+            Row{
+                anchors.top: text.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                Button{
+                    text:"pop"
+                    onClicked: game.popScene()
+                }
+                Button{
+                    text:"push"
+                    onClicked: game.pushScene(scene2)
+                }
+                Button{
+                    text:"switch"
+                    onClicked: game.currentScene = scene2
                 }
             }
         }
@@ -76,21 +86,32 @@ Game {
         height: parent.height
 
         enterAnimation: NumberAnimation{ target:scene2; properties: "x"; to: 0; from: -scene2.width; duration: 500}
-        //exitAnimation: NumberAnimation{  target:scene2; properties: "x"; to: scene2.width; from:0; easing.type: Easing.InBounce; duration: 500}
+        exitAnimation: NumberAnimation{  target:scene2; properties: "x"; to: scene2.width; from:0; easing.type: Easing.InBounce; duration: 500}
         Rectangle{
             id:rect2
             color:"blue"
             anchors.fill: parent
 
             Text{
+                id:text_2
                 anchors.centerIn: parent
                 color: "white"
                 text:"Scene 2"
             }
-            MouseArea{
-                anchors.fill: parent
-                onClicked: {
-                    game.currentScene = scene3
+            Row{
+                anchors.top: text_2.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                Button{
+                    text:"pop"
+                    onClicked: game.popScene()
+                }
+                Button{
+                    text:"push"
+                    onClicked: game.pushScene(scene3)
+                }
+                Button{
+                    text:"switch"
+                    onClicked: game.currentScene = scene3
                 }
             }
         }
@@ -121,14 +142,25 @@ Game {
             anchors.fill: parent
 
             Text{
+                id:text_3
                 anchors.centerIn: parent
                 color: "black"
                 text:"Scene 3"
             }
-            MouseArea{
-                anchors.fill: parent
-                onClicked: {
-                    game.currentScene = scene4
+            Row{
+                anchors.top: text_3.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                Button{
+                    text:"pop"
+                    onClicked: game.popScene()
+                }
+                Button{
+                    text:"push"
+                    onClicked: game.pushScene(scene4)
+                }
+                Button{
+                    text:"switch"
+                    onClicked: game.currentScene = scene4
                 }
             }
 
@@ -153,14 +185,25 @@ Game {
             anchors.fill: parent
 
             Text{
+                id:text_4
                 anchors.centerIn: parent
                 color: "green"
                 text:"Scene 4"
             }
-            MouseArea{
-                anchors.fill: parent
-                onClicked: {
-                    game.currentScene = scene5
+            Row{
+                anchors.top: text_4.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                Button{
+                    text:"pop"
+                    onClicked: game.popScene()
+                }
+                Button{
+                    text:"push"
+                    onClicked: game.pushScene(scene5)
+                }
+                Button{
+                    text:"switch"
+                    onClicked: game.currentScene = scene5
                 }
             }
 
@@ -182,23 +225,6 @@ Game {
 
         onRunningChanged: {
             console.log("scene5 running: " + running)
-        }
-
-        Text{
-            anchors.left: parent.left
-            anchors.leftMargin: 150
-            anchors.verticalCenter: parent.verticalCenter
-            font.pixelSize: 20
-            text: "Scene 5"
-            color: "white"
-            z:10
-        }
-
-        MouseArea{
-            anchors.fill: parent
-            onClicked: {
-                game.currentScene = scene1
-            }
         }
 
         ImageLayer {
@@ -241,6 +267,33 @@ Game {
                 }
             ]
 
+        }
+
+        Text{
+            id:text_5
+            anchors.left: parent.left
+            anchors.leftMargin: 150
+            anchors.verticalCenter: parent.verticalCenter
+            font.pixelSize: 20
+            text: "Scene 5"
+            color: "white"
+        }
+
+        Row{
+            anchors.top: text_5.bottom
+            anchors.horizontalCenter: text_5.horizontalCenter
+            Button{
+                text:"pop"
+                onClicked: game.popScene()
+            }
+            Button{
+                text:"push"
+                onClicked: game.pushScene(scene1)
+            }
+            Button{
+                text:"switch"
+                onClicked: game.currentScene = scene1
+            }
         }
 
         viewport: Viewport {

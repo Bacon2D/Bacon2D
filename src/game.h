@@ -47,8 +47,8 @@ public:
     Scene *currentScene() const;
     void setCurrentScene(Scene *currentScene);
 
-    void pushScene(Scene* scene);
-    Scene* popScene();
+    Q_INVOKABLE void pushScene(Scene* scene);
+    Q_INVOKABLE Scene* popScene();
 
     int ups() const;
     void setUps(const int &ups);

@@ -128,7 +128,8 @@ void Game::setCurrentScene(Scene *currentScene)
     \qmlmethod void Game::pushScene(Scene *scene)
 
     Suspends the execution of the running scene, while add a new Scene to the Scene stack.
-    If the Scene has the enterAnimation property set, the push will be animated.
+    If the Scene has the enterAnimation property set, the push will be animated. Warning, pushing
+    scenes already on stack will remove it from the current position and place it on top of the stack.
 
 \sa popScene
 */
@@ -141,11 +142,13 @@ void Game::pushScene(Scene *scene)
         if(!m_sceneStack.isEmpty()){
             topScene = m_sceneStack.top();
             deactivateScene(topScene);
+            m_exitScene = topScene;
         }
 
         m_sceneStack.push(scene);
         attachScene(scene);
         if(!triggerEnterAnimation(scene)){
+            qDebug() << "pau geral";
             activateScene(scene);
             if(topScene)
                 topScene->setVisible(false);
