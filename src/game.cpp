@@ -102,20 +102,23 @@ void Game::setCurrentScene(Scene *currentScene)
     if(m_sceneStack.isEmpty()){
         pushScene(currentScene);
     }else{
-        Scene *topScene = m_sceneStack.pop();
+        m_exitScene = m_sceneStack.pop();
 
         m_sceneStack.push(currentScene);
-        m_exitScene = topScene;
 
-        deactivateScene(topScene);
+        currentScene->setZ(m_sceneStack.size());
+        if(currentScene->viewport()){
+            currentScene->viewport()->setZ(m_sceneStack.size());
+        }
+        deactivateScene(m_exitScene);
 
         attachScene(currentScene);
 
         triggerExitAnimation(m_exitScene);
         if(!triggerEnterAnimation(currentScene)){
             activateScene(currentScene);
-            if(topScene)
-                topScene->setVisible(false);
+            if(m_exitScene)
+                m_exitScene->setVisible(false);
             m_exitScene = NULL;
         }
 
@@ -128,7 +131,7 @@ void Game::setCurrentScene(Scene *currentScene)
     \qmlmethod void Game::pushScene(Scene *scene)
 
     Suspends the execution of the running scene, while add a new Scene to the Scene stack.
-    If the Scene has the enterAnimation property set, the push will be animated. Warning, pushing
+    If the Scene has the enterAnimation property set, the push will be animated. \warning Pushing
     scenes already on stack will remove it from the current position and place it on top of the stack.
 
 \sa popScene
@@ -146,9 +149,12 @@ void Game::pushScene(Scene *scene)
         }
 
         m_sceneStack.push(scene);
+        scene->setZ(m_sceneStack.size());
+        if(scene->viewport()){
+            scene->viewport()->setZ(m_sceneStack.size());
+        }
         attachScene(scene);
         if(!triggerEnterAnimation(scene)){
-            qDebug() << "pau geral";
             activateScene(scene);
             if(topScene)
                 topScene->setVisible(false);
@@ -157,10 +163,10 @@ void Game::pushScene(Scene *scene)
 }
 
 /*!
-    \qmlmethod void Game::popScene(Scene *scene)
-
-    Suspends and remove the current Scene from stack animating if exitAnimation property was set.
-    If there is no scene on stack, it will do nothing.
+    \qmlmethod Scene* Game::popScene()
+    \brief Suspends and remove the top Scene from the scene stack.
+    Suspends and remove the current Scene from stack. If exitAnimation property
+the exit will be animated. When there is no scene on stack, it will do nothing.
 
 \sa pushScene
 */
