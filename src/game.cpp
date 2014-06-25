@@ -283,16 +283,14 @@ void Game::attachScene(Scene *scene)
         viewport->setParent(this);
         viewport->setParentItem(this);
         viewport->setScene(scene);
+        scene->setParentItem(viewport);
         viewport->setWidth(width());
         viewport->setHeight(height());
         viewport->setContentWidth(scene->width());
         viewport->setContentHeight(scene->height());
         viewport->updateMaxOffsets();
         viewport->setVisible(true);
-
-        scene->setParentItem(viewport);
     } else {
-        scene->setParent(this);
         scene->setParentItem(this);
     }
     scene->setVisible(true);
