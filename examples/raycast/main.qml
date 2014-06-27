@@ -240,7 +240,7 @@ Game {
             height: 30
             Text {
                 id: debugButtonText
-                text: "Debug view: off"
+                text: scene.debug ? "Debug view: on" : "Debug view: off"
                 anchors.centerIn: parent
             }
             color: "#DEDEDE"
@@ -248,21 +248,9 @@ Game {
             radius: 5
             MouseArea {
                 anchors.fill: parent
-                onClicked: {
-                    debugDraw.visible = !debugDraw.visible;
-                    debugButtonText.text = debugDraw.visible ? "Debug view: on" : "Debug view: off";
-                }
+                onClicked: scene.debug = !scene.debug
             }
         }
-
-        DebugDraw {
-            id: debugDraw
-            anchors.fill: parent
-            world: scene.world
-            opacity: 0.7
-            visible: false
-        }
-
 
         Slider {
             id: fractionSlider

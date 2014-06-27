@@ -24,8 +24,6 @@
 #include "game.h"
 #include "layer.h"
 #include "viewport.h"
-#include "box2dworld.h"
-#include "box2ddebugdraw.h"
 
 #include <QtCore/QtGlobal>
 #include <QtQml/QQmlEngine>
@@ -74,11 +72,14 @@ Scene::Scene(Game *parent)
     , m_game(parent)
     , m_world(0)
     , m_physics(false)
+    , m_debugDraw(0)
     , m_debug(false)
 {
     setVisible(false);
 
     connect(this, SIGNAL(debugChanged()), SLOT(onDebugChanged()));
+    connect(this, SIGNAL(worldChanged()), SLOT(onWorldChanged()));
+    connect(this, SIGNAL(initialized()), SLOT(onDebugChanged()));
 }
 
 Scene::~Scene()
@@ -174,18 +175,6 @@ void Scene::createWorld()
     if (m_physics && !m_world) {
         m_world = new Box2DWorld(this);
         m_world->setParentItem(this);
-        /* Wrap signals from Box2DWorld */
-        connect(m_world, SIGNAL(initialized()), this, SIGNAL(initialized()));
-        connect(m_world, SIGNAL(preSolve(Box2DContact *)), this, SIGNAL(preSolve(Box2DContact *)));
-        connect(m_world, SIGNAL(postSolve(Box2DContact *)), this, SIGNAL(postSolve(Box2DContact *)));
-        connect(m_world, SIGNAL(timeStepChanged()), this, SIGNAL(timeStepChanged()));
-        connect(m_world, SIGNAL(velocityIterationsChanged()), this, SIGNAL(velocityIterationsChanged()));
-        connect(m_world, SIGNAL(positionIterationsChanged()), this, SIGNAL(positionIterationsChanged()));
-        connect(m_world, SIGNAL(gravityChanged()), this, SIGNAL(gravityChanged()));
-        connect(m_world, SIGNAL(autoClearForcesChanged()), this, SIGNAL(autoClearForcesChanged()));
-        connect(m_world, SIGNAL(stepped()), this, SIGNAL(stepped()));
-        connect(m_world, SIGNAL(pixelsPerMeterChanged()), this, SIGNAL(pixelsPerMeterChanged()));
-        /* End wrapped signals from Box2DWorld */
         m_world->setRunning(m_running);
         emit worldChanged();
     }
@@ -214,7 +203,8 @@ void Scene::setPhysics(const bool &physics)
 
 /*!
  * \qmlproperty bool Scene::debug
- * \brief Debug mode
+ * \brief This property allows toggling debug mode, if enabled along with 
+   physics, an overlay showing fixtures will be shown.
  */
 bool Scene::debug() const
 {
@@ -227,6 +217,10 @@ void Scene::setDebug(const bool &debug)
         return;
 
     m_debug = debug;
+
+    /* if debug and physics are enabled, create a DebugDraw */
+    if (m_debug && m_physics && !m_debugDraw)
+        m_debugDraw = new Box2DDebugDraw(this);
 
     emit debugChanged();
 }
@@ -380,7 +374,6 @@ void Scene::rayCast(Box2DRayCast *rayCast, const QPointF &point1, const QPointF 
 }
 /* End wrapped Box2DWorld  */
 
-
 void Scene::initializeEntities(QQuickItem *parent)
 {
     QQuickItem *item;
@@ -391,9 +384,6 @@ void Scene::initializeEntities(QQuickItem *parent)
             if (Box2DBody *body = dynamic_cast<Box2DBody *>(item)) {
                 body->setParent(m_world);
                 body->initialize(m_world);
-            } else if (Box2DDebugDraw *debugDraw = dynamic_cast<Box2DDebugDraw *>(item)) {
-                /* Properly setWorld if a DebugDraw is added */
-                debugDraw->setWorld(m_world);
             }
         }
         initializeEntities(item);
@@ -403,7 +393,9 @@ void Scene::initializeEntities(QQuickItem *parent)
 void Scene::componentComplete()
 {
     QQuickItem::componentComplete();
+
     initializeEntities(this);
+
     if (m_world)
         m_world->componentComplete();
 }
@@ -426,6 +418,41 @@ void Scene::itemChange(ItemChange change, const ItemChangeData &data)
     QQuickItem::itemChange(change, data);
 }
 
+void Scene::onWorldChanged()
+{
+    if (m_world) {
+        /* Wrap signals from Box2DWorld */
+        connect(m_world, SIGNAL(initialized()), this, SIGNAL(initialized()));
+        connect(m_world, SIGNAL(preSolve(Box2DContact *)), this, SIGNAL(preSolve(Box2DContact *)));
+        connect(m_world, SIGNAL(postSolve(Box2DContact *)), this, SIGNAL(postSolve(Box2DContact *)));
+        connect(m_world, SIGNAL(timeStepChanged()), this, SIGNAL(timeStepChanged()));
+        connect(m_world, SIGNAL(velocityIterationsChanged()), this, SIGNAL(velocityIterationsChanged()));
+        connect(m_world, SIGNAL(positionIterationsChanged()), this, SIGNAL(positionIterationsChanged()));
+        connect(m_world, SIGNAL(gravityChanged()), this, SIGNAL(gravityChanged()));
+        connect(m_world, SIGNAL(autoClearForcesChanged()), this, SIGNAL(autoClearForcesChanged()));
+        connect(m_world, SIGNAL(stepped()), this, SIGNAL(stepped()));
+        connect(m_world, SIGNAL(pixelsPerMeterChanged()), this, SIGNAL(pixelsPerMeterChanged()));
+        /* End wrapped signals from Box2DWorld */
+
+        /* if debug is enabled, create a DebugDraw */
+        if (m_debug && !m_debugDraw)
+            m_debugDraw = new Box2DDebugDraw(this);
+    }
+}
+
 void Scene::onDebugChanged()
 {
+    if (m_debugDraw && m_world) {
+        /* Properly setup a DebugDraw */
+        m_debugDraw->setWorld(m_world);
+        m_debugDraw->setParentItem(this);
+        if (this->childItems().indexOf(m_debugDraw) != (this->childItems().length()-1))
+            m_debugDraw->stackAfter(this->childItems().last());
+        m_debugDraw->setOpacity(0.3);
+        m_debugDraw->setWidth(width());
+        m_debugDraw->setHeight(height());
+        m_debugDraw->setX(x());
+        m_debugDraw->setY(y());
+        m_debugDraw->setVisible(m_debug);
+    }
 }

@@ -25,6 +25,7 @@
 #include "entity.h"
 #include "box2dcontact.h"
 #include "box2dworld.h"
+#include "box2ddebugdraw.h"
 
 #include <QtCore/QtGlobal>
 
@@ -114,6 +115,7 @@ signals:
     void debugChanged();
     void physicsChanged();
 
+    /* These are wrapped around Box2DWorld */
     void initialized();
     void preSolve(Box2DContact * contact);
     void postSolve(Box2DContact * contact);
@@ -124,9 +126,11 @@ signals:
     void autoClearForcesChanged();
     void stepped();
     void pixelsPerMeterChanged();
+    /* End wrapped Box2DWorld  */
 
 protected slots:
     void onDebugChanged();
+    void onWorldChanged();
 
 protected:
     virtual void componentComplete();
@@ -140,6 +144,7 @@ protected:
     Viewport *m_viewport;
     Game *m_game;
     Box2DWorld *m_world;
+    Box2DDebugDraw *m_debugDraw;
     bool m_physics;
     bool m_debug;
 };

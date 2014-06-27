@@ -79,7 +79,8 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<Box2DPolygon>("Bacon2D", 1, 0, "Polygon");
     qmlRegisterType<Box2DChain>("Bacon2D", 1, 0, "Chain");
     qmlRegisterType<Box2DEdge>("Bacon2D", 1, 0, "Edge");
-    qmlRegisterType<Box2DDebugDraw>("Bacon2D", 1, 0, "DebugDraw");
+    qmlRegisterUncreatableType<Box2DDebugDraw>("Bacon2D", 1, 0, "DebugDraw",
+                                               QStringLiteral("DebugDraw created by Scene if physics and debug is enabled"));
     qmlRegisterUncreatableType<Box2DJoint>("Bacon2D", 1, 0, "Joint",
                                            QStringLiteral("Base type for DistanceJoint, RevoluteJoint etc."));
     qmlRegisterType<Box2DDistanceJoint>("Bacon2D", 1, 0, "DistanceJoint");
