@@ -54,7 +54,8 @@ class Scene : public QQuickItem
     Q_PROPERTY(Box2DProfile *profile READ profile NOTIFY stepped)
     Q_PROPERTY(float pixelsPerMeter READ pixelsPerMeter WRITE setPixelsPerMeter NOTIFY pixelsPerMeterChanged)
     /* End Box2DWorld wrapped properties */
-
+    Q_PROPERTY(QObject *enterAnimation READ enterAnimation WRITE setEnterAnimation NOTIFY enterAnimationChanged)
+    Q_PROPERTY(QObject *exitAnimation READ exitAnimation WRITE setExitAnimation NOTIFY exitAnimationChanged)
 
 public:
     Scene(Game *parent = 0);
@@ -108,6 +109,11 @@ public:
 
     /* End wrapped Box2DWorld  */
 
+    QObject *enterAnimation() const;
+    void setEnterAnimation(QObject *animation);
+
+    QObject *exitAnimation() const;
+    void setExitAnimation(QObject *animation);
 signals:
     void runningChanged();
     void viewportChanged();
@@ -128,6 +134,8 @@ signals:
     void pixelsPerMeterChanged();
     /* End wrapped Box2DWorld  */
 
+    void enterAnimationChanged();
+    void exitAnimationChanged();
 protected slots:
     void onDebugChanged();
     void onWorldChanged();
@@ -147,6 +155,9 @@ protected:
     Box2DDebugDraw *m_debugDraw;
     bool m_physics;
     bool m_debug;
+
+    QObject *m_enterAnimation;
+    QObject *m_exitAnimation;
 };
 
 

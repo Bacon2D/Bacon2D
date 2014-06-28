@@ -25,6 +25,7 @@
 #include <QtQuick/QQuickItem>
 #include <QtCore/QTime>
 #include <QtCore/QtGlobal>
+#include <QtCore/QStack>
 
 class Scene;
 class Viewport;
@@ -40,12 +41,17 @@ class Game : public QQuickItem
     Q_PROPERTY(int ups READ ups WRITE setUps NOTIFY upsChanged)
     Q_PROPERTY(QPointF mouse READ mouse)
     Q_PROPERTY(QString gameName READ gameName WRITE setGameName NOTIFY gameNameChanged)
+    Q_PROPERTY(int stackLevel READ stackLevel NOTIFY stackLevelChanged)
 
 public:
     Game(QQuickItem *parent = 0);
 
     Scene *currentScene() const;
     void setCurrentScene(Scene *currentScene);
+
+    int stackLevel() const;
+    Q_INVOKABLE void pushScene(Scene* scene);
+    Q_INVOKABLE Scene* popScene();
 
     int ups() const;
     void setUps(const int &ups);
@@ -64,13 +70,30 @@ signals:
     void currentSceneChanged();
     void upsChanged();
     void gameNameChanged();
+    void stackLevelChanged();
 
 private:
-    Scene *m_currentScene;
+
     QTime m_gameTime;
     int m_ups;
-    Viewport *m_viewport;
     int m_timerId;
+
+    //for handling scene transition
+    Scene *m_enterScene;
+    Scene *m_exitScene;
+    QStack<Scene*> m_sceneStack;
+
+    QMetaMethod getMetaMethod(QObject *object, QString methodSignature) const;
+
+    void attachScene(Scene *scene);
+    void activateScene(Scene *scene);
+    void deactivateScene(Scene *scene);
+    bool triggerExitAnimation(Scene *scene);
+    bool triggerEnterAnimation(Scene *scene);
+
+private slots:
+    void handleEnterAnimationRunningChanged(bool running);
+    void handleExitAnimationRunningChanged(bool running);
 };
 
 #endif /* _GAME_H_ */
