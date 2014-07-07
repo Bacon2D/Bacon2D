@@ -1,4 +1,9 @@
-A simple Qt-based 2D game engine.
+2D Game Engine for QML
+
+Bacon2D is a framework to ease 2D game development, providing ready-to-use QML 
+components useful for creating compeling games.
+
+API documentation can be found at http://bacon2d.com/docs
 
 ========
 1. Build
@@ -17,6 +22,11 @@ Available QMake parameters:
 	Prefix where Qt has been installed. It is required to install
 	Bacon2D's QML import plugin and related files.
 	The default path is /usr/lib/qt5
+
+
+If building from a git checkout, you will need to initialize the git submodules:
+
+$ git submodule update --init
 
 Sample build from Bacon2D's root source tree:
 
@@ -47,3 +57,10 @@ the command line.
 
 $ cd examples/fixtures
 $ qmlscene -I ../../build/src/imports main.qml
+
+
+===============
+3. Get Involved
+===============
+
+http://bacon2d.com/contact.html
