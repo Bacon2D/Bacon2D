@@ -68,7 +68,6 @@ Game {
                 Button{
                     text:"pop"
                     onClicked: game.popScene()
-                    enabled: game.stackLevel !== 1
                 }
                 Button{
                     text:"push"
@@ -109,7 +108,6 @@ Game {
                 Button{
                     text:"pop"
                     onClicked: game.popScene()
-                    enabled: game.stackLevel !== 1
                 }
                 Button{
                     text:"push"
@@ -159,7 +157,6 @@ Game {
                 Button{
                     text:"pop"
                     onClicked: game.popScene()
-                    enabled: game.stackLevel !== 1
                 }
                 Button{
                     text:"push"
@@ -203,7 +200,6 @@ Game {
                 Button{
                     text:"pop"
                     onClicked: game.popScene()
-                    enabled: game.stackLevel !== 1
                 }
                 Button{
                     text:"push"
@@ -293,7 +289,6 @@ Game {
             Button{
                 text:"pop"
                 onClicked: game.popScene()
-                enabled: game.stackLevel !== 1
             }
             Button{
                 text:"push"
