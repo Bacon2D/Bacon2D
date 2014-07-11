@@ -216,13 +216,13 @@ void Game::pushScene(Scene *scene)
     \qmlmethod Scene* Game::popScene()
     \brief Suspends and remove the top Scene from the scene stack.
     Suspends and remove the current Scene from stack. If exitAnimation property
-the exit will be animated. When there is only one scene on stack, it will do nothing.
+the exit will be animated. When there is no scene on stack, it will do nothing.
 
 \sa pushScene
 */
 Scene* Game::popScene()
 {
-    if(m_sceneStack.isEmpty() || m_sceneStack.size() == 1)
+    if(m_sceneStack.isEmpty())
         return NULL;
 
     Scene *topScene = m_sceneStack.pop();
