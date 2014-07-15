@@ -1,5 +1,6 @@
 /**
  * Copyright (C) 2012 by INdT
+ * Copyright (C) 2014 Bacon2D Project
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -20,7 +21,6 @@
  */
 
 #include "sprite.h"
-
 #include "scene.h"
 #include "spritesheet.h"
 #include "spriteanimation.h"
