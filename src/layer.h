@@ -25,47 +25,10 @@
 
 #include "entity.h"
 
-#include <QtQuick/QQuickPaintedItem>
-#include <QtCore/QList>
-#include <QtCore/QString>
-
-class Offsets {
-public:
-    typedef QList<Offsets> OffsetsList;
-
-    Offsets() { m_point = m_size = 0; }
-    Offsets(int point, int size)
-    {
-        m_point = point;
-        m_size = size;
-    }
-    ~Offsets() {}
-
-    int point() const { return m_point; }
-    void setPoint(int point)
-    {
-        if (point != m_point)
-            m_point = point;
-    }
-
-    int size() const { return m_size; }
-    void setSize(int size)
-    {
-        if (size != m_size)
-            m_size = size;
-    }
-    bool operator==(const Offsets &other) const {
-        return ((this->point() == other.point())
-                && (this->size() == other.size()));
-    }
-
-private:
-    int m_point;
-    int m_size;
-};
+#include <QtQuick/QQuickItem>
 
 //! A layer class
-class Layer: public QQuickPaintedItem
+class Layer: public QQuickItem
 {
     Q_OBJECT
 
@@ -75,7 +38,6 @@ class Layer: public QQuickPaintedItem
 
     Q_ENUMS (
         LayerType
-        DrawType
     )
 
 public:
@@ -93,14 +55,8 @@ public:
         Mirrored
     };
 
-    enum DrawType {
-        PlaneDraw,
-        TiledDraw
-    };
-
     Layer::LayerType layerType() const { return m_type; };
     void setLayerType(const Layer::LayerType &type);
-
 
 signals:
     void animatedChanged();
@@ -109,6 +65,8 @@ signals:
     void layerTypeChanged();
 
 protected:
+    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
+
     bool m_isAnimated;
     qreal m_horizontalStep;
     Layer::LayerType m_type;

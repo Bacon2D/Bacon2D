@@ -22,8 +22,136 @@
 
 #include "imagelayer.h"
 
-#include <QtCore/QDebug>
+#include <QImage>
+#include <QPainter>
 
+// ImageLayerShader
+const char *ImageLayerShader::vertexShader() const
+{
+    return
+        "attribute highp vec4 aVertex;"
+        "attribute highp vec2 aTexCoord;"
+
+        "uniform highp mat4 qt_Matrix;"
+        "varying highp vec2 texCoord;"
+
+        "void main() {"
+        "    texCoord = aTexCoord;"
+        "    gl_Position = qt_Matrix * aVertex;"
+        "}";
+}
+
+const char *ImageLayerShader::fragmentShader() const {
+    return
+        "uniform lowp float qt_Opacity;"
+        "varying highp vec2 texCoord;"
+
+        "uniform sampler2D texture;"
+        "uniform highp float xPos;"
+
+        "void main() {"
+        "   gl_FragColor = texture2D(texture, vec2(texCoord.x + xPos, texCoord.y)) * qt_Opacity;"
+        "}";
+}
+
+QList<QByteArray> ImageLayerShader::attributes() const
+{
+    return QList<QByteArray>() << "aVertex" << "aTexCoord";
+}
+
+void ImageLayerShader::initialize()
+{
+    if (!program()->isLinked())
+        return;
+
+    QSGSimpleMaterialShader<ImageLayerState>::initialize();
+    program()->bind();
+
+    m_idTexture = program()->uniformLocation("texture");
+    m_idXPos = program()->uniformLocation("xPos");
+}
+
+void ImageLayerShader::updateState(const ImageLayerState *newState, const ImageLayerState *oldState)
+{
+    if (!oldState)
+        newState->texture->bind();
+
+    if (!oldState || oldState->xPos != newState->xPos)
+        program()->setUniformValue(m_idXPos, (GLfloat)newState->xPos);
+}
+
+void ImageLayerShader::resolveUniforms()
+{
+    program()->setUniformValue(m_idTexture, 0);
+}
+// ImageLayerShader
+
+// ImageLayerNode
+ImageLayerNode::ImageLayerNode(QQuickWindow *window, const QString file, bool mirroredType)
+{
+    QImage image(file);
+
+    // NOTE this is a workaround to get the mirrored effect at the end of the image
+    // ideally, do it using the shader program
+    if (mirroredType) {
+        QImage tempImage(image.width() * 2, image.height(), QImage::Format_ARGB32);
+        QPainter p(&tempImage);
+            p.drawImage(0, 0, image);
+            p.drawImage(image.width(), 0, image.mirrored(true, false));
+        p.end();
+
+        image = tempImage;
+    }
+
+    QSGTexture *texture = window->createTextureFromImage(image);
+
+    texture->setHorizontalWrapMode(QSGTexture::Repeat);
+    texture->setFiltering(QSGTexture::Linear);
+
+    m_width = texture->textureSize().width();
+    m_height = texture->textureSize().height();
+
+    QSGSimpleMaterial<ImageLayerState> *m = ImageLayerShader::createMaterial();
+    m->state()->texture = texture;
+    setMaterial(m);
+    setFlag(OwnsMaterial, true);
+
+    updateXPos(0);
+
+    QSGGeometry *g = new QSGGeometry(QSGGeometry::defaultAttributes_TexturedPoint2D(), 4);
+    QSGGeometry::updateTexturedRectGeometry(g, QRect(), QRect());
+    setGeometry(g);
+
+    setFlag(OwnsGeometry, true);
+}
+
+void ImageLayerNode::setRect(const QRectF &bounds)
+{
+    QSGGeometry::updateTexturedRectGeometry(geometry(), bounds, QRectF(0, 0, 1, 1));
+    markDirty(QSGNode::DirtyGeometry);
+}
+
+void ImageLayerNode::updateXPos(const qreal pos)
+{
+    QSGSimpleMaterial<ImageLayerState> *m =
+        static_cast<QSGSimpleMaterial<ImageLayerState> *>(material());
+
+    m->state()->xPos = -(pos / m_width);
+    markDirty(QSGNode::DirtyMaterial);
+}
+
+qreal ImageLayerNode::imageWidth() const
+{
+    return m_width;
+}
+
+qreal ImageLayerNode::imageHeight() const
+{
+    return m_height;
+}
+// ImageLayerNode
+
+// ImageLayer
 /*!
   \qmltype ImageLayer
   \inqmlmodule Bacon2D
@@ -35,25 +163,16 @@
 */
 ImageLayer::ImageLayer(Layer *parent)
     : Layer((QQuickItem *)parent)
-    , m_currentImage(0)
-    , m_tileWidth(32)
-    , m_tileHeight(32)
-    , m_drawType(Layer::TiledDraw)
-    , m_areaToDraw(2.0)
-    , m_columnOffset(0)
-    , m_latestPoint(0)
-    , m_globalXPos(0.0)
-    , m_localXPos(0.0)
-    , m_localYPos(0.0)
-    , m_initialized(false)
+    , m_currentHorizontalStep(0)
+    , m_imageWidth(0)
+    , m_imageHeight(0)
+    , m_geometryChanged(false)
 {
-    connect(this, SIGNAL(horizontalDirectionChanged()),
-            this, SLOT(onHorizontalDirectionChanged()));
+    setFlag(ItemHasContents, true);
 }
 
 ImageLayer::~ImageLayer()
 {
-    m_pixmaps.clear();
 }
 
 void ImageLayer::setSource(const QUrl &source)
@@ -64,6 +183,7 @@ void ImageLayer::setSource(const QUrl &source)
     m_source = source;
 
     emit sourceChanged();
+    update();
 }
 
 /*!
@@ -75,362 +195,63 @@ QUrl ImageLayer::source() const
     return m_source;
 }
 
-void ImageLayer::setDrawType(Layer::DrawType drawType)
-{
-    if (m_drawType != drawType)
-        m_drawType = drawType;
-}
-
-/*!
-  \qmlproperty enumeration ImageLayer::drawType
-  \table
-  \header
-    \li {2, 1} \e {Layer::DrawType} is an enumeration:
-  \header
-    \li Type
-    \li Description
-  \row
-    \li Layer.TiledDraw (default)
-    \li Tiled
-  \row
-    \li Layer.PlaneDraw
-    \li Plane
-  \endtable
-*/
-Layer::DrawType ImageLayer::drawType() const
-{
-    return m_drawType;
-}
-
-void ImageLayer::setTileHeight(const int &value)
-{
-    if (value == m_tileHeight)
-        return;
-
-    m_tileHeight = value;
-
-    emit tilesChanged();
-}
-
-void ImageLayer::setTileWidth(const int &value)
-{
-    if (value == m_tileWidth)
-        return;
-
-    m_tileWidth = value;
-
-    emit tilesChanged();
-}
-
-//! Adds a tile on the list
-/*!
- * \param pix the pixmap to append on the list
- * \return the list actual size or -1 if the layer can not accept tiled pixmaps
- */
-int ImageLayer::addTile(const QPixmap &pixmap)
-{
-    m_pixmaps.append(pixmap);
-
-    return m_pixmaps.size();
-}
-
-//! Gets a tile from the list
-/*!
- * \param pos the tile position on the list
- * \return the tile pixmap of position pos on the list or null, if none
- */
-QPixmap ImageLayer::getTile(int pos) const
-{
-    return m_pixmaps.at(pos);
-}
-
-void ImageLayer::setDrawGrid(bool draw)
-{
-    if (draw == m_drawGrid)
-        return;
-
-    m_drawGrid = draw;
-}
-
-void ImageLayer::setGridColor(const QColor &color)
-{
-    if (color == m_gridColor)
-        return;
-
-    m_gridColor = color;
-}
-
-//! Gets the tiles pixmap list size
-/*!
- * \return the tiles pixmap list size
- */
-int ImageLayer::count() const
-{
-    return m_pixmaps.size();
-}
-
-void ImageLayer::generateOffsets()
-{
-    bool completed = false;
-    int start = 0;
-    int step = m_numColumns;
-    int max = m_totalColumns;
-    int count = 0;
-    int maxCount = step * (int) m_areaToDraw;
-    bool first = true;
-    Offsets::OffsetsList firstPoint;
-
-    while (!completed) {
-        Offsets::OffsetsList offsetsList;
-
-        int size;
-        int end = 0;
-        bool finished = false;
-
-        while (count < maxCount) {
-            end = (start + step) % max;
-
-            if (end - start > 0) {
-                size = step;
-                count += size;
-
-                // TODO check this comparison. Is it really needed?
-                if (finished || count != maxCount) {
-                    offsetsList.append(Offsets(start, size));
-
-                    if (!finished)
-                        start = end;
-                    finished = false;
-                } else {
-                    offsetsList.append(Offsets(start, size));
-                }
-            } else {
-                int oldStart = start;
-                size = max - start;
-                count += size;
-
-                offsetsList.append(Offsets(start, size));
-
-                size = step - size;
-                start = 0;
-                count += size;
-
-                if (size != 0) {
-                    offsetsList.append(Offsets(0, size));
-                }
-
-                if (count <= maxCount / 2) {
-                    start = size;
-                    finished = true;
-                } else
-                    start = oldStart;
-            }
-        }
-
-        count = 0;
-
-        if (offsetsList == firstPoint)
-            completed = true;
-        else
-            m_offsets.append(offsetsList);
-
-        if (first) {
-            firstPoint = offsetsList;
-            first = false;
-        }
-    }
-}
-
-void ImageLayer::updateTiles()
-{
-    if ((boundingRect().width() == 0) || (boundingRect().height() == 0))
-        return;
-
-    // TODO create enums to define image aspect, auto tile, etc...
-    QPixmap pixmap;
-    if (m_source.url().startsWith("qrc:/"))
-        pixmap.load(m_source.url().replace(QString("qrc:/"), QString(":/")));
-    else
-        pixmap.load(m_source.toLocalFile());
-
-    // If item height doesn't match pixmap height, scaleToHeight
-    if (pixmap.height() != (int)height()) {
-        pixmap = pixmap.scaledToHeight(height());
-    }
-
-    if (m_drawType == Layer::PlaneDraw) {
-        m_tileWidth = width();
-        m_tileHeight = height();
-
-        if (pixmap.width() % (int)width() != 0) {
-            // XXX create some log system?
-            qCritical() << QString("Bacon2D>>Image \'%1\' doesn't contains a proper size... CROPPING!").arg(m_source.url());
-
-            int newWidth = pixmap.width() - (pixmap.width() % (int)width());
-            pixmap = pixmap.copy(0, 0, newWidth, height());
-        }
-    }
-
-    if (pixmap.width() < boundingRect().width()) {
-        QPixmap temp(boundingRect().width(), boundingRect().height());
-        QPainter p(&temp);
-            p.drawTiledPixmap(boundingRect(), pixmap, QPoint(0,0));
-        p.end();
-
-        pixmap = temp;
-    }
-
-    if (m_type == Layer::Mirrored) {
-        QPixmap temp(pixmap.width() * 2, pixmap.height());
-
-        QPainter p(&temp);
-            p.drawPixmap(0, 0, pixmap.width(), pixmap.height(), pixmap);
-            p.drawPixmap(pixmap.width(), 0, pixmap.width(), pixmap.height(),
-                         pixmap.transformed(QTransform().scale(-1, 1), Qt::FastTransformation));
-        p.end();
-
-        pixmap = temp;
-    }
-
-    // visible tiles
-    m_numColumns = boundingRect().width() / m_tileWidth;
-    m_numRows = boundingRect().height() / m_tileHeight;
-
-    // total of columns and rows
-    m_totalColumns = pixmap.width() / m_tileWidth;
-    m_totalRows = pixmap.height() / m_tileHeight;
-
-    int i, j;
-    for (i = 0; i < m_totalRows; i++) {
-        for (j = 0; j < m_totalColumns; j++) {
-            QPixmap temp(m_tileWidth, m_tileHeight);
-
-            QPainter p(&temp);
-                p.setCompositionMode(QPainter::CompositionMode_Source);
-                p.drawPixmap(0, 0, m_tileWidth, m_tileHeight,
-                             pixmap, j * m_tileWidth, i * m_tileHeight, m_tileWidth, m_tileHeight);
-            p.end();
-
-            addTile(temp);
-        }
-    }
-
-    generateOffsets();
-    drawPixmap();
-}
-
-QPixmap ImageLayer::generatePartialPixmap(int startPoint, int size)
-{
-    QPixmap temp(m_tileWidth * size, boundingRect().height());
-
-    QPainter p(&temp);
-        int i, j;
-        int index = 0;
-        for (i = 0; i < m_numRows; i++) {
-            for (j = 0; j < size; j++) {
-                index = ((i * m_totalColumns) + (j + startPoint));
-
-                p.drawPixmap(j * m_tileWidth, i * m_tileHeight, getTile(index));
-
-                // just draw a grid
-                // XXX chech the possibility of drawn it only on a debug mode
-                if (m_drawGrid) {
-                    p.setPen(m_gridColor);
-                    p.drawRect(j * m_tileWidth, i * m_tileHeight, m_tileWidth, m_tileHeight);
-                }
-            }
-        }
-    p.end();
-
-    return temp;
-}
-
-void ImageLayer::drawPixmap()
-{
-    if ((boundingRect().width() == 0) || (boundingRect().height() == 0))
-        return;
-
-    if (m_currentImage)
-        delete m_currentImage;
-
-    m_currentImage = new QImage(boundingRect().width() * m_areaToDraw,
-                                boundingRect().height(), QImage::Format_ARGB32_Premultiplied);
-
-    QPainter p(m_currentImage);
-        int xPoint = 0;
-        for (int i = 0; i < m_offsets[m_columnOffset].size(); i++) {
-            Offsets offset = m_offsets[m_columnOffset].at(i);
-
-            QPixmap pixmap = generatePartialPixmap(offset.point(), offset.size());
-            p.drawPixmap(xPoint, 0, pixmap);
-
-            xPoint += pixmap.width();
-            m_latestPoint = offset.point();
-        }
-
-        if (m_horizontalStep > 0)
-            m_columnOffset = (m_columnOffset - 1 < 0) ? m_offsets.size() - 1 : m_columnOffset - 1;
-        else
-            m_columnOffset = (m_columnOffset + 1) % m_offsets.size();
-    p.end();
-}
-
-// move to a X value
-void ImageLayer::moveX(const qreal &x)
-{
-    qreal newValue = x;
-    qreal delta = m_globalXPos + newValue;
-
-    m_globalXPos = newValue * -1;
-    m_localXPos -= delta;
-
-    if (m_localXPos <= -width()) {
-        drawPixmap();
-        m_localXPos = width() + m_localXPos;
-    } else if (m_localXPos >= 0) {
-        if (m_globalXPos != 0) {
-            drawPixmap();
-            m_localXPos = -width() + m_localXPos;
-        } else
-            m_localXPos = 0;
-    }
-}
-
-void ImageLayer::moveY(const qreal &y)
-{
-    Q_UNUSED(y);
-
-    // TBD
-}
-
 void ImageLayer::updateHorizontalStep()
 {
+    // XXX m_currentHorizontalStep is a pretty bad name
+    // keeping it because we are planning moving the horizontalStep update logic to
+    // the QML part (using ScriptBehavior)
     m_currentHorizontalStep += m_horizontalStep;
 
-    if (m_currentHorizontalStep <= -width()) {
-        drawPixmap();
+    if (m_currentHorizontalStep <= -m_imageWidth)
         m_currentHorizontalStep = 0;
-    } else if (m_currentHorizontalStep >= 0) {
-        drawPixmap();
-        m_currentHorizontalStep = -width();
+    else if (m_currentHorizontalStep >= 0)
+        m_currentHorizontalStep = -m_imageWidth;
+}
+
+QSGNode *ImageLayer::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
+{
+    ImageLayerNode *n = static_cast<ImageLayerNode *>(oldNode);
+
+    if (boundingRect().isEmpty()) {
+        delete n;
+        return 0;
     }
-}
 
-void ImageLayer::onHorizontalDirectionChanged()
-{
-    if (m_offsets.count() != 0)
-        m_columnOffset = (m_columnOffset + 2) % m_offsets.size();
-}
+    if (!n) {
+        // thanks to Ken VanDine for the file location fix:
+        QString localFile;
 
-void ImageLayer::paint(QPainter *painter)
-{
-    if (!m_currentImage)
-        return;
+        if (m_source.url().startsWith("qrc:/"))
+            localFile = m_source.url().replace(QString("qrc:/"), QString(":/"));
+        else
+            localFile = m_source.toLocalFile();
 
-    if (m_isAnimated)
+        n = new ImageLayerNode(window(), localFile,
+                (m_type == Layer::Mirrored) ? true : false);
+
+        m_imageWidth = n->imageWidth();
+        m_imageHeight = n->imageHeight();
+    }
+
+    if (m_isAnimated) {
         updateHorizontalStep();
+        n->updateXPos(m_currentHorizontalStep);
+    }
 
-    painter->drawImage(m_currentHorizontalStep, 0, *m_currentImage);
+    if (m_geometryChanged) {
+        // simple workaround to deal with resizing
+        // works when imageWidth > imageHeigth; should test when dealing with vertical scrolling images
+        // FAIL: it doesn't work when resizing to a width > that imageWidth :'(
+        qreal factor = m_imageWidth / m_imageHeight;
+        qreal w = height() * factor;
+
+        QRectF r(0, 0, w, height());
+
+        n->setRect(r);
+        m_geometryChanged = false;
+    }
+
+    return n;
 }
 
 void ImageLayer::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
@@ -438,20 +259,21 @@ void ImageLayer::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeo
     if (newGeometry.isEmpty() || !isComponentComplete())
         return;
 
-    updateTiles();
+    m_geometryChanged = true;
 
-    m_initialized = true;
+    update();
+    //XXX when calling it we get some dirty :/
     Layer::geometryChanged(newGeometry, oldGeometry);
 }
 
 void ImageLayer::componentComplete()
 {
     Layer::componentComplete();
-
-    if (m_initialized || boundingRect().isEmpty())
-        return;
-
-    updateTiles();
-
-    m_initialized = true;
 }
+
+void ImageLayer::setContentGeometry(const QRectF &geometry)
+{
+    setWidth(geometry.width());
+    setHeight(geometry.height());
+}
+// ImageLayer

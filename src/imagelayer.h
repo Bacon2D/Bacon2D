@@ -25,23 +25,67 @@
 
 #include "layer.h"
 
-#include <QtCore/QtGlobal>
-#include <QtGui/QPixmap>
-#include <QtGui/QPainter>
+#include <QSGTexture>
+#include <QQuickWindow>
+#include <QSGSimpleMaterialShader>
+#include <QSGGeometryNode>
 
+// ImageLayerState
+struct ImageLayerState
+{
+    ~ImageLayerState() {
+        delete texture;
+    }
+
+    QSGTexture *texture;
+    qreal xPos;
+};
+// ImageLayerState
+
+// ImageLayerShader
+class ImageLayerShader : public QSGSimpleMaterialShader<ImageLayerState>
+{
+    QSG_DECLARE_SIMPLE_SHADER(ImageLayerShader, ImageLayerState)
+
+public:
+    const char *vertexShader() const;
+    const char *fragmentShader() const;
+    QList<QByteArray> attributes() const;
+
+    void initialize();
+    void updateState(const ImageLayerState *newState, const ImageLayerState *oldState);
+    void resolveUniforms();
+
+private:
+    int m_idTexture;
+    int m_idXPos;
+};
+// ImageLayerShader
+
+// ImageLayerNode
+class ImageLayerNode : public QSGGeometryNode
+{
+public:
+    ImageLayerNode(QQuickWindow *window, const QString file, bool mirroredType = false);
+
+    void setRect(const QRectF &bounds);
+    void updateXPos(const qreal pos);
+
+    qreal imageWidth() const;
+    qreal imageHeight() const;
+
+private:
+    qreal m_width;
+    qreal m_height;
+};
+// ImageLayerNode
+
+// ImageLayer (finally ;D)
 class ImageLayer : public Layer
 {
     Q_OBJECT
 
     Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
-
-    // From Layers
-    Q_PROPERTY(int tileHeight READ tileHeight WRITE setTileHeight)
-    Q_PROPERTY(int tileWidth READ tileWidth WRITE setTileWidth)
-
-    Q_PROPERTY(Layer::DrawType drawType READ drawType WRITE setDrawType)
-    Q_PROPERTY(bool drawGrid READ drawGrid WRITE setDrawGrid)
-    Q_PROPERTY(QColor gridColor READ gridColor WRITE setGridColor)
 
 public:
     ImageLayer(Layer *parent = 0);
@@ -50,80 +94,29 @@ public:
     void setSource(const QUrl &source);
     QUrl source() const;
 
-    void setDrawType(Layer::DrawType drawType);
-    Layer::DrawType drawType() const;
-
-    int tileHeight() const { return m_tileHeight; }
-    void setTileHeight(const int &value);
-
-    int tileWidth() const { return m_tileWidth; }
-    void setTileWidth(const int &value);
-
-    int addTile(const QPixmap &pix);
-    QPixmap getTile(int pos) const;
-
-    bool drawGrid() const { return m_drawGrid; }
-    void setDrawGrid(bool draw);
-
-    QColor gridColor() const { return m_gridColor; }
-    void setGridColor(const QColor &color);
-
-    int count() const;
-
-    void moveX(const qreal &x);
-    void moveY(const qreal &y);
-
-    void paint(QPainter *painter);
+    QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *);
+    void setContentGeometry(const QRectF &geometry);
 
 signals:
-    void tilesChanged();
     void sourceChanged();
 
 protected:
-    void drawPixmap();
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
-
-    QImage *m_currentImage;
-
-    int m_tileWidth;
-    int m_tileHeight;
-    int m_numColumns;
-    int m_numRows;
-    int m_totalColumns;
-    int m_totalRows;
-
-protected slots:
-    void onHorizontalDirectionChanged();
 
 protected:
     void componentComplete();
 
 private:
-    QPixmap generatePartialPixmap(int startPoint, int size);
-    void generateOffsets();
     void updateHorizontalStep();
-    void updateTiles();
-
-    QList<Offsets::OffsetsList> m_offsets;
-    QList<QPixmap> m_pixmaps;
 
     QUrl m_source;
-    Layer::DrawType m_drawType;
-
-    const float m_areaToDraw;
-    int m_columnOffset;
-    int m_latestPoint;
-
-    bool m_drawGrid;
-    QColor m_gridColor;
-
-    qreal m_globalXPos;
-    qreal m_globalYPos;
-    qreal m_localXPos;
-    qreal m_localYPos;
     qreal m_currentHorizontalStep;
 
-    bool m_initialized;
+    qreal m_imageWidth;
+    qreal m_imageHeight;
+
+    bool m_geometryChanged;
 };
+// ImageLayer
 
 #endif /* _IMAGELAYER_H_ */
