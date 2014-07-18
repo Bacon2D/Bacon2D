@@ -22,8 +22,6 @@
 
 #include "layer.h"
 
-#include <QtCore/QDebug>
-#include <QtGui/QPainter>
 #include <QtQml/QQmlProperty>
 
 /*!
@@ -33,7 +31,7 @@
    needed by other Layer types.  See \l ImageLayer.
 */
 Layer::Layer(QQuickItem *parent)
-    : QQuickPaintedItem(parent)
+    : QQuickItem(parent)
     , m_isAnimated(false)
     , m_horizontalStep(1.0)
     , m_type(Layer::Infinite)
@@ -103,4 +101,9 @@ void Layer::setLayerType(const Layer::LayerType &type)
     m_type = type;
 
     emit layerTypeChanged();
+}
+
+void Layer::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+{
+    QQuickItem::geometryChanged(newGeometry, oldGeometry);
 }

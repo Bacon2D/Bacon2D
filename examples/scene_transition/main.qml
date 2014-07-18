@@ -233,13 +233,11 @@ Game {
 
         ImageLayer {
             anchors.fill: parent
-            drawType: Layer.PlaneDraw
             source: "images/layer_01.png"
         }
 
         ImageLayer {
             anchors.fill: parent
-            drawType: Layer.PlaneDraw
             source: "images/layer_02.png"
         }
 

@@ -59,8 +59,6 @@ Game {
             source: "images/space.png"
             horizontalStep: -10 * scene.scrollFactor
             layerType: Layer.Mirrored
-            tileWidth: 40
-            tileHeight: 40
         }
 
         ImageLayer {
@@ -70,8 +68,7 @@ Game {
             source: "images/planet.png"
             horizontalStep: -15 * scene.scrollFactor
             layerType: Layer.Infinite
-            tileWidth: 40
-            tileHeight: 40
+
         }
 
         Entity {
@@ -94,8 +91,6 @@ Game {
             source: "images/stars.png"
             horizontalStep: -20 * scene.scrollFactor
             layerType: Layer.Infinite
-            tileWidth: 40
-            tileHeight: 40
         }
 
         ImageLayer {
@@ -105,8 +100,6 @@ Game {
             source: "images/moon.png"
             horizontalStep: -23 * scene.scrollFactor
             layerType: Layer.Infinite
-            tileWidth: 40
-            tileHeight: 40
         }
     }
 
