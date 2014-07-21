@@ -5,11 +5,11 @@ Source: https://github.com/Bacon2D/Bacon2D
 Files: *
 Copyright: 2012 INdT
            2014 Bacon2D Project
-License: LGPL-2.1
+License: LGPL-2+
 
 Files: src/animation*
 Copyright: 2012 INdT
-License: LGPL-2.1
+License: LGPL-2+
 
 Files: src/settings.*
 Copyright: 2010 Nokia Corporation and/or its subsidiary(-ies)
@@ -54,13 +54,13 @@ Copyright: 2010-2011 Thorbjørn Lindeijer <thorbjorn@lindeijer.nl>
            2012 Adriano Rezende <atdrez@gmail.com>
 License: zlib/libpng
 
-Files: 3rdparty/qml-box-2d/Box2D/*
+Files: 3rdparty/qml-box2d/Box2D/*
 Copyright: 2006-2009 Erin Catto http://www.box2d.org
 License: zlib/libpng
 
-License: LGPL-2.1
+License: LGPL-2+
  On Debian systems, the complete text of the GNU Lesser General
- Public License version 2.1 can be found in `/usr/share/common-licenses/LGPL-2.1'.
+ Public License version 2 can be found in `/usr/share/common-licenses/LGPL-2'.
 
 License: zlib/libpng
  This software is provided 'as-is', without any express or implied warranty.
