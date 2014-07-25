@@ -22,8 +22,6 @@
 
 #include "behavior.h"
 
-#include "entity.h"
-
 /*!
   \qmltype Behavior
   \inqmlmodule Bacon2D
@@ -32,19 +30,19 @@
 */
 Behavior::Behavior(QObject *parent)
     : QObject(parent)
-    , m_entity(0)
+    , m_target(0)
     , m_delta(0)
 {
 }
 
-Entity *Behavior::entity() const
+QQuickItem *Behavior::target() const
 {
-    return m_entity;
+    return m_target;
 }
 
-void Behavior::setEntity(Entity *entity)
+void Behavior::setTarget(QQuickItem *target)
 {
-    m_entity = entity;
+    m_target = target;
 }
 
 /*!

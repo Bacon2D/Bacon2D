@@ -75,9 +75,9 @@ void Entity::update(const int &delta)
         m_updateTime.restart();
         if (m_behavior) {
             m_behavior->setDelta(delta);
-            m_behavior->setEntity(this);
+            m_behavior->setTarget(this);
             m_behavior->update(delta);
-            m_behavior->setEntity(0);
+            m_behavior->setTarget(0);
         }
     }
 

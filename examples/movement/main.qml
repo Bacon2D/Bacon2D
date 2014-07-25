@@ -44,10 +44,10 @@ Game {
 
             behavior: ScriptBehavior {
                 script: {
-                    var newPos = entity.x + 5
-                    entity.x = newPos > parent.width ? 0 : newPos
+                    var newPos = target.x + 5
+                    target.x = newPos > parent.width ? 0 : newPos
 
-                    console.log("update: x -> ", entity.x)
+                    console.log("update: x -> ", target.x)
                 }
             }
 
