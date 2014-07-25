@@ -51,12 +51,13 @@
 #include "box2dropejoint.h"
 #include "box2draycast.h"
 #include "box2dcontact.h"
+#include "scrollbehavior.h"
 
 void Plugins::registerTypes(const char *uri)
 {
     Q_UNUSED(uri)
 
-    qmlRegisterUncreatableType<Layer>("Bacon2D", 1, 0, "Layer", "Registering Layer as we use it on Layers");
+    qmlRegisterType<Layer>("Bacon2D", 1, 0, "Layer");
     qmlRegisterUncreatableType<Behavior>("Bacon2D", 1, 0, "Bacon2DBehavior", "Don't use Bacon2DBehavior directly, use one specialized behavior");
 
     qmlRegisterType<Game>("Bacon2D", 1, 0, "Game");
@@ -68,6 +69,7 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<Viewport>("Bacon2D", 1, 0, "Viewport");
     qmlRegisterType<ScriptBehavior>("Bacon2D", 1, 0, "ScriptBehavior");
     qmlRegisterType<Settings>("Bacon2D", 1, 0, "Settings");
+    qmlRegisterType<ScrollBehavior>("Bacon2D", 1, 0, "ScrollBehavior");
 
     qmlRegisterUncreatableType<Box2DWorld>("Bacon2D", 1, 0, "World",
                                            QStringLiteral("World created by Scene if physics is enabled"));

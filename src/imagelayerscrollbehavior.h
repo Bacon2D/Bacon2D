@@ -1,5 +1,4 @@
 /**
- * Copyright (C) 2012 by INdT
  * Copyright (C) 2014 Bacon2D Project
  *
  * This program is free software; you can redistribute it and/or
@@ -16,37 +15,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @author Rodrigo Goncalves de Oliveira <rodrigo.goncalves@openbossa.org>
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _BEHAVIOR_H_
-#define _BEHAVIOR_H_
+#ifndef _IMAGELAYERSCROLLBEHAVIOR_H_
+#define _IMAGELAYERSCROLLBEHAVIOR_H_
 
-#include <QtCore/QObject>
-#include <QtQuick/QQuickItem>
+#include "scrollbehaviorimpl.h"
 
-class Behavior : public QObject
+class ImageLayerScrollBehavior : public ScrollBehaviorImpl
 {
     Q_OBJECT
 
-    Q_PROPERTY(QQuickItem *target READ target)
-    Q_PROPERTY(int delta READ delta)
-
 public:
-    Behavior(QObject *parent = 0);
+    ImageLayerScrollBehavior(QObject *parent = 0);
 
-    QQuickItem *target() const;
-    virtual void setTarget(QQuickItem *target);
-
-    void setDelta(int delta);
-    int delta() const;
-
-    virtual void update(const int &delta) { Q_UNUSED(delta);  }
-
-protected:
-    QQuickItem *m_target;
-    int m_delta;
+    virtual void update(const int &delta);
 };
 
-#endif /* _BEHAVIOR_H_ */
+#endif

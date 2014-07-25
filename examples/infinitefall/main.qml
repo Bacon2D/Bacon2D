@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 by INdT
+ * Copyright (C) 2014 by Bacon2D
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -15,7 +15,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @author Rodrigo Goncalves de Oliveira <rodrigo.goncalves@openbossa.org>
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
@@ -25,8 +24,8 @@ import Bacon2D 1.0
 Game {
     id: game
 
-    width: 800
-    height: 385
+    width: 512
+    height: 512
 
     currentScene: scene
 
@@ -40,27 +39,35 @@ Game {
         ImageLayer {
             id: layer
             anchors.fill: parent
-            source: "large_enough.png"
-            layerType: Layer.Mirrored
+            source: "sky.png"
 
             behavior: ScrollBehavior {
-                horizontalStep: -5
+                verticalStep: -15
             }
         }
 
         Sprite {
             id: spriteItem
 
-            y: 175
+            x: scene.width / 2 - spriteItem.width / 2
+            y: scene.height / 2 - spriteItem.height / 2
 
-            animation: "sliding"
+            animation: "falling"
 
             animations: SpriteAnimation {
-                name: "sliding"
-                source: "sliding.png"
-                frames: 4
+                name: "falling"
+                source: "astronaut.png"
+                frames: 3
                 duration: 450
                 loops: Animation.Infinite
+            }
+
+            NumberAnimation on rotation {
+                from: 0
+                to: 360
+                running: true
+                loops: Animation.Infinite
+                duration: 1800
             }
         }
     }

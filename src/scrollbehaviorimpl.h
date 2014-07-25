@@ -1,5 +1,4 @@
 /**
- * Copyright (C) 2012 by INdT
  * Copyright (C) 2014 Bacon2D Project
  *
  * This program is free software; you can redistribute it and/or
@@ -16,37 +15,39 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @author Rodrigo Goncalves de Oliveira <rodrigo.goncalves@openbossa.org>
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _BEHAVIOR_H_
-#define _BEHAVIOR_H_
+#ifndef _SCROLLBEHAVIORIMPL_H_
+#define _SCROLLBEHAVIORIMPL_H_
 
-#include <QtCore/QObject>
-#include <QtQuick/QQuickItem>
+#include "behavior.h"
 
-class Behavior : public QObject
+class ScrollBehaviorImpl : public Behavior
 {
     Q_OBJECT
 
-    Q_PROPERTY(QQuickItem *target READ target)
-    Q_PROPERTY(int delta READ delta)
+    Q_PROPERTY(qreal horizontalStep READ horizontalStep WRITE setHorizontalStep)
+    Q_PROPERTY(qreal verticalStep READ verticalStep WRITE setVerticalStep)
 
 public:
-    Behavior(QObject *parent = 0);
+    ScrollBehaviorImpl(QObject *parent = 0)
+	    : Behavior(parent)
+	    , m_horizontalStep(0)
+	    , m_verticalStep(0)
+    {}
 
-    QQuickItem *target() const;
-    virtual void setTarget(QQuickItem *target);
+    virtual void update(const int &delta) = 0;
 
-    void setDelta(int delta);
-    int delta() const;
+    qreal horizontalStep() { return m_horizontalStep; }
+    void setHorizontalStep(qreal step) { m_horizontalStep = step; }
 
-    virtual void update(const int &delta) { Q_UNUSED(delta);  }
+    qreal verticalStep() { return m_verticalStep; }
+    void setVerticalStep(qreal step) { m_verticalStep = step; }
 
 protected:
-    QQuickItem *m_target;
-    int m_delta;
+    qreal m_horizontalStep;
+    qreal m_verticalStep;
 };
 
-#endif /* _BEHAVIOR_H_ */
+#endif
