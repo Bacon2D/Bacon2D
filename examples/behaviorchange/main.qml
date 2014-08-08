@@ -34,9 +34,9 @@ Game {
         id: sideScrollBehavior
 
         script: {
-            var newPos = entity.x + entity.scrollStep
-            entity.x = newPos > scene.width ? 0 : newPos
-            entity.x = entity.x < 0 ? scene.width : entity.x
+            var newPos = target.x + target.scrollStep
+            target.x = newPos > scene.width ? 0 : newPos
+            target.x = target.x < 0 ? scene.width : target.x
         }
     }
 
@@ -44,9 +44,9 @@ Game {
         id: verticalScrollBehavior
 
         script: {
-            var newPos = entity.y + entity.scrollStep
-            entity.y = newPos > scene.height ? 0 : newPos
-            entity.y = entity.y < 0 ? scene.height : entity.y
+            var newPos = target.y + target.scrollStep
+            target.y = newPos > scene.height ? 0 : newPos
+            target.y = target.y < 0 ? scene.height : target.y
         }
     }
 

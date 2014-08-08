@@ -40,10 +40,12 @@ Game {
         ImageLayer {
             id: layer
             anchors.fill: parent
-            animated: true
             source: "large_enough.png"
-            horizontalStep: -5
             layerType: Layer.Mirrored
+
+            behavior: ScrollBehavior {
+                horizontalStep: -5
+            }
         }
 
         Sprite {
@@ -60,10 +62,6 @@ Game {
                 duration: 450
                 loops: Animation.Infinite
             }
-        }
-
-        Keys.onPressed: {
-            layer.animated = !layer.animated
         }
     }
 }

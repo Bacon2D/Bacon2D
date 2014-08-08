@@ -96,7 +96,7 @@ void Scene::updateEntities(QQuickItem *parent, const int &delta)
         if (Entity *entity = qobject_cast<Entity *>(item))
             entity->update(delta);
         else if (Layer *layer = qobject_cast<Layer *>(item))
-            layer->update();
+            layer->update(delta);
         else if (Box2DWorld *world = dynamic_cast<Box2DWorld *>(item))
             updateEntities(world, delta);
     }

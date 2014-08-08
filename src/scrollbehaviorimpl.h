@@ -1,5 +1,4 @@
 /**
- * Copyright (C) 2012 by INdT
  * Copyright (C) 2014 Bacon2D Project
  *
  * This program is free software; you can redistribute it and/or
@@ -16,46 +15,39 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @author Rodrigo Goncalves de Oliveira <rodrigo.goncalves@openbossa.org>
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
+#ifndef _SCROLLBEHAVIORIMPL_H_
+#define _SCROLLBEHAVIORIMPL_H_
+
 #include "behavior.h"
 
-/*!
-  \qmltype Behavior
-  \inqmlmodule Bacon2D
-  \brief Provides an easy way to add custom behaviors to the game, like 
-         artificial intelligence or other game logic
-*/
-Behavior::Behavior(QObject *parent)
-    : QObject(parent)
-    , m_target(0)
-    , m_delta(0)
+class ScrollBehaviorImpl : public Behavior
 {
-}
+    Q_OBJECT
 
-QQuickItem *Behavior::target() const
-{
-    return m_target;
-}
+    Q_PROPERTY(qreal horizontalStep READ horizontalStep WRITE setHorizontalStep)
+    Q_PROPERTY(qreal verticalStep READ verticalStep WRITE setVerticalStep)
 
-void Behavior::setTarget(QQuickItem *target)
-{
-    m_target = target;
-}
+public:
+    ScrollBehaviorImpl(QObject *parent = 0)
+	    : Behavior(parent)
+	    , m_horizontalStep(0)
+	    , m_verticalStep(0)
+    {}
 
-/*!
-  \qmlproperty int Behavior::delta
-  \brief This property holds the delta in milliseconds since the last update tick.
-*/
+    virtual void update(const int &delta) = 0;
 
-int Behavior::delta() const
-{
-    return m_delta;
-}
+    qreal horizontalStep() { return m_horizontalStep; }
+    void setHorizontalStep(qreal step) { m_horizontalStep = step; }
 
-void Behavior::setDelta(int delta)
-{
-    m_delta = delta;
-}
+    qreal verticalStep() { return m_verticalStep; }
+    void setVerticalStep(qreal step) { m_verticalStep = step; }
+
+protected:
+    qreal m_horizontalStep;
+    qreal m_verticalStep;
+};
+
+#endif

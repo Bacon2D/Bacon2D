@@ -32,7 +32,11 @@ HEADERS += entity.h \
            imagelayer.h \
            viewport.h \
            behavior.h \
-           scriptbehavior.h \ 
+           scriptbehavior.h \
+           scrollbehavior.h \
+           scrollbehaviorimpl.h \
+           imagelayerscrollbehavior.h \
+           layerscrollbehavior.h \
            settings.h
 
 SOURCES += entity.cpp \
@@ -48,6 +52,9 @@ SOURCES += entity.cpp \
            viewport.cpp \
            behavior.cpp \
            scriptbehavior.cpp \
+           scrollbehavior.cpp \
+           imagelayerscrollbehavior.cpp \
+           layerscrollbehavior.cpp \
            settings.cpp
 
 QMAKE_POST_LINK = $$QMAKE_COPY $$PWD/qmldir $$OUT_PWD/imports/Bacon2D

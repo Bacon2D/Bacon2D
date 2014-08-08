@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 by INdT
+ * Copyright (C) 2014 by Bacon2D
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -15,7 +15,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @author Rodrigo Goncalves de Oliveira <rodrigo.goncalves@openbossa.org>
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
@@ -25,37 +24,50 @@ import Bacon2D 1.0
 Game {
     id: game
 
-    width: 400
-    height: 250
+    width: 512
+    height: 512
 
     currentScene: scene
 
     Scene {
         id: scene
 
+        focus: true
         width: parent.width
         height: parent.height
 
-        Entity {
-            width: parent.width
-            height: parent.height
+        ImageLayer {
+            id: layer
+            anchors.fill: parent
+            source: "sky.png"
 
-            updateInterval: 50
+            behavior: ScrollBehavior {
+                verticalStep: -15
+            }
+        }
 
-            behavior: ScriptBehavior {
-                script: {
-                    var newPos = target.x + 5
-                    target.x = newPos > parent.width ? 0 : newPos
+        Sprite {
+            id: spriteItem
 
-                    console.log("update: x -> ", target.x)
-                }
+            x: scene.width / 2 - spriteItem.width / 2
+            y: scene.height / 2 - spriteItem.height / 2
+
+            animation: "falling"
+
+            animations: SpriteAnimation {
+                name: "falling"
+                source: "astronaut.png"
+                frames: 3
+                duration: 450
+                loops: Animation.Infinite
             }
 
-            Rectangle {
-                width: 50
-                height: 50
-
-                color: "red"
+            NumberAnimation on rotation {
+                from: 0
+                to: 360
+                running: true
+                loops: Animation.Infinite
+                duration: 1800
             }
         }
     }

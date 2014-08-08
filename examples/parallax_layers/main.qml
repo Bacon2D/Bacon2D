@@ -55,18 +55,20 @@ Game {
         ImageLayer {
             id: layer1
             anchors.fill: parent
-            animated: true
             source: "images/space.png"
-            horizontalStep: -10 * scene.scrollFactor
+            behavior: ScrollBehavior {
+                horizontalStep: -10 * scene.scrollFactor
+            }
             layerType: Layer.Mirrored
         }
 
         ImageLayer {
             id: layer2
             anchors.fill: parent
-            animated: true
             source: "images/planet.png"
-            horizontalStep: -15 * scene.scrollFactor
+            behavior: ScrollBehavior {
+                horizontalStep: -15 * scene.scrollFactor
+            }
             layerType: Layer.Infinite
 
         }
@@ -87,18 +89,20 @@ Game {
         ImageLayer {
             id: layer3
             anchors.fill: parent
-            animated: true
             source: "images/stars.png"
-            horizontalStep: -20 * scene.scrollFactor
+            behavior: ScrollBehavior {
+                horizontalStep: -20 * scene.scrollFactor
+            }
             layerType: Layer.Infinite
         }
 
         ImageLayer {
             id: layer4
             anchors.fill: parent
-            animated: true
             source: "images/moon.png"
-            horizontalStep: -23 * scene.scrollFactor
+            behavior: ScrollBehavior {
+                horizontalStep: -23 * scene.scrollFactor
+            }
             layerType: Layer.Infinite
         }
     }
@@ -118,18 +122,6 @@ Game {
             break;
         case Qt.Key_Up:
             ship.y -= 5;
-            break;
-        case Qt.Key_1:
-            layer1.animated = !layer1.animated
-            break;
-        case Qt.Key_2:
-            layer2.animated = !layer2.animated
-            break;
-        case Qt.Key_3:
-            layer3.animated = !layer3.animated
-            break;
-        case Qt.Key_4:
-            layer4.animated = !layer4.animated
             break;
         }
     }
