@@ -202,9 +202,11 @@ void Game::pushScene(Scene *scene)
         emit stackLevelChanged();
 
     scene->setZ(m_sceneStack.size());
+
     if(scene->viewport()){
         scene->viewport()->setZ(m_sceneStack.size());
     }
+
     attachScene(scene);
     if(!triggerEnterAnimation(scene)){
         activateScene(scene);
@@ -352,8 +354,6 @@ void Game::attachScene(Scene *scene)
     scene->setRunning(false);
     scene->setEnabled(false);
     scene->setFocus(false, Qt::OtherFocusReason);
-
-
 }
 
 void Game::activateScene(Scene *scene)
