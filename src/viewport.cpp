@@ -208,6 +208,11 @@ void Viewport::setAnimationDuration(const int &animationDuration)
 void Viewport::setScene(Scene *scene)
 {
     m_scene = scene;
+    scene->setParentItem(this);
+    setContentWidth(scene->width());
+    setContentHeight(scene->height());
+    setVisible(true);
+    updateMaxOffsets();
 }
 
 void Viewport::updateMaxOffsets()

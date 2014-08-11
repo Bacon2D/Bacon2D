@@ -239,6 +239,7 @@ void Scene::setViewport(Viewport *viewport)
         return;
 
     m_viewport = viewport;
+    m_viewport->setScene(this);
 
     emit viewportChanged();
 }
@@ -494,6 +495,9 @@ void Scene::componentComplete()
 
     if (m_world)
         m_world->componentComplete();
+
+    if (m_viewport)
+        m_viewport->setScene(this);
 }
 
 void Scene::itemChange(ItemChange change, const ItemChangeData &data)
