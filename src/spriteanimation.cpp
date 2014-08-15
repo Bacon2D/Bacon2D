@@ -73,6 +73,11 @@ bool SpriteAnimation::running() const
 
 void SpriteAnimation::setRunning(const bool &running)
 {
+    if (!m_spriteAnimation) {
+        qWarning() << "SpriteAnimation" << "invalid";
+        return;
+    }
+
     bool currentState = m_spriteAnimation->state() == QAbstractAnimation::Running;
 
     if (currentState != running) {

@@ -70,8 +70,13 @@ QString Sprite::animation() const
 
 void Sprite::setAnimation(const QString &animation, const bool &force)
 {
+    if (!m_states.contains(animation)) {
+        qWarning() << "SpriteAnimation:" << animation << "invalid";
+        return;
+    }
+
     if (force || (m_animation != animation)) {
-        if (m_animation != QString()) {
+        if (m_animation != QString() && m_states.contains(m_animation)) {
             SpriteAnimation *animationItem = m_states[m_animation];
             animationItem->setRunning(false);
             animationItem->setVisible(false);
