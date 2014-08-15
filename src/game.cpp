@@ -141,7 +141,9 @@ void Game::setCurrentScene(Scene *currentScene)
     triggerExitAnimation(m_exitScene);
     if(!triggerEnterAnimation(currentScene)){
         activateScene(currentScene);
-        if(m_exitScene)
+        if (m_exitScene->viewport())
+            m_exitScene->viewport()->setVisible(false);
+        if (m_exitScene)
             m_exitScene->setVisible(false);
         m_exitScene = NULL;
     }
@@ -371,6 +373,8 @@ void Game::deactivateScene(Scene *scene)
 {
     if(!scene) return;
 
+    if (scene->viewport())
+        scene->viewport()->setVisible(false);
     scene->setRunning(false);
     scene->setEnabled(false);
     scene->setFocus(false, Qt::OtherFocusReason);
@@ -405,11 +409,11 @@ void Game::handleEnterAnimationRunningChanged(bool running)
 
     disconnect(sender(), 0, this, SLOT(handleEnterAnimationRunningChanged(bool)));
 
-   activateScene(m_enterScene);
-   m_enterScene = NULL;
+    activateScene(m_enterScene);
+    m_enterScene = NULL;
 
-   if(m_exitScene)
-       m_exitScene->setVisible(false);
+    if(m_exitScene)
+        m_exitScene->setVisible(false);
 }
 
 bool Game::triggerExitAnimation(Scene *scene)
