@@ -71,4 +71,4 @@ qmltypes.path = $$target.path
 qmltypes.extra = $$[QT_INSTALL_BINS]/qmlplugindump -notrelocatable Bacon2D $$API_VER $$OUT_PWD/imports  > $$OUT_PWD/imports/Bacon2D/plugins.qmltypes
 qmltypes.files += $$OUT_PWD/imports/Bacon2D/plugins.qmltypes
 
-INSTALLS += target qmlpluginfiles qmltypes
+INSTALLS += target qmltypes qmlpluginfiles
