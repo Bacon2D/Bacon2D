@@ -148,7 +148,7 @@ void Viewport::hScroll(float step)
 }
 
 /*!
-  \qmlmethod Viewport::yScroll(float step)
+  \qmlmethod Viewport::vScroll(float step)
   \brief Scroll the Viewport vertically by \a step
 */
 void Viewport::vScroll(float step)
