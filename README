@@ -36,6 +36,16 @@ $ make
 $ sudo make install
 
 
+*MacOS note*:
+
+If you get some error like 'could not resolve SDK path for...', add 
+'QMAKE_MAC_SDK=MAC_SDK_VERSION'to the qmake command, like this (issue #80):
+
+$ qmake QMAKE_MAC_SDK=macosx10.9 ..
+
+Where MAC_SDK_VERSION points to the OSX version you're using (in the above 
+example it is 10.9.x).
+
 ===========
 2. Examples
 ===========
