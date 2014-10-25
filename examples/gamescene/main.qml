@@ -40,6 +40,7 @@ Item {
         Scene {
             id: scene
             physics: true
+            debug: true
             width: container.width/3
             height: container.height
 
@@ -52,40 +53,14 @@ Item {
                 ball.applyLinearImpulse(impulse, center)
             }
 
+            Boundaries {}
+
             Rectangle {
                 anchors.fill: parent
                 color: "white"
             }
 
-            Wall {
-                anchors.right: parent.left
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                width: 1
-            }
-
-            Wall {
-                anchors.left: parent.right
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                width: 1
-            }
-
-            Wall {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.bottom: parent.top
-                height: 1
-            }
-
-            Wall {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.top: parent.bottom
-                height: 1
-            }
-
-            Entity {
+            PhysicsEntity {
                 id: ball
                 width: 40
                 height: 40
@@ -93,11 +68,10 @@ Item {
                 y: scene.height / 3
                 fixedRotation: false
                 sleepingAllowed: false
-                bodyType: Entity.Dynamic
+                bodyType: Body.Dynamic
                 fixtures: Circle {
                     id: circleShape
                     radius: parent.width / 2
-                    anchors.fill: parent
                     density: 1;
                     friction: 1;
                     restitution: 0.5;

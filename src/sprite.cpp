@@ -41,12 +41,13 @@ void Sprite::append_animation(QQmlListProperty<SpriteAnimation> *list, SpriteAni
 /*!
   \qmltype Sprite
   \inqmlmodule Bacon2D
-  \inherits Entity
-  \brief A Sprite representation of an Entity, providing state based 
+  \inherits Item
+  \brief A Sprite, providing state based
    management of multiple SpriteAnimation animations.
  */
-Sprite::Sprite(Scene *parent)
-    : Entity(parent)
+Sprite::Sprite(QQuickItem *parent)
+    : QQuickItem(parent)
+    , m_entity(0)
     , m_stateMachine(0)
     , m_stateGroup(0)
     , m_verticalMirror(false)
@@ -166,4 +167,21 @@ void Sprite::setHorizontalMirror(const bool &horizontalMirror)
         animation->setHorizontalMirror(m_horizontalMirror);
 
     emit horizontalMirrorChanged();
+}
+
+Entity *Sprite::entity() const
+{
+    return m_entity;
+}
+
+void Sprite::setEntity(Entity *entity)
+{
+    qDebug() << Q_FUNC_INFO;
+
+    if (m_entity == entity)
+        return;
+
+    m_entity = entity;
+
+    emit entityChanged();
 }

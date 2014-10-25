@@ -256,14 +256,13 @@ QSGNode *ImageLayer::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
 
 void ImageLayer::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
+    Layer::geometryChanged(newGeometry, oldGeometry);
     if (newGeometry.isEmpty() || !isComponentComplete())
         return;
 
     m_geometryChanged = true;
 
     QQuickItem::update();
-    //XXX when calling it we get some dirty :/
-    Layer::geometryChanged(newGeometry, oldGeometry);
 }
 
 void ImageLayer::componentComplete()

@@ -27,11 +27,12 @@
 
 #include <QtCore/QHash>
 #include <QtCore/QStateMachine>
+#include <QtQuick/QQuickItem>
 
 class Scene;
 class SpriteAnimation;
 
-class Sprite : public Entity
+class Sprite : public QQuickItem
 {
     Q_OBJECT
 
@@ -39,9 +40,10 @@ class Sprite : public Entity
     Q_PROPERTY(QString animation READ animation WRITE setAnimation NOTIFY animationChanged)
     Q_PROPERTY(bool verticalMirror READ verticalMirror WRITE setVerticalMirror NOTIFY verticalMirrorChanged)
     Q_PROPERTY(bool horizontalMirror READ horizontalMirror WRITE setHorizontalMirror NOTIFY horizontalMirrorChanged)
+    Q_PROPERTY(Entity *entity READ entity WRITE setEntity NOTIFY entityChanged)
 
 public:
-    Sprite(Scene *parent = 0);
+    Sprite(QQuickItem *parent = 0);
 
     QQmlListProperty<SpriteAnimation> animations() const;
 
@@ -54,6 +56,9 @@ public:
     bool horizontalMirror() const;
     void setHorizontalMirror(const bool &horizontalMirror);
 
+    Entity *entity() const;
+    void setEntity(Entity *entity);
+
 public slots:
     void initializeAnimation();
 
@@ -61,6 +66,7 @@ signals:
     void animationChanged();
     void verticalMirrorChanged();
     void horizontalMirrorChanged();
+    void entityChanged();
 
 private:
     void initializeMachine();
@@ -74,6 +80,7 @@ private:
     QString m_animation;
     bool m_verticalMirror;
     bool m_horizontalMirror;
+    Entity *m_entity;
 };
 
 #endif /* _SPRITE_H_ */

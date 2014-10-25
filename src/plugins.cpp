@@ -77,6 +77,7 @@ void Plugins::registerTypes(const char *uri)
                                           QStringLiteral("Body is the base class for Entity"));
     qmlRegisterUncreatableType<Box2DFixture>("Bacon2D", 1, 0, "Fixture",
                                              QStringLiteral("Base type for Box, Circle etc."));
+    qmlRegisterType<Box2DBody>("Bacon2D", 1, 0, "Body");
     qmlRegisterType<Box2DBox>("Bacon2D", 1, 0, "Box");
     qmlRegisterType<Box2DCircle>("Bacon2D", 1, 0, "Circle");
     qmlRegisterType<Box2DPolygon>("Bacon2D", 1, 0, "Polygon");
