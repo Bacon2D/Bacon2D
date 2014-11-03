@@ -23,12 +23,9 @@ Game {
         id: linkComponent
         PhysicsEntity {
             id: ball
-
             width: 20
             height: 20
             bodyType: Body.Dynamic
-            //FIXME: we shouldn't need to set world
-            body.world: scene.world
 
             property color color: "#EFEFEF"
 
@@ -64,7 +61,6 @@ Game {
         physics: true
 
         Component.onCompleted: {
-        //onInitialized: {
             var prev = leftWall;
             for(var i = 60;i < 740;i += 20) {
                 var newLink = linkComponent.createObject(scene);
