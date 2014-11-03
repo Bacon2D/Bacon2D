@@ -150,7 +150,6 @@ protected:
     void initializeEntities(QQuickItem *parent);
     void createWorld();
 
-private:
     bool m_running;
     Viewport *m_viewport;
     Game *m_game;

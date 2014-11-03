@@ -176,8 +176,6 @@ Entity *Sprite::entity() const
 
 void Sprite::setEntity(Entity *entity)
 {
-    qDebug() << Q_FUNC_INFO;
-
     if (m_entity == entity)
         return;
 
