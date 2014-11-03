@@ -57,14 +57,9 @@ SOURCES += entity.cpp \
            layerscrollbehavior.cpp \
            settings.cpp
 
-QMAKE_POST_LINK = $$QMAKE_COPY $$PWD/qmldir $$OUT_PWD/imports/Bacon2D
-
 !isEmpty(QTPATH): target.path = $$QTPATH/imports/$$TARGETPATH
 else: target.path = $$[QT_INSTALL_QML]/$$replace(TARGETPATH, \\., /).$$API_VER
 ;
-
-qmltypes.path = $$target.path
-qmltypes.extra = $$[QT_INSTALL_BINS]/qmlplugindump -notrelocatable Bacon2D $$API_VER $$OUT_PWD/imports  > $$OUT_PWD/imports/Bacon2D/plugins.qmltypes
 
 QMLFILES += $$PWD/PhysicsEntity.qml \
             $$PWD/BoxBody.qml \
@@ -75,12 +70,23 @@ QMLFILES += $$PWD/PhysicsEntity.qml \
             $$PWD/PolygonBody.qml \
             $$PWD/Boundaries.qml \
             $$PWD/RectangleBoxBody.qml \
-            $$PWD/plugins.qmltypes \
             $$PWD/qmldir
+QMAKE_POST_LINK = $$[QT_INSTALL_BINS]/qmlplugindump -notrelocatable Bacon2D $$API_VER $$OUT_PWD/imports > $$OUT_PWD/imports/Bacon2D/plugins.qmltypes
 
+qmltypes.path = $$target.path
+qmltypes.files += $$OUT_PWD/imports/Bacon2D/plugins.qmltypes
+export(qmltypes.files)
+
+qmlplugin.commands = $$QMAKE_COPY $$QMLFILES $$OUT_PWD/imports/Bacon2D/
+qmlplugin.path = $$target.path
+
+qmlpluginfiles.depends += qmlplugin
 qmlpluginfiles.path = $$target.path
-qmlpluginfiles.files += \
-    $$QMLFILES \
-    $$OUT_PWD/imports/Bacon2D/*
+qmlpluginfiles.files = $$QMLFILES
 
+first.depends += qmlplugin
+export(first.depends)
+export(qmlplugin.commands)
+
+QMAKE_EXTRA_TARGETS += first qmlplugin
 INSTALLS += target qmltypes qmlpluginfiles
