@@ -47,8 +47,8 @@ Game {
             Entity {
                 id: spriteItem
 
-                x: scene.width / 2 - spriteItem.width / 2
-                y: scene.height / 2 - spriteItem.height / 2
+                x: parent.scene.width / 2 - spriteItem.width / 2
+                y: parent.scene.height / 2 - spriteItem.height / 2
 
                 Sprite {
                     anchors.fill: parent
