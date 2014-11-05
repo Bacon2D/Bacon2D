@@ -89,4 +89,4 @@ export(first.depends)
 export(qmlplugin.commands)
 
 QMAKE_EXTRA_TARGETS += first qmlplugin
-INSTALLS += target qmltypes qmlpluginfiles
+INSTALLS += target qmlpluginfiles qmltypes
