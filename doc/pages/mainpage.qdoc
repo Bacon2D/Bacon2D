@@ -76,9 +76,11 @@ Game {
     \li \l {ImageLayer}
     \li \l {Entity}
     \li \l {Fixture}
+    \li \l {PhysicsEntity}
     \li \l {Sprite}
     \li \l {SpriteAnimation}
     \li \l {ScriptBehavior}
+    \li \l {ScrollBehavior}
     \li \l {Settings}
 \endlist
 Available through:

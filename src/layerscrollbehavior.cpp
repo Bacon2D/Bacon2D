@@ -1,7 +1,5 @@
 #include "layerscrollbehavior.h"
 
-#include "entity.h"
-
 LayerScrollBehavior::LayerScrollBehavior(QObject *parent)
     : ScrollBehaviorImpl(parent)
 {

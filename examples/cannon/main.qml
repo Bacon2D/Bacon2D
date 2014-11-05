@@ -11,14 +11,13 @@ Game {
 
     Component {
         id: link
-        Entity {
+        PhysicsEntity {
             width: 20
             height: 20
             x: 400
-            bodyType: Entity.Dynamic
+            bodyType: Body.Dynamic
             fixtures: Circle {
                 radius: 10
-                anchors.centerIn: parent
                 friction: 0.9
                 density: 0.8
             }
@@ -28,7 +27,6 @@ Game {
                 radius: 10
             }
         }
-
     }
 
     Component {
@@ -42,11 +40,11 @@ Game {
 
     Component {
         id: ball
-        Entity {
+        PhysicsEntity {
             width: 10
             height: 10
             bullet: true
-            bodyType: Entity.Dynamic
+            bodyType: Body.Dynamic
             fixtures: Circle {
                 radius: 5
                 density: 0.9
@@ -66,14 +64,15 @@ Game {
 
     Component {
         id: dominoComponent
-        Entity {
+        PhysicsEntity {
             width: 10
             height:50
             x: 0
             y: 510
-            bodyType: Entity.Dynamic
+            bodyType: Body.Dynamic
             fixtures: Box {
-                anchors.fill: parent
+                width: target.width
+                height: target.height
                 density: 1
                 friction: 0.3
                 restitution: 0.5
@@ -91,30 +90,30 @@ Game {
         anchors.fill: parent
         physics: true
 
-        onInitialized: {
+        Component.onCompleted: {
             createDominos();
             createChain();
         }
 
         function createDominos() {
             for(var i = 0;i < 5;i ++) {
-                var newDomino = dominoComponent.createObject(scene.world);
+                var newDomino = dominoComponent.createObject(scene);
                 newDomino.x = 500 + 50 * i;
                 newDomino.y = 510
             }
             for(i = 0;i < 4;i ++) {
-                newDomino = dominoComponent.createObject(scene.world);
+                newDomino = dominoComponent.createObject(scene);
                 newDomino.x = 555 + 50 * i;
                 newDomino.y = 500
                 newDomino.rotation = 90;
             }
             for(var i = 0;i < 4;i ++) {
-                newDomino = dominoComponent.createObject(scene.world);
+                newDomino = dominoComponent.createObject(scene);
                 newDomino.x = 525 + 50 * i;
                 newDomino.y = 450
             }
             for(i = 0;i < 3;i ++) {
-                newDomino = dominoComponent.createObject(scene.world);
+                newDomino = dominoComponent.createObject(scene);
                 newDomino.x = 580 + 50 * i;
                 newDomino.y = 440
                 newDomino.rotation = 90;
@@ -127,26 +126,27 @@ Game {
             for(var i = 0;i < 12;i ++)
             {
                 var y = 300 + i * 20 - 5;
-                var newLink = link.createObject(scene.world);
+                var newLink = link.createObject(scene);
                 newLink.y = y;
-                var newJoint = linkJoint.createObject(scene.world);
-                newJoint.bodyA = prev;
-                newJoint.bodyB = newLink;
+                var newJoint = linkJoint.createObject(scene);
+                newJoint.bodyA = prev.body;
+                newJoint.bodyB = newLink.body;
                 prev = newLink;
             }
         }
 
-        Entity {
+        PhysicsEntity {
             id: ground
             height: 40
-            bodyType: Entity.Static
+            bodyType: Body.Static
             anchors {
                 left: parent.left
                 right: parent.right
                 bottom: parent.bottom
             }
             fixtures: Box {
-                anchors.fill: parent
+                width: ground.width
+                height: ground.height
                 friction: 1
                 density: 1
             }
@@ -189,16 +189,17 @@ Game {
 
         }
 
-        Entity {
+        PhysicsEntity {
             id: canon
-            bodyType: Entity.Dynamic
+            bodyType: Body.Dynamic
             width: 98
             height: 37
             x: 150
             y: 443
             fixtures: Box {
-                id: canonFixtire
-                anchors.fill: parent
+                id: canonFixture
+                width: canon.width
+                height: canon.height
                 density: 0.5
             }
             Image {
@@ -207,15 +208,16 @@ Game {
             }
         }
 
-        Entity {
+        PhysicsEntity {
             id: canonBase
-            bodyType: Entity.Static
+            bodyType: Body.Static
             width: 130
             height: 67
             x: 50
             y: 493
             fixtures: Box {
-                anchors.fill: parent
+                width: canonBase.width
+                height: canonBase.height
                 density: 0.5
             }
             Image {
@@ -226,8 +228,8 @@ Game {
 
         RevoluteJoint {
             id: joint
-            bodyA: canonBase
-            bodyB: canon
+            bodyA: canonBase.body
+            bodyB: canon.body
             localAnchorA: Qt.point(75, 18)
             localAnchorB: Qt.point(36, 19)
             collideConnected: false
@@ -239,13 +241,13 @@ Game {
             upperAngle: -60
         }
 
-        Entity {
+        PhysicsEntity {
             id: chainAnchor
             width: 20
             height: 20
             x: 400
             y: 230
-            bodyType: Entity.Static
+            bodyType: Body.Static
             Rectangle {
                 anchors.fill: parent
                 color: "black"
@@ -290,7 +292,7 @@ Game {
                 acceptedButtons: Qt.LeftButton
                 anchors.fill: parent
                 onPressed: {
-                    canonFixtire.density = 0.5;
+                    canonFixture.density = 0.5;
                     joint.motorSpeed = -15;
                     joint.enableMotor = true;
                     upButton.color = "#AAA";
@@ -357,7 +359,7 @@ Game {
                     var angle = Math.abs(joint.getJointAngle());
                     var offsetX = 65 * Math.cos(angle * Math.PI / 180);
                     var offsetY = 65 * Math.sin(angle * Math.PI / 180);
-                    var newBall = ball.createObject(scene.world);
+                    var newBall = ball.createObject(scene);
                     newBall.x = 125 + offsetX;
                     newBall.y = 500 - offsetY;
                     var impulse = power.value;

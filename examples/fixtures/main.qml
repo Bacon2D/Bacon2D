@@ -9,15 +9,14 @@ Game {
 
     Component {
         id: ballComponent
-        Entity {
+        PhysicsEntity {
             id: box
             width: 20
             height: 20
             sleepingAllowed: true
-            bodyType: Entity.Dynamic
+            bodyType: Body.Dynamic
             fixtures: Circle {
-                radius: parent.width / 2
-                anchors.centerIn: parent
+                radius: box.width / 2
                 density: 0.1
                 friction: 0.3
                 restitution: 0.5
@@ -46,7 +45,16 @@ Game {
             horizontalAlignment: Text.AlignHCenter
         }
 
-        Entity {
+        PhysicsEntity {
+            id: ground
+            anchors {
+                left: parent.left
+                right: parent.right
+            }
+            height: 100
+            z: 100
+            y: scene.height
+            bodyType: Body.Static
             function getVertices(height) {
                 var pos = height;
                 var arr = [];
@@ -64,17 +72,9 @@ Game {
                 arr.push(Qt.point(0,height));
                 return arr;
             }
-            height: 40
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            z: 100
-            id: ground
-            bodyType: Entity.Static
             fixtures: Chain {
                 id: groundShape
                 vertices: ground.getVertices(ground.height)
-                anchors.fill: parent
                 loop: true
             }
             Canvas {
@@ -97,41 +97,11 @@ Game {
             }
         }
 
-        Wall {
-            id: topWall
-            height: 40
-            anchors {
-                left: parent.left
-                right: parent.right
-                top: parent.top
-            }
-        }
+        Boundaries {}
 
-        Wall {
-            id: leftWall
-            width: 40
-            anchors {
-                left: parent.left
-                top: parent.top
-                bottom: parent.bottom
-                bottomMargin: 40
-            }
-        }
-
-        Wall {
-            id: rightWall
-            width: 40
-            anchors {
-                right: parent.right
-                top: parent.top
-                bottom: parent.bottom
-                bottomMargin: 40
-            }
-        }
-
-        Entity {
+        PhysicsEntity {
             id: dynamicTest
-            bodyType: Entity.Static
+            bodyType: Body.Static
             x: 200
             y: 150
             width: 200
@@ -140,14 +110,14 @@ Game {
                 Box {
                     x: 0
                     y: 0
-                    width: parent.width * 0.45
-                    height: parent.height
+                    width: dynamicTest.width * 0.45
+                    height: dynamicTest.height
                 },
                 Box {
-                    x: parent.width * 0.55
+                    x: dynamicTest.width * 0.55
                     y: 0
-                    width: parent.width * 0.45
-                    height: parent.height
+                    width: dynamicTest.width * 0.45
+                    height: dynamicTest.height
 
                 }
             ]
@@ -157,9 +127,9 @@ Game {
             }
         }
 
-        Entity {
+        PhysicsEntity {
             id: staticTest
-            bodyType: Entity.Static
+            bodyType: Body.Static
             x: 350
             y: 250
             width: 100
@@ -176,43 +146,39 @@ Game {
             }
         }
 
-        Entity {
+        PhysicsEntity {
             id: radiusTest
-            bodyType: Entity.Dynamic
+            bodyType: Body.Dynamic
             x: 600
             y: 100
-            fixtures: [
-                Circle {
-                    id: circleShape
-                    radius: 50
-                    anchors.centerIn: parent
-                    density: 0.9
-                    friction: 0.3
-                    restitution: 0.8
-                }
-            ]
+            width: circleShape.radius * 2
+            height: width
+            fixtures: Circle {
+                id: circleShape
+                radius: 50
+                density: 0.9
+                friction: 0.3
+                restitution: 0.8
+            }
             Rectangle {
-                anchors.fill: circleShape
-                radius: circleShape.width / 2
+                anchors.fill: parent
+                radius: circleShape.radius
                 color: "red"
             }
         }
 
-        Entity {
+        PhysicsEntity {
             id: polygonTest
-            bodyType: Entity.Dynamic
+            bodyType: Body.Dynamic
             x: 450
             y: 50
             width: 100
             height: 100
-            fixtures:
-                Polygon {
-                width: parent.width
-                height: parent.height
+            fixtures: Polygon {
                 vertices: [
-                    Qt.point(width / 2,0),
-                    Qt.point(width,height),
-                    Qt.point(0,height)
+                    Qt.point(polygonTest.width / 2,0),
+                    Qt.point(polygonTest.width,polygonTest.height),
+                    Qt.point(0,polygonTest.height)
                 ]
                 density: 0.9
                 friction: 0.3
@@ -224,10 +190,10 @@ Game {
                 onPaint: {
                     var context = canvas.getContext("2d");
                     context.beginPath();
-                    context.moveTo(parent.width / 2,0);
-                    context.lineTo(0,parent.height);
-                    context.lineTo(parent.width,parent.height);
-                    context.lineTo(parent.width / 2,0);
+                    context.moveTo(polygonTest.width / 2,0);
+                    context.lineTo(0,polygonTest.height);
+                    context.lineTo(polygonTest.width,polygonTest.height);
+                    context.lineTo(polygonTest.width / 2,0);
                     context.fillStyle = "green";
                     context.fill();
                 }
@@ -274,7 +240,7 @@ Game {
             running: false
             repeat: true
             onTriggered: {
-                var newBox = ballComponent.createObject(scene.world);
+                var newBox = ballComponent.createObject(scene);
                 newBox.x = 40 + (Math.random() * scene.width - 80);
                 newBox.y = 50;
                 ballsCounter.count ++;
@@ -410,10 +376,10 @@ Game {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    if(ground.height == 40)
-                        ground.height = 100
-                    else
-                        ground.height = 40
+                    if (ground.y == scene.height)
+                        ground.y = scene.height - ground.height;
+                    else 
+                        ground.y = scene.height;
                 }
             }
         }

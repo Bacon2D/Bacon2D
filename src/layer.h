@@ -24,6 +24,7 @@
 #define _LAYER_H_
 
 #include "behavior.h"
+#include "scene.h"
 
 #include <QtQuick/QQuickItem>
 #include <QtCore/QtGlobal>
@@ -36,6 +37,7 @@ class Layer: public QQuickItem
 
     Q_PROPERTY(Layer::LayerType layerType READ layerType WRITE setLayerType NOTIFY layerTypeChanged)
     Q_PROPERTY(Behavior *behavior READ behavior WRITE setBehavior NOTIFY behaviorChanged)
+    Q_PROPERTY(Scene *scene READ scene WRITE setScene NOTIFY sceneChanged)
     Q_PROPERTY(int updateInterval READ updateInterval WRITE setUpdateInterval NOTIFY updateIntervalChanged)
 
     Q_ENUMS (
@@ -50,6 +52,9 @@ public:
 
     Behavior *behavior() const;
     void setBehavior(Behavior *behavior);
+
+    Scene *scene() const;
+    void setScene(Scene *scene);
 
     int updateInterval() const;
     void setUpdateInterval(const int &updateInterval);
@@ -66,6 +71,7 @@ signals:
     void layerTypeChanged();
     void updateIntervalChanged();
     void behaviorChanged();
+    void sceneChanged();
 
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
@@ -77,6 +83,7 @@ protected:
     QTime m_updateTime;
     int m_updateInterval;
     Behavior *m_behavior;
+    Scene *m_scene;
 };
 
 #endif /* _LAYER */

@@ -37,6 +37,7 @@ Layer::Layer(QQuickItem *parent)
     , m_type(Layer::Infinite)
     , m_updateInterval(0)
     , m_behavior(0)
+    , m_scene(0)
 {
     // this activates the item layered mode
     QQmlProperty(this, "layer.enabled").write(true);
@@ -91,6 +92,21 @@ void Layer::setBehavior(Behavior *behavior)
     m_behavior = behavior;
 
     emit behaviorChanged();
+}
+
+Scene *Layer::scene() const
+{
+    return m_scene;
+}
+
+void Layer::setScene(Scene *scene)
+{
+    if (m_scene == scene)
+        return;
+
+    m_scene = scene;
+
+    emit sceneChanged();
 }
 
 int Layer::updateInterval() const

@@ -66,6 +66,8 @@ void ScriptBehavior::update(const int &delta) {
 
     if (m_expression) {
         m_expression->evaluate();
+        if (m_expression->hasError())
+            qWarning() << m_expression->error();
     }
 }
 
