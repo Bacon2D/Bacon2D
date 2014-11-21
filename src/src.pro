@@ -71,9 +71,10 @@ QMLFILES += $$PWD/PhysicsEntity.qml \
             $$PWD/Boundaries.qml \
             $$PWD/RectangleBoxBody.qml \
             $$PWD/qmldir
-QMAKE_POST_LINK = $$[QT_INSTALL_BINS]/qmlplugindump -notrelocatable Bacon2D $$API_VER $$OUT_PWD/imports > $$OUT_PWD/imports/Bacon2D/plugins.qmltypes
+
 
 qmltypes.path = $$target.path
+qmltypes.extra = $$[QT_INSTALL_BINS]/qmlplugindump -notrelocatable Bacon2D $$API_VER $$OUT_PWD/imports  > $$OUT_PWD/imports/Bacon2D/plugins.qmltypes
 qmltypes.files += $$OUT_PWD/imports/Bacon2D/plugins.qmltypes
 export(qmltypes.files)
 
@@ -89,4 +90,4 @@ export(first.depends)
 export(qmlplugin.commands)
 
 QMAKE_EXTRA_TARGETS += first qmlplugin
-INSTALLS += target qmlpluginfiles qmltypes
+INSTALLS += target qmltypes qmlpluginfiles
