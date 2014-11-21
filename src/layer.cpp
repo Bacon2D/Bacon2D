@@ -24,6 +24,8 @@
 
 #include <QtQml/QQmlProperty>
 
+#include "entity.h"
+
 /*!
   \qmltype Layer
   \inqmlmodule Bacon2D
@@ -32,9 +34,10 @@
 */
 Layer::Layer(QQuickItem *parent)
     : QQuickItem(parent)
-    , m_isAnimated(false)
-    , m_horizontalStep(1.0)
     , m_type(Layer::Infinite)
+    , m_updateInterval(0)
+    , m_behavior(0)
+    , m_scene(0)
 {
     // this activates the item layered mode
     QQmlProperty(this, "layer.enabled").write(true);
@@ -43,38 +46,6 @@ Layer::Layer(QQuickItem *parent)
 //! Class destructor
 Layer::~Layer()
 {
-}
-
-/*!
-  \qmlproperty bool Layer::animated
-  \brief This property represents the current state of the Layer's animation.
-*/
-void Layer::setAnimated(bool animated)
-{
-    if (m_isAnimated == animated)
-        return;
-
-    m_isAnimated = animated;
-
-    emit animatedChanged();
-}
-
-/*!
-  \qmlproperty qreal Layer::horizontalStep
-  \brief This property holds the distance to move horizontally in each 
-   step of the animation
-*/
-void Layer::setHorizontalStep(const qreal &step)
-{
-    if (m_horizontalStep == step)
-        return;
-
-    if ((step > 0 && m_horizontalStep < 0) || (step < 0 && m_horizontalStep > 0))
-        emit horizontalDirectionChanged();
-
-    m_horizontalStep = step;
-
-    emit horizontalStepChanged();
 }
 
 /*!
@@ -106,4 +77,75 @@ void Layer::setLayerType(const Layer::LayerType &type)
 void Layer::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
+}
+
+Behavior *Layer::behavior() const
+{
+    return m_behavior;
+}
+
+void Layer::setBehavior(Behavior *behavior)
+{
+    if (m_behavior == behavior)
+        return;
+
+    m_behavior = behavior;
+
+    emit behaviorChanged();
+}
+
+Scene *Layer::scene() const
+{
+    return m_scene;
+}
+
+void Layer::setScene(Scene *scene)
+{
+    if (m_scene == scene)
+        return;
+
+    m_scene = scene;
+
+    emit sceneChanged();
+}
+
+int Layer::updateInterval() const
+{
+    return m_updateInterval;
+}
+
+void Layer::setUpdateInterval(const int &updateInterval)
+{
+    if (m_updateInterval == updateInterval)
+        return;
+
+    m_updateInterval = updateInterval;
+
+    emit updateIntervalChanged();
+
+    m_updateTime.restart();
+}
+
+void Layer::update(const int &delta)
+{
+    if ((m_updateInterval && m_updateTime.elapsed() >= m_updateInterval)
+        || !m_updateInterval) {
+        m_updateTime.restart();
+        if (m_behavior) {
+            m_behavior->setDelta(delta);
+            m_behavior->setTarget(this);
+            m_behavior->update(delta);
+        }
+    }
+
+    updateEntities(delta);
+}
+
+void Layer::updateEntities(const int &delta)
+{
+    QQuickItem *item;
+    foreach (item, childItems()) {
+        if (Entity *entity = qobject_cast<Entity *>(item))
+            entity->update(delta);
+    }
 }

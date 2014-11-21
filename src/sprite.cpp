@@ -41,12 +41,13 @@ void Sprite::append_animation(QQmlListProperty<SpriteAnimation> *list, SpriteAni
 /*!
   \qmltype Sprite
   \inqmlmodule Bacon2D
-  \inherits Entity
-  \brief A Sprite representation of an Entity, providing state based 
+  \inherits Item
+  \brief A Sprite, providing state based
    management of multiple SpriteAnimation animations.
  */
-Sprite::Sprite(Scene *parent)
-    : Entity(parent)
+Sprite::Sprite(QQuickItem *parent)
+    : QQuickItem(parent)
+    , m_entity(0)
     , m_stateMachine(0)
     , m_stateGroup(0)
     , m_verticalMirror(false)
@@ -70,8 +71,13 @@ QString Sprite::animation() const
 
 void Sprite::setAnimation(const QString &animation, const bool &force)
 {
+    if (!m_states.contains(animation)) {
+        qWarning() << "SpriteAnimation:" << animation << "invalid";
+        return;
+    }
+
     if (force || (m_animation != animation)) {
-        if (m_animation != QString()) {
+        if (m_animation != QString() && m_states.contains(m_animation)) {
             SpriteAnimation *animationItem = m_states[m_animation];
             animationItem->setRunning(false);
             animationItem->setVisible(false);
@@ -161,4 +167,19 @@ void Sprite::setHorizontalMirror(const bool &horizontalMirror)
         animation->setHorizontalMirror(m_horizontalMirror);
 
     emit horizontalMirrorChanged();
+}
+
+Entity *Sprite::entity() const
+{
+    return m_entity;
+}
+
+void Sprite::setEntity(Entity *entity)
+{
+    if (m_entity == entity)
+        return;
+
+    m_entity = entity;
+
+    emit entityChanged();
 }

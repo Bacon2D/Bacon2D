@@ -202,9 +202,11 @@ void Game::pushScene(Scene *scene)
         emit stackLevelChanged();
 
     scene->setZ(m_sceneStack.size());
+
     if(scene->viewport()){
         scene->viewport()->setZ(m_sceneStack.size());
     }
+
     attachScene(scene);
     if(!triggerEnterAnimation(scene)){
         activateScene(scene);
@@ -307,6 +309,7 @@ QPointF Game::mouse()
 
 void Game::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
+    QQuickItem::geometryChanged(newGeometry, oldGeometry);
     if (newGeometry.isEmpty() || !isComponentComplete() || (newGeometry == oldGeometry))
         return;
     if(m_sceneStack.isEmpty())
@@ -316,14 +319,8 @@ void Game::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
     Viewport *viewport = currentScene->viewport();
 
     if (viewport && currentScene) {
-        viewport->setWidth(width());
-        viewport->setHeight(height());
-        viewport->setContentWidth(currentScene->width());
-        viewport->setContentHeight(currentScene->height());
-        viewport->updateMaxOffsets();
+        viewport->setScene(currentScene);
     }
-
-    QQuickItem::geometryChanged(newGeometry, oldGeometry);
 }
 
 void Game::attachScene(Scene *scene)
@@ -337,14 +334,9 @@ void Game::attachScene(Scene *scene)
     if (viewport) {
         viewport->setParent(this);
         viewport->setParentItem(this);
-        viewport->setScene(scene);
-        scene->setParentItem(viewport);
         viewport->setWidth(width());
         viewport->setHeight(height());
-        viewport->setContentWidth(scene->width());
-        viewport->setContentHeight(scene->height());
-        viewport->updateMaxOffsets();
-        viewport->setVisible(true);
+        viewport->setScene(scene);
     } else {
         scene->setParentItem(this);
     }
@@ -352,8 +344,6 @@ void Game::attachScene(Scene *scene)
     scene->setRunning(false);
     scene->setEnabled(false);
     scene->setFocus(false, Qt::OtherFocusReason);
-
-
 }
 
 void Game::activateScene(Scene *scene)

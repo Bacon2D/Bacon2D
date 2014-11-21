@@ -28,6 +28,7 @@
 
 #include <QtCore/QtGlobal>
 #include <QtQml/QQmlEngine>
+#include "../../3rdparty/qml-box2d/box2dbody.h"
 
 /*!
   \qmltype Scene
@@ -96,9 +97,7 @@ void Scene::updateEntities(QQuickItem *parent, const int &delta)
         if (Entity *entity = qobject_cast<Entity *>(item))
             entity->update(delta);
         else if (Layer *layer = qobject_cast<Layer *>(item))
-            layer->update();
-        else if (Box2DWorld *world = dynamic_cast<Box2DWorld *>(item))
-            updateEntities(world, delta);
+            layer->update(delta);
     }
 }
 
@@ -239,6 +238,7 @@ void Scene::setViewport(Viewport *viewport)
         return;
 
     m_viewport = viewport;
+    m_viewport->setScene(this);
 
     emit viewportChanged();
 }
@@ -270,7 +270,6 @@ void Scene::createWorld()
 {
     if (m_physics && !m_world) {
         m_world = new Box2DWorld(this);
-        m_world->setParentItem(this);
         m_world->setRunning(m_running);
         emit worldChanged();
     }
@@ -472,42 +471,53 @@ void Scene::rayCast(Box2DRayCast *rayCast, const QPointF &point1, const QPointF 
 
 void Scene::initializeEntities(QQuickItem *parent)
 {
-    QQuickItem *item;
-    foreach (item, parent->childItems()) {
-        if (Entity *entity = dynamic_cast<Entity *>(item))
+    QQuickItem *child;
+    foreach (child, parent->childItems()) {
+        if (Entity *entity = dynamic_cast<Entity *>(child)) {
             entity->setScene(this);
+        } else if (Layer *layer = dynamic_cast<Layer *>(child)) {
+            layer->setScene(this);
+        }
+
         if (m_physics && m_world) {
-            if (Box2DBody *body = dynamic_cast<Box2DBody *>(item)) {
-                body->setParent(m_world);
-                body->initialize(m_world);
+            foreach (Box2DBody *body, child->findChildren<Box2DBody *>(QString(), Qt::FindDirectChildrenOnly)) {
+                body->setWorld(m_world);
             }
         }
-        initializeEntities(item);
+
+        initializeEntities(child);
     }
 }
 
 void Scene::componentComplete()
 {
     QQuickItem::componentComplete();
-
     initializeEntities(this);
 
     if (m_world)
         m_world->componentComplete();
+
+    if (m_viewport)
+        m_viewport->setScene(this);
 }
 
 void Scene::itemChange(ItemChange change, const ItemChangeData &data)
 {
+
     if (isComponentComplete() && change == ItemChildAddedChange) {
         QQuickItem *child = data.item;
-        if (Entity *entity = dynamic_cast<Entity *>(child))
+        if (Entity *entity = dynamic_cast<Entity *>(child)) {
             entity->setScene(this);
+        } else if (Layer *layer = dynamic_cast<Layer *>(child)) {
+            layer->setScene(this);
+        }
+
         if (m_physics && m_world) {
-            if (Box2DBody *body = dynamic_cast<Box2DBody *>(child)) {
-                body->setParent(m_world);
-                body->initialize(m_world);
+            foreach (Box2DBody *body, child->findChildren<Box2DBody *>(QString(), Qt::FindDirectChildrenOnly)) {
+                body->setWorld(m_world);
             }
         }
+
         initializeEntities(child);
     }
 
@@ -518,7 +528,6 @@ void Scene::onWorldChanged()
 {
     if (m_world) {
         /* Wrap signals from Box2DWorld */
-        connect(m_world, SIGNAL(initialized()), this, SIGNAL(initialized()));
         connect(m_world, SIGNAL(preSolve(Box2DContact *)), this, SIGNAL(preSolve(Box2DContact *)));
         connect(m_world, SIGNAL(postSolve(Box2DContact *)), this, SIGNAL(postSolve(Box2DContact *)));
         connect(m_world, SIGNAL(timeStepChanged()), this, SIGNAL(timeStepChanged()));
@@ -531,14 +540,16 @@ void Scene::onWorldChanged()
         /* End wrapped signals from Box2DWorld */
 
         /* if debug is enabled, create a DebugDraw */
-        if (m_debug && !m_debugDraw)
+        if (m_debug && !m_debugDraw) {
             m_debugDraw = new Box2DDebugDraw(this);
+            emit debugChanged();
+        }
     }
 }
 
 void Scene::onDebugChanged()
 {
-    if (m_debugDraw && m_world) {
+    if (m_debug && m_debugDraw && m_world) {
         /* Properly setup a DebugDraw */
         m_debugDraw->setWorld(m_world);
         m_debugDraw->setParentItem(this);
@@ -547,8 +558,23 @@ void Scene::onDebugChanged()
         m_debugDraw->setOpacity(0.3);
         m_debugDraw->setWidth(width());
         m_debugDraw->setHeight(height());
-        m_debugDraw->setX(x());
-        m_debugDraw->setY(y());
+        m_debugDraw->setVisible(m_debug);
+    } else if (m_debugDraw) {
         m_debugDraw->setVisible(m_debug);
     }
 }
+
+void Scene::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+{
+    QQuickItem::geometryChanged(newGeometry, oldGeometry);
+    if (newGeometry.isEmpty() || !isComponentComplete() || (newGeometry == oldGeometry))
+        return;
+
+    if (m_viewport && m_running) {
+        m_viewport->setScene(this);
+    }
+    if (m_debug && m_debugDraw) {
+        emit debugChanged();
+    }
+}
+

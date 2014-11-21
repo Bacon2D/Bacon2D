@@ -21,17 +21,19 @@ Game {
 
     Component {
         id: linkComponent
-        Entity {
+        PhysicsEntity {
+            id: ball
             width: 20
-            height:20
-            sleepingAllowed: true
-			bodyType: Entity.Dynamic;
+            height: 20
+            bodyType: Body.Dynamic
+
             property color color: "#EFEFEF"
+
             fixtures: Circle {
-                radius: parent.width / 2
-                anchors.centerIn: parent
+                radius: ball.width / 2
                 density: 0.5
             }
+
             Rectangle {
                 radius: parent.width / 2
                 border.color: "blue"
@@ -58,36 +60,37 @@ Game {
         anchors.fill: parent
         physics: true
 
-        onInitialized: {
+        Component.onCompleted: {
             var prev = leftWall;
             for(var i = 60;i < 740;i += 20) {
-                var newLink = linkComponent.createObject(scene.world);
+                var newLink = linkComponent.createObject(scene);
                 newLink.color = "orange";
                 newLink.x = i;
                 newLink.y = 100;
-                var newJoint = jointComponent.createObject(scene.world);
+                var newJoint = jointComponent.createObject(scene);
                 if(i === 60) newJoint.localAnchorA = Qt.point(40,100);
-                newJoint.bodyA = prev;
-                newJoint.bodyB = newLink;
+                newJoint.bodyA = prev.body;
+                newJoint.bodyB = newLink.body;
                 prev = newLink;
             }
-            newJoint = jointComponent.createObject(scene.world);
+            newJoint = jointComponent.createObject(scene);
             newJoint.localAnchorB = Qt.point(0,100);
-            newJoint.bodyA = prev;
-            newJoint.bodyB = rightWall;
+            newJoint.bodyA = prev.body;
+            newJoint.bodyB = rightWall.body;
         }
 
-        Entity {
+        PhysicsEntity {
             id: ground
             height: 40
-            bodyType: Entity.Static
+            bodyType: Body.Static
             anchors {
                 left: parent.left
                 right: parent.right
                 bottom: parent.bottom
             }
             fixtures: Box {
-                anchors.fill: parent
+                width: ground.width
+                height: ground.height
                 friction: 1
                 density: 1
             }
@@ -155,7 +158,7 @@ Game {
             running: true
             repeat: true
             onTriggered: {
-                var newBox = linkComponent.createObject(scene.world);
+                var newBox = linkComponent.createObject(scene);
                 newBox.x = 40 + (Math.random() * scene.width - 80);
                 newBox.y = 50;
             }

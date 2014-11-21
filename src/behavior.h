@@ -24,29 +24,28 @@
 #define _BEHAVIOR_H_
 
 #include <QtCore/QObject>
-
-class Entity;
+#include <QtQuick/QQuickItem>
 
 class Behavior : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(Entity *entity READ entity)
+    Q_PROPERTY(QQuickItem *target READ target)
     Q_PROPERTY(int delta READ delta)
 
 public:
     Behavior(QObject *parent = 0);
 
-    Entity *entity() const;
-    void setEntity(Entity *entity);
+    QQuickItem *target() const;
+    virtual void setTarget(QQuickItem *target);
 
     void setDelta(int delta);
     int delta() const;
 
     virtual void update(const int &delta) { Q_UNUSED(delta);  }
 
-private:
-    Entity *m_entity;
+protected:
+    QQuickItem *m_target;
     int m_delta;
 };
 

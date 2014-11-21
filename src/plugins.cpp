@@ -51,12 +51,13 @@
 #include "box2dropejoint.h"
 #include "box2draycast.h"
 #include "box2dcontact.h"
+#include "scrollbehavior.h"
 
 void Plugins::registerTypes(const char *uri)
 {
     Q_UNUSED(uri)
 
-    qmlRegisterUncreatableType<Layer>("Bacon2D", 1, 0, "Layer", "Registering Layer as we use it on Layers");
+    qmlRegisterType<Layer>("Bacon2D", 1, 0, "Layer");
     qmlRegisterUncreatableType<Behavior>("Bacon2D", 1, 0, "Bacon2DBehavior", "Don't use Bacon2DBehavior directly, use one specialized behavior");
 
     qmlRegisterType<Game>("Bacon2D", 1, 0, "Game");
@@ -68,6 +69,7 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<Viewport>("Bacon2D", 1, 0, "Viewport");
     qmlRegisterType<ScriptBehavior>("Bacon2D", 1, 0, "ScriptBehavior");
     qmlRegisterType<Settings>("Bacon2D", 1, 0, "Settings");
+    qmlRegisterType<ScrollBehavior>("Bacon2D", 1, 0, "ScrollBehavior");
 
     qmlRegisterUncreatableType<Box2DWorld>("Bacon2D", 1, 0, "World",
                                            QStringLiteral("World created by Scene if physics is enabled"));
@@ -75,6 +77,7 @@ void Plugins::registerTypes(const char *uri)
                                           QStringLiteral("Body is the base class for Entity"));
     qmlRegisterUncreatableType<Box2DFixture>("Bacon2D", 1, 0, "Fixture",
                                              QStringLiteral("Base type for Box, Circle etc."));
+    qmlRegisterType<Box2DBody>("Bacon2D", 1, 0, "Body");
     qmlRegisterType<Box2DBox>("Bacon2D", 1, 0, "Box");
     qmlRegisterType<Box2DCircle>("Bacon2D", 1, 0, "Circle");
     qmlRegisterType<Box2DPolygon>("Bacon2D", 1, 0, "Polygon");

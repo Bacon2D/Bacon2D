@@ -1,16 +1,13 @@
 import QtQuick 2.2
 import Bacon2D 1.0
 
-Entity {
-    bodyType: Entity.Static
-    signal beginContact (variant other)
+PhysicsEntity {
+    bodyType: Body.Static
     fixtures: Box {
-        anchors.fill: parent
+        height: target.height
+        width: target.width
         friction: 1
         density: 1
-        onBeginContact: {
-            parent.beginContact(other)
-        }
     }
     Image {
         source: "images/wall.jpg"

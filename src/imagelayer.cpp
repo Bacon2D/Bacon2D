@@ -48,9 +48,10 @@ const char *ImageLayerShader::fragmentShader() const {
 
         "uniform sampler2D texture;"
         "uniform highp float xPos;"
+        "uniform highp float yPos;"
 
         "void main() {"
-        "   gl_FragColor = texture2D(texture, vec2(texCoord.x + xPos, texCoord.y)) * qt_Opacity;"
+        "   gl_FragColor = texture2D(texture, vec2(texCoord.x + xPos, texCoord.y + yPos)) * qt_Opacity;"
         "}";
 }
 
@@ -69,6 +70,7 @@ void ImageLayerShader::initialize()
 
     m_idTexture = program()->uniformLocation("texture");
     m_idXPos = program()->uniformLocation("xPos");
+    m_idYPos = program()->uniformLocation("yPos");
 }
 
 void ImageLayerShader::updateState(const ImageLayerState *newState, const ImageLayerState *oldState)
@@ -78,6 +80,9 @@ void ImageLayerShader::updateState(const ImageLayerState *newState, const ImageL
 
     if (!oldState || oldState->xPos != newState->xPos)
         program()->setUniformValue(m_idXPos, (GLfloat)newState->xPos);
+    if (!oldState || oldState->yPos != newState->yPos)
+        program()->setUniformValue(m_idYPos, (GLfloat)newState->yPos);
+
 }
 
 void ImageLayerShader::resolveUniforms()
@@ -106,6 +111,7 @@ ImageLayerNode::ImageLayerNode(QQuickWindow *window, const QString file, bool mi
     QSGTexture *texture = window->createTextureFromImage(image);
 
     texture->setHorizontalWrapMode(QSGTexture::Repeat);
+    texture->setVerticalWrapMode(QSGTexture::Repeat);
     texture->setFiltering(QSGTexture::Linear);
 
     m_width = texture->textureSize().width();
@@ -117,6 +123,7 @@ ImageLayerNode::ImageLayerNode(QQuickWindow *window, const QString file, bool mi
     setFlag(OwnsMaterial, true);
 
     updateXPos(0);
+    updateYPos(0);
 
     QSGGeometry *g = new QSGGeometry(QSGGeometry::defaultAttributes_TexturedPoint2D(), 4);
     QSGGeometry::updateTexturedRectGeometry(g, QRect(), QRect());
@@ -137,6 +144,15 @@ void ImageLayerNode::updateXPos(const qreal pos)
         static_cast<QSGSimpleMaterial<ImageLayerState> *>(material());
 
     m->state()->xPos = -(pos / m_width);
+    markDirty(QSGNode::DirtyMaterial);
+}
+
+void ImageLayerNode::updateYPos(const qreal pos)
+{
+    QSGSimpleMaterial<ImageLayerState> *m =
+        static_cast<QSGSimpleMaterial<ImageLayerState> *>(material());
+
+    m->state()->yPos = -(pos / m_height);
     markDirty(QSGNode::DirtyMaterial);
 }
 
@@ -163,7 +179,6 @@ qreal ImageLayerNode::imageHeight() const
 */
 ImageLayer::ImageLayer(Layer *parent)
     : Layer((QQuickItem *)parent)
-    , m_currentHorizontalStep(0)
     , m_imageWidth(0)
     , m_imageHeight(0)
     , m_geometryChanged(false)
@@ -183,7 +198,7 @@ void ImageLayer::setSource(const QUrl &source)
     m_source = source;
 
     emit sourceChanged();
-    update();
+    QQuickItem::update();
 }
 
 /*!
@@ -193,19 +208,6 @@ void ImageLayer::setSource(const QUrl &source)
 QUrl ImageLayer::source() const
 {
     return m_source;
-}
-
-void ImageLayer::updateHorizontalStep()
-{
-    // XXX m_currentHorizontalStep is a pretty bad name
-    // keeping it because we are planning moving the horizontalStep update logic to
-    // the QML part (using ScriptBehavior)
-    m_currentHorizontalStep += m_horizontalStep;
-
-    if (m_currentHorizontalStep <= -m_imageWidth)
-        m_currentHorizontalStep = 0;
-    else if (m_currentHorizontalStep >= 0)
-        m_currentHorizontalStep = -m_imageWidth;
 }
 
 QSGNode *ImageLayer::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
@@ -233,10 +235,8 @@ QSGNode *ImageLayer::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
         m_imageHeight = n->imageHeight();
     }
 
-    if (m_isAnimated) {
-        updateHorizontalStep();
-        n->updateXPos(m_currentHorizontalStep);
-    }
+    n->updateXPos(m_horizontalOffset);
+    n->updateYPos(m_verticalOffset);
 
     if (m_geometryChanged) {
         // simple workaround to deal with resizing
@@ -256,14 +256,13 @@ QSGNode *ImageLayer::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
 
 void ImageLayer::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
+    Layer::geometryChanged(newGeometry, oldGeometry);
     if (newGeometry.isEmpty() || !isComponentComplete())
         return;
 
     m_geometryChanged = true;
 
-    update();
-    //XXX when calling it we get some dirty :/
-    Layer::geometryChanged(newGeometry, oldGeometry);
+    QQuickItem::update();
 }
 
 void ImageLayer::componentComplete()
@@ -276,4 +275,43 @@ void ImageLayer::setContentGeometry(const QRectF &geometry)
     setWidth(geometry.width());
     setHeight(geometry.height());
 }
+
+void ImageLayer::update(const int &delta)
+{
+    Layer::update(delta);
+    QQuickItem::update();
+}
+
+qreal ImageLayer::imageWidth()
+{
+    return m_imageWidth;
+}
+
+qreal ImageLayer::imageHeight()
+{
+    return m_imageHeight;
+}
+
+qreal ImageLayer::horizontalOffset()
+{
+    return m_horizontalOffset;
+}
+
+void ImageLayer::setHorizontalOffset(qreal offset)
+{
+    m_horizontalOffset = offset;
+}
+
+
+qreal ImageLayer::verticalOffset()
+{
+    return m_verticalOffset;
+}
+
+void ImageLayer::setVerticalOffset(qreal offset)
+{
+    m_verticalOffset = offset;
+}
+
+
 // ImageLayer

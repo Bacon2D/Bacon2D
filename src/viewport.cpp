@@ -148,7 +148,7 @@ void Viewport::hScroll(float step)
 }
 
 /*!
-  \qmlmethod Viewport::yScroll(float step)
+  \qmlmethod Viewport::vScroll(float step)
   \brief Scroll the Viewport vertically by \a step
 */
 void Viewport::vScroll(float step)
@@ -208,6 +208,11 @@ void Viewport::setAnimationDuration(const int &animationDuration)
 void Viewport::setScene(Scene *scene)
 {
     m_scene = scene;
+    scene->setParentItem(this);
+    setContentWidth(scene->width());
+    setContentHeight(scene->height());
+    setVisible(true);
+    updateMaxOffsets();
 }
 
 void Viewport::updateMaxOffsets()

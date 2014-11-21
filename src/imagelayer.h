@@ -39,6 +39,7 @@ struct ImageLayerState
 
     QSGTexture *texture;
     qreal xPos;
+    qreal yPos;
 };
 // ImageLayerState
 
@@ -59,6 +60,7 @@ public:
 private:
     int m_idTexture;
     int m_idXPos;
+    int m_idYPos;
 };
 // ImageLayerShader
 
@@ -70,6 +72,7 @@ public:
 
     void setRect(const QRectF &bounds);
     void updateXPos(const qreal pos);
+    void updateYPos(const qreal pos);
 
     qreal imageWidth() const;
     qreal imageHeight() const;
@@ -86,13 +89,28 @@ class ImageLayer : public Layer
     Q_OBJECT
 
     Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
+    Q_PROPERTY(qreal imageWidth READ imageWidth)
+    Q_PROPERTY(qreal imageHeight READ imageHeight)
+    Q_PROPERTY(qreal horizontalOffset READ horizontalOffset WRITE setHorizontalOffset)
+    Q_PROPERTY(qreal verticalOffset READ verticalOffset WRITE setVerticalOffset)
 
 public:
     ImageLayer(Layer *parent = 0);
     ~ImageLayer();
 
+    virtual void update(const int &delta);
+
     void setSource(const QUrl &source);
     QUrl source() const;
+
+    qreal imageWidth();
+    qreal imageHeight();
+
+    qreal horizontalOffset();
+    void setHorizontalOffset(qreal offset);
+
+    qreal verticalOffset();
+    void setVerticalOffset(qreal offset);
 
     QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *);
     void setContentGeometry(const QRectF &geometry);
@@ -107,13 +125,12 @@ protected:
     void componentComplete();
 
 private:
-    void updateHorizontalStep();
-
     QUrl m_source;
-    qreal m_currentHorizontalStep;
 
     qreal m_imageWidth;
     qreal m_imageHeight;
+    qreal m_horizontalOffset;
+    qreal m_verticalOffset;
 
     bool m_geometryChanged;
 };

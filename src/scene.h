@@ -137,18 +137,19 @@ signals:
 
     void enterAnimationChanged();
     void exitAnimationChanged();
+
 protected slots:
     void onDebugChanged();
     void onWorldChanged();
 
 protected:
+    virtual void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
     virtual void componentComplete();
     virtual void itemChange(ItemChange change, const ItemChangeData &data);
     void updateEntities(QQuickItem *parent, const int &delta);
     void initializeEntities(QQuickItem *parent);
     void createWorld();
 
-protected:
     bool m_running;
     Viewport *m_viewport;
     Game *m_game;

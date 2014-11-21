@@ -23,18 +23,22 @@
 #ifndef _LAYER_H_
 #define _LAYER_H_
 
-#include "entity.h"
+#include "behavior.h"
+#include "scene.h"
 
 #include <QtQuick/QQuickItem>
+#include <QtCore/QtGlobal>
+#include <QtCore/QTime>
 
 //! A layer class
 class Layer: public QQuickItem
 {
     Q_OBJECT
 
-    Q_PROPERTY(bool animated READ isAnimated WRITE setAnimated NOTIFY animatedChanged)
-    Q_PROPERTY(qreal horizontalStep READ horizontalStep WRITE setHorizontalStep NOTIFY horizontalStepChanged)
     Q_PROPERTY(Layer::LayerType layerType READ layerType WRITE setLayerType NOTIFY layerTypeChanged)
+    Q_PROPERTY(Behavior *behavior READ behavior WRITE setBehavior NOTIFY behaviorChanged)
+    Q_PROPERTY(Scene *scene READ scene WRITE setScene NOTIFY sceneChanged)
+    Q_PROPERTY(int updateInterval READ updateInterval WRITE setUpdateInterval NOTIFY updateIntervalChanged)
 
     Q_ENUMS (
         LayerType
@@ -44,11 +48,16 @@ public:
     Layer(QQuickItem *parent = 0);
     virtual ~Layer();
 
-    bool isAnimated() const { return m_isAnimated; }
-    void setAnimated(bool animated);
+    virtual void update(const int &delta);
 
-    qreal horizontalStep() const { return m_horizontalStep; }
-    void setHorizontalStep(const qreal &step);
+    Behavior *behavior() const;
+    void setBehavior(Behavior *behavior);
+
+    Scene *scene() const;
+    void setScene(Scene *scene);
+
+    int updateInterval() const;
+    void setUpdateInterval(const int &updateInterval);
 
     enum LayerType {
         Infinite,
@@ -59,17 +68,22 @@ public:
     void setLayerType(const Layer::LayerType &type);
 
 signals:
-    void animatedChanged();
-    void horizontalStepChanged();
-    void horizontalDirectionChanged();
     void layerTypeChanged();
+    void updateIntervalChanged();
+    void behaviorChanged();
+    void sceneChanged();
 
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
+    void updateEntities(const int &delta);
 
     bool m_isAnimated;
     qreal m_horizontalStep;
     Layer::LayerType m_type;
+    QTime m_updateTime;
+    int m_updateInterval;
+    Behavior *m_behavior;
+    Scene *m_scene;
 };
 
 #endif /* _LAYER */
