@@ -24,6 +24,7 @@
 #include "scene.h"
 #include "viewport.h"
 
+#include <QtCore/QCoreApplication>
 #include <QtQuick/QQuickWindow>
 #include <QtGui/QCursor>
 
