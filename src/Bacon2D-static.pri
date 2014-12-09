@@ -30,10 +30,14 @@ HEADERS += \
         $$PWD/entity.h \
         $$PWD/game.h \
         $$PWD/imagelayer.h \
+        $$PWD/imagelayerscrollbehavior.h \
         $$PWD/layer.h \
+        $$PWD/layerscrollbehavior.h \
         $$PWD/plugins.h \
         $$PWD/scene.h \
         $$PWD/scriptbehavior.h \
+        $$PWD/scrollbehavior.h \
+        $$PWD/scrollbehaviorimpl.h \
         $$PWD/spriteanimation.h \
         $$PWD/sprite.h \
         $$PWD/spritesheet.h \
@@ -46,10 +50,13 @@ SOURCES += \
         $$PWD/entity.cpp \
         $$PWD/game.cpp \
         $$PWD/imagelayer.cpp \
+        $$PWD/imagelayerscrollbehavior.cpp \
         $$PWD/layer.cpp \
+        $$PWD/layerscrollbehavior.cpp \
         $$PWD/plugins.cpp \
         $$PWD/scene.cpp \
         $$PWD/scriptbehavior.cpp \
+        $$PWD/scrollbehavior.cpp \
         $$PWD/spriteanimation.cpp \
         $$PWD/sprite.cpp \
         $$PWD/spritesheet.cpp \
