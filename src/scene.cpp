@@ -28,6 +28,7 @@
 
 #include <QtCore/QtGlobal>
 #include <QtQml/QQmlEngine>
+
 #include "../../3rdparty/qml-box2d/box2dbody.h"
 
 /*!
@@ -81,9 +82,7 @@ Scene::Scene(Game *parent)
 {
     setVisible(false);
 
-    connect(this, SIGNAL(debugChanged()), SLOT(onDebugChanged()));
     connect(this, SIGNAL(worldChanged()), SLOT(onWorldChanged()));
-    connect(this, SIGNAL(initialized()), SLOT(onDebugChanged()));
 }
 
 Scene::~Scene()
@@ -271,6 +270,8 @@ void Scene::createWorld()
     if (m_physics && !m_world) {
         m_world = new Box2DWorld(this);
         m_world->setRunning(m_running);
+        //force debug draw update
+        setDebug(m_debug);
         emit worldChanged();
     }
 }
@@ -308,16 +309,28 @@ bool Scene::debug() const
 
 void Scene::setDebug(const bool &debug)
 {
-    if (m_debug == debug)
-        return;
-
-    m_debug = debug;
-
-    /* if debug and physics are enabled, create a DebugDraw */
-    if (m_debug && m_physics && !m_debugDraw)
+    if (debug && m_physics && !m_debugDraw){
         m_debugDraw = new Box2DDebugDraw(this);
+        m_debugDraw->setWorld(m_world);
+        m_debugDraw->setParentItem(this);
+        if (this->childItems().indexOf(m_debugDraw) != (this->childItems().length()-1))
+            m_debugDraw->stackAfter(this->childItems().last());
+        m_debugDraw->setOpacity(0.3);
+        m_debugDraw->setWidth(width());
+        m_debugDraw->setHeight(height());
+        m_debugDraw->setVisible(true);
+    }
 
-    emit debugChanged();
+    if(!debug && m_debugDraw) {
+        m_debugDraw->setVisible(false);
+        m_debugDraw->deleteLater();
+        m_debugDraw = 0;
+    }
+
+    if(debug != m_debug){
+        m_debug = debug;
+        emit debugChanged();
+    }
 }
 
 /* These are wrapped around Box2DWorld */
@@ -544,23 +557,6 @@ void Scene::onWorldChanged()
             m_debugDraw = new Box2DDebugDraw(this);
             emit debugChanged();
         }
-    }
-}
-
-void Scene::onDebugChanged()
-{
-    if (m_debug && m_debugDraw && m_world) {
-        /* Properly setup a DebugDraw */
-        m_debugDraw->setWorld(m_world);
-        m_debugDraw->setParentItem(this);
-        if (this->childItems().indexOf(m_debugDraw) != (this->childItems().length()-1))
-            m_debugDraw->stackAfter(this->childItems().last());
-        m_debugDraw->setOpacity(0.3);
-        m_debugDraw->setWidth(width());
-        m_debugDraw->setHeight(height());
-        m_debugDraw->setVisible(m_debug);
-    } else if (m_debugDraw) {
-        m_debugDraw->setVisible(m_debug);
     }
 }
 
