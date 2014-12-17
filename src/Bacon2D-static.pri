@@ -28,6 +28,7 @@ HEADERS += \
         $$PWD/animationtransition.h \
         $$PWD/behavior.h \
         $$PWD/entity.h \
+        $$PWD/enums.h \
         $$PWD/game.h \
         $$PWD/imagelayer.h \
         $$PWD/imagelayerscrollbehavior.h \
@@ -48,6 +49,7 @@ SOURCES += \
         $$PWD/animationtransition.cpp \
         $$PWD/behavior.cpp \
         $$PWD/entity.cpp \
+        $$PWD/enums.cpp \
         $$PWD/game.cpp \
         $$PWD/imagelayer.cpp \
         $$PWD/imagelayerscrollbehavior.cpp \

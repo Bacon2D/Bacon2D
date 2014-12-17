@@ -20,6 +20,7 @@ DEFINES += STATIC_PLUGIN_BOX2D
 include(../3rdparty/qml-box2d/box2d-static.pri)
 
 HEADERS += entity.h \
+           enums.h \
            scene.h \
            game.h \
            plugins.h \
@@ -40,6 +41,7 @@ HEADERS += entity.h \
            settings.h
 
 SOURCES += entity.cpp \
+           enums.cpp \
            scene.cpp \
            game.cpp \
            plugins.cpp \

@@ -23,6 +23,7 @@
 #include "plugins.h"
 
 #include "entity.h"
+#include "enums.h"
 #include "scene.h"
 #include "spriteanimation.h"
 #include "sprite.h"
@@ -59,6 +60,7 @@ void Plugins::registerTypes(const char *uri)
 
     qmlRegisterType<Layer>("Bacon2D", 1, 0, "Layer");
     qmlRegisterUncreatableType<Behavior>("Bacon2D", 1, 0, "Bacon2DBehavior", "Don't use Bacon2DBehavior directly, use one specialized behavior");
+    qmlRegisterUncreatableType<Bacon2D>("Bacon2D", 1, 0, "Bacon2D", "Not creatable as an object, use only to access enums");
 
     qmlRegisterType<Game>("Bacon2D", 1, 0, "Game");
     qmlRegisterType<Scene>("Bacon2D", 1, 0, "Scene");

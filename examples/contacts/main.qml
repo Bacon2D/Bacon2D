@@ -1,7 +1,6 @@
 import QtQuick 2.2
 import Bacon2D 1.0
 
-
 Game {
     id: game
     width: 800
@@ -267,7 +266,7 @@ Game {
         Timer {
             id: rectTimer
             interval: 2000
-            running: true
+            running: game.gameState === Bacon2D.Running
             repeat: true
             onTriggered: {
                 var newBox = rectComponent.createObject(scene);

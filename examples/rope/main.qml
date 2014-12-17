@@ -155,7 +155,7 @@ Game {
         Timer {
             id: ballsTimer
             interval: 500
-            running: true
+            running: game.gameState === Bacon2D.Running
             repeat: true
             onTriggered: {
                 var newBox = linkComponent.createObject(scene);
