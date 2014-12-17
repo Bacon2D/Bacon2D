@@ -109,6 +109,14 @@ void Layer::setScene(Scene *scene)
     emit sceneChanged();
 }
 
+Game *Layer::game() const
+{
+    if (m_scene)
+        return m_scene->game();
+
+    return 0;
+}
+
 int Layer::updateInterval() const
 {
     return m_updateInterval;
