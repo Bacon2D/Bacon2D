@@ -24,10 +24,12 @@
 #define _SPRITE_H_
 
 #include "entity.h"
+#include "enums.h"
 
 #include <QtCore/QHash>
 #include <QtCore/QStateMachine>
 #include <QtQuick/QQuickItem>
+#include <QtCore/QtGlobal>
 
 class Scene;
 class SpriteAnimation;
@@ -35,12 +37,12 @@ class SpriteAnimation;
 class Sprite : public QQuickItem
 {
     Q_OBJECT
-
     Q_PROPERTY(QQmlListProperty<SpriteAnimation> animations READ animations)
     Q_PROPERTY(QString animation READ animation WRITE setAnimation NOTIFY animationChanged)
     Q_PROPERTY(bool verticalMirror READ verticalMirror WRITE setVerticalMirror NOTIFY verticalMirrorChanged)
     Q_PROPERTY(bool horizontalMirror READ horizontalMirror WRITE setHorizontalMirror NOTIFY horizontalMirrorChanged)
     Q_PROPERTY(Entity *entity READ entity WRITE setEntity NOTIFY entityChanged)
+    Q_PROPERTY(Bacon2D::State spriteState READ spriteState WRITE setSpriteState NOTIFY spriteStateChanged)
 
 public:
     Sprite(QQuickItem *parent = 0);
@@ -59,6 +61,9 @@ public:
     Entity *entity() const;
     void setEntity(Entity *entity);
 
+    Bacon2D::State spriteState() const { return m_state; };
+    void setSpriteState(const Bacon2D::State &state);
+
 public slots:
     void initializeAnimation();
 
@@ -67,6 +72,7 @@ signals:
     void verticalMirrorChanged();
     void horizontalMirrorChanged();
     void entityChanged();
+    void spriteStateChanged();
 
 private:
     void initializeMachine();
@@ -81,6 +87,7 @@ private:
     bool m_verticalMirror;
     bool m_horizontalMirror;
     Entity *m_entity;
+    Bacon2D::State m_state;
 };
 
 #endif /* _SPRITE_H_ */
