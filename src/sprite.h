@@ -25,6 +25,7 @@
 
 #include "entity.h"
 #include "enums.h"
+#include "game.h"
 
 #include <QtCore/QHash>
 #include <QtCore/QStateMachine>
@@ -66,6 +67,7 @@ public:
 
 public slots:
     void initializeAnimation();
+    void onGameStateChanged();
 
 signals:
     void animationChanged();
@@ -87,6 +89,7 @@ private:
     bool m_verticalMirror;
     bool m_horizontalMirror;
     Entity *m_entity;
+    Game *m_game;
     Bacon2D::State m_state;
 };
 

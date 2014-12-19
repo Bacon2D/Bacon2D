@@ -20,6 +20,7 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
+#include "scene.h"
 #include "sprite.h"
 #include "spritesheet.h"
 #include "spriteanimation.h"
@@ -47,6 +48,7 @@ void Sprite::append_animation(QQmlListProperty<SpriteAnimation> *list, SpriteAni
 Sprite::Sprite(QQuickItem *parent)
     : QQuickItem(parent)
     , m_entity(0)
+    , m_game(0)
     , m_stateMachine(0)
     , m_stateGroup(0)
     , m_verticalMirror(false)
@@ -73,6 +75,11 @@ void Sprite::setAnimation(const QString &animation, const bool &force)
 {
     if (!m_states.contains(animation)) {
         qWarning() << "SpriteAnimation:" << animation << "invalid";
+        return;
+    }
+
+    if (m_state == Bacon2D::Paused || m_state == Bacon2D::Suspended) {
+        qWarning() << "SpriteAnimation: isn't active";
         return;
     }
 
@@ -180,8 +187,17 @@ void Sprite::setEntity(Entity *entity)
         return;
 
     m_entity = entity;
-
+    if (!m_game) {
+        m_game = m_entity->scene()->game();
+        connect(m_game, SIGNAL(gameStateChanged()), this, SLOT(onGameStateChanged()));
+    }
     emit entityChanged();
+}
+
+void Sprite::onGameStateChanged()
+{
+    if (m_state != Bacon2D::Inactive)
+        this->setSpriteState(m_game->gameState());
 }
 
 /*!

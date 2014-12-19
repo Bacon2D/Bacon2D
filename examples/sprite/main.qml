@@ -40,42 +40,42 @@ Game {
             anchors.fill: parent
 
             onClicked: {
-                spriteItem.spriteState = spriteItem.spriteState == Bacon2D.Running ? Bacon2D.Paused : Bacon2D.Running
+                game.gameState = game.gameState == Bacon2D.Running ? Bacon2D.Paused : Bacon2D.Running
             }
         }
 
-        Sprite {
-            id: spriteItem
-            animation: "sliding"
-            spriteState: Bacon2D.Running
-            animations: [
-                SpriteAnimation {
-                    name: "sliding"
+        Entity {
+            Sprite {
+                id: spriteItem
+                animation: "sliding"
+                spriteState: Bacon2D.Running
+                animations: [
+                    SpriteAnimation {
+                        name: "sliding"
+                        source: "sliding.png"
+                        frames: 4
+                        duration: 400
+                        loops: Animation.Infinite
+                    },
+                    SpriteAnimation {
+                        name: "jumping"
+                        source: "jumping.png"
+                        frames: 10
+                        duration: 600
+                        loops: 2
 
-                    source: "sliding.png"
-                    frames: 4
-                    duration: 400
-                    loops: Animation.Infinite
-                },
-                SpriteAnimation {
-                    name: "jumping"
-
-                    source: "jumping.png"
-                    frames: 10
-                    duration: 600
-                    loops: 2
-
-                    onFinished: {
-                        spriteItem.animation = "sliding"
+                        onFinished: {
+                            spriteItem.animation = "sliding"
+                        }
                     }
-                }
-            ]
+                ]
 
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    spriteItem.animation = spriteItem.animation == "sliding" ? "jumping"
-                                                                             : "sliding"
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        spriteItem.animation = spriteItem.animation == "sliding" ? "jumping"
+                                                                                 : "sliding"
+                    }
                 }
             }
         }
