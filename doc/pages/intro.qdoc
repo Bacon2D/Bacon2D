@@ -1,0 +1,42 @@
+/*!
+\page intro.html intro
+
+\title Tutorial - Bacon2D Introduction
+\indexpage Bacon2D
+\contentspage {Bacon2D} {Contents}
+\previouspage index.html
+
+We expect playing games to be fun right?  Why shouldn't creating games be fun?  QML simplifies creating native applications in a declarative way.   Bacon2D provides useful QML components for creating appealing games.  By leveraging QML and Bacon2D you'll be able to get your game off the ground quickly, and more importantly you'll have a blast doing it!
+
+This tutorial will give you an introductory tour of the features provided by Bacon2D and help you setup your development environment to create your first game.
+
+\chapter Introducing Bacon2D
+
+We'll start our tour with the top-level Game container, which provides a game loop, scene management, and more.  The Game container is the root item of your game, in which you'll add one or more scenes.  Game controls the state of the game, including which scene is the current scene as well as the handle playing states for pausing, etc.  Game runs a game loop, on each iteration of the loop the current Scene will trigger each Entity in the Scene to execute any Behavior defined.
+
+To sum up what we've learned so far, Game is the boss, making high level decisions and managing all elements of the Game.  Game is an effective top-level manager, and delegates responsibility to other managers within the Game.  These are mid-level managers are scenes, the Game can manage one or many Scene containers.  At any one time, there can only be a single active Scene, and Game ensures that.
+
+As a good middle manager, Scene carries out orders given by Game and has a great deal of responsibility.  Each Scene manages all the Entity items it contains.  Scene also controls physics, if physics are enabled the Scene creates a Box2D world providing 2D rigid body physics and ensures entities with Box2D bodies are properly added to the Box2D world.  All entities in the world interact with each other providing a rich gaming experience with very little development effort.  Scene delegates some responsibility to it's subordinates, which is the Entity.  When the current active Scene gets the order from Game to execute for an iteration of the game loop, the Scene tells each Entity to execute any Behavior defined within the Entity.
+
+Scene also provides a Viewport, allowing the Scene to be larger than the currently viewable area.   You can easily move the Viewport by changing a property on the viewport.   You can also easy bind the offset of the viewport to the coordinates of an Entity within the game, for an easy way to move the Viewport around keeping the Entity on the screen.
+
+Of course to make any organization work well, you need to have someone to do the real work.  Let's talk about Entity, which is a very hands on manager, that works very closely with any other components on the team.  An Entity usually represents a visual item within the Scene, however it might not be visual at all.  In fact, the Entity itself isn't visual, however you'll usually add a visual item to the Entity, for example a Sprite, Image, etc.
+
+If your game utilizes physics, you'll want to use the PhysicsEntity, which is an Entity with a Box2D Body that will participate in the Box2D physics world.  This allows your Entity to have weight, velocity, friction, etc.  For example your PhysicsEntity maybe be a ball that bounces when it hits a wall or the ground.  Or a more interesting example, a player with a jet pack who can fly in short bursts to avoid obstacles.  The PhysicsEntity will automatically react to collisions with other objects in the physics world.  You can also get notified of the collisions and act on them yourself.  Like our jet pack example, when hitting an obstacle he'll bounce or get pushed by the obstacle, we an also choose to end the game on the collision.
+
+You can also utilize the physics world to control movement of the PhysicsEntity, in our jetpack example we could listen for touch events and change linearVelocity of the player to make him fly higher while pressed and use gravity to have him naturally fall when not pressed.
+
+Entity even has a way to provide some very basic AI (Artificial Intelligence), called behaviors.  An Entity can contain a ScriptBehavior, containing JavaScript to execute on each iteration of the game loop.  You can use this to control just about anything, but the scope is limited to the current iteration of the game loop.  For example, variable created are only available for the current iteration and will be recreated on the next iteration of the loop. However, you can change values defined outside of the ScriptBehavior.  For example, in our jetpack game we might want to decrease our fuel level while we're flying.  We can do this by having a property on the Entity for our jetpack guy, and decrease it by 1 on each iteration of the loop from within the ScriptBehavior.
+
+As discussed earlier, you'll probably want to include a visual item in your Entity.  This could be a simple Image, or a Rectangle, but why not an animated Sprite?  Bacon2D provides a Sprite component which can be comprised of multiple animations and sprite sheets.  The Sprite controls which SpriteAnimation is current active, and each SpriteAnimation specifies the SpriteSheet and various properties controlling the animation.  The SpriteSheet is a single image containing a sequence of frames used to build the animation.
+
+Entities aren't the only components under the command of the Scene.  Lets talk about layers, which can be used for infinite scrolling and parallax effects.  The Scene can also contain multiple ImageLayer components, which can be controlled with a ScrollBehavior. The ScrollBehavior can scroll the ImageLayer horizontally or vertically with each iteration of the game loop.  You can specify the step size to control the speed the layer moves.  Having multiple layers stacked and moving at different speeds will provide a parallax scrolling effect.
+
+Bacon2D provides an easy way to store game settings, preferences, scores, etc.  The Settings component can be used to store simple key/value data for your game.  You can add the Settings component in a Scene, or directly inside the Game container and share it across all the scenes.
+
+So far we've introduced some key features of Bacon2D that will help you create a fun and compelling game.  For complete API documentation, please visit http://bacon2d.com/docs
+
+\section1 More info
+For complete API documentation, please visit \l {http://bacon2d.com/docs}
+
+*/
