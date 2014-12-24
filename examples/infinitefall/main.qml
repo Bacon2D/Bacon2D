@@ -65,7 +65,7 @@ Game {
             NumberAnimation on rotation {
                 from: 0
                 to: 360
-                running: true
+                running: game.gameState === Bacon2D.Running
                 loops: Animation.Infinite
                 duration: 1800
             }

@@ -24,7 +24,7 @@
 #include "scene.h"
 #include "viewport.h"
 
-#include <QtCore/QCoreApplication>
+#include <QtGui/QGuiApplication>
 #include <QtQuick/QQuickWindow>
 #include <QtGui/QCursor>
 
@@ -62,10 +62,18 @@ Game::Game(QQuickItem *parent)
     , m_timerId(0)
     , m_enterScene(0)
     , m_exitScene(0)
+    , m_state(Bacon2D::Active)
 {
     m_sceneStack.clear();
     m_gameTime.start();
     m_timerId = startTimer(1000 / m_ups);
+
+    if (QCoreApplication::instance()) {
+        connect(QCoreApplication::instance(),
+                SIGNAL(applicationStateChanged(Qt::ApplicationState)),
+                SLOT(onApplicationStateChanged(Qt::ApplicationState))
+        );
+    }
 }
 
 /*!
@@ -85,6 +93,58 @@ void Game::setGameName(const QString& gameName)
     // but creates path that plays well accross platforms
     QCoreApplication::setOrganizationName(gameName);
     Q_EMIT gameNameChanged();
+}
+
+void Game::onApplicationStateChanged(Qt::ApplicationState state)
+{
+    if (m_state != Bacon2D::Paused && state != Qt::ApplicationActive)
+        this->setGameState(Bacon2D::Suspended);
+    else if (m_state != Bacon2D::Paused && state == Qt::ApplicationActive)
+        this->setGameState(Bacon2D::Running);
+}
+
+/*!
+  \qmlproperty Bacon2D.State Game::gameState
+  \brief This property holds the current gameState.
+  \sa {http://doc.qt.io/qt-5/qt.html#ApplicationState-enum} {Qt.ApplicationState}
+  \table
+  \header
+    \li {2, 1} This enum type is used to specify the current state of the game.
+
+
+  \header
+    \li State
+    \li Description
+  \row
+    \li Bacon2D.Active
+    \li Game is active and the currentScene is not running
+  \row
+    \li Bacon2D.Inactive
+    \li Game is inactive
+  \row
+    \li Bacon2D.Running
+    \li Game is active and the currentScene is running
+  \row
+    \li Bacon2D.Paused
+    \li Game is paused by user request.
+  \row
+    \li Bacon2D.Suspended
+    \li Game is suspended, usually means the platform has stopped the process or the game is no longer focused.
+  \endtable
+*/
+void Game::setGameState(const Bacon2D::State &state)
+{
+    if (state == m_state)
+        return;
+
+    m_state = state;
+
+    if (m_state == Bacon2D::Running)
+        this->currentScene()->setRunning(true);
+    else
+        this->currentScene()->setRunning(false);
+
+    emit gameStateChanged();
 }
 
 /*!

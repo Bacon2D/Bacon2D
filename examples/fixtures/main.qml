@@ -6,6 +6,10 @@ Game {
     width: 800
     height: 600
     currentScene: scene
+    onGameStateChanged: {
+        if (gameState !== Bacon2D.Running)
+            ballsTimer.running = false;
+    }
 
     Component {
         id: ballComponent

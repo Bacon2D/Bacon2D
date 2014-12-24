@@ -39,7 +39,6 @@ Game {
         Sprite {
             id: spriteItem
 
-
             animation: "sliding"
 
             animations: [

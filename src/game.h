@@ -23,6 +23,8 @@
 #ifndef _GAME_H_
 #define _GAME_H_
 
+#include "enums.h"
+
 #include <QtQuick/QQuickItem>
 #include <QtCore/QTime>
 #include <QtCore/QtGlobal>
@@ -42,6 +44,7 @@ class Game : public QQuickItem
     Q_PROPERTY(int ups READ ups WRITE setUps NOTIFY upsChanged)
     Q_PROPERTY(QPointF mouse READ mouse)
     Q_PROPERTY(QString gameName READ gameName WRITE setGameName NOTIFY gameNameChanged)
+    Q_PROPERTY(Bacon2D::State gameState READ gameState WRITE setGameState NOTIFY gameStateChanged)
     Q_PROPERTY(int stackLevel READ stackLevel NOTIFY stackLevelChanged)
 
 public:
@@ -62,6 +65,9 @@ public:
     QString gameName();
     void setGameName(const QString& gameName);
 
+    Bacon2D::State gameState() const { return m_state; };
+    void setGameState(const Bacon2D::State &state);
+
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
     void timerEvent(QTimerEvent *event);
@@ -71,6 +77,7 @@ signals:
     void currentSceneChanged();
     void upsChanged();
     void gameNameChanged();
+    void gameStateChanged();
     void stackLevelChanged();
 
 private:
@@ -78,6 +85,7 @@ private:
     QTime m_gameTime;
     int m_ups;
     int m_timerId;
+    Bacon2D::State m_state;
 
     //for handling scene transition
     Scene *m_enterScene;
@@ -95,6 +103,7 @@ private:
 private slots:
     void handleEnterAnimationRunningChanged(bool running);
     void handleExitAnimationRunningChanged(bool running);
+    void onApplicationStateChanged(Qt::ApplicationState state);
 };
 
 #endif /* _GAME_H_ */
