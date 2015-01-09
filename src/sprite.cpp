@@ -21,7 +21,6 @@
  */
 
 #include "sprite.h"
-#include "scene.h"
 #include "spritesheet.h"
 #include "spriteanimation.h"
 #include "animationchangeevent.h"
@@ -52,6 +51,7 @@ Sprite::Sprite(QQuickItem *parent)
     , m_stateGroup(0)
     , m_verticalMirror(false)
     , m_horizontalMirror(false)
+    , m_state(Bacon2D::Running)
 {
 }
 
@@ -122,7 +122,7 @@ void Sprite::initializeMachine()
 void Sprite::initializeAnimation()
 {
     if (m_animation != QString())
-        setAnimation(m_animation, true);
+        setAnimation(m_animation, (m_state == Bacon2D::Running));
 }
 
 /*!
@@ -182,4 +182,33 @@ void Sprite::setEntity(Entity *entity)
     m_entity = entity;
 
     emit entityChanged();
+}
+
+/*!
+  \qmlproperty Bacon2D.State Sprite::spriteState
+  \brief This property holds the current spriteState.
+*/
+void Sprite::setSpriteState(const Bacon2D::State &state)
+{
+    if (state == m_state)
+        return;
+
+    m_state = state;
+
+    if (m_animation != QString() && m_states.contains(m_animation)) {
+        SpriteAnimation *animationItem = m_states[m_animation];
+        animationItem->setRunning(m_state == Bacon2D::Running);
+        if (m_state == Bacon2D::Running || m_state == Bacon2D::Paused)
+            animationItem->setVisible(true);
+    }
+
+    emit spriteStateChanged();
+
+    if (!m_stateMachine)
+        return;
+
+    if (m_state == Bacon2D::Running && !m_stateMachine->isRunning())
+        m_stateMachine->start();
+    else if (m_state != Bacon2D::Running && m_stateMachine->isRunning())
+        m_stateMachine->stop();
 }

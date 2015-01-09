@@ -36,11 +36,18 @@ Game {
         width: parent.width
         height: parent.height
 
+        MouseArea {
+            anchors.fill: parent
+
+            onClicked: {
+                spriteItem.spriteState = spriteItem.spriteState == Bacon2D.Running ? Bacon2D.Paused : Bacon2D.Running
+            }
+        }
+
         Sprite {
             id: spriteItem
-
             animation: "sliding"
-
+            spriteState: Bacon2D.Running
             animations: [
                 SpriteAnimation {
                     name: "sliding"
@@ -61,18 +68,16 @@ Game {
                     onFinished: {
                         spriteItem.animation = "sliding"
                     }
-
                 }
             ]
-        }
-    }
 
-    MouseArea {
-        anchors.fill: parent
-
-        onClicked: {
-            spriteItem.animation = spriteItem.animation == "sliding" ? "jumping"
-                                                                     : "sliding"
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    spriteItem.animation = spriteItem.animation == "sliding" ? "jumping"
+                                                                             : "sliding"
+                }
+            }
         }
     }
 }

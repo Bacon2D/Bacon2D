@@ -39,7 +39,7 @@ class SpriteAnimation : public QState
     Q_PROPERTY(int frames READ frames WRITE setFrames NOTIFY framesChanged)
     Q_PROPERTY(int frame READ frame WRITE setFrame NOTIFY frameChanged)
     Q_PROPERTY(int initialFrame READ initialFrame WRITE setInitialFrame NOTIFY initialFrameChanged)
-    Q_PROPERTY(bool running READ running WRITE setRunning NOTIFY runningChanged)
+    Q_PROPERTY(bool running READ running  NOTIFY runningChanged)
     Q_PROPERTY(int loops READ loops WRITE setLoops NOTIFY loopsChanged)
     Q_PROPERTY(bool visible READ visible WRITE setVisible NOTIFY visibleChanged)
     Q_PROPERTY(int duration READ duration WRITE setDuration NOTIFY durationChanged)
