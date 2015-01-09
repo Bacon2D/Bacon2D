@@ -24,6 +24,7 @@
 #define _LAYER_H_
 
 #include "behavior.h"
+#include "game.h"
 #include "scene.h"
 
 #include <QtQuick/QQuickItem>
@@ -37,6 +38,7 @@ class Layer: public QQuickItem
 
     Q_PROPERTY(Layer::LayerType layerType READ layerType WRITE setLayerType NOTIFY layerTypeChanged)
     Q_PROPERTY(Behavior *behavior READ behavior WRITE setBehavior NOTIFY behaviorChanged)
+    Q_PROPERTY(Game *game READ game)
     Q_PROPERTY(Scene *scene READ scene WRITE setScene NOTIFY sceneChanged)
     Q_PROPERTY(int updateInterval READ updateInterval WRITE setUpdateInterval NOTIFY updateIntervalChanged)
 
@@ -52,6 +54,8 @@ public:
 
     Behavior *behavior() const;
     void setBehavior(Behavior *behavior);
+
+    Game *game() const;
 
     Scene *scene() const;
     void setScene(Scene *scene);
