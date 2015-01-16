@@ -1,13 +1,19 @@
 /*!
 \page index.html overview
-
+\title Bacon2D
 \contentspage {Bacon2D} {Contents}
-
-\chapter Introduction
 
 Bacon2D includes useful QML components for creating 2D games with ease.  QML simplifies creating native applications in a declarative way.  Bacon2D adds essentials for creating appealing games.
 
 Starting with the top-level \l Game container, which provides a game loop and \l Scene management, all the way down to entities with Box2D physics and parallax layers with infinite scrolling.  You should find Bacon2D gives you everything you need to create a great game.
+
+\section1 Resources
+
+\list
+  \li \l {Tutorial - Bacon2D Introduction}
+  \li \l {Tutorial - Getting Started for Ubuntu Touch}
+\endlist
+
 
 \section1 Definitions
 

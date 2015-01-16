@@ -1,6 +1,7 @@
 project = Bacon2D
 description = Bacon2D - QML 2D Game engine
 sourcedirs = . ../src ../src/doc/pages
+imagedirs = . pages/images
 
 sources.fileextensions = "*.cpp *.qdoc *.mm *.qml"
 headers.fileextensions = "*.h *.ch *.h++ *.hh *.hpp *.hxx"
@@ -16,3 +17,10 @@ include($QT_INSTALL_DOCS/global/fileextensions.qdocconf)
 include($QT_INSTALL_DOCS/global/qt-html-templates-offline.qdocconf)
 
 HTML.footer = ""
+HTML.extraimages += pages/images/CreateClickTarget.png \
+                    pages/images/ubuntu_sdk_new_project.png \
+                    pages/images/Options_Ubuntu_Click.png \
+                    pages/images/wizard-1.png \
+                    pages/images/wizard-2.png \
+                    pages/images/wizard-3.png \
+                    pages/images/wizard-4.png
