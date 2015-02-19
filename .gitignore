@@ -6,3 +6,4 @@ moc*
 Makefile*
 lib/
 imports/
+*.pro.user
