@@ -1,10 +1,10 @@
 include(doc/doc.pri)
-include(examples/examples.pri)
 
 TEMPLATE = subdirs
 
 SUBDIRS += src \
-    tests
+    tests \
+    examples
 
 PROJECT_NAME = bacon2d
 PROJECT_VERSION = 0.90.4

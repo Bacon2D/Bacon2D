@@ -20,109 +20,115 @@
  */
 
 import QtQuick 2.2
+import QtQuick.Window 2.0
 import Bacon2D 1.0
 
-Game {
-    id: game
-
-    focus: true
-    clip: true
+Window {
     width: 800
     height: 400
+    visible: true
 
-    currentScene: scene
+    Game {
+        id: game
+        anchors.fill: parent
 
-    function toLeft() {
-        scene.scrollFactor -= 0.05;
-        if (scene.scrollFactor <= 0)
-            shipImage.mirror = true;
-    }
+        focus: true
+        clip: true
 
-    function toRight() {
-        scene.scrollFactor += 0.05;
-        if (scene.scrollFactor >= 0)
-            shipImage.mirror = false;
-    }
+        currentScene: scene
 
-    Scene {
-        id: scene
-
-        width: parent.width
-        height: parent.height
-
-        property real scrollFactor: 1
-
-        ImageLayer {
-            id: layer1
-            anchors.fill: parent
-            source: "images/space.png"
-            behavior: ScrollBehavior {
-                horizontalStep: -10 * scene.scrollFactor
-            }
-            layerType: Layer.Mirrored
+        function toLeft() {
+            scene.scrollFactor -= 0.05;
+            if (scene.scrollFactor <= 0)
+                shipImage.mirror = true;
         }
 
-        ImageLayer {
-            id: layer2
-            anchors.fill: parent
-            source: "images/planet.png"
-            behavior: ScrollBehavior {
-                horizontalStep: -15 * scene.scrollFactor
-            }
-            layerType: Layer.Infinite
-
+        function toRight() {
+            scene.scrollFactor += 0.05;
+            if (scene.scrollFactor >= 0)
+                shipImage.mirror = false;
         }
 
-        Entity {
-            id: ship
-            y: (game.height / 2) - (shipImage.height / 2)
-            x: (game.width / 2) - (shipImage.width / 2)
+        Scene {
+            id: scene
 
-            Image {
-                id: shipImage
-                source: "images/rocketship.png"
+            width: parent.width
+            height: parent.height
+
+            property real scrollFactor: 1
+
+            ImageLayer {
+                id: layer1
+                anchors.fill: parent
+                source: "images/space.png"
+                behavior: ScrollBehavior {
+                    horizontalStep: -10 * scene.scrollFactor
+                }
+                layerType: Layer.Mirrored
             }
 
-            Behavior on y { SmoothedAnimation {}}
-        }
+            ImageLayer {
+                id: layer2
+                anchors.fill: parent
+                source: "images/planet.png"
+                behavior: ScrollBehavior {
+                    horizontalStep: -15 * scene.scrollFactor
+                }
+                layerType: Layer.Infinite
 
-        ImageLayer {
-            id: layer3
-            anchors.fill: parent
-            source: "images/stars.png"
-            behavior: ScrollBehavior {
-                horizontalStep: -20 * scene.scrollFactor
             }
-            layerType: Layer.Infinite
-        }
 
-        ImageLayer {
-            id: layer4
-            anchors.fill: parent
-            source: "images/moon.png"
-            behavior: ScrollBehavior {
-                horizontalStep: -23 * scene.scrollFactor
+            Entity {
+                id: ship
+                y: (game.height / 2) - (shipImage.height / 2)
+                x: (game.width / 2) - (shipImage.width / 2)
+
+                Image {
+                    id: shipImage
+                    source: "images/rocketship.png"
+                }
+
+                Behavior on y { SmoothedAnimation {}}
             }
-            layerType: Layer.Infinite
-        }
-    }
 
-    Keys.onPressed: {
-        switch (event.key) {
-        case Qt.Key_Left:
-            toLeft();
-            ship.x -= 5;
-            break;
-        case Qt.Key_Right:
-            toRight();
-            ship.x += 5;
-            break;
-        case Qt.Key_Down:
-            ship.y += 5;
-            break;
-        case Qt.Key_Up:
-            ship.y -= 5;
-            break;
+            ImageLayer {
+                id: layer3
+                anchors.fill: parent
+                source: "images/stars.png"
+                behavior: ScrollBehavior {
+                    horizontalStep: -20 * scene.scrollFactor
+                }
+                layerType: Layer.Infinite
+            }
+
+            ImageLayer {
+                id: layer4
+                anchors.fill: parent
+                source: "images/moon.png"
+                behavior: ScrollBehavior {
+                    horizontalStep: -23 * scene.scrollFactor
+                }
+                layerType: Layer.Infinite
+            }
+        }
+
+        Keys.onPressed: {
+            switch (event.key) {
+            case Qt.Key_Left:
+                toLeft();
+                ship.x -= 5;
+                break;
+            case Qt.Key_Right:
+                toRight();
+                ship.x += 5;
+                break;
+            case Qt.Key_Down:
+                ship.y += 5;
+                break;
+            case Qt.Key_Up:
+                ship.y -= 5;
+                break;
+            }
         }
     }
 }

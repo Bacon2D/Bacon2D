@@ -20,42 +20,48 @@
  */
 
 import QtQuick 2.2
+import QtQuick.Window 2.0
 import Bacon2D 1.0
 
-Game {
-    id: game
-
+Window {
     width: 400
     height: 250
+    visible: true
 
-    currentScene: scene
+    Game {
+        id: game
+        anchors.fill: parent
 
-    Scene {
-        id: scene
+        currentScene: scene
 
-        width: parent.width
-        height: parent.height
+        Scene {
+            id: scene
 
-        Entity {
             width: parent.width
             height: parent.height
 
-            updateInterval: 50
+            Entity {
+                id: entity
+                width: parent.width
+                height: parent.height
 
-            behavior: ScriptBehavior {
-                script: {
-                    var newPos = target.x + 5
-                    target.x = newPos > parent.width ? 0 : newPos
+                updateInterval: 50
 
-                    console.log("update: x -> ", target.x)
+                behavior: ScriptBehavior {
+                    script: {
+                        var newPos = target.x + 5
+                        target.x = newPos > entity.width ? 0 : newPos
+
+                        console.log("update: x -> ", target.x)
+                    }
                 }
-            }
 
-            Rectangle {
-                width: 50
-                height: 50
+                Rectangle {
+                    width: 50
+                    height: 50
 
-                color: "red"
+                    color: "red"
+                }
             }
         }
     }

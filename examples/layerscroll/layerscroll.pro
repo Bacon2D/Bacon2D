@@ -1,5 +1,5 @@
 EXAMPLE_IMAGE_FILES += \
-    jumping.png \
-    sliding.png
+    astronaut.png \
+    sky.png
 
 include(../shared/example.pri)

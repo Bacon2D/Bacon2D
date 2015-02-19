@@ -1,5 +1,5 @@
 EXAMPLE_IMAGE_FILES += \
-    jumping.png \
-    sliding.png
+    sliding.png \
+    large_enough.png
 
 include(../shared/example.pri)
