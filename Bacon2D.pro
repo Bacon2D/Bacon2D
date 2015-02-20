@@ -1,4 +1,5 @@
 include(doc/doc.pri)
+include(examples/examples.pri)
 
 TEMPLATE = subdirs
 
