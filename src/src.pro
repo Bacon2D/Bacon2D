@@ -7,7 +7,7 @@ TARGET = bacon2dplugin
 TARGETPATH = Bacon2D
 
 API_VER=1.0
-DESTDIR = $$OUT_PWD/imports/Bacon2D
+DESTDIR = $$OUT_PWD/imports/Bacon2D/
 
 OBJECTS_DIR = tmp
 MOC_DIR = tmp
@@ -74,22 +74,26 @@ QMLFILES += $$PWD/PhysicsEntity.qml \
             $$PWD/RectangleBoxBody.qml \
             $$PWD/qmldir
 
+# Copy qml files post build
+win32 {
+    DESTDIR ~= s,/,\\,g
+    QMLFILES ~= s,/,\\,g
+    for(FILE, QMLFILES){
+        QMAKE_POST_LINK += $$QMAKE_COPY $$quote($$FILE) $$quote($$DESTDIR) $$escape_expand(\\n\\t)
+    }
+    QMAKE_POST_LINK += $$[QT_INSTALL_BINS]\qmlplugindump -notrelocatable Bacon2D $$API_VER $$OUT_PWD\imports  > $$DESTDIR\plugins.qmltypes
+}
+unix {
+    QMAKE_POST_LINK += $$QMAKE_COPY $$QMLFILES $$DESTDIR $$escape_expand(\\n\\t)
+    QMAKE_POST_LINK += $$[QT_INSTALL_BINS]/qmlplugindump -notrelocatable Bacon2D $$API_VER $$OUT_PWD/imports  > $$DESTDIR/plugins.qmltypes
+}
 
 qmltypes.path = $$target.path
-qmltypes.extra = $$[QT_INSTALL_BINS]/qmlplugindump -notrelocatable Bacon2D $$API_VER $$OUT_PWD/imports  > $$OUT_PWD/imports/Bacon2D/plugins.qmltypes
-qmltypes.files += $$OUT_PWD/imports/Bacon2D/plugins.qmltypes
+qmltypes.files += $$DESTDIR/plugins.qmltypes
 export(qmltypes.files)
 
-qmlplugin.commands = $$QMAKE_COPY $$QMLFILES $$OUT_PWD/imports/Bacon2D/
-qmlplugin.path = $$target.path
-
-qmlpluginfiles.depends += qmlplugin
 qmlpluginfiles.path = $$target.path
 qmlpluginfiles.files = $$QMLFILES
 
-first.depends += qmlplugin
-export(first.depends)
-export(qmlplugin.commands)
-
-QMAKE_EXTRA_TARGETS += first qmlplugin
+QMAKE_EXTRA_TARGETS += qmltypes qmlpluginfiles
 INSTALLS += target qmltypes qmlpluginfiles
