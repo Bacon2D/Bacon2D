@@ -1,36 +1,41 @@
 import QtQuick 2.2
+import QtQuick.Window 2.0
 import Bacon2D 1.0
 import QtQuick.Controls 1.1
 
-Game {
-    id: game
+Window {
     width: 800
     height: 600
-    focus: true
-    currentScene: scene
-    gameName: "some.example.game"
+    visible: true
 
-    Settings {
-        id: settings
-        property int highScore: 0
-        property bool noSound: false
-    }
+    Game {
+        id: game
+        focus: true
+        currentScene: scene
+        gameName: "some.example.game"
 
-    Scene {
-        id: scene
-        anchors.fill: parent
+        Settings {
+            id: settings
+            property int highScore: 0
+            property bool noSound: false
+        }
 
-        Column {
+        Scene {
+            id: scene
             anchors.fill: parent
-            Text {
-                id: disp
-                text: settings.highScore
-            }
 
-            SpinBox {
-                width: 200
-                value: settings.highScore
-                onValueChanged: settings.highScore = value
+            Column {
+                anchors.fill: parent
+                Text {
+                    id: disp
+                    text: settings.highScore
+                }
+
+                SpinBox {
+                    width: 200
+                    value: settings.highScore
+                    onValueChanged: settings.highScore = value
+                }
             }
         }
     }

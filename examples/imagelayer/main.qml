@@ -20,47 +20,52 @@
  */
 
 import QtQuick 2.2
+import QtQuick.Window 2.0
 import Bacon2D 1.0
 
-Game {
-    id: game
-
+Window {
     width: 800
     height: 385
+    visible: true
 
-    currentScene: scene
+    Game {
+        id: game
+        anchors.fill: parent
 
-    Scene {
-        id: scene
+        currentScene: scene
 
-        focus: true
-        width: parent.width
-        height: parent.height
+        Scene {
+            id: scene
 
-        ImageLayer {
-            id: layer
-            anchors.fill: parent
-            source: "large_enough.png"
-            layerType: Layer.Mirrored
+            focus: true
+            width: parent.width
+            height: parent.height
 
-            behavior: ScrollBehavior {
-                horizontalStep: -5
+            ImageLayer {
+                id: layer
+                anchors.fill: parent
+                source: "large_enough.png"
+                layerType: Layer.Mirrored
+
+                behavior: ScrollBehavior {
+                    horizontalStep: -5
+                }
             }
-        }
 
-        Sprite {
-            id: spriteItem
+            Sprite {
+                id: spriteItem
 
-            y: 175
+                y: 175
 
-            animation: "sliding"
+                animation: "sliding"
 
-            animations: SpriteAnimation {
-                name: "sliding"
-                source: "sliding.png"
-                frames: 4
-                duration: 450
-                loops: Animation.Infinite
+                animations: SpriteAnimation {
+                    name: "sliding"
+                    source: "sliding.png"
+                    frames: 4
+                    duration: 450
+                    loops: Animation.Infinite
+                }
             }
         }
     }

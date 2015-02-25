@@ -20,61 +20,66 @@
  */
 
 import QtQuick 2.2
+import QtQuick.Window 2.0
 import Bacon2D 1.0
 
-Game {
-    id: game
-
+Window {
     width: 400
     height: 250
+    visible: true
 
-    currentScene: scene
+    Game {
+        id: game
+        anchors.fill: parent
 
-    Scene {
-        id: scene
+        currentScene: scene
 
-        width: parent.width
-        height: parent.height
+        Scene {
+            id: scene
 
-        MouseArea {
-            anchors.fill: parent
+            width: parent.width
+            height: parent.height
 
-            onClicked: {
-                game.gameState = game.gameState == Bacon2D.Running ? Bacon2D.Paused : Bacon2D.Running
+            MouseArea {
+                anchors.fill: parent
+
+                onClicked: {
+                    game.gameState = game.gameState == Bacon2D.Running ? Bacon2D.Paused : Bacon2D.Running
+                }
             }
-        }
 
-        Entity {
-            Sprite {
-                id: spriteItem
-                animation: "sliding"
-                spriteState: Bacon2D.Running
-                animations: [
-                    SpriteAnimation {
-                        name: "sliding"
-                        source: "sliding.png"
-                        frames: 4
-                        duration: 400
-                        loops: Animation.Infinite
-                    },
-                    SpriteAnimation {
-                        name: "jumping"
-                        source: "jumping.png"
-                        frames: 10
-                        duration: 600
-                        loops: 2
+            Entity {
+                Sprite {
+                    id: spriteItem
+                    animation: "sliding"
+                    spriteState: Bacon2D.Running
+                    animations: [
+                        SpriteAnimation {
+                            name: "sliding"
+                            source: "sliding.png"
+                            frames: 4
+                            duration: 400
+                            loops: Animation.Infinite
+                        },
+                        SpriteAnimation {
+                            name: "jumping"
+                            source: "jumping.png"
+                            frames: 10
+                            duration: 600
+                            loops: 2
 
-                        onFinished: {
-                            spriteItem.animation = "sliding"
+                            onFinished: {
+                                spriteItem.animation = "sliding"
+                            }
                         }
-                    }
-                ]
+                    ]
 
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        spriteItem.animation = spriteItem.animation == "sliding" ? "jumping"
-                                                                                 : "sliding"
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            spriteItem.animation = spriteItem.animation == "sliding" ? "jumping"
+                                                                                     : "sliding"
+                        }
                     }
                 }
             }

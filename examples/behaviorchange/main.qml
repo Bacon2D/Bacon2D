@@ -20,65 +20,70 @@
  */
 
 import QtQuick 2.2
+import QtQuick.Window 2.0
 import Bacon2D 1.0
 
-Game {
-    id: game
-
+Window {
     width: 400
     height: 250
+    visible: true
 
-    currentScene: scene
+    Game {
+        id: game
+        anchors.fill: parent
 
-    ScriptBehavior {
-        id: sideScrollBehavior
+        currentScene: scene
 
-        script: {
-            var newPos = target.x + target.scrollStep
-            target.x = newPos > scene.width ? 0 : newPos
-            target.x = target.x < 0 ? scene.width : target.x
+        ScriptBehavior {
+            id: sideScrollBehavior
+
+            script: {
+                var newPos = target.x + target.scrollStep
+                target.x = newPos > scene.width ? 0 : newPos
+                target.x = target.x < 0 ? scene.width : target.x
+            }
         }
-    }
 
-    ScriptBehavior {
-        id: verticalScrollBehavior
+        ScriptBehavior {
+            id: verticalScrollBehavior
 
-        script: {
-            var newPos = target.y + target.scrollStep
-            target.y = newPos > scene.height ? 0 : newPos
-            target.y = target.y < 0 ? scene.height : target.y
+            script: {
+                var newPos = target.y + target.scrollStep
+                target.y = newPos > scene.height ? 0 : newPos
+                target.y = target.y < 0 ? scene.height : target.y
+            }
         }
-    }
 
-    Scene {
-        id: scene
+        Scene {
+            id: scene
 
-        width: parent.width
-        height: parent.height
+            width: parent.width
+            height: parent.height
 
-        Entity {
-            id: square
-            property int scrollStep: 3
+            Entity {
+                id: square
+                property int scrollStep: 3
 
-            width: 50
-            height: 50
-
-            updateInterval: 50
-
-            behavior: sideScrollBehavior
-
-            Rectangle {
                 width: 50
                 height: 50
 
-                color: "red"
+                updateInterval: 50
+
+                behavior: sideScrollBehavior
+
+                Rectangle {
+                    width: 50
+                    height: 50
+
+                    color: "red"
+                }
             }
         }
-    }
 
-    MouseArea {
-        anchors.fill: parent
+        MouseArea {
+            anchors.fill: parent
 
-        onClicked: square.behavior = square.behavior == sideScrollBehavior ? verticalScrollBehavior : sideScrollBehavior
+            onClicked: square.behavior = square.behavior == sideScrollBehavior ? verticalScrollBehavior : sideScrollBehavior
+        }
     }
 }

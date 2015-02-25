@@ -20,47 +20,53 @@
  */
 
 import QtQuick 2.2
+import QtQuick.Window 2.0
 import Bacon2D 1.0
 
-Game {
-    id: game
-
+Window {
+    id: window
     width: 800
     height: 600
+    visible: true
 
-    currentScene: scene
+    Game {
+        id: game
+        anchors.fill: parent
 
-    property int numberOfSprites: 50
+        currentScene: scene
 
-    Component {
-        id: spriteComponent
+        property int numberOfSprites: 50
 
-        Sprite {
-            animation: "explosion"
+        Component {
+            id: spriteComponent
 
-            animations: SpriteAnimation {
-                name: "explosion"
-                source: "explosion.png"
-                frames: 4
-                duration: 400
-                loops: Animation.Infinite
+            Sprite {
+                animation: "explosion"
+
+                animations: SpriteAnimation {
+                    name: "explosion"
+                    source: "explosion.png"
+                    frames: 4
+                    duration: 400
+                    loops: Animation.Infinite
+                }
             }
         }
-    }
 
-    Scene {
-        id: scene
+        Scene {
+            id: scene
 
-        width: parent.width
-        height: parent.height
+            width: parent.width
+            height: parent.height
 
-        Component.onCompleted: {
-            var spriteObject;
+            Component.onCompleted: {
+                var spriteObject;
 
-            for (var i = 0; i < numberOfSprites; i++) {
-                spriteObject = spriteComponent.createObject(scene)
-                spriteObject.x = Math.random() * game.width
-                spriteObject.y = Math.random() * game.height
+                for (var i = 0; i < game.numberOfSprites; i++) {
+                    spriteObject = spriteComponent.createObject(scene)
+                    spriteObject.x = Math.random() * window.width
+                    spriteObject.y = Math.random() * window.height
+                }
             }
         }
     }

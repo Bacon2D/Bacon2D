@@ -19,86 +19,91 @@
  */
 
 import QtQuick 2.2
+import QtQuick.Window 2.0
 import Bacon2D 1.0
 
-Game {
-    id: game
-
+Window {
     width: 512
     height: 512
+    visible: true
 
-    currentScene: scene
-    focus: true
-    clip: true
-
-    Scene {
-        id: scene
-
+    Game {
+        id: game
         anchors.fill: parent
 
-        Image {
+        currentScene: scene
+        focus: true
+        clip: true
+
+        Scene {
+            id: scene
+
             anchors.fill: parent
-            source: "sky.png"
-        }
 
-        Component {
-            id: astronautComponent
+            Image {
+                anchors.fill: parent
+                source: "sky.png"
+            }
 
-            Entity {
-                id: spriteItem
+            Component {
+                id: astronautComponent
 
-                x: parent.scene.width / 2 - spriteItem.width / 2
-                y: parent.scene.height / 2 - spriteItem.height / 2
+                Entity {
+                    id: spriteItem
 
-                Sprite {
-                    anchors.fill: parent
-                    animation: "falling"
-                    animations: SpriteAnimation {
-                        name: "falling"
-                        source: "astronaut.png"
-                        frames: 3
-                        duration: 450
+                    x: parent.scene.width / 2 - spriteItem.width / 2
+                    y: parent.scene.height / 2 - spriteItem.height / 2
+
+                    Sprite {
+                        anchors.fill: parent
+                        animation: "falling"
+                        animations: SpriteAnimation {
+                            name: "falling"
+                            source: "astronaut.png"
+                            frames: 3
+                            duration: 450
+                            loops: Animation.Infinite
+                        }
+                    }
+
+                    NumberAnimation on rotation {
+                        from: 0
+                        to: 360
+                        running: spawnTimer.running
                         loops: Animation.Infinite
+                        duration: 1800
                     }
-                }
 
-                NumberAnimation on rotation {
-                    from: 0
-                    to: 360
-                    running: spawnTimer.running
-                    loops: Animation.Infinite
-                    duration: 1800
-                }
-
-                behavior: ScriptBehavior {
-                    script: {
-                        if (target.y > parent.scene.height)
-                            target.destroy();
+                    behavior: ScriptBehavior {
+                        script: {
+                            if (target.y > parent.scene.height)
+                                target.destroy();
+                        }
                     }
                 }
             }
-        }
 
-        Layer {
-            id: astronautsLayer
-            anchors.fill: parent
+            Layer {
+                id: astronautsLayer
+                anchors.fill: parent
 
-            behavior: ScrollBehavior {
-                verticalStep: 5
+                behavior: ScrollBehavior {
+                    verticalStep: 5
+                }
             }
-        }
 
-        Timer {
-            id: spawnTimer
+            Timer {
+                id: spawnTimer
 
-            interval: 800
-            running: game.gameState === Bacon2D.Running
-            repeat: true
+                interval: 800
+                running: game.gameState === Bacon2D.Running
+                repeat: true
 
-            onTriggered: {
-                var astronaut = astronautComponent.createObject(astronautsLayer);
-                astronaut.y = -astronaut.height * 2;
-                astronaut.x = Math.random() * (scene.width - astronaut.width);
+                onTriggered: {
+                    var astronaut = astronautComponent.createObject(astronautsLayer);
+                    astronaut.y = -astronaut.height * 2;
+                    astronaut.x = Math.random() * (scene.width - astronaut.width);
+                }
             }
         }
     }
