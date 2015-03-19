@@ -30,9 +30,18 @@
 #include "scene.h"
 #include "viewport.h"
 
+#include <csignal>
 #include <QtGui/QGuiApplication>
 #include <QtQuick/QQuickWindow>
 #include <QtGui/QCursor>
+
+namespace {
+    void shutdown(int sig)
+    {
+        qDebug() << Q_FUNC_INFO << sig;
+        QCoreApplication::instance()->quit();
+    }
+}
 
 /*!
   \qmltype Game
@@ -79,7 +88,17 @@ Game::Game(QQuickItem *parent)
                 SIGNAL(applicationStateChanged(Qt::ApplicationState)),
                 SLOT(onApplicationStateChanged(Qt::ApplicationState))
         );
+
+        std::signal(SIGTERM, shutdown);
+        std::signal(SIGHUP, shutdown);
+        std::signal(SIGKILL, shutdown);
+        std::signal(SIGINT, shutdown);
     }
+}
+
+Game::~Game()
+{
+    qDebug() << Q_FUNC_INFO;
 }
 
 /*!
