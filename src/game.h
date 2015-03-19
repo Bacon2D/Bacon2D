@@ -55,6 +55,7 @@ class Game : public QQuickItem
 
 public:
     Game(QQuickItem *parent = 0);
+    virtual ~Game();
 
     Scene *currentScene() const;
     void setCurrentScene(Scene *currentScene);
