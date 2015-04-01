@@ -19,6 +19,8 @@ INCLUDEPATH += ../3rdparty/qml-box2d/
 DEFINES += STATIC_PLUGIN_BOX2D
 include(../3rdparty/qml-box2d/box2d-static.pri)
 
+win32:DEFINES += WIN32
+
 HEADERS += entity.h \
            enums.h \
            scene.h \
