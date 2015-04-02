@@ -90,9 +90,11 @@ Game::Game(QQuickItem *parent)
         );
 
         std::signal(SIGTERM, shutdown);
+        std::signal(SIGINT, shutdown);
+#ifndef WIN32 // SIGHUP and SIGKILL are not available on windows
         std::signal(SIGHUP, shutdown);
         std::signal(SIGKILL, shutdown);
-        std::signal(SIGINT, shutdown);
+#endif
     }
 }
 
