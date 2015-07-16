@@ -8,6 +8,7 @@ SUBDIRS += \
     imagelayer \
     impulse \
     infinitefall \
+    infinite_scroll \
     layerscroll \
     manysprites \
     movement \

@@ -11,3 +11,4 @@ ImageBoxBody 1.0 ImageBoxBody.qml
 PhysicsEntity 1.0 PhysicsEntity.qml
 PolygonBody 1.0 PolygonBody.qml
 RectangleBoxBody 1.0 RectangleBoxBody.qml
+InfiniteScrollEntity 1.0 InfiniteScrollEntity.qml
