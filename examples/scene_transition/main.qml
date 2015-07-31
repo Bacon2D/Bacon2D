@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @author Paulo Pinheiro <paulovictor.pinheiro@gmail.com>
+ * @author Paulo Pinheiro <paulo@intocosmic.com>
  */
 
 import QtQuick 2.2
