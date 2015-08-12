@@ -62,7 +62,8 @@ SOURCES += entity.cpp \
            settings.cpp
 
 !isEmpty(QTPATH): target.path = $$QTPATH/imports/$$TARGETPATH
-else: target.path = $$[QT_INSTALL_QML]/$$replace(TARGETPATH, \\., /).$$API_VER;
+else: target.path = $$[QT_INSTALL_QML]/$$replace(TARGETPATH, \\., /).$$API_VER
+;
 
 QMLFILES += \
             $$PWD/InfiniteScrollEntity.qml \
