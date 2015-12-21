@@ -24,6 +24,12 @@ Item {
     property alias groupIndex: itemBody.groupIndex
     property alias categories: itemBody.categories
     property var _bounds: item.parent
+    property variant fixtures: QtObject {
+        property alias bottom: _bottom
+        property alias top: _top
+        property alias left: _left
+        property alias right: _right
+    }
 
     Body {
         id: itemBody
@@ -40,6 +46,7 @@ Item {
         signal endContact(Fixture other)
 
         Box {
+            id: _bottom
             x: _bounds.x
             y: _bounds.y + _bounds.height
             width: _bounds.width
@@ -52,6 +59,7 @@ Item {
             categories: itemBody.categories
         }
         Box {
+            id: _top
             x: _bounds.x
             y: _bounds.y - height
             height: 2
@@ -64,6 +72,7 @@ Item {
             categories: itemBody.categories
         }
         Box {
+            id: _left
             x: _bounds.x - width
             y: _bounds.y
             width: 2
@@ -76,6 +85,7 @@ Item {
             categories: itemBody.categories
         }
         Box {
+            id: _right
             x: _bounds.x + _bounds.width
             y: _bounds.y
             width: 2
