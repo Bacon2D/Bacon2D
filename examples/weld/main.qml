@@ -233,11 +233,11 @@ Window {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        if (hz == 0) {
-                            hz = 60;
+                        if (game.hz == 0) {
+                            game.hz = 60;
                             crazyButton.color = "#999";
                         } else {
-                            hz = 0;
+                            game.hz = 0;
                             crazyButton.color = "#DEDEDE";
                         }
                     }
