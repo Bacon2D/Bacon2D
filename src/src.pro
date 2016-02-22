@@ -3,6 +3,9 @@ CONFIG += qt plugin
 
 QT += quick
 
+# For libtiled
+CONFIG += c++11
+
 TARGET = bacon2dplugin
 TARGETPATH = Bacon2D
 
@@ -16,8 +19,16 @@ DEPENDPATH += .
 INCLUDEPATH += .
 INCLUDEPATH += ../3rdparty/qml-box2d/
 
+# For libtiled
+INCLUDEPATH += ../3rdparty/
+
 DEFINES += STATIC_PLUGIN_BOX2D
 include(../3rdparty/qml-box2d/box2d-static.pri)
+
+# For libtiled
+INCLUDEPATH += $$PWD/../3rdparty
+include(../3rdparty/libtiled/libtiled.pri)
+include($$PWD/tmx/tmx.pri)
 
 win32:DEFINES += WIN32
 
@@ -40,7 +51,10 @@ HEADERS += entity.h \
            scrollbehaviorimpl.h \
            imagelayerscrollbehavior.h \
            layerscrollbehavior.h \
-           settings.h
+           settings.h \
+           tiledscene.h \
+           tiledlayer.h \
+           tiledobject.h
 
 SOURCES += entity.cpp \
            enums.cpp \
@@ -59,7 +73,10 @@ SOURCES += entity.cpp \
            scrollbehavior.cpp \
            imagelayerscrollbehavior.cpp \
            layerscrollbehavior.cpp \
-           settings.cpp
+           settings.cpp \
+           tiledscene.cpp \
+           tiledlayer.cpp \
+           tiledobject.cpp
 
 !isEmpty(QTPATH): target.path = $$QTPATH/imports/$$TARGETPATH
 else: target.path = $$[QT_INSTALL_QML]/$$replace(TARGETPATH, \\., /).$$API_VER

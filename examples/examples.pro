@@ -18,6 +18,7 @@ SUBDIRS += \
     scene_transition \
     settings \
     sprite \
+    tiledscene \
     viewport_parallax \
     weld
 
