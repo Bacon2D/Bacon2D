@@ -1,3 +1,8 @@
+EXAMPLE_QML_FILES += \
+    Coin.qml \
+    Dog.qml \
+    main.qml
+
 EXAMPLE_IMAGE_FILES += \
     images/coin.png \
     images/coin_icon.png \
