@@ -2,6 +2,3 @@
 	path = 3rdparty/qml-box2d
 	url = https://github.com/qml-box2d/qml-box2d
 	branch = master
-[submodule "libtiled"]
-	path = libtiled
-	url = https://github.com/obeezzy/libtiled.git
