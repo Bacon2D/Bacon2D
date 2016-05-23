@@ -85,11 +85,11 @@ win32 {
     for(FILE, QMLFILES){
         QMAKE_POST_LINK += $$QMAKE_COPY $$quote($$FILE) $$quote($$DESTDIR) $$escape_expand(\\n\\t)
     }
-    QMAKE_POST_LINK += $$[QT_INSTALL_BINS]\qmlplugindump -notrelocatable Bacon2D $$API_VER $$OUT_PWD\imports  > $$DESTDIR\plugins.qmltypes
+    QMAKE_POST_LINK += $$[QT_INSTALL_BINS]\qmlplugindump -noinstantiate -notrelocatable Bacon2D $$API_VER $$OUT_PWD\imports  > $$DESTDIR\plugins.qmltypes
 }
 unix {
     QMAKE_POST_LINK += $$QMAKE_COPY $$QMLFILES $$DESTDIR $$escape_expand(\\n\\t)
-    QMAKE_POST_LINK += $$[QT_INSTALL_BINS]/qmlplugindump -notrelocatable Bacon2D $$API_VER $$OUT_PWD/imports  > $$DESTDIR/plugins.qmltypes
+    QMAKE_POST_LINK += $$[QT_INSTALL_BINS]/qmlplugindump -noinstantiate -notrelocatable Bacon2D $$API_VER $$OUT_PWD/imports  > $$DESTDIR/plugins.qmltypes
 }
 
 qmltypes.path = $$target.path
