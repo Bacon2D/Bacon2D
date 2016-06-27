@@ -30,7 +30,6 @@
 
 #include <QtQml/QQmlProperty>
 
-#include "entity.h"
 
 /*!
   \qmltype Layer
@@ -39,11 +38,8 @@
    needed by other Layer types.  See \l ImageLayer.
 */
 Layer::Layer(QQuickItem *parent)
-    : QQuickItem(parent)
+    : Entity(parent)
     , m_type(Layer::Infinite)
-    , m_updateInterval(0)
-    , m_behavior(0)
-    , m_scene(0)
 {
     // this activates the item layered mode
     QQmlProperty(this, "layer.enabled").write(true);
@@ -85,61 +81,6 @@ void Layer::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
 }
 
-Behavior *Layer::behavior() const
-{
-    return m_behavior;
-}
-
-void Layer::setBehavior(Behavior *behavior)
-{
-    if (m_behavior == behavior)
-        return;
-
-    m_behavior = behavior;
-
-    emit behaviorChanged();
-}
-
-Scene *Layer::scene() const
-{
-    return m_scene;
-}
-
-void Layer::setScene(Scene *scene)
-{
-    if (m_scene == scene)
-        return;
-
-    m_scene = scene;
-
-    emit sceneChanged();
-}
-
-Game *Layer::game() const
-{
-    if (m_scene)
-        return m_scene->game();
-
-    return 0;
-}
-
-int Layer::updateInterval() const
-{
-    return m_updateInterval;
-}
-
-void Layer::setUpdateInterval(const int &updateInterval)
-{
-    if (m_updateInterval == updateInterval)
-        return;
-
-    m_updateInterval = updateInterval;
-
-    emit updateIntervalChanged();
-
-    m_updateTime.restart();
-}
-
 void Layer::update(const int &delta)
 {
     if ((m_updateInterval && m_updateTime.elapsed() >= m_updateInterval)
@@ -157,9 +98,8 @@ void Layer::update(const int &delta)
 
 void Layer::updateEntities(const int &delta)
 {
-    QQuickItem *item;
-    foreach (item, childItems()) {
-        if (Entity *entity = qobject_cast<Entity *>(item))
-            entity->update(delta);
+    Entity *item;
+    foreach (item, findChildren<Entity*>(QString(),Qt::FindDirectChildrenOnly)) {
+        item->update(delta);
     }
 }

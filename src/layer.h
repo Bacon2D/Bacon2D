@@ -31,22 +31,19 @@
 
 #include "behavior.h"
 #include "game.h"
+#include "entity.h"
 #include "scene.h"
 
-#include <QtQuick/QQuickItem>
 #include <QtCore/QtGlobal>
-#include <QtCore/QTime>
+
+class QQuickItem;
 
 //! A layer class
-class Layer: public QQuickItem
+class Layer: public Entity
 {
     Q_OBJECT
 
     Q_PROPERTY(Layer::LayerType layerType READ layerType WRITE setLayerType NOTIFY layerTypeChanged)
-    Q_PROPERTY(Behavior *behavior READ behavior WRITE setBehavior NOTIFY behaviorChanged)
-    Q_PROPERTY(Game *game READ game)
-    Q_PROPERTY(Scene *scene READ scene WRITE setScene NOTIFY sceneChanged)
-    Q_PROPERTY(int updateInterval READ updateInterval WRITE setUpdateInterval NOTIFY updateIntervalChanged)
 
     Q_ENUMS (
         LayerType
@@ -58,30 +55,16 @@ public:
 
     virtual void update(const int &delta);
 
-    Behavior *behavior() const;
-    void setBehavior(Behavior *behavior);
-
-    Game *game() const;
-
-    Scene *scene() const;
-    void setScene(Scene *scene);
-
-    int updateInterval() const;
-    void setUpdateInterval(const int &updateInterval);
-
     enum LayerType {
         Infinite,
         Mirrored
     };
 
-    Layer::LayerType layerType() const { return m_type; };
+    Layer::LayerType layerType() const { return m_type; }
     void setLayerType(const Layer::LayerType &type);
 
 signals:
     void layerTypeChanged();
-    void updateIntervalChanged();
-    void behaviorChanged();
-    void sceneChanged();
 
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
@@ -90,10 +73,6 @@ protected:
     bool m_isAnimated;
     qreal m_horizontalStep;
     Layer::LayerType m_type;
-    QTime m_updateTime;
-    int m_updateInterval;
-    Behavior *m_behavior;
-    Scene *m_scene;
 };
 
 #endif /* _LAYER */

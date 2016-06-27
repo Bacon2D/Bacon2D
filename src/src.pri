@@ -1,16 +1,16 @@
-TEMPLATE = lib
-CONFIG += qt plugin
+#TEMPLATE = lib
+#CONFIG += qt plugin
 
 QT += quick
 
-TARGET = bacon2dplugin
+#TARGET = bacon2dplugin
 TARGETPATH = Bacon2D
 
 API_VER=1.0
 DESTDIR = $$OUT_PWD/imports/Bacon2D/
 
-OBJECTS_DIR = tmp
-MOC_DIR = tmp
+#OBJECTS_DIR = tmp
+#MOC_DIR = tmp
 
 DEPENDPATH += .
 INCLUDEPATH += .
@@ -88,22 +88,16 @@ win32 {
     QMAKE_POST_LINK += $$[QT_INSTALL_BINS]\qmlplugindump -notrelocatable Bacon2D $$API_VER $$OUT_PWD\imports  > $$DESTDIR\plugins.qmltypes
 }
 unix {
-    QMAKE_POST_LINK += $$QMAKE_COPY $$QMLFILES $$DESTDIR $$escape_expand(\\n\\t)
-    QMAKE_POST_LINK += $$[QT_INSTALL_BINS]/qmlplugindump -notrelocatable Bacon2D $$API_VER $$OUT_PWD/imports  > $$DESTDIR/plugins.qmltypes
+#    QMAKE_POST_LINK += $$QMAKE_COPY $$QMLFILES $$DESTDIR $$escape_expand(\\n\\t)
+#    QMAKE_POST_LINK += $$[QT_INSTALL_BINS]/qmlplugindump -notrelocatable Bacon2D $$API_VER $$OUT_PWD/imports  > $$DESTDIR/plugins.qmltypes
 }
 
-qmltypes.path = $$target.path
-qmltypes.files += $$DESTDIR/plugins.qmltypes
-export(qmltypes.files)
+#qmltypes.path = $$target.path
+#qmltypes.files += $$DESTDIR/plugins.qmltypes
+#export(qmltypes.files)
 
-qmlpluginfiles.path = $$target.path
-qmlpluginfiles.files = $$QMLFILES
+#qmlpluginfiles.path = $$target.path
+#qmlpluginfiles.files = $$QMLFILES
 
-QMAKE_EXTRA_TARGETS += qmltypes qmlpluginfiles
-INSTALLS += target qmltypes qmlpluginfiles
-
-DISTFILES += \
-    src.pri
-
-RESOURCES += \
-    qml.qrc
+#QMAKE_EXTRA_TARGETS += qmltypes qmlpluginfiles
+#INSTALLS += target qmltypes qmlpluginfiles

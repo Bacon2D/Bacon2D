@@ -66,7 +66,7 @@
    their mass properties from the fixtures. However, you can override the
    mass properties after an entity is constructed.
 */
-Entity::Entity(Scene *parent)
+Entity::Entity(QQuickItem *parent)
     : QQuickItem(parent)
     , m_updateInterval(0)
     , m_scene(0)
@@ -136,10 +136,10 @@ void Entity::update(const int &delta)
         }
     }
 
-    QQuickItem *child;
-    foreach (child, childItems())
-        if (Entity *item = dynamic_cast<Entity *>(child))
-            item->update(delta);
+    Entity *child;
+    foreach (child, findChildren<Entity*>(QString(),Qt::FindDirectChildrenOnly)){
+        child->update(delta);
+    }
 }
 
 /*!

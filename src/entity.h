@@ -41,13 +41,13 @@ class Entity : public QQuickItem
 {
     Q_OBJECT
 
-    Q_PROPERTY(int updateInterval READ updateInterval WRITE setUpdateInterval NOTIFY updateIntervalChanged)
     Q_PROPERTY(Game *game READ game)
-    Q_PROPERTY(Scene *scene READ scene NOTIFY sceneChanged)
+    Q_PROPERTY(Scene *scene READ scene WRITE setScene NOTIFY sceneChanged)
     Q_PROPERTY(Behavior *behavior READ behavior WRITE setBehavior NOTIFY behaviorChanged)
+    Q_PROPERTY(int updateInterval READ updateInterval WRITE setUpdateInterval NOTIFY updateIntervalChanged)
 
 public:
-    Entity(Scene *parent = 0);
+    Entity(QQuickItem *parent = 0);
     ~Entity();
 
     int updateInterval() const;
@@ -73,7 +73,6 @@ protected:
     virtual void itemChange(ItemChange change, const ItemChangeData &data);
     void initializeEntities(QQuickItem *parent);
 
-private:
     int m_updateInterval;
     QTime m_updateTime;
     Scene *m_scene;

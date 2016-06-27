@@ -69,7 +69,7 @@ public:
     ~Scene();
 
     bool running() const;
-    void setRunning(const bool &running);
+    void setRunning(const bool running);
 
     Viewport *viewport() const;
     void setViewport(Viewport *viewport);
@@ -151,7 +151,6 @@ protected:
     virtual void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
     virtual void componentComplete();
     virtual void itemChange(ItemChange change, const ItemChangeData &data);
-    void updateEntities(QQuickItem *parent, const int &delta);
     void initializeEntities(QQuickItem *parent);
     void createWorld();
 

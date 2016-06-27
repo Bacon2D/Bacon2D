@@ -72,13 +72,18 @@ public:
     QString gameName();
     void setGameName(const QString& gameName);
 
-    Bacon2D::State gameState() const { return m_state; };
+    Bacon2D::State gameState() const { return m_state; }
     void setGameState(const Bacon2D::State &state);
 
+    QQmlEngine *getQmlEngine();
+    static Game *getInstance();
+    static Game* m_instance;
+
+public slots:
+    void update();
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
     void timerEvent(QTimerEvent *event);
-    void update();
 
 signals:
     void currentSceneChanged();
@@ -98,6 +103,7 @@ private:
     Scene *m_enterScene;
     Scene *m_exitScene;
     QStack<Scene*> m_sceneStack;
+    QQmlEngine* qmlEngine;
 
     QMetaMethod getMetaMethod(QObject *object, QString methodSignature) const;
 

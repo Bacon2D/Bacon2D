@@ -43,7 +43,9 @@ HEADERS += \
         $$PWD/sprite.h \
         $$PWD/spritesheet.h \
         $$PWD/viewport.h \
-        $$PWD/settings.h 
+        $$PWD/settings.h \ 
+    $$PWD/nativebehavior.h \
+    $$PWD/physicsentity.h
 
 SOURCES += \
         $$PWD/animationtransition.cpp \
@@ -63,4 +65,9 @@ SOURCES += \
         $$PWD/sprite.cpp \
         $$PWD/spritesheet.cpp \
         $$PWD/viewport.cpp \
-        $$PWD/settings.cpp
+        $$PWD/settings.cpp \
+    $$PWD/nativebehavior.cpp \
+    $$PWD/physicsentity.cpp
+
+RESOURCES += \
+    $$PWD/bacon2d-static-rs.qrc
