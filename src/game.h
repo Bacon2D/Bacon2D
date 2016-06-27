@@ -54,7 +54,7 @@ class Game : public QQuickItem
     Q_PROPERTY(int stackLevel READ stackLevel NOTIFY stackLevelChanged)
 
 public:
-    Game(QQuickItem *parent = 0);
+    Game(QQuickItem *parent = 0,int _ups = 30);
     virtual ~Game();
 
     Scene *currentScene() const;

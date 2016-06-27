@@ -80,9 +80,9 @@ Game *Game::getInstance()
    }
    \endqml
 */
-Game::Game(QQuickItem *parent)
+Game::Game(QQuickItem *parent, int _ups)
     : QQuickItem(parent)
-    , m_ups(30)
+    , m_ups(_ups)
     , m_timerId(0)
     , m_enterScene(0)
     , m_exitScene(0)
@@ -90,15 +90,17 @@ Game::Game(QQuickItem *parent)
 {
     m_instance = this;
     m_sceneStack.clear();
-    m_gameTime.start();
-//    m_timerId = startTimer(1000 / m_ups);
 
-    connect(this,&QQuickItem::windowChanged,[&](QQuickWindow* window){
-        QQuickWindow* w = this->window();
-        if(w) {
-            connect(w,&QQuickWindow::afterAnimating,this,&Game::update,Qt::DirectConnection);
-        }
-    });
+    if(_ups == 60){
+        connect(this,&QQuickItem::windowChanged,[&](QQuickWindow* window){
+            QQuickWindow* w = this->window();
+            if(w) connect(w,&QQuickWindow::afterAnimating,this,&Game::update,Qt::DirectConnection);
+        });
+    }else{
+        m_timerId = startTimer(1000 / m_ups);
+    }
+
+    m_gameTime.start();
     if (QCoreApplication::instance(
                 )) {
         connect(QCoreApplication::instance(),
