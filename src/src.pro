@@ -1,6 +1,11 @@
 TEMPLATE = lib
 CONFIG += qt plugin
 
+QMAKE_HOST_ARCH=$$QMAKE_HOST.arch
+  !equals(QMAKE_HOST_ARCH, $$QT_ARCH) {
+     CONFIG += cross_build
+}
+
 QT += quick
 
 TARGET = bacon2dplugin
@@ -89,7 +94,9 @@ win32 {
 }
 unix {
     QMAKE_POST_LINK += $$QMAKE_COPY $$QMLFILES $$DESTDIR $$escape_expand(\\n\\t)
+    !cross_build {
     QMAKE_POST_LINK += $$[QT_INSTALL_BINS]/qmlplugindump -notrelocatable Bacon2D $$API_VER $$OUT_PWD/imports  > $$DESTDIR/plugins.qmltypes
+    }
 }
 
 qmltypes.path = $$target.path
