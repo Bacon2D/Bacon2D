@@ -39,9 +39,6 @@
 #include "behavior.h"
 #include "scriptbehavior.h"
 #include "settings.h"
-#include "tiledscene.h"
-#include "tiledlayer.h"
-#include "tiledobject.h"
 
 #include "box2dworld.h"
 #include "box2dbody.h"
@@ -62,6 +59,9 @@
 #include "box2draycast.h"
 #include "box2dcontact.h"
 #include "scrollbehavior.h"
+#include "tiledscene.h"
+#include "tiledlayer.h"
+#include "tiledobject.h"
 
 void Plugins::registerTypes(const char *uri)
 {

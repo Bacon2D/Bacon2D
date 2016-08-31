@@ -16,6 +16,8 @@ public:
     explicit TMXTileset(Tiled::Tileset *tileset, QObject *parent = 0)
         : TMXObject(tileset, parent), m_tileset(tileset) {}
 
+    TMXTileset &operator=(const TMXTileset &other) { setTileset(other.tileset()); return *this; }
+
     Tiled::Tileset *tileset() const { return m_tileset; }
     void setTileset(Tiled::Tileset *tileset) { m_tileset = tileset; }
 

@@ -2,9 +2,14 @@ include(doc/doc.pri)
 
 TEMPLATE = subdirs
 
-SUBDIRS += src \
+CONFIG += ordered   # This tells Qt to compile the following SUBDIRS in order
+
+SUBDIRS += 3rdparty/zlib \
+    src \
     tests \
     examples
+
+INCLUDEPATH += 3rdparty/zlib
 
 PROJECT_NAME = bacon2d
 PROJECT_VERSION = 0.90.7

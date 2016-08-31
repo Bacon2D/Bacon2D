@@ -20,6 +20,7 @@ public:
         m_cell.flippedVertically = cell.flippedVertically;
     }
     TMXCell(const TMXCell &other) { setCell(other.cell()); }
+    TMXCell &operator=(const TMXCell &other) { setCell(other.cell()); return *this; }
 
     Tiled::Cell cell() const { return m_cell; }
     void setCell(const Tiled::Cell &cell) { m_cell = cell; }

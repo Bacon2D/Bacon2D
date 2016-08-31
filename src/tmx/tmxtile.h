@@ -15,6 +15,8 @@ public:
     explicit TMXTile(Tiled::Tile *tile, QObject *parent = 0)
         : TMXObject(tile, parent), m_tile(tile) {}
 
+    TMXTile &operator=(const TMXTile &other) { setTile(other.tile()); return *this; }
+
     Tiled::Tile *tile() const { return m_tile; }
     void setTile(Tiled::Tile *tile) { m_tile = tile; }
 

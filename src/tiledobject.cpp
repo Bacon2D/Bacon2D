@@ -283,15 +283,16 @@ void TiledObject::setBody(Box2DBody *body)
 }
 
 /*!
-  \qmlmethod string TiledObject::getProperty(string name)
+  \qmlmethod string TiledObject::getProperty(string name, variant defaultValue)
   \brief This method returns the value of the custom property called \e name for this TMX object.
+  If the value is not available, the \e defaultValue is used instead.
 
   \warning This method ignores the custom property set with the names
    \e x, \e y, \e width, \e height, \e rotation, \e visible and \e id and returns
    the actual value. For example, if an object is 50 pixels wide, getProperty("width")
    would return 50 pixels even if it has a custom property set for \e width.
 */
-QVariant TiledObject::getProperty(const QString &name) const
+QVariant TiledObject::getProperty(const QString &name, const QVariant &defaultValue) const
 {
     if(name.toLower() == "x")
         return QVariant::fromValue(x());
@@ -308,7 +309,7 @@ QVariant TiledObject::getProperty(const QString &name) const
     else if(name.toLower() == "id")
         return QVariant::fromValue(m_id);
 
-    return m_properties.value(name);
+    return m_properties.value(name, defaultValue);
 }
 
 void TiledObject::initialize()

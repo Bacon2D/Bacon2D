@@ -22,6 +22,12 @@ public:
     explicit TMXMapObject(Tiled::MapObject *mapObject, QObject *parent = 0)
         : TMXObject(mapObject, parent), m_mapObject(mapObject) {}
 
+    TMXMapObject& operator=(const TMXMapObject &other)
+    {
+        setTiledMapObject(other.tiledMapObject());
+        return *this;
+    }
+
     Tiled::MapObject *tiledMapObject() const { return m_mapObject; }
     void setTiledMapObject(Tiled::MapObject *mapObject) { m_mapObject = mapObject; }
 

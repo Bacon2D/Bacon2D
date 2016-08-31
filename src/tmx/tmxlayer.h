@@ -18,6 +18,8 @@ public:
     explicit TMXLayer(Tiled::Layer *layer, QObject *parent = 0)
         : TMXObject(layer, parent), m_layer(layer) {}
 
+    TMXLayer &operator=(const TMXLayer &other) { setLayer(other.layer()); return *this; }
+
     bool isNull() const { return m_layer == nullptr; }
 
     Tiled::Layer *layer() const { return  m_layer; }

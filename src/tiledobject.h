@@ -39,7 +39,7 @@ public:
 
     void setProperties(const QMap<QString, QVariant> &properties) { m_properties = properties; }
     void setId(int id) { m_id = id; }
-    Q_INVOKABLE QVariant getProperty(const QString &name) const;
+    Q_INVOKABLE QVariant getProperty(const QString &name, const QVariant &defaultValue = QVariant()) const;
 
     QQmlListProperty<Box2DFixture> fixtures();
     static void append_fixture(QQmlListProperty<Box2DFixture> *list, Box2DFixture *fixture);
