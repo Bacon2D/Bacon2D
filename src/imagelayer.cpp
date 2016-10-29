@@ -253,7 +253,7 @@ QSGNode *ImageLayer::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
         qreal h = height();
         qreal _y = 0;
         if(width() > m_imageWidth) {
-//            h *= factor+1;
+            h *= factor+1;
             h = m_imageHeight;
             w = width();
 //            _y = height();
