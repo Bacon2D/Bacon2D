@@ -250,8 +250,17 @@ QSGNode *ImageLayer::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
         // FAIL: it doesn't work when resizing to a width > that imageWidth :'(
         qreal factor = m_imageWidth / m_imageHeight;
         qreal w = height() * factor;
+        qreal h = height();
+        qreal _y = 0;
+        if(width() > m_imageWidth) {
+            h *= factor+1;
+            h = m_imageHeight;
+            w = width();
+//            _y = height();
+        }
 
-        QRectF r(0, 0, w, height());
+
+        QRectF r(0, _y, w, h);
 
         n->setRect(r);
         m_geometryChanged = false;

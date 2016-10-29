@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Boundaries.qml</file>
+        <file>BoxBody.qml</file>
+        <file>ChainBody.qml</file>
+        <file>CircleBody.qml</file>
+        <file>EdgeBody.qml</file>
+        <file>ImageBoxBody.qml</file>
+        <file>InfiniteScrollEntity.qml</file>
+        <file>PhysicsEntity.qml</file>
+        <file>PolygonBody.qml</file>
+        <file>RectangleBoxBody.qml</file>
+    </qresource>
+</RCC>

@@ -95,23 +95,17 @@ Scene::~Scene()
 {
 }
 
-void Scene::updateEntities(QQuickItem *parent, const int &delta)
-{
-    QQuickItem *item;
-    foreach (item, parent->childItems()) {
-        if (Entity *entity = qobject_cast<Entity *>(item))
-            entity->update(delta);
-        else if (Layer *layer = qobject_cast<Layer *>(item))
-            layer->update(delta);
-    }
-}
-
 void Scene::update(const int &delta)
 {
     if (!m_running) // TODO: stop Qt animations as well
         return;
 
-    updateEntities(this, delta);
+    Entity *entity;
+    foreach (entity, this->findChildren<Entity*>(QString(),Qt::FindDirectChildrenOnly)) {
+        if(entity->isEnabled()) {
+            entity->update(delta);
+        }
+    }
 }
 
 /*!
@@ -216,7 +210,7 @@ bool Scene::running() const
     return m_running;
 }
 
-void Scene::setRunning(const bool &running)
+void Scene::setRunning(const bool running)
 {
     if (m_running == running)
         return;
@@ -490,13 +484,10 @@ void Scene::rayCast(Box2DRayCast *rayCast, const QPointF &point1, const QPointF 
 
 void Scene::initializeEntities(QQuickItem *parent)
 {
-    QQuickItem *child;
-    foreach (child, parent->childItems()) {
-        if (Entity *entity = dynamic_cast<Entity *>(child)) {
-            entity->setScene(this);
-        } else if (Layer *layer = dynamic_cast<Layer *>(child)) {
-            layer->setScene(this);
-        }
+    Entity *child;
+    foreach (child, parent->findChildren<Entity*>(QString(),Qt::FindDirectChildrenOnly))
+    {
+        child->setScene(this);
 
         if (m_physics && m_world) {
             foreach (Box2DBody *body, child->findChildren<Box2DBody *>(QString(), Qt::FindDirectChildrenOnly)) {
@@ -527,8 +518,6 @@ void Scene::itemChange(ItemChange change, const ItemChangeData &data)
         QQuickItem *child = data.item;
         if (Entity *entity = dynamic_cast<Entity *>(child)) {
             entity->setScene(this);
-        } else if (Layer *layer = dynamic_cast<Layer *>(child)) {
-            layer->setScene(this);
         }
 
         if (m_physics && m_world) {

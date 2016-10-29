@@ -33,6 +33,8 @@
 #include <csignal>
 #include <QtGui/QGuiApplication>
 #include <QtQuick/QQuickWindow>
+#include <QQmlEngine>
+#include <QQmlContext>
 #include <QtGui/QCursor>
 
 namespace {
@@ -41,6 +43,13 @@ namespace {
         qDebug() << Q_FUNC_INFO << sig;
         QCoreApplication::instance()->quit();
     }
+}
+
+Game* Game::m_instance = nullptr;
+
+Game *Game::getInstance()
+{
+    return m_instance;
 }
 
 /*!
@@ -71,24 +80,33 @@ namespace {
    }
    \endqml
 */
-Game::Game(QQuickItem *parent)
+Game::Game(QQuickItem *parent, int _ups)
     : QQuickItem(parent)
-    , m_ups(30)
+    , m_ups(_ups)
     , m_timerId(0)
     , m_enterScene(0)
     , m_exitScene(0)
     , m_state(Bacon2D::Active)
 {
+    m_instance = this;
     m_sceneStack.clear();
-    m_gameTime.start();
-    m_timerId = startTimer(1000 / m_ups);
 
-    if (QCoreApplication::instance()) {
+    if(_ups == 60){
+        connect(this,&QQuickItem::windowChanged,[&](QQuickWindow* window){
+            QQuickWindow* w = this->window();
+            if(w) connect(w,&QQuickWindow::afterAnimating,this,&Game::update,Qt::DirectConnection);
+        });
+    }else{
+        m_timerId = startTimer(1000 / m_ups);
+    }
+
+    m_gameTime.start();
+    if (QCoreApplication::instance(
+                )) {
         connect(QCoreApplication::instance(),
                 SIGNAL(applicationStateChanged(Qt::ApplicationState)),
                 SLOT(onApplicationStateChanged(Qt::ApplicationState))
         );
-
         std::signal(SIGTERM, shutdown);
         std::signal(SIGINT, shutdown);
 #ifndef WIN32 // SIGHUP and SIGKILL are not available on windows
@@ -172,6 +190,11 @@ void Game::setGameState(const Bacon2D::State &state)
         this->currentScene()->setRunning(false);
 
     emit gameStateChanged();
+}
+
+QQmlEngine *Game::getQmlEngine()
+{
+    return QQmlEngine::contextForObject(this)->engine();
 }
 
 /*!
