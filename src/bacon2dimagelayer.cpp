@@ -26,7 +26,7 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#include "imagelayer.h"
+#include "bacon2dimagelayer.h"
 
 #include <QImage>
 #include <QPainter>
@@ -183,8 +183,8 @@ qreal ImageLayerNode::imageHeight() const
   An ImageLayer can be used to create parallax effects like an infinite 
   scrolling background useful in creating side-scrolling games.
 */
-ImageLayer::ImageLayer(Layer *parent)
-    : Layer((QQuickItem *)parent)
+Bacon2DImageLayer::Bacon2DImageLayer(Bacon2DLayer *parent)
+    : Bacon2DLayer((QQuickItem *)parent)
     , m_imageWidth(0)
     , m_imageHeight(0)
     , m_geometryChanged(false)
@@ -192,11 +192,11 @@ ImageLayer::ImageLayer(Layer *parent)
     setFlag(ItemHasContents, true);
 }
 
-ImageLayer::~ImageLayer()
+Bacon2DImageLayer::~Bacon2DImageLayer()
 {
 }
 
-void ImageLayer::setSource(const QUrl &source)
+void Bacon2DImageLayer::setSource(const QUrl &source)
 {
     if (m_source == source)
         return;
@@ -211,12 +211,12 @@ void ImageLayer::setSource(const QUrl &source)
   \qmlproperty string ImageLayer::source
   \brief This property represents the source path for the image
 */
-QUrl ImageLayer::source() const
+QUrl Bacon2DImageLayer::source() const
 {
     return m_source;
 }
 
-QSGNode *ImageLayer::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
+QSGNode *Bacon2DImageLayer::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
 {
     ImageLayerNode *n = static_cast<ImageLayerNode *>(oldNode);
 
@@ -235,7 +235,7 @@ QSGNode *ImageLayer::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
             localFile = m_source.toLocalFile();
 
         n = new ImageLayerNode(window(), localFile,
-                (m_type == Layer::Mirrored) ? true : false);
+                (m_type == Bacon2DLayer::Mirrored) ? true : false);
 
         m_imageWidth = n->imageWidth();
         m_imageHeight = n->imageHeight();
@@ -260,9 +260,9 @@ QSGNode *ImageLayer::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
     return n;
 }
 
-void ImageLayer::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+void Bacon2DImageLayer::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
-    Layer::geometryChanged(newGeometry, oldGeometry);
+    Bacon2DLayer::geometryChanged(newGeometry, oldGeometry);
     if (newGeometry.isEmpty() || !isComponentComplete())
         return;
 
@@ -271,50 +271,50 @@ void ImageLayer::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeo
     QQuickItem::update();
 }
 
-void ImageLayer::componentComplete()
+void Bacon2DImageLayer::componentComplete()
 {
-    Layer::componentComplete();
+    Bacon2DLayer::componentComplete();
 }
 
-void ImageLayer::setContentGeometry(const QRectF &geometry)
+void Bacon2DImageLayer::setContentGeometry(const QRectF &geometry)
 {
     setWidth(geometry.width());
     setHeight(geometry.height());
 }
 
-void ImageLayer::update(const int &delta)
+void Bacon2DImageLayer::update(const int &delta)
 {
-    Layer::update(delta);
+    Bacon2DLayer::update(delta);
     QQuickItem::update();
 }
 
-qreal ImageLayer::imageWidth()
+qreal Bacon2DImageLayer::imageWidth()
 {
     return m_imageWidth;
 }
 
-qreal ImageLayer::imageHeight()
+qreal Bacon2DImageLayer::imageHeight()
 {
     return m_imageHeight;
 }
 
-qreal ImageLayer::horizontalOffset()
+qreal Bacon2DImageLayer::horizontalOffset()
 {
     return m_horizontalOffset;
 }
 
-void ImageLayer::setHorizontalOffset(qreal offset)
+void Bacon2DImageLayer::setHorizontalOffset(qreal offset)
 {
     m_horizontalOffset = offset;
 }
 
 
-qreal ImageLayer::verticalOffset()
+qreal Bacon2DImageLayer::verticalOffset()
 {
     return m_verticalOffset;
 }
 
-void ImageLayer::setVerticalOffset(qreal offset)
+void Bacon2DImageLayer::setVerticalOffset(qreal offset)
 {
     m_verticalOffset = offset;
 }

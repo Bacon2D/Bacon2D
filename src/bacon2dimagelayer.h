@@ -29,7 +29,7 @@
 #ifndef _IMAGELAYER_H_
 #define _IMAGELAYER_H_
 
-#include "layer.h"
+#include "bacon2dlayer.h"
 
 #include <QSGTexture>
 #include <QQuickWindow>
@@ -90,7 +90,7 @@ private:
 // ImageLayerNode
 
 // ImageLayer (finally ;D)
-class ImageLayer : public Layer
+class Bacon2DImageLayer : public Bacon2DLayer
 {
     Q_OBJECT
 
@@ -101,8 +101,8 @@ class ImageLayer : public Layer
     Q_PROPERTY(qreal verticalOffset READ verticalOffset WRITE setVerticalOffset)
 
 public:
-    ImageLayer(Layer *parent = 0);
-    ~ImageLayer();
+    Bacon2DImageLayer(Bacon2DLayer *parent = 0);
+    ~Bacon2DImageLayer();
 
     virtual void update(const int &delta);
 

@@ -26,7 +26,7 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#include "layer.h"
+#include "bacon2dlayer.h"
 
 #include <QtQml/QQmlProperty>
 
@@ -38,9 +38,9 @@
   \brief Is the base component providing common properties and functionality
    needed by other Layer types.  See \l ImageLayer.
 */
-Layer::Layer(QQuickItem *parent)
+Bacon2DLayer::Bacon2DLayer(QQuickItem *parent)
     : QQuickItem(parent)
-    , m_type(Layer::Infinite)
+    , m_type(Bacon2DLayer::Infinite)
     , m_updateInterval(0)
     , m_behavior(0)
     , m_scene(0)
@@ -50,7 +50,7 @@ Layer::Layer(QQuickItem *parent)
 }
 
 //! Class destructor
-Layer::~Layer()
+Bacon2DLayer::~Bacon2DLayer()
 {
 }
 
@@ -70,7 +70,7 @@ Layer::~Layer()
     \li Mirrored Layer
   \endtable
 */
-void Layer::setLayerType(const Layer::LayerType &type)
+void Bacon2DLayer::setLayerType(const Bacon2DLayer::LayerType &type)
 {
     if (type == m_type)
         return;
@@ -80,17 +80,17 @@ void Layer::setLayerType(const Layer::LayerType &type)
     emit layerTypeChanged();
 }
 
-void Layer::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+void Bacon2DLayer::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
 }
 
-Behavior *Layer::behavior() const
+Behavior *Bacon2DLayer::behavior() const
 {
     return m_behavior;
 }
 
-void Layer::setBehavior(Behavior *behavior)
+void Bacon2DLayer::setBehavior(Behavior *behavior)
 {
     if (m_behavior == behavior)
         return;
@@ -100,12 +100,12 @@ void Layer::setBehavior(Behavior *behavior)
     emit behaviorChanged();
 }
 
-Scene *Layer::scene() const
+Scene *Bacon2DLayer::scene() const
 {
     return m_scene;
 }
 
-void Layer::setScene(Scene *scene)
+void Bacon2DLayer::setScene(Scene *scene)
 {
     if (m_scene == scene)
         return;
@@ -115,7 +115,7 @@ void Layer::setScene(Scene *scene)
     emit sceneChanged();
 }
 
-Game *Layer::game() const
+Game *Bacon2DLayer::game() const
 {
     if (m_scene)
         return m_scene->game();
@@ -123,12 +123,12 @@ Game *Layer::game() const
     return 0;
 }
 
-int Layer::updateInterval() const
+int Bacon2DLayer::updateInterval() const
 {
     return m_updateInterval;
 }
 
-void Layer::setUpdateInterval(const int &updateInterval)
+void Bacon2DLayer::setUpdateInterval(const int &updateInterval)
 {
     if (m_updateInterval == updateInterval)
         return;
@@ -140,7 +140,7 @@ void Layer::setUpdateInterval(const int &updateInterval)
     m_updateTime.restart();
 }
 
-void Layer::update(const int &delta)
+void Bacon2DLayer::update(const int &delta)
 {
     if ((m_updateInterval && m_updateTime.elapsed() >= m_updateInterval)
         || !m_updateInterval) {
@@ -155,7 +155,7 @@ void Layer::update(const int &delta)
     updateEntities(delta);
 }
 
-void Layer::updateEntities(const int &delta)
+void Bacon2DLayer::updateEntities(const int &delta)
 {
     QQuickItem *item;
     foreach (item, childItems()) {

@@ -25,7 +25,7 @@
 
 #include "imagelayerscrollbehavior.h"
 
-#include "imagelayer.h"
+#include "bacon2dimagelayer.h"
 
 ImageLayerScrollBehavior::ImageLayerScrollBehavior(QObject *parent)
     : ScrollBehaviorImpl(parent)
@@ -36,8 +36,8 @@ void ImageLayerScrollBehavior::update(const int &delta)
 {
     Q_UNUSED(delta);
 
-	ImageLayer *target = 0;
-	if (!(target = dynamic_cast<ImageLayer*>(m_target)))
+	Bacon2DImageLayer *target = 0;
+	if (!(target = dynamic_cast<Bacon2DImageLayer*>(m_target)))
 		return;
 
 	target->setHorizontalOffset(target->horizontalOffset() + m_horizontalStep);

@@ -2,3 +2,9 @@
 	path = 3rdparty/qml-box2d
 	url = https://github.com/qml-box2d/qml-box2d
 	branch = master
+[submodule "3rdparty/tiled"]
+	path = 3rdparty/tiled
+	url = https://github.com/bjorn/tiled
+[submodule "3rdparty/zlib"]
+	path = 3rdparty/zlib
+	url = https://github.com/madler/zlib
