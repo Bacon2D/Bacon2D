@@ -33,7 +33,7 @@
 #include "scene.h"
 #include "spriteanimation.h"
 #include "sprite.h"
-#include "imagelayer.h"
+#include "bacon2dimagelayer.h"
 #include "game.h"
 #include "viewport.h"
 #include "behavior.h"
@@ -60,11 +60,15 @@
 #include "box2dcontact.h"
 #include "scrollbehavior.h"
 
+#include "tiledscene.h"
+#include "tiledlayer.h"
+#include "tiledobject.h"
+
 void Plugins::registerTypes(const char *uri)
 {
     Q_UNUSED(uri)
 
-    qmlRegisterType<Layer>("Bacon2D", 1, 0, "Layer");
+    qmlRegisterType<Bacon2DLayer>("Bacon2D", 1, 0, "Layer");
     qmlRegisterUncreatableType<Behavior>("Bacon2D", 1, 0, "Bacon2DBehavior", "Don't use Bacon2DBehavior directly, use one specialized behavior");
     qmlRegisterUncreatableType<Bacon2D>("Bacon2D", 1, 0, "Bacon2D", "Not creatable as an object, use only to access enums");
 
@@ -73,11 +77,20 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<Entity>("Bacon2D", 1, 0, "Entity");
     qmlRegisterType<Sprite>("Bacon2D", 1, 0, "Sprite");
     qmlRegisterType<SpriteAnimation>("Bacon2D", 1, 0, "SpriteAnimation");
-    qmlRegisterType<ImageLayer>("Bacon2D", 1, 0, "ImageLayer");
+    qmlRegisterType<Bacon2DImageLayer>("Bacon2D", 1, 0, "ImageLayer");
     qmlRegisterType<Viewport>("Bacon2D", 1, 0, "Viewport");
     qmlRegisterType<ScriptBehavior>("Bacon2D", 1, 0, "ScriptBehavior");
     qmlRegisterType<Settings>("Bacon2D", 1, 0, "Settings");
     qmlRegisterType<ScrollBehavior>("Bacon2D", 1, 0, "ScrollBehavior");
+
+
+
+    // For TiledScene
+    qmlRegisterType<TiledScene>("Bacon2D", 1, 0, "TiledScene");
+    qmlRegisterType<TiledLayer>("Bacon2D", 1, 0, "TiledLayer");
+    qmlRegisterType<TiledObject>("Bacon2D", 1, 0, "TiledObject");
+    qmlRegisterType<CollisionItem>("Bacon2D", 1, 0, "CollisionItem");
+
 
     qmlRegisterUncreatableType<Box2DWorld>("Bacon2D", 1, 0, "World",
                                            QStringLiteral("World created by Scene if physics is enabled"));

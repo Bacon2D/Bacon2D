@@ -28,8 +28,8 @@
 
 #include <QtQml/QQmlExpression>
 
-#include "layer.h"
-#include "imagelayer.h"
+#include "bacon2dlayer.h"
+#include "bacon2dimagelayer.h"
 #include "layerscrollbehavior.h"
 #include "imagelayerscrollbehavior.h"
 
@@ -99,9 +99,9 @@ void ScrollBehavior::setTarget(QQuickItem *target)
         m_currentBehavior = 0;
     }
 
-    if (dynamic_cast<ImageLayer*>(target))
+    if (dynamic_cast<Bacon2DImageLayer*>(target))
         m_currentBehavior = new ImageLayerScrollBehavior(this);
-    else if (dynamic_cast<Layer*>(target))
+    else if (dynamic_cast<Bacon2DLayer*>(target))
         m_currentBehavior = new LayerScrollBehavior(this);
 
     if (!m_currentBehavior)

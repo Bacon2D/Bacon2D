@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (C) 2014 Bacon2D Project
+ * Copyright (C) 2017 Bacon2D Project
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,33 +23,45 @@
  *
  */
 
-#include "imagelayerscrollbehavior.h"
+#ifndef TMXTILE
+#define TMXTILE
 
-#include "bacon2dimagelayer.h"
+#include "tmxobject.h"
 
-ImageLayerScrollBehavior::ImageLayerScrollBehavior(QObject *parent)
-    : ScrollBehaviorImpl(parent)
+#include <libtiled/tile.h>
+
+class TMXMap;
+
+class TMXTile: public TMXObject
 {
-}
+    Q_OBJECT
 
-void ImageLayerScrollBehavior::update(const int &delta)
-{
-    Q_UNUSED(delta);
+public:
+    explicit TMXTile(Tiled::Tile *tile, QObject *parent = 0)
+        : TMXObject(tile, parent), m_tile(tile) {}
 
-	Bacon2DImageLayer *target = 0;
-	if (!(target = dynamic_cast<Bacon2DImageLayer*>(m_target)))
-		return;
+    TMXTile &operator=(const TMXTile &other) { setTile(other.tile()); return *this; }
 
-	target->setHorizontalOffset(target->horizontalOffset() + m_horizontalStep);
-	target->setVerticalOffset(target->verticalOffset() + m_verticalStep);
+    Tiled::Tile *tile() const { return m_tile; }
+    void setTile(Tiled::Tile *tile) { m_tile = tile; }
 
-	if (target->horizontalOffset() <= -target->imageWidth())
-		target->setHorizontalOffset(0);
-	else if (target->horizontalOffset() >= 0)
-		target->setHorizontalOffset(-target->imageWidth());
+    const QPixmap &image() const { return m_tile->image(); }
+    void setImage(const QPixmap &image) { m_tile->setImage(image); }
 
-	if (target->verticalOffset() <= -target->imageHeight())
-		target->setVerticalOffset(0);
-	else if (target->verticalOffset() >= 0)
-		target->setVerticalOffset(-target->imageHeight());
-}
+    QString imageSource() const { return m_tile->imageSource(); }
+    void setImageSource(const QString &imageSource) { m_tile->setImageSource(imageSource); }
+
+    int width() const { return m_tile->width(); }
+    int height() const { return m_tile->height(); }
+    QSize size() const { return m_tile->size(); }
+
+    QPoint offset() const {return m_tile->offset(); }
+
+    int id() const { return m_tile->id(); }
+private:
+    Tiled::Tile *m_tile;
+    TMXMap *m_map;
+};
+
+#endif // TMXTILE
+

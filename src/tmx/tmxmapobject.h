@@ -1,0 +1,108 @@
+/**
+ * The MIT License (MIT)
+ *
+ * Copyright (C) 2017 Bacon2D Project
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ */
+
+#ifndef TMXMAPOBJECT_H
+#define TMXMAPOBJECT_H
+
+#include "tmxobject.h"
+#include "tmxcell.h"
+
+#include <libtiled/mapobject.h>
+#include <QVariant>
+
+class TMXMapObject : public TMXObject
+{
+    Q_OBJECT
+
+public:
+    enum Shape {
+        Rectangle,
+        Polygon,
+        Polyline,
+        Ellipse
+    };
+
+    explicit TMXMapObject(Tiled::MapObject *mapObject, QObject *parent = 0)
+        : TMXObject(mapObject, parent), m_mapObject(mapObject) {}
+
+    TMXMapObject& operator=(const TMXMapObject &other)
+    {
+        setTiledMapObject(other.tiledMapObject());
+        return *this;
+    }
+
+    Tiled::MapObject *tiledMapObject() const { return m_mapObject; }
+    void setTiledMapObject(Tiled::MapObject *mapObject) { m_mapObject = mapObject; }
+
+    const QString &name() const { return m_mapObject->name(); }
+    void setName(const QString &name) { m_mapObject->setName(name); }
+
+    const QString &type() const { return m_mapObject->type(); }
+    void setType(const QString &type) { m_mapObject->setType(type); }
+
+    const QPointF &position() const { return m_mapObject->position(); }
+    void setPosition(const QPointF &pos) { m_mapObject->setPosition(pos); }
+
+    qreal x() const { return m_mapObject->x(); }
+    void setX(qreal x) { m_mapObject->setX(x); }
+
+    qreal y() const { return m_mapObject->y(); }
+    void setY(qreal y) { m_mapObject->setY(y); }
+
+    qreal width() const { return m_mapObject->width(); }
+    void setWidth(qreal width) { m_mapObject->setWidth(width); }
+
+    qreal height() const { return m_mapObject->height(); }
+    void setHeight(qreal height) { m_mapObject->setHeight(height); }
+
+    qreal rotation() const { return m_mapObject->rotation(); }
+    void setRotation(qreal rotation) { m_mapObject->setRotation(rotation); }
+
+    Shape shape() const { return static_cast<Shape>(m_mapObject->shape()); }
+    void setShape(Shape shape) { m_mapObject->setShape(static_cast<Tiled::MapObject::Shape>(shape)); }
+
+    bool isVisible() const { return m_mapObject->isVisible(); }
+    void setVisible(bool visible) { m_mapObject->setVisible(visible); }
+
+    const QPolygonF &polygon() const { return m_mapObject->polygon(); }
+    void setPolygon(const QPolygonF &polygon) { m_mapObject->setPolygon(polygon); }
+
+    QVariantList polygonAsList() const
+    {
+        QVariantList allVertices;
+        foreach(const QPointF &point, m_mapObject->polygon())
+            allVertices.append(QVariant(point));
+
+        return allVertices;
+    }
+
+    int id() const { return m_mapObject->id(); }
+
+    TMXCell cell() const { return TMXCell(m_mapObject->cell()); }
+private:
+    Tiled::MapObject *m_mapObject;
+};
+
+#endif // TMXMAPOBJECT_H

@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (C) 2014 Bacon2D Project
+ * Copyright (C) 2017 Bacon2D Project
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,33 +23,35 @@
  *
  */
 
-#include "imagelayerscrollbehavior.h"
+#ifndef TMXOBJECT_H
+#define TMXOBJECT_H
 
-#include "bacon2dimagelayer.h"
+#include <libtiled/object.h>
+#include <libtiled/properties.h>
 
-ImageLayerScrollBehavior::ImageLayerScrollBehavior(QObject *parent)
-    : ScrollBehaviorImpl(parent)
+#include <QtCore/QMap>
+#include <QtCore/QObject>
+#include <QtCore/QString>
+
+class TMXObject : public QObject
 {
-}
+    Q_OBJECT
 
-void ImageLayerScrollBehavior::update(const int &delta)
-{
-    Q_UNUSED(delta);
+public:
+    explicit TMXObject(Tiled::Object *tiledObject, QObject *parent = 0)
+        : QObject(parent), m_tiledObject(tiledObject) {}
 
-	Bacon2DImageLayer *target = 0;
-	if (!(target = dynamic_cast<Bacon2DImageLayer*>(m_target)))
-		return;
+    TMXObject(const TMXObject &other) { setTiledObject(other.tiledObject()); }
 
-	target->setHorizontalOffset(target->horizontalOffset() + m_horizontalStep);
-	target->setVerticalOffset(target->verticalOffset() + m_verticalStep);
+    Tiled::Object *tiledObject() const { return m_tiledObject; }
+    void setTiledObject(Tiled::Object *tiledObject) { m_tiledObject = tiledObject; }
 
-	if (target->horizontalOffset() <= -target->imageWidth())
-		target->setHorizontalOffset(0);
-	else if (target->horizontalOffset() >= 0)
-		target->setHorizontalOffset(-target->imageWidth());
+    QVariant property(const QString &name) const { return m_tiledObject->property(name); }
+    void setProperty(const QString &name, const QVariant &value) { m_tiledObject->setProperty(name, value); }
+    const QMap<QString, QVariant> &properties() const { return m_tiledObject->properties(); }
 
-	if (target->verticalOffset() <= -target->imageHeight())
-		target->setVerticalOffset(0);
-	else if (target->verticalOffset() >= 0)
-		target->setVerticalOffset(-target->imageHeight());
-}
+private:
+    Tiled::Object *m_tiledObject;
+};
+
+#endif // TMXOBJECT_H

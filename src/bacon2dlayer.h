@@ -38,11 +38,11 @@
 #include <QtCore/QTime>
 
 //! A layer class
-class Layer: public QQuickItem
+class Bacon2DLayer: public QQuickItem
 {
     Q_OBJECT
 
-    Q_PROPERTY(Layer::LayerType layerType READ layerType WRITE setLayerType NOTIFY layerTypeChanged)
+    Q_PROPERTY(Bacon2DLayer::LayerType layerType READ layerType WRITE setLayerType NOTIFY layerTypeChanged)
     Q_PROPERTY(Behavior *behavior READ behavior WRITE setBehavior NOTIFY behaviorChanged)
     Q_PROPERTY(Game *game READ game)
     Q_PROPERTY(Scene *scene READ scene WRITE setScene NOTIFY sceneChanged)
@@ -53,8 +53,8 @@ class Layer: public QQuickItem
     )
 
 public:
-    Layer(QQuickItem *parent = 0);
-    virtual ~Layer();
+    Bacon2DLayer(QQuickItem *parent = 0);
+    virtual ~Bacon2DLayer();
 
     virtual void update(const int &delta);
 
@@ -74,8 +74,8 @@ public:
         Mirrored
     };
 
-    Layer::LayerType layerType() const { return m_type; };
-    void setLayerType(const Layer::LayerType &type);
+    Bacon2DLayer::LayerType layerType() const { return m_type; };
+    void setLayerType(const Bacon2DLayer::LayerType &type);
 
 signals:
     void layerTypeChanged();
@@ -89,7 +89,7 @@ protected:
 
     bool m_isAnimated;
     qreal m_horizontalStep;
-    Layer::LayerType m_type;
+    Bacon2DLayer::LayerType m_type;
     QTime m_updateTime;
     int m_updateInterval;
     Behavior *m_behavior;

@@ -19,7 +19,8 @@ SUBDIRS += \
     settings \
     sprite \
     viewport_parallax \
-    weld
+    weld \
+    tiledscene
 
 OTHER_FILES += \
     shared/example.pri \

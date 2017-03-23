@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (C) 2014 Bacon2D Project
+ * Copyright (C) 2017 Bacon2D Project
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,33 +23,31 @@
  *
  */
 
-#include "imagelayerscrollbehavior.h"
+#ifndef TMXIMAGELAYER_H
+#define TMXIMAGELAYER_H
 
-#include "bacon2dimagelayer.h"
+#include "tmxlayer.h"
+#include <QPixmap>
 
-ImageLayerScrollBehavior::ImageLayerScrollBehavior(QObject *parent)
-    : ScrollBehaviorImpl(parent)
+#include <libtiled/imagelayer.h>
+
+class TMXImageLayer : public TMXLayer
 {
-}
+    Q_OBJECT
 
-void ImageLayerScrollBehavior::update(const int &delta)
-{
-    Q_UNUSED(delta);
+public:
+    explicit TMXImageLayer(Tiled::ImageLayer *imageLayer, QObject *parent = 0)
+        : TMXLayer(imageLayer, parent) , m_imageLayer(imageLayer) {}
 
-	Bacon2DImageLayer *target = 0;
-	if (!(target = dynamic_cast<Bacon2DImageLayer*>(m_target)))
-		return;
+    explicit TMXImageLayer(const TMXLayer &layer, QObject *parent = 0)
+        : TMXLayer(layer.layer()->asImageLayer(), parent) , m_imageLayer(layer.layer()->asImageLayer()) {}
 
-	target->setHorizontalOffset(target->horizontalOffset() + m_horizontalStep);
-	target->setVerticalOffset(target->verticalOffset() + m_verticalStep);
+    Tiled::ImageLayer *tiledImageLayer() const { return m_imageLayer; }
+    void setTiledImageLayer(Tiled::ImageLayer *imageLayer) { m_imageLayer = imageLayer; }
 
-	if (target->horizontalOffset() <= -target->imageWidth())
-		target->setHorizontalOffset(0);
-	else if (target->horizontalOffset() >= 0)
-		target->setHorizontalOffset(-target->imageWidth());
+    QPixmap image() const { return m_imageLayer->image(); }
+private:
+    Tiled::ImageLayer *m_imageLayer;
+};
 
-	if (target->verticalOffset() <= -target->imageHeight())
-		target->setVerticalOffset(0);
-	else if (target->verticalOffset() >= 0)
-		target->setVerticalOffset(-target->imageHeight());
-}
+#endif // TMXIMAGELAYER_H

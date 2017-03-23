@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (C) 2014 Bacon2D Project
+ * Copyright (C) 2017 Bacon2D Project
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,33 +23,31 @@
  *
  */
 
-#include "imagelayerscrollbehavior.h"
+#ifndef TMXOBJECTLAYER_H
+#define TMXOBJECTLAYER_H
 
-#include "bacon2dimagelayer.h"
+#include "tmxlayer.h"
+#include "tmxmapobject.h"
 
-ImageLayerScrollBehavior::ImageLayerScrollBehavior(QObject *parent)
-    : ScrollBehaviorImpl(parent)
+#include <libtiled/objectgroup.h>
+
+class TMXObjectLayer : public TMXLayer
 {
-}
+    Q_OBJECT
 
-void ImageLayerScrollBehavior::update(const int &delta)
-{
-    Q_UNUSED(delta);
+public:
+    explicit TMXObjectLayer(Tiled::ObjectGroup *objLayer, QObject *parent = 0)
+        : TMXLayer(objLayer, parent), m_objectLayer(objLayer) {}
 
-	Bacon2DImageLayer *target = 0;
-	if (!(target = dynamic_cast<Bacon2DImageLayer*>(m_target)))
-		return;
+    Tiled::ObjectGroup *tiledObjectLayer() const { return m_objectLayer; }
+    void setTiledObjectLayer(Tiled::ObjectGroup *objLayer) { m_objectLayer = objLayer; }
 
-	target->setHorizontalOffset(target->horizontalOffset() + m_horizontalStep);
-	target->setVerticalOffset(target->verticalOffset() + m_verticalStep);
+    const QList<TMXMapObject*> &objects() const { return m_objects; }
+    void addObject(TMXMapObject *object) { m_objects.append(object); }
 
-	if (target->horizontalOffset() <= -target->imageWidth())
-		target->setHorizontalOffset(0);
-	else if (target->horizontalOffset() >= 0)
-		target->setHorizontalOffset(-target->imageWidth());
+private:
+    Tiled::ObjectGroup *m_objectLayer;
+    QList<TMXMapObject*> m_objects;
+};
 
-	if (target->verticalOffset() <= -target->imageHeight())
-		target->setVerticalOffset(0);
-	else if (target->verticalOffset() >= 0)
-		target->setVerticalOffset(-target->imageHeight());
-}
+#endif // TMXOBJECTLAYER_H
