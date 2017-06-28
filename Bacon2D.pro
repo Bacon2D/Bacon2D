@@ -8,8 +8,6 @@ SUBDIRS += src \
     tests \
     examples
 
-INCLUDEPATH += 3rdparty/zlib
-
 PROJECT_NAME = bacon2d
 PROJECT_VERSION = 0.90.7.1
 
