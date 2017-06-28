@@ -12,7 +12,7 @@ TARGET = tst_bacon2d
 CONFIG   += warn_on qmltestcase
 
 TEMPLATE = app
-IMPORTPATH += $$OUT_PWD/../src/imports
+IMPORTPATH += $$OUT_PWD/../src/qml
 SOURCES += \
     tst_bacon2d.cpp
 OTHER_FILES += \

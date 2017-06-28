@@ -29,7 +29,7 @@
 #include "scene.h"
 
 #include "game.h"
-#include "layer.h"
+#include "bacon2dlayer.h"
 #include "viewport.h"
 
 #include <QtCore/QtGlobal>
@@ -101,7 +101,7 @@ void Scene::updateEntities(QQuickItem *parent, const int &delta)
     foreach (item, parent->childItems()) {
         if (Entity *entity = qobject_cast<Entity *>(item))
             entity->update(delta);
-        else if (Layer *layer = qobject_cast<Layer *>(item))
+        else if (Bacon2DLayer *layer = qobject_cast<Bacon2DLayer *>(item))
             layer->update(delta);
     }
 }
@@ -494,7 +494,7 @@ void Scene::initializeEntities(QQuickItem *parent)
     foreach (child, parent->childItems()) {
         if (Entity *entity = dynamic_cast<Entity *>(child)) {
             entity->setScene(this);
-        } else if (Layer *layer = dynamic_cast<Layer *>(child)) {
+        } else if (Bacon2DLayer *layer = dynamic_cast<Bacon2DLayer *>(child)) {
             layer->setScene(this);
         }
 
@@ -527,7 +527,7 @@ void Scene::itemChange(ItemChange change, const ItemChangeData &data)
         QQuickItem *child = data.item;
         if (Entity *entity = dynamic_cast<Entity *>(child)) {
             entity->setScene(this);
-        } else if (Layer *layer = dynamic_cast<Layer *>(child)) {
+        } else if (Bacon2DLayer *layer = dynamic_cast<Bacon2DLayer *>(child)) {
             layer->setScene(this);
         }
 

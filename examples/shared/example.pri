@@ -11,10 +11,10 @@ EXAMPLE_QML_FILES += \
 
 # obeezzy: Add TMX files
 OTHER_FILES += \
-    $$EXAMPLE_QML_FILES \
-    $$EXAMPLE_IMAGE_FILES \
-    $$EXAMPLE_SOUND_FILES \
-    $$EXAMPLE_TMX_FILES
+   $$EXAMPLE_QML_FILES \
+   $$EXAMPLE_IMAGE_FILES \
+   $$EXAMPLE_SOUND_FILES \
+   $$EXAMPLE_TMX_FILES
 
 # Create the resource file
 GENERATED_RESOURCE_FILE = $$OUT_PWD/resources.qrc
@@ -29,6 +29,7 @@ INCLUDED_RESOURCE_FILES = \
 RESOURCE_CONTENT = \
     "<RCC>" \
     "<qresource prefix=\"/\">"
+
 
 win32 {
     for(resourcefile, INCLUDED_RESOURCE_FILES) {

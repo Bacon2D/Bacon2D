@@ -25,64 +25,69 @@
  */
 
 import QtQuick 2.2
+import QtQuick.Window 2.0
 import Bacon2D 1.0
 
 /*
   Same example as InfiniteFall, but using InfiniteScollItem instead of ImageLayer
  */
-Game {
-    id: game
 
+Window {
     width: 512
     height: 512
+    visible: true
 
-    currentScene: scene
+    Game {
+        id: game
+        anchors.fill: parent
+        currentScene: scene
 
-    Scene {
-        id: scene
+        Scene {
+            id: scene
+ 
+            focus: true
+            width: parent.width
+            height: parent.height
 
-        focus: true
-        width: parent.width
-        height: parent.height
+            InfiniteScrollEntity {
+                id: scroller
+                anchors.centerIn: parent
 
-        InfiniteScrollEntity {
-            id: scroller
-            anchors.centerIn: parent
-
-            Image{
-                width: scene.width; height: scene.height
-                fillMode: Image.Tile
-                source: "sky.png"
-                Timer{
-                    interval: 15
-                    repeat: true
-                    running: true
-                    onTriggered: scroller.offsetY +=1
+                Image{
+                    width: scene.width; height: scene.height
+                    fillMode: Image.Tile
+                    source: "sky.png"
+                    Timer{
+                        interval: 15
+                        repeat: true
+                        running: true
+                        onTriggered: scroller.offsetY +=1
+                    }
                 }
             }
-        }
-        Sprite {
-            id: spriteItem
+            Sprite {
+                id: spriteItem
 
-            x: scene.width / 2 - spriteItem.width / 2
-            y: scene.height / 2 - spriteItem.height / 2
+                x: scene.width / 2 - spriteItem.width / 2
+                y: scene.height / 2 - spriteItem.height / 2
 
-            animation: "falling"
+                animation: "falling"
 
-            animations: SpriteAnimation {
-                name: "falling"
-                source: "astronaut.png"
-                frames: 3
-                duration: 450
-                loops: Animation.Infinite
-            }
+                animations: SpriteAnimation {
+                    name: "falling"
+                    source: "astronaut.png"
+                    frames: 3
+                    duration: 450
+                    loops: Animation.Infinite
+                }
 
-            NumberAnimation on rotation {
-                from: 0
-                to: 360
-                running: true
-                loops: Animation.Infinite
-                duration: 1800
+                NumberAnimation on rotation {
+                    from: 0
+                    to: 360
+                    running: true
+                    loops: Animation.Infinite
+                    duration: 1800
+                }
             }
         }
     }

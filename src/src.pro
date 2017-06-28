@@ -1,17 +1,19 @@
 TEMPLATE = lib
 CONFIG += qt plugin
 
-QT += quick
+QMAKE_HOST_ARCH=$$QMAKE_HOST.arch
+  !equals(QMAKE_HOST_ARCH, $$QT_ARCH) {
+     CONFIG += cross_build
+}
 
-# obeezzy: For libtiled
 CONFIG += c++11
 
-TARGETPATH = Bacon2D
+QT += quick
+
 TARGET = bacon2dplugin
+TARGETPATH = Bacon2D
 
 API_VER=1.0
-
-# obeezzy: Newer versions of Qt do not have an "imports" folder
 DESTDIR = $$OUT_PWD/qml/Bacon2D
 
 OBJECTS_DIR = tmp
@@ -20,15 +22,14 @@ MOC_DIR = tmp
 DEPENDPATH += .
 INCLUDEPATH += .
 INCLUDEPATH += ../3rdparty/qml-box2d/
+INCLUDEPATH += ../3rdparty/tiled/src/
 
 DEFINES += STATIC_PLUGIN_BOX2D
 include(../3rdparty/qml-box2d/box2d-static.pri)
 
-# obeezzy: For libtiled
-INCLUDEPATH += $$PWD/../3rdparty
-include(../3rdparty/libtiled/libtiled.pri)
+
+include(../3rdparty/tiled/src/libtiled/libtiled-static.pri)
 include($$PWD/tmx/tmx.pri)
-#
 
 win32:DEFINES += WIN32
 
@@ -42,8 +43,8 @@ HEADERS += entity.h \
            spriteanimation.h \
            animationtransition.h \
            animationchangeevent.h \
-           layer.h \
-           imagelayer.h \
+           bacon2dlayer.h \
+           bacon2dimagelayer.h \
            viewport.h \
            behavior.h \
            scriptbehavior.h \
@@ -65,8 +66,8 @@ SOURCES += entity.cpp \
            sprite.cpp \
            spriteanimation.cpp \
            animationtransition.cpp \
-           layer.cpp \
-           imagelayer.cpp \
+           bacon2dlayer.cpp \
+           bacon2dimagelayer.cpp \
            viewport.cpp \
            behavior.cpp \
            scriptbehavior.cpp \
@@ -74,12 +75,10 @@ SOURCES += entity.cpp \
            imagelayerscrollbehavior.cpp \
            layerscrollbehavior.cpp \
            settings.cpp \
-# obeezzy: For libtiled
            tiledscene.cpp \
            tiledlayer.cpp \
            tiledobject.cpp
 
-# obeezzy: Newer versions of Qt do not have an "imports" folder. "qml" used instead
 !isEmpty(QTPATH): target.path = $$QTPATH/qml/$$TARGETPATH
 else: target.path = $$[QT_INSTALL_QML]/$$replace(TARGETPATH, \\., /).$$API_VER
 ;
@@ -104,13 +103,13 @@ win32 {
     for(FILE, QMLFILES){
         QMAKE_POST_LINK += $$QMAKE_COPY $$quote($$FILE) $$quote($$DESTDIR) $$escape_expand(\\n\\t)
     }
-    # obeezzy: Newer versions of Qt do not have an "imports" folder
     QMAKE_POST_LINK += $$[QT_INSTALL_BINS]/qmlplugindump -noinstantiate -notrelocatable Bacon2D $$API_VER $$OUT_PWD/qml  > $$DESTDIR\plugins.qmltypes
 }
 unix {
     QMAKE_POST_LINK += $$QMAKE_COPY $$QMLFILES $$DESTDIR $$escape_expand(\\n\\t)
-    # obeezzy: Newer versions of Qt do not have an "imports" folder
-    QMAKE_POST_LINK += $$[QT_INSTALL_BINS]/qmlplugindump -noinstantiate -notrelocatable Bacon2D $$API_VER $$OUT_PWD/qml  > $$DESTDIR/plugins.qmltypes
+    !cross_build {
+        QMAKE_POST_LINK += $$[QT_INSTALL_BINS]/qmlplugindump -noinstantiate -notrelocatable Bacon2D $$API_VER $$OUT_PWD/qml  > $$DESTDIR/plugins.qmltypes
+    }
 }
 
 qmltypes.path = $$target.path
