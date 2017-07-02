@@ -110,6 +110,7 @@
 TiledScene::TiledScene(Game *parent)
     : Scene(parent)
     , m_map(0)
+    , m_background(nullptr)
 {
     setFlag(QQuickItem::ItemHasContents, true);
 }
@@ -147,9 +148,31 @@ void TiledScene::setSource(const QUrl &source)
     m_image = QPixmap(m_map->tileWidth() * m_map->width(), m_map->tileHeight() * m_map->height());
     m_image.fill(Qt::transparent);
 
+    loadBackground();
     loadLayers();
 
     emit sourceChanged();
+}
+
+/*!
+ * \qmlproperty url TiledScene::background
+ * \brief This property allows you to override the TMX image layer set in the TMX file. Note that the
+ * background set takes the dimensions of the scene automatically and
+ * \return
+ */
+QQuickItem *TiledScene::background() const
+{
+    return m_background;
+}
+
+void TiledScene::setBackground(QQuickItem *background)
+{
+    if (m_background == background)
+        return;
+
+    m_background = background;
+    loadBackground();
+    emit backgroundChanged();
 }
 
 bool TiledScene::loadMap(const QString &source)
@@ -174,6 +197,17 @@ bool TiledScene::loadMap(const QString &source)
     return true;
 }
 
+void TiledScene::loadBackground()
+{
+    if (m_background == nullptr)
+        return;
+
+    m_background->setParentItem(this);
+    m_background->setWidth(implicitWidth());
+    m_background->setHeight(implicitHeight());
+    m_background->setZ(-1);
+}
+
 void TiledScene::loadLayers()
 {
     // Extract tiles for each layer
@@ -181,12 +215,12 @@ void TiledScene::loadLayers()
     {
         if(layer.isTileLayer())
             loadTileLayer(static_cast<TMXTileLayer>(layer));
-        else if(layer.isImageLayer())
+        else if(layer.isImageLayer() && m_background == nullptr)
             loadImageLayer(static_cast<TMXImageLayer>(layer));
         else if(layer.isObjectLayer()) {
             // This layer would be loaded by the TiledLayer and TiledObject classes.
         }
-        else
+        else if (m_background == nullptr)
             qWarning() << "Unknown layer type: " << layer.name();
     }
 
