@@ -7,3 +7,4 @@ Makefile*
 lib/
 imports/
 *.pro.user
+/build/doc/html/*
