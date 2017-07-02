@@ -43,13 +43,16 @@ class TiledScene : public Scene
     Q_OBJECT
 
     Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
+    Q_PROPERTY(QQuickItem *background READ background WRITE setBackground NOTIFY backgroundChanged)
     Q_PROPERTY(QQmlListProperty<TiledLayer> layers READ layers)
 public:
     TiledScene(Game *parent = 0);
 
+    QUrl source() const;
     void setSource(const QUrl &source);
 
-    QUrl source() const;
+    QQuickItem *background() const;
+    void setBackground(QQuickItem *);
 
     QQmlListProperty<TiledLayer> layers();
 
@@ -61,15 +64,18 @@ public:
     virtual void componentComplete();
 signals:
     void sourceChanged();
+    void backgroundChanged();
 protected:
     QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *);
 private:
     TMXMap *m_map;
     QUrl m_source;
+    QQuickItem *m_background;
     QPixmap m_image;
     QList<TiledLayer *> m_layers;
 
     bool loadMap(const QString &source);
+    void loadBackground();
     void loadLayers();
     void loadTileLayer(const TMXTileLayer &layer);
     void loadImageLayer(const TMXImageLayer &layer);

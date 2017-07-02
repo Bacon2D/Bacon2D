@@ -100,7 +100,7 @@ Game::Game(QQuickItem *parent)
 
 Game::~Game()
 {
-    qDebug() << Q_FUNC_INFO;
+    // qDebug() << Q_FUNC_INFO;
 }
 
 /*!
