@@ -63,9 +63,10 @@ Window {
                     Sprite {
                         anchors.fill: parent
                         animation: "falling"
+                        source: "astronaut.png"
+
                         animations: SpriteAnimation {
                             name: "falling"
-                            source: "astronaut.png"
                             frames: 3
                             duration: 450
                             loops: Animation.Infinite

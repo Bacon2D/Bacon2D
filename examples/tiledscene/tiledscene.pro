@@ -6,10 +6,7 @@ EXAMPLE_QML_FILES += \
 EXAMPLE_IMAGE_FILES += \
     images/coin.png \
     images/coin_icon.png \
-    images/dog_freefall.png \
-    images/dog_idle.png \
-    images/dog_jump.png \
-    images/dog_run.png \
+    images/sprite.png \
     images/player.png \
     levels/background.png \
     levels/winter_tileset.png

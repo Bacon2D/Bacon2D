@@ -2,7 +2,7 @@ import QtQuick 2.4
 import Bacon2D 1.0
 
 PhysicsEntity {
-    id: root
+    id: coin
     width: 100
     height: 62
     sleepingAllowed: false
@@ -17,34 +17,32 @@ PhysicsEntity {
         sensor: true
         collidesWith: Box.Category1
 
-        onBeginContact: {
-            if(!picked) {
-                root.opacity = 0
-                scale = 4
-                picked = true
-            }
-        }
+        onBeginContact: picked = true;
     }
 
     Sprite {
         animation: "spin"
         width: parent.width
         height: parent.height
+        source: "images/coin.png"
+
         animations: SpriteAnimation {
             name: "spin"
-            source: "images/coin.png"
             frames: 10
             duration: 1000
             loops: Animation.Infinite
         }
     }
 
-    onOpacityChanged: {
-        if(opacity == 0)
-            destroy()
-    }
+    SequentialAnimation {
+        running: coin.picked
 
-    Behavior on opacity { NumberAnimation {} }
-    Behavior on scale { NumberAnimation {} }
+        ParallelAnimation {
+            NumberAnimation { target: coin; property: "scale"; to: 6 }
+            NumberAnimation { target: coin; property: "opacity"; to: 0 }
+        }
+
+        ScriptAction { script: coin.destroy(); }
+    }
 }
 

@@ -32,6 +32,8 @@
 #include "sprite.h"
 #include "spritesheet.h"
 
+#include <QDebug>
+
 AnimationTransition::AnimationTransition(SpriteAnimation *spriteAnimationItem)
     : QAbstractTransition()
     , m_spriteAnimationItem(spriteAnimationItem)

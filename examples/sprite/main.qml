@@ -59,21 +59,23 @@ Window {
                 Sprite {
                     id: spriteItem
                     animation: "sliding"
-                    spriteState: Bacon2D.Running
+                    source: "images/sprite.png"
                     animations: [
                         SpriteAnimation {
                             name: "sliding"
-                            source: "sliding.png"
-                            frames: 4
+                            frames: 10
+                            finalFrame: 3
+                            frameY: frameHeight
                             duration: 400
                             loops: Animation.Infinite
+                            frameHeight: spriteItem.sourceSize.height / 2
                         },
                         SpriteAnimation {
                             name: "jumping"
-                            source: "jumping.png"
                             frames: 10
                             duration: 600
                             loops: 2
+                            frameHeight: spriteItem.sourceSize.height / 2
 
                             onFinished: {
                                 spriteItem.animation = "sliding"

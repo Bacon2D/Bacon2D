@@ -37,22 +37,34 @@
 #include <QtCore/QStateMachine>
 #include <QtQuick/QQuickItem>
 #include <QtCore/QtGlobal>
+#include <QPixmap>
 
 class Scene;
 class SpriteAnimation;
+class SpriteSheet;
 
 class Sprite : public QQuickItem
 {
     Q_OBJECT
+    Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
+    Q_PROPERTY(QSize sourceSize READ sourceSize NOTIFY sourceSizeChanged)
     Q_PROPERTY(QQmlListProperty<SpriteAnimation> animations READ animations)
     Q_PROPERTY(QString animation READ animation WRITE setAnimation NOTIFY animationChanged)
     Q_PROPERTY(bool verticalMirror READ verticalMirror WRITE setVerticalMirror NOTIFY verticalMirrorChanged)
     Q_PROPERTY(bool horizontalMirror READ horizontalMirror WRITE setHorizontalMirror NOTIFY horizontalMirrorChanged)
+    Q_PROPERTY(int verticalFrameCount READ verticalFrameCount WRITE setVerticalFrameCount NOTIFY verticalFrameCountChanged)
+    Q_PROPERTY(int horizontalFrameCount READ horizontalFrameCount WRITE setHorizontalFrameCount NOTIFY horizontalFrameCountChanged)
     Q_PROPERTY(Entity *entity READ entity WRITE setEntity NOTIFY entityChanged)
     Q_PROPERTY(Bacon2D::State spriteState READ spriteState WRITE setSpriteState NOTIFY spriteStateChanged)
 
 public:
     Sprite(QQuickItem *parent = 0);
+
+    QUrl source() const;
+    void setSource(const QUrl &source);
+
+    QSize sourceSize() const;
+    void setSourceSize(const QSize &sourceSize);
 
     QQmlListProperty<SpriteAnimation> animations() const;
 
@@ -65,11 +77,19 @@ public:
     bool horizontalMirror() const;
     void setHorizontalMirror(const bool &horizontalMirror);
 
+    int verticalFrameCount() const;
+    void setVerticalFrameCount(const int &verticalFrameCount);
+
+    int horizontalFrameCount() const;
+    void setHorizontalFrameCount(const int &horizontalFrameCount);
+
     Entity *entity() const;
     void setEntity(Entity *entity);
 
-    Bacon2D::State spriteState() const { return m_state; };
+    Bacon2D::State spriteState() const { return m_state; }
     void setSpriteState(const Bacon2D::State &state);
+
+    QPixmap pixmap() const;
 
 public slots:
     void initializeAnimation();
@@ -79,24 +99,36 @@ signals:
     void animationChanged();
     void verticalMirrorChanged();
     void horizontalMirrorChanged();
+    void verticalFrameCountChanged();
+    void horizontalFrameCountChanged();
     void entityChanged();
     void spriteStateChanged();
+    void sourceChanged();
+    void sourceSizeChanged();
 
 private:
     void initializeMachine();
 
 private:
     static void append_animation(QQmlListProperty<SpriteAnimation> *list, SpriteAnimation *animation);
+    static int count_animation(QQmlListProperty<SpriteAnimation> *list);
+    static SpriteAnimation *at_animation(QQmlListProperty<SpriteAnimation> *list, int index);
 
     QStateMachine *m_stateMachine;
     QState *m_stateGroup;
     QHash<QString, SpriteAnimation *> m_states;
+    static QHash<QUrl, QPixmap> m_loadedPixmaps;
+    QUrl m_source;
+    QSize m_sourceSize;
     QString m_animation;
     bool m_verticalMirror;
     bool m_horizontalMirror;
+    int m_verticalFrameCount;
+    int m_horizontalFrameCount;
     Entity *m_entity;
     Game *m_game;
     Bacon2D::State m_state;
+    QPixmap m_pixmap;
 };
 
 #endif /* _SPRITE_H_ */

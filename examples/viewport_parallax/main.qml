@@ -75,12 +75,12 @@ Window {
                 y: 420
 
                 animation: "stopped"
+                source: "images/stopped.png"
 
                 animations: [
                     SpriteAnimation {
                         name: "moving"
 
-                        source: "images/moving.png"
                         frames: 20
                         duration: 450
                         loops: Animation.Infinite
@@ -89,7 +89,6 @@ Window {
                     SpriteAnimation {
                         name: "stopped"
 
-                        source: "images/stopped.png"
                         frames: 7
                         duration: 5000
                         loops: Animation.Infinite

@@ -33,6 +33,11 @@
 #include "animationchangeevent.h"
 #include "animationtransition.h"
 
+#include <QTime>
+#include <QDebug>
+
+QHash<QUrl, QPixmap> Sprite::m_loadedPixmaps;
+
 void Sprite::append_animation(QQmlListProperty<SpriteAnimation> *list, SpriteAnimation *animation)
 {
     Sprite *spriteItem = qobject_cast<Sprite *>(list->object);
@@ -42,6 +47,33 @@ void Sprite::append_animation(QQmlListProperty<SpriteAnimation> *list, SpriteAni
 
     spriteItem->m_states.insert(animation->name(), animation);
     animation->spriteSheet()->setParentItem(spriteItem);
+    animation->spriteSheet()->setPixmap(spriteItem->pixmap());
+    animation->spriteSheet()->setHorizontalFrameCount(spriteItem->horizontalFrameCount());
+    animation->spriteSheet()->setVerticalFrameCount(spriteItem->verticalFrameCount());
+
+    connect(spriteItem, &Sprite::sourceChanged, [animation, spriteItem]() {
+        animation->spriteSheet()->setPixmap(spriteItem->pixmap());
+    });
+}
+
+int Sprite::count_animation(QQmlListProperty<SpriteAnimation> *list)
+{
+    Sprite *spriteItem = qobject_cast<Sprite *>(list->object);
+
+    if (!spriteItem)
+        return 0;
+
+    return spriteItem->m_states.values().length();
+}
+
+SpriteAnimation *Sprite::at_animation(QQmlListProperty<SpriteAnimation> *list, int index)
+{
+    Sprite *spriteItem = qobject_cast<Sprite *>(list->object);
+
+    if (!spriteItem)
+        return nullptr;
+
+    return spriteItem->m_states.values().at(index);
 }
 
 /*!
@@ -53,19 +85,75 @@ void Sprite::append_animation(QQmlListProperty<SpriteAnimation> *list, SpriteAni
  */
 Sprite::Sprite(QQuickItem *parent)
     : QQuickItem(parent)
-    , m_entity(0)
-    , m_game(0)
     , m_stateMachine(0)
     , m_stateGroup(0)
+    , m_entity(0)
+    , m_game(0)
     , m_verticalMirror(false)
     , m_horizontalMirror(false)
+    , m_verticalFrameCount(0)
+    , m_horizontalFrameCount(0)
     , m_state(Bacon2D::Running)
 {
 }
 
+/*!
+ * \qmlproperty string SpriteAnimation::source
+ * \brief QUrl for the source image
+ */
+
+QUrl Sprite::source() const
+{
+    return m_source;
+}
+
+void Sprite::setSource(const QUrl &source)
+{
+    if (m_source == source)
+        return;
+
+    m_source = source;
+
+    if (m_loadedPixmaps.contains(m_source))
+        m_pixmap = m_loadedPixmaps.value(m_source);
+    else {
+        if (m_source.url().startsWith("qrc:/"))
+            m_pixmap = QPixmap(m_source.url().replace(QString("qrc:/"), QString(":/")));
+        else
+            m_pixmap = QPixmap(m_source.toLocalFile());
+    }
+
+    if (m_pixmap.isNull())
+        qCritical() << QString("Bacon2D>>Image \'%1\' failed to load!").arg(m_source.url());
+    else
+        m_loadedPixmaps.insert(m_source, m_pixmap);
+
+    setSourceSize(m_pixmap.size());
+
+    emit sourceChanged();
+}
+
+QSize Sprite::sourceSize() const
+{
+    return m_sourceSize;
+}
+
+void Sprite::setSourceSize(const QSize &sourceSize)
+{
+    if (m_sourceSize == sourceSize)
+        return;
+
+    m_sourceSize = sourceSize;
+    emit sourceSizeChanged();
+}
+
 QQmlListProperty<SpriteAnimation> Sprite::animations() const
 {
-    return QQmlListProperty<SpriteAnimation>(const_cast<Sprite *>(this), 0, &Sprite::append_animation, 0, 0, 0);
+    return QQmlListProperty<SpriteAnimation>(const_cast<Sprite *>(this), 0,
+                                             &Sprite::append_animation,
+                                             &Sprite::count_animation,
+                                             &Sprite::at_animation,
+                                             0);
 }
 
 /*!
@@ -94,7 +182,13 @@ void Sprite::setAnimation(const QString &animation, const bool &force)
             SpriteAnimation *animationItem = m_states[m_animation];
             animationItem->setRunning(false);
             animationItem->setVisible(false);
+
+            if (width() == 0 || height() == 0) {
+                setImplicitWidth(animationItem->spriteSheet()->width());
+                setImplicitHeight(animationItem->spriteSheet()->height());
+            }
         }
+
         m_animation = animation;
 
         if (!m_stateMachine)
@@ -117,11 +211,6 @@ void Sprite::initializeMachine()
         AnimationTransition *transition = new AnimationTransition(animation);
         animation->setParent(m_stateGroup);
         animation->addTransition(transition);
-
-        if (width() == 0 || height() == 0) {
-            setWidth(animation->spriteSheet()->width());
-            setHeight(animation->spriteSheet()->height());
-        }
     }
 
     m_stateMachine->addState(m_stateGroup);
@@ -182,6 +271,34 @@ void Sprite::setHorizontalMirror(const bool &horizontalMirror)
     emit horizontalMirrorChanged();
 }
 
+int Sprite::verticalFrameCount() const
+{
+    return m_verticalFrameCount;
+}
+
+void Sprite::setVerticalFrameCount(const int &verticalFrameCount)
+{
+    if (m_verticalFrameCount == verticalFrameCount)
+        return;
+
+    m_verticalFrameCount = verticalFrameCount;
+    emit verticalFrameCountChanged();
+}
+
+int Sprite::horizontalFrameCount() const
+{
+    return m_horizontalFrameCount;
+}
+
+void Sprite::setHorizontalFrameCount(const int &horizontalFrameCount)
+{
+    if (m_horizontalFrameCount = horizontalFrameCount)
+        return;
+
+    m_horizontalFrameCount = horizontalFrameCount;
+    emit horizontalFrameCountChanged();
+}
+
 Entity *Sprite::entity() const
 {
     return m_entity;
@@ -233,4 +350,9 @@ void Sprite::setSpriteState(const Bacon2D::State &state)
         m_stateMachine->start();
     else if (m_state != Bacon2D::Running && m_stateMachine->isRunning())
         m_stateMachine->stop();
+}
+
+QPixmap Sprite::pixmap() const
+{
+    return m_pixmap;
 }

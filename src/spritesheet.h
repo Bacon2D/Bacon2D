@@ -32,8 +32,7 @@
 #include <QtQuick/QQuickPaintedItem>
 #include <QUrl>
 #include <QtCore/QtGlobal>
-
-class QPixmap;
+#include <QPixmap>
 
 class SpriteSheet : public QQuickPaintedItem
 {
@@ -44,17 +43,37 @@ class SpriteSheet : public QQuickPaintedItem
 public:
     SpriteSheet(QQuickItem *parent = 0);
 
-    QUrl source() const;
-    void setSource(const QUrl &source);
+    void setPixmap(const QPixmap &pixmap);
 
     int frames() const;
     void setFrames(const int &frames);
 
+    int horizontalFrameCount() const;
+    void setHorizontalFrameCount(const int &horizontalFrameCount);
+
+    int verticalFrameCount() const;
+    void setVerticalFrameCount(const int &verticalFrameCount);
+
     int frame() const;
     void setFrame(const int &frame);
 
+    qreal frameX() const;
+    void setFrameX(const qreal &frameX);
+
+    qreal frameY() const;
+    void setFrameY(const qreal &frameY);
+
+    qreal frameWidth() const;
+    void setFrameWidth(const qreal &frameWidth);
+
+    qreal frameHeight() const;
+    void setFrameHeight(const qreal &frameHeight);
+
     int initialFrame() const;
     void setInitialFrame(const int &initialFrame);
+
+    int finalFrame() const;
+    void setFinalFrame(const int &finalFrame);
 
     bool verticalMirror() const;
     void setVerticalMirror(const bool &verticalMirror);
@@ -64,22 +83,35 @@ public:
 
     void paint(QPainter *painter);
 
-signals:
-    void sourceChanged();
-    void framesChanged();
-    void frameChanged();
-    void initialFrameChanged();
-
 private:
     void updateSizeInfo();
 
+signals:
+    void sourceChanged();
+    void horizontalFrameCountChanged();
+    void verticalFrameCountChanged();
+    void framesChanged();
+    void frameChanged();
+    void frameXChanged();
+    void frameYChanged();
+    void frameWidthChanged();
+    void frameHeightChanged();
+    void initialFrameChanged();
+    void finalFrameChanged();
+    void sourceSizeChanged();
+
 private:
-    QPixmap *m_pixMap;
-    QUrl m_source;
+    QPixmap m_pixmap;
+    int m_horizontalFrameCount;
+    int m_verticalFrameCount;
     int m_frames;
     int m_frame;
     int m_initialFrame;
-    int m_frameWidth;
+    int m_finalFrame;
+    qreal m_frameX;
+    qreal m_frameY;
+    qreal m_frameWidth;
+    qreal m_frameHeight;
     int m_vertical;
     int m_horizontal;
     bool m_mirror;

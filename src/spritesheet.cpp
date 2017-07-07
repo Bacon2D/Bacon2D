@@ -34,63 +34,48 @@
 
 SpriteSheet::SpriteSheet(QQuickItem *parent)
     : QQuickPaintedItem(parent)
-    , m_pixMap(0)
+    , m_pixmap(QPixmap())
+    , m_horizontalFrameCount(0)
+    , m_verticalFrameCount(0)
     , m_frames(0)
     , m_frame(0)
     , m_initialFrame(0)
-    , m_frameWidth(0)
+    , m_finalFrame(0)
     , m_vertical(1)
     , m_horizontal(1)
+    , m_frameX(0.0)
+    , m_frameY(0.0)
+    , m_frameWidth(0.0)
+    , m_frameHeight(0.0)
     , m_mirror(false)
 {
     setVisible(false);
     QQmlProperty(this, "layer.enabled").write(true);
 }
 
-QUrl SpriteSheet::source() const
+void SpriteSheet::setPixmap(const QPixmap &pixmap)
 {
-    return m_source;
-}
-
-void SpriteSheet::setSource(const QUrl &source)
-{
-    if (m_source == source)
-        return;
-
-    if (m_pixMap)
-        delete m_pixMap;
-
-    m_source = source;
-
-    if (m_source.url().startsWith("qrc:/"))
-        m_pixMap = new QPixmap(m_source.url().replace(QString("qrc:/"), QString(":/")));
-    else
-        m_pixMap = new QPixmap(m_source.toLocalFile());
-
-    if (!m_pixMap)
-        qCritical() << QString("Bacon2D>>Image \'%1\' failed to load!").arg(m_source.url());
-
-    if (m_frames)
-        updateSizeInfo();
-
-    update();
-
-    emit sourceChanged();
+    m_pixmap = pixmap;
+    updateSizeInfo();
 }
 
 void SpriteSheet::paint(QPainter *painter)
 {
-    if (m_pixMap) {
+    if (!m_pixmap.isNull()) {
         if (!m_frames)
-            painter->drawPixmap(0, 0, *m_pixMap);
-        else
-            if (m_mirror)
-                painter->drawPixmap(0, 0,
-                        m_pixMap->transformed(QTransform().scale(m_horizontal, m_vertical),
-                        Qt::FastTransformation), (m_frame * m_frameWidth), 0, m_frameWidth,
-                        m_pixMap->height());
-            else
-                painter->drawPixmap(0, 0, *m_pixMap, (m_frame * m_frameWidth), 0, m_frameWidth, m_pixMap->height());
+            painter->drawPixmap(0, 0, m_pixmap);
+        else {
+            QRectF target = QRectF(boundingRect());
+            QPixmap pixmap = m_pixmap.transformed(QTransform().scale(m_horizontal, m_vertical), Qt::FastTransformation);
+            // Add 1 to final frame to include the final frame
+            QRectF source = QRectF((horizontalMirror() ? ((m_frames - (m_finalFrame + 1) + m_frame - m_initialFrame) * frameWidth())
+                                                       : (m_frame * frameWidth())) + frameX(),
+                                   frameY(),
+                                   frameWidth(),
+                                   frameHeight());
+
+            painter->drawPixmap(target, pixmap, source);
+        }
     }
 }
 
@@ -104,13 +89,41 @@ void SpriteSheet::setFrames(const int &frames)
     if (m_frames != frames) {
         m_frames = frames;
 
-        if (m_pixMap)
-            updateSizeInfo();
+        if (!m_finalFrame)
+            m_finalFrame = m_frames - 1;
 
-        update();
+        updateSizeInfo();
 
         emit framesChanged();
     }
+}
+
+int SpriteSheet::horizontalFrameCount() const
+{
+    return m_horizontalFrameCount;
+}
+
+void SpriteSheet::setHorizontalFrameCount(const int &horizontalFrameCount)
+{
+    if (m_horizontalFrameCount == horizontalFrameCount)
+       return;
+
+    m_horizontalFrameCount = horizontalFrameCount;
+    emit horizontalFrameCountChanged();
+}
+
+int SpriteSheet::verticalFrameCount() const
+{
+    return m_verticalFrameCount;
+}
+
+void SpriteSheet::setVerticalFrameCount(const int &verticalFrameCount)
+{
+    if (m_verticalFrameCount = verticalFrameCount)
+        return;
+
+    m_verticalFrameCount = verticalFrameCount;
+    emit verticalFrameCountChanged();
 }
 
 int SpriteSheet::frame() const
@@ -120,21 +133,82 @@ int SpriteSheet::frame() const
 
 void SpriteSheet::setFrame(const int &frame)
 {
-    if (m_frame != frame
-        && frame < m_frames) { //FIXME: using qt5 and non infinite animations, the property animation updates this value to m_frames, the max should be m_frames-1
+    if (m_frame != frame && frame >= 0 && frame < m_frames) {
         m_frame = frame;
-
         update();
 
         emit frameChanged();
     }
 }
 
+qreal SpriteSheet::frameX() const
+{
+    return m_frameX <= 0.0 ? 0.0 : m_frameX;
+}
+
+void SpriteSheet::setFrameX(const qreal &frameX)
+{
+    if (frameX == m_frameX)
+        return;
+
+    m_frameX = frameX;
+    emit frameXChanged();
+}
+
+qreal SpriteSheet::frameY() const
+{
+    return m_frameY <= 0.0 ? 0.0 : m_frameY;
+}
+
+void SpriteSheet::setFrameY(const qreal &frameY)
+{
+    if (m_frameY == frameY)
+        return;
+
+    m_frameY = frameY;
+    emit frameYChanged();
+}
+
+qreal SpriteSheet::frameWidth() const
+{
+    if (m_frameWidth <= 0.0 && m_frames <= 0 && m_horizontalFrameCount > 0)
+        return m_pixmap.width() / m_horizontalFrameCount;
+
+    return m_frameWidth <= 0.0 && m_frames > 0? m_pixmap.width() / m_frames : m_frameWidth;
+}
+
+void SpriteSheet::setFrameWidth(const qreal &frameWidth)
+{
+    if (m_frameWidth == frameWidth)
+        return;
+
+    m_frameWidth = frameWidth;
+    updateSizeInfo();
+    emit frameWidthChanged();
+}
+
+qreal SpriteSheet::frameHeight() const
+{
+    return m_frameHeight <= 0.0 ? (m_horizontalFrameCount == 0 ? m_pixmap.height() : m_pixmap.height() / m_horizontalFrameCount) : m_frameHeight;
+}
+
+void SpriteSheet::setFrameHeight(const qreal &frameHeight)
+{
+    if (m_frameHeight == frameHeight)
+        return;
+
+    m_frameHeight = frameHeight;
+    updateSizeInfo();
+    emit frameHeightChanged();
+}
+
 void SpriteSheet::updateSizeInfo()
 {
-    m_frameWidth = m_pixMap->width() / m_frames;
-    setWidth(m_frameWidth);
-    setHeight(m_pixMap->height());
+    if (m_pixmap.isNull() || (m_frames <= 0 && m_horizontalFrameCount <= 0))
+        return;
+
+    setImplicitWidth(frameWidth());
+    setImplicitHeight(frameHeight());
 }
 
 int SpriteSheet::initialFrame() const
@@ -151,6 +225,20 @@ void SpriteSheet::setInitialFrame(const int &initialFrame)
     }
 }
 
+int SpriteSheet::finalFrame() const
+{
+    return m_finalFrame;
+}
+
+void SpriteSheet::setFinalFrame(const int &finalFrame)
+{
+    if (m_finalFrame == finalFrame)
+        return;
+
+    m_finalFrame = finalFrame;
+    emit finalFrameChanged();
+}
+
 bool SpriteSheet::verticalMirror() const
 {
     return m_vertical == -1;
@@ -162,6 +250,8 @@ void SpriteSheet::setVerticalMirror(const bool &verticalMirror)
 
     if (m_vertical == -1 || m_horizontal == -1)
         m_mirror = true;
+
+    update();
 }
 
 bool SpriteSheet::horizontalMirror() const
@@ -175,4 +265,6 @@ void SpriteSheet::setHorizontalMirror(const bool &horizontalMirror)
 
     if (m_vertical == -1 || m_horizontal == -1)
         m_mirror = true;
+
+    update();
 }
