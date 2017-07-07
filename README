@@ -74,3 +74,16 @@ $ qmlscene -I ../../build/src/imports main.qml
 ===============
 
 http://bacon2d.com/contact.html
+
+===============
+4. Enhancements
+===============
+
+* Customizable background for TiledScene object (used to override the Tiled image layer)
+* More efficient spritesheet handling
+* Easier to use sprite classes
+
+===========
+5. See also
+===========
+* [Seppuku](https://github.com/obeezzy/Bacon2D), game built with Bacon2D (far from complete)
