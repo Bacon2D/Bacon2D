@@ -211,7 +211,6 @@ int SpriteAnimation::finalFrame() const
 
 void SpriteAnimation::setFinalFrame(const int &finalFrame)
 {
-    qDebug() << "Final frame for 'run'->" << finalFrame;
     m_spriteSheet->setFinalFrame(finalFrame);
     m_spriteAnimation->setEndValue(finalFrame + 1);
 }
