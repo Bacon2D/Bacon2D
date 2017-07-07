@@ -1,20 +1,17 @@
-2D Game Engine for QML
+# 2D Game Engine for QML
 
 Bacon2D is a framework to ease 2D game development, providing ready-to-use QML 
 components useful for creating compeling games.
 
-API documentation can be found at http://bacon2d.com/docs
+API documentation can be found at [here](http://bacon2d.com/docs).
 
-========
-1. Build
-========
+## 1. Build
 
-1.1) Dependencies
+### 1.1) Dependencies
 
-* Qt5
-  	Qt5 source repository: https://qt.gitorious.org/qt/qt5
+* [Qt5](https://qt.gitorious.org/qt/qt5)
 
-1.2) Building
+### 1.2) Building
 
 Available QMake parameters:
 
@@ -25,30 +22,28 @@ Available QMake parameters:
 
 
 If building from a git checkout, you will need to initialize the git submodules:
-
+ ```sh
 $ git submodule update --init
-
+```
 Sample build from Bacon2D's root source tree:
-
+ ```sh
 $ mkdir build && cd build
 $ qmake QTPATH=/opt/Qt5 ..
 $ make
 $ sudo make install
-
+```
 
 *MacOS note*:
 
 If you get some error like 'could not resolve SDK path for...', add 
-'QMAKE_MAC_SDK=MAC_SDK_VERSION'to the qmake command, like this (issue #80):
-
+**'QMAKE_MAC_SDK=MAC_SDK_VERSION'** to the qmake command, like this (issue #80):
+ ```sh
 $ qmake QMAKE_MAC_SDK=macosx10.9 ..
-
-Where MAC_SDK_VERSION points to the OSX version you're using (in the above 
+```
+Where **MAC_SDK_VERSION** points to the OSX version you're using (in the above 
 example it is 10.9.x).
 
-===========
-2. Examples
-===========
+## 2. Examples
 
 If you have installed the QML plugin to the proper Qt import directory,
 you can run the examples directly from their specific source directories.
@@ -57,33 +52,27 @@ Each example can be opened and run from QtCreator, to open the fixtures
 example, open examples/fixtures/fixtures.qmlproject from QtCreator
 
 To run the fixtures example without QtCreator:
-
+ ```sh
 $ cd examples/fixtures
 $ qmlscene main.qml
-
+```
 If Bacon2D QML plugin was not installed you can export QML2_IMPORT_PATH 
 environment variable or specify the path to your built plugin on 
 the command line.
-
+ ```sh
 $ cd examples/fixtures
 $ qmlscene -I ../../build/src/imports main.qml
+```
 
+## 3. Get Involved
 
-===============
-3. Get Involved
-===============
+[Contact us](http://bacon2d.com/contact.html)
 
-http://bacon2d.com/contact.html
-
-===============
-4. Enhancements
-===============
+## 4. Enhancements
 
 * Customizable background for TiledScene object (used to override the Tiled image layer)
 * More efficient spritesheet handling
 * Easier to use sprite classes
 
-===========
-5. See also
-===========
+## 5. See also
 * [Seppuku](https://github.com/obeezzy/Bacon2D), game built with Bacon2D (far from complete)
