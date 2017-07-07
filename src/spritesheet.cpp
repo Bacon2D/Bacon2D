@@ -67,7 +67,6 @@ void SpriteSheet::paint(QPainter *painter)
         else {
             QRectF target = QRectF(boundingRect());
             QPixmap pixmap = m_pixmap.transformed(QTransform().scale(m_horizontal, m_vertical), Qt::FastTransformation);
-            // Add 1 to final frame to include the final frame
             QRectF source = QRectF((horizontalMirror() ? ((m_frames - (m_finalFrame + 1) + m_frame - m_initialFrame) * frameWidth())
                                                        : (m_frame * frameWidth())) + frameX(),
                                    frameY(),
