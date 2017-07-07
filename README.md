@@ -75,4 +75,4 @@ $ qmlscene -I ../../build/src/imports main.qml
 * Easier to use sprite classes
 
 ## 5. See also
-* [Seppuku](https://github.com/obeezzy/Bacon2D), game built with Bacon2D (far from complete)
+* [Seppuku](https://github.com/obeezzy/Seppuku), game built with Bacon2D (far from complete)
