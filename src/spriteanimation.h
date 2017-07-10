@@ -108,6 +108,9 @@ public:
 
     SpriteSheet *spriteSheet();
 
+    SpriteAnimation *previousAnimation() const;
+    void setPreviousAnimation(SpriteAnimation *);
+
 signals:
     void runningChanged();
     void loopsChanged();
@@ -130,6 +133,7 @@ private:
     QString m_name;
     SpriteSheet *m_spriteSheet;
     QPropertyAnimation *m_spriteAnimation;
+    SpriteAnimation *m_previousAnimationItem;
     bool m_inverse;
 };
 

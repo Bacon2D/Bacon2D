@@ -41,6 +41,7 @@ SpriteAnimation::SpriteAnimation(QState *parent)
     , m_spriteSheet(new SpriteSheet)
     , m_spriteAnimation(new QPropertyAnimation(this))
     , m_inverse(false)
+    , m_previousAnimationItem(nullptr)
 {
     connect(m_spriteSheet, SIGNAL(frameChanged()), this, SIGNAL(frameChanged()));
     connect(m_spriteSheet, SIGNAL(framesChanged()), this, SIGNAL(framesChanged()));
@@ -245,6 +246,20 @@ SpriteSheet *SpriteAnimation::spriteSheet()
 {
     return m_spriteSheet;
 }
+
+SpriteAnimation *SpriteAnimation::previousAnimation() const
+{
+    return m_previousAnimationItem;
+}
+
+void SpriteAnimation::setPreviousAnimation(SpriteAnimation *previousAnimationItem)
+{
+    if (m_previousAnimationItem == previousAnimationItem)
+        return;
+
+    m_previousAnimationItem = previousAnimationItem;
+}
+
 
 /*!
  * \qmlproperty int SpriteAnimation::duration

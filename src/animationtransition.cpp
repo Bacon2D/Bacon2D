@@ -54,6 +54,11 @@ void AnimationTransition::onTransition(QEvent *e)
 {
     Q_UNUSED(e)
 
+    if (m_spriteAnimationItem->previousAnimation() != nullptr) {
+        m_spriteAnimationItem->previousAnimation()->setVisible(false);
+        m_spriteAnimationItem->previousAnimation()->setRunning(false);
+    }
+
     m_spriteAnimationItem->spriteSheet()->setVisible(true);
     m_spriteAnimationItem->setRunning(true);
 }

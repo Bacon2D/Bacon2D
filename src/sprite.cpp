@@ -186,19 +186,20 @@ void Sprite::setAnimation(const QString &animation, const bool &force)
     }
 
     if (force || (m_animation != animation)) {
-        if (m_animation != QString() && m_states.contains(m_animation)) {
-            SpriteAnimation *animationItem = m_states[m_animation];
-            animationItem->setRunning(false);
-            animationItem->setVisible(false);
-        }
+        // Store previous animation to stop it later
+        SpriteAnimation *previousAnimationItem = nullptr;
+        if (m_animation != QString() && m_states.contains(m_animation))
+            previousAnimationItem = m_states[m_animation];
 
         m_animation = animation;
 
-        // Set width and height after animation is set
+        // Set width and height after animation is set, also set previous animation
         if (m_animation != QString() && m_states.contains(m_animation)) {
             SpriteAnimation *animationItem = m_states[m_animation];
             setImplicitWidth(animationItem->spriteSheet()->width());
             setImplicitHeight(animationItem->spriteSheet()->height());
+
+            animationItem->setPreviousAnimation(previousAnimationItem);
         }
 
         if (!m_stateMachine)
