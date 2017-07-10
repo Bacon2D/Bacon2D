@@ -65,7 +65,7 @@ void SpriteSheet::paint(QPainter *painter)
         if (!m_frames)
             painter->drawPixmap(0, 0, m_pixmap);
         else {
-            QRectF target = QRectF(boundingRect());
+            QRectF target = QRectF(clipRect());
             QPixmap pixmap = m_pixmap.transformed(QTransform().scale(m_horizontal, m_vertical), Qt::FastTransformation);
             QRectF source = QRectF((horizontalMirror() ? ((m_frames - (m_finalFrame + 1) + m_frame - m_initialFrame) * frameWidth())
                                                        : (m_frame * frameWidth())) + frameX(),
@@ -108,6 +108,12 @@ void SpriteSheet::setHorizontalFrameCount(const int &horizontalFrameCount)
        return;
 
     m_horizontalFrameCount = horizontalFrameCount;
+
+    if (m_frames == 0)
+        setFrames(m_horizontalFrameCount);
+
+    updateSizeInfo();
+
     emit horizontalFrameCountChanged();
 }
 
@@ -122,6 +128,8 @@ void SpriteSheet::setVerticalFrameCount(const int &verticalFrameCount)
         return;
 
     m_verticalFrameCount = verticalFrameCount;
+    updateSizeInfo();
+
     emit verticalFrameCountChanged();
 }
 
@@ -173,7 +181,7 @@ qreal SpriteSheet::frameWidth() const
     if (m_frameWidth <= 0.0 && m_frames <= 0 && m_horizontalFrameCount > 0)
         return m_pixmap.width() / m_horizontalFrameCount;
 
-    return m_frameWidth <= 0.0 && m_frames > 0? m_pixmap.width() / m_frames : m_frameWidth;
+    return (m_frameWidth <= 0.0 && m_frames > 0) ? m_pixmap.width() / m_frames : m_frameWidth;
 }
 
 void SpriteSheet::setFrameWidth(const qreal &frameWidth)
@@ -188,7 +196,7 @@ void SpriteSheet::setFrameWidth(const qreal &frameWidth)
 
 qreal SpriteSheet::frameHeight() const
 {
-    return m_frameHeight <= 0.0 ? (m_horizontalFrameCount == 0 ? m_pixmap.height() : m_pixmap.height() / m_horizontalFrameCount) : m_frameHeight;
+    return m_frameHeight <= 0.0 ? (m_verticalFrameCount == 0 ? m_pixmap.height() : m_pixmap.height() / m_verticalFrameCount) : m_frameHeight;
 }
 
 void SpriteSheet::setFrameHeight(const qreal &frameHeight)

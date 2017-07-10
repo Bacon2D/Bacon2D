@@ -54,6 +54,14 @@ void Sprite::append_animation(QQmlListProperty<SpriteAnimation> *list, SpriteAni
     connect(spriteItem, &Sprite::sourceChanged, [animation, spriteItem]() {
         animation->spriteSheet()->setPixmap(spriteItem->pixmap());
     });
+    connect(spriteItem, &Sprite::verticalFrameCountChanged, [animation, spriteItem]() {
+        animation->spriteSheet()->setVerticalFrameCount(spriteItem->verticalFrameCount());
+    });
+
+    connect(spriteItem, &Sprite::horizontalFrameCountChanged, [animation, spriteItem]() {
+        animation->spriteSheet()->setHorizontalFrameCount(spriteItem->horizontalFrameCount());
+        animation->setFrames(animation->spriteSheet()->frames());
+    });
 }
 
 int Sprite::count_animation(QQmlListProperty<SpriteAnimation> *list)
@@ -182,14 +190,16 @@ void Sprite::setAnimation(const QString &animation, const bool &force)
             SpriteAnimation *animationItem = m_states[m_animation];
             animationItem->setRunning(false);
             animationItem->setVisible(false);
-
-            if (width() == 0 || height() == 0) {
-                setImplicitWidth(animationItem->spriteSheet()->width());
-                setImplicitHeight(animationItem->spriteSheet()->height());
-            }
         }
 
         m_animation = animation;
+
+        // Set width and height after animation is set
+        if (m_animation != QString() && m_states.contains(m_animation)) {
+            SpriteAnimation *animationItem = m_states[m_animation];
+            setImplicitWidth(animationItem->spriteSheet()->width());
+            setImplicitHeight(animationItem->spriteSheet()->height());
+        }
 
         if (!m_stateMachine)
             initializeMachine();
@@ -292,7 +302,7 @@ int Sprite::horizontalFrameCount() const
 
 void Sprite::setHorizontalFrameCount(const int &horizontalFrameCount)
 {
-    if (m_horizontalFrameCount = horizontalFrameCount)
+    if (m_horizontalFrameCount == horizontalFrameCount)
         return;
 
     m_horizontalFrameCount = horizontalFrameCount;
