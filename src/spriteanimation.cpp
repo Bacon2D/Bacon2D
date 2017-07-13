@@ -54,6 +54,8 @@ SpriteAnimation::SpriteAnimation(QState *parent)
 
     connect(m_spriteAnimation, SIGNAL(finished()), this, SIGNAL(finished()));
 
+    connect(m_spriteAnimation, &QPropertyAnimation::stateChanged, this, &SpriteAnimation::onStateChanged);
+
     m_spriteAnimation->setTargetObject(m_spriteSheet);
     m_spriteAnimation->setPropertyName("frame");
     m_spriteAnimation->setStartValue(0);
@@ -84,11 +86,6 @@ bool SpriteAnimation::running() const
 
 void SpriteAnimation::setRunning(const bool &running)
 {
-    if (!m_spriteAnimation) {
-        qWarning() << "SpriteAnimation" << "invalid";
-        return;
-    }
-
     bool currentState = m_spriteAnimation->state() == QAbstractAnimation::Running;
 
     if (currentState != running) {
@@ -258,6 +255,11 @@ void SpriteAnimation::setPreviousAnimation(SpriteAnimation *previousAnimationIte
         return;
 
     m_previousAnimationItem = previousAnimationItem;
+}
+
+void SpriteAnimation::onStateChanged(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
+{
+    setRunning(newState == QAbstractAnimation::Running);
 }
 
 

@@ -129,6 +129,9 @@ signals:
     void inverseChanged();
     void finished();
 
+private slots:
+    void onStateChanged(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
+
 private:
     QString m_name;
     SpriteSheet *m_spriteSheet;

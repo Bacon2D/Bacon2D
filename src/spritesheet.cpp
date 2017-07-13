@@ -65,7 +65,7 @@ void SpriteSheet::paint(QPainter *painter)
         if (!m_frames)
             painter->drawPixmap(0, 0, m_pixmap);
         else {
-            QRectF target = QRectF(clipRect());
+            QRectF target = QRectF(boundingRect());
             QPixmap pixmap = m_pixmap.transformed(QTransform().scale(m_horizontal, m_vertical), Qt::FastTransformation);
             QRectF source = QRectF((horizontalMirror() ? ((m_frames - (m_finalFrame + 1) + m_frame - m_initialFrame) * frameWidth())
                                                        : (m_frame * frameWidth())) + frameX(),

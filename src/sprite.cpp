@@ -152,6 +152,9 @@ void Sprite::setSourceSize(const QSize &sourceSize)
         return;
 
     m_sourceSize = sourceSize;
+    setImplicitWidth(sourceSize.width());
+    setImplicitHeight(sourceSize.height());
+
     emit sourceSizeChanged();
 }
 
