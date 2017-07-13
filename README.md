@@ -74,5 +74,10 @@ $ qmlscene -I ../../build/src/imports main.qml
 * More efficient spritesheet handling
 * Easier to use sprite classes
 
-## 5. See also
+## 5. Bug fixes
+
+* Sprites out of sync with their animations sometimes
+* Multiple SpriteAnimation objects running at once
+
+## 6. See also
 * [Seppuku](https://github.com/obeezzy/Seppuku), game built with Bacon2D (far from complete)
