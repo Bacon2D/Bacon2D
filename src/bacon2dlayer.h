@@ -74,7 +74,7 @@ public:
         Mirrored
     };
 
-    Bacon2DLayer::LayerType layerType() const { return m_type; };
+    Bacon2DLayer::LayerType layerType() const { return m_type; }
     void setLayerType(const Bacon2DLayer::LayerType &type);
 
 signals:
