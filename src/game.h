@@ -72,7 +72,7 @@ public:
     QString gameName();
     void setGameName(const QString& gameName);
 
-    Bacon2D::State gameState() const { return m_state; };
+    Bacon2D::State gameState() const { return m_state; }
     void setGameState(const Bacon2D::State &state);
 
 protected:

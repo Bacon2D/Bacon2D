@@ -67,6 +67,7 @@ signals:
     void backgroundChanged();
 protected:
     QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *);
+    virtual void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
 private:
     TMXMap *m_map;
     QUrl m_source;

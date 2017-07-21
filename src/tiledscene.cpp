@@ -148,9 +148,7 @@ void TiledScene::setSource(const QUrl &source)
     m_image = QPixmap(m_map->tileWidth() * m_map->width(), m_map->tileHeight() * m_map->height());
     m_image.fill(Qt::transparent);
 
-    loadBackground();
     loadLayers();
-
     emit sourceChanged();
 }
 
@@ -171,7 +169,6 @@ void TiledScene::setBackground(QQuickItem *background)
         return;
 
     m_background = background;
-    loadBackground();
     emit backgroundChanged();
 }
 
@@ -303,6 +300,15 @@ QSGNode *TiledScene::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
     node->setRect(boundingRect());
 
     return node;
+}
+
+void TiledScene::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+{
+    Scene::geometryChanged(newGeometry, oldGeometry);
+    if (newGeometry.isEmpty() || !isComponentComplete() || (newGeometry == oldGeometry))
+        return;
+
+    loadBackground();
 }
 
 void TiledScene::componentComplete()
