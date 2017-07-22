@@ -57,6 +57,7 @@ class SpriteAnimation : public QState
     Q_PROPERTY(bool inverse READ inverse WRITE setInverse NOTIFY inverseChanged)
 public:
     SpriteAnimation(QState *parent = 0);
+    ~SpriteAnimation();
 
     QString name() const;
     void setName(const QString &name);

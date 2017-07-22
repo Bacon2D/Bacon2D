@@ -31,7 +31,7 @@
 #include "scene.h"
 #include "game.h"
 #include "behavior.h"
-#include "sprite.h"
+#include "animatedsprite.h"
 #include "../../3rdparty/qml-box2d/box2dbody.h"
 
 
@@ -87,7 +87,7 @@ void Entity::initializeEntities(QQuickItem *parent)
     foreach (item, parent->childItems()) {
         if (Entity *entity = dynamic_cast<Entity *>(item))
             entity->setScene(m_scene);
-        if (Sprite *sprite = dynamic_cast<Sprite *>(item))
+        if (AnimatedSprite *sprite = dynamic_cast<AnimatedSprite *>(item))
             sprite->setEntity(this);
         initializeEntities(item);
     }
@@ -114,7 +114,7 @@ void Entity::itemChange(ItemChange change, const ItemChangeData &data)
         QQuickItem *child = data.item;
         if (Entity *entity = dynamic_cast<Entity *>(child))
             entity->setScene(m_scene);
-        if (Sprite *sprite = dynamic_cast<Sprite *>(child))
+        if (AnimatedSprite *sprite = dynamic_cast<AnimatedSprite *>(child))
             sprite->setEntity(this);
 
         initializeEntities(child);

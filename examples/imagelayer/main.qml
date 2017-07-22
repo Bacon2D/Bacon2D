@@ -59,7 +59,7 @@ Window {
                 }
             }
 
-            Sprite {
+            AnimatedSprite {
                 id: spriteItem
 
                 y: 175

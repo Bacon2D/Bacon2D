@@ -47,7 +47,7 @@ PhysicsEntity {
         }
     ]
 
-    Sprite {
+    AnimatedSprite {
         id: sprite
         animation: "idle"
         horizontalMirror: dog.facingLeft

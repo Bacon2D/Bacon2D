@@ -56,7 +56,7 @@ Window {
             }
 
             Entity {
-                Sprite {
+                AnimatedSprite {
                     id: spriteItem
                     animation: "sliding"
                     source: "images/sprite.png"

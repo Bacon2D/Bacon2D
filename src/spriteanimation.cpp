@@ -61,6 +61,11 @@ SpriteAnimation::SpriteAnimation(QState *parent)
     m_spriteAnimation->setStartValue(0);
 }
 
+SpriteAnimation::~SpriteAnimation()
+{
+    delete m_spriteSheet;
+}
+
 /*!
  * \qmlproperty string SpriteAnimation::name
  * \brief Unique name for the Sprite state

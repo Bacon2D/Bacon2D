@@ -39,7 +39,6 @@ HEADERS += entity.h \
            game.h \
            plugins.h \
            spritesheet.h \
-           sprite.h \
            spriteanimation.h \
            animationtransition.h \
            animationchangeevent.h \
@@ -56,6 +55,8 @@ HEADERS += entity.h \
            tiledobject.h \
            tiledlayer.h \
            tiledscene.h \
+    animatedsprite.h \
+    sprite.h
 
 SOURCES += entity.cpp \
            enums.cpp \
@@ -63,7 +64,6 @@ SOURCES += entity.cpp \
            game.cpp \
            plugins.cpp \
            spritesheet.cpp \
-           sprite.cpp \
            spriteanimation.cpp \
            animationtransition.cpp \
            bacon2dlayer.cpp \
@@ -77,7 +77,9 @@ SOURCES += entity.cpp \
            settings.cpp \
            tiledscene.cpp \
            tiledlayer.cpp \
-           tiledobject.cpp
+           tiledobject.cpp \
+    animatedsprite.cpp \
+    sprite.cpp
 
 !isEmpty(QTPATH): target.path = $$QTPATH/qml/$$TARGETPATH
 else: target.path = $$[QT_INSTALL_QML]/$$replace(TARGETPATH, \\., /).$$API_VER

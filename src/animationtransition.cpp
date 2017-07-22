@@ -29,7 +29,7 @@
 
 #include "animationchangeevent.h"
 #include "spriteanimation.h"
-#include "sprite.h"
+#include "animatedsprite.h"
 #include "spritesheet.h"
 
 #include <QDebug>

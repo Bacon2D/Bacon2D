@@ -47,7 +47,7 @@ Window {
         Component {
             id: spriteComponent
 
-            Sprite {
+            AnimatedSprite {
                 animation: "explosion"
                 source: "explosion.png"
 

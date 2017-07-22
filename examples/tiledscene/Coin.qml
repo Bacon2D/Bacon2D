@@ -20,7 +20,7 @@ PhysicsEntity {
         onBeginContact: picked = true;
     }
 
-    Sprite {
+    AnimatedSprite {
         animation: "spin"
         width: parent.width
         height: parent.height

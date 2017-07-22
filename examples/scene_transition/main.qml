@@ -251,7 +251,7 @@ Window {
                 source: "images/layer_02.png"
             }
 
-            Sprite {
+            AnimatedSprite {
                 id: gameSprite
 
                 x: 10

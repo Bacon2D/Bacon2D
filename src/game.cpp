@@ -35,6 +35,8 @@
 #include <QtQuick/QQuickWindow>
 #include <QtGui/QCursor>
 
+QHash<QUrl, QPixmap> Game::m_loadedPixmaps;
+
 namespace {
     void shutdown(int sig)
     {
@@ -172,6 +174,11 @@ void Game::setGameState(const Bacon2D::State &state)
         this->currentScene()->setRunning(false);
 
     emit gameStateChanged();
+}
+
+QHash<QUrl, QPixmap> Game::loadedPixmaps()
+{
+    return m_loadedPixmaps;
 }
 
 /*!

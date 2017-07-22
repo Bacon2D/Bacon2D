@@ -65,7 +65,7 @@ Window {
                     }
                 }
             }
-            Sprite {
+            AnimatedSprite {
                 id: spriteItem
 
                 x: scene.width / 2 - spriteItem.width / 2

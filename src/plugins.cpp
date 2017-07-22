@@ -33,6 +33,7 @@
 #include "scene.h"
 #include "spriteanimation.h"
 #include "sprite.h"
+#include "animatedsprite.h"
 #include "bacon2dimagelayer.h"
 #include "game.h"
 #include "viewport.h"
@@ -76,6 +77,7 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<Scene>("Bacon2D", 1, 0, "Scene");
     qmlRegisterType<Entity>("Bacon2D", 1, 0, "Entity");
     qmlRegisterType<Sprite>("Bacon2D", 1, 0, "Sprite");
+    qmlRegisterType<AnimatedSprite>("Bacon2D", 1, 0, "AnimatedSprite");
     qmlRegisterType<SpriteAnimation>("Bacon2D", 1, 0, "SpriteAnimation");
     qmlRegisterType<Bacon2DImageLayer>("Bacon2D", 1, 0, "ImageLayer");
     qmlRegisterType<Viewport>("Bacon2D", 1, 0, "Viewport");
