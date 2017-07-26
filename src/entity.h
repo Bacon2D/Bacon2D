@@ -41,6 +41,8 @@ class Entity : public QQuickItem
 {
     Q_OBJECT
 
+    Q_PROPERTY(QString entityId READ entityId NOTIFY entityIdChanged)
+    Q_PROPERTY(QString entityType READ entityType WRITE setEntityType NOTIFY entityTypeChanged)
     Q_PROPERTY(int updateInterval READ updateInterval WRITE setUpdateInterval NOTIFY updateIntervalChanged)
     Q_PROPERTY(Game *game READ game)
     Q_PROPERTY(Scene *scene READ scene NOTIFY sceneChanged)
@@ -49,6 +51,12 @@ class Entity : public QQuickItem
 public:
     Entity(Scene *parent = 0);
     ~Entity();
+
+    QString entityId() const;
+    void setEntityId(const QString &);
+
+    QString entityType() const;
+    void setEntityType(const QString &);
 
     int updateInterval() const;
     void setUpdateInterval(const int &updateInterval);
@@ -67,13 +75,16 @@ signals:
     void updateIntervalChanged();
     void behaviorChanged();
     void sceneChanged();
-
+    void entityIdChanged();
+    void entityTypeChanged();
 protected:
     virtual void componentComplete();
     virtual void itemChange(ItemChange change, const ItemChangeData &data);
     void initializeEntities(QQuickItem *parent);
 
 private:
+    QString m_entityId;
+    QString m_entityType;
     int m_updateInterval;
     QTime m_updateTime;
     Scene *m_scene;

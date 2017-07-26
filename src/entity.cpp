@@ -78,6 +78,34 @@ Entity::~Entity()
 {
 }
 
+QString Entity::entityId() const
+{
+    return m_entityId;
+}
+
+void Entity::setEntityId(const QString &entityId)
+{
+    if (m_entityId == entityId)
+        return;
+
+    m_entityId = entityId;
+    emit entityIdChanged();
+}
+
+QString Entity::entityType() const
+{
+    return m_entityType;
+}
+
+void Entity::setEntityType(const QString &entityType)
+{
+    if (m_entityType == entityType)
+        return;
+
+    m_entityType = entityType;
+    emit entityTypeChanged();
+}
+
 void Entity::initializeEntities(QQuickItem *parent)
 {
     if (!m_scene)

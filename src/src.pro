@@ -56,7 +56,8 @@ HEADERS += entity.h \
            tiledlayer.h \
            tiledscene.h \
     animatedsprite.h \
-    sprite.h
+    sprite.h \
+    entitymanager.h
 
 SOURCES += entity.cpp \
            enums.cpp \
@@ -79,7 +80,8 @@ SOURCES += entity.cpp \
            tiledlayer.cpp \
            tiledobject.cpp \
     animatedsprite.cpp \
-    sprite.cpp
+    sprite.cpp \
+    entitymanager.cpp
 
 !isEmpty(QTPATH): target.path = $$QTPATH/qml/$$TARGETPATH
 else: target.path = $$[QT_INSTALL_QML]/$$replace(TARGETPATH, \\., /).$$API_VER
@@ -123,3 +125,5 @@ qmlpluginfiles.files = $$QMLFILES
 
 QMAKE_EXTRA_TARGETS += qmltypes qmlpluginfiles
 INSTALLS += target qmltypes qmlpluginfiles
+
+DISTFILES +=

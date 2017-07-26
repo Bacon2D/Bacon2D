@@ -40,6 +40,7 @@
 #include "behavior.h"
 #include "scriptbehavior.h"
 #include "settings.h"
+#include "entitymanager.h"
 
 #include "box2dworld.h"
 #include "box2dbody.h"
@@ -84,7 +85,7 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<ScriptBehavior>("Bacon2D", 1, 0, "ScriptBehavior");
     qmlRegisterType<Settings>("Bacon2D", 1, 0, "Settings");
     qmlRegisterType<ScrollBehavior>("Bacon2D", 1, 0, "ScrollBehavior");
-
+    qmlRegisterType<EntityManager>("Bacon2D", 1, 0, "EntityManager");
 
 
     // For TiledScene
