@@ -70,7 +70,7 @@ $ qmlscene -I ../../build/src/imports main.qml
 
 ## 4. Enhancements
 
-* Customizable background for TiledScene object (used to override the Tiled image layer)
+* Customizable background for TiledScene class using any QQuickItem (overrides the Tiled image layer set in TMX file)
 * More efficient spritesheet handling
 * Easier to use sprite classes
 * Added EntityManager class for managing all entities in a game
