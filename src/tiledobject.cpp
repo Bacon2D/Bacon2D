@@ -578,6 +578,7 @@ void TiledObject::createPolylineFixture(const TMXMapObject &object, CollisionIte
         fixture->setCategories(chain->categories());
         fixture->setCollidesWith(chain->collidesWith());
         fixture->setGroupIndex(chain->groupIndex());
+        fixture->setLoop(chain->loop());
 
         connect(chain, SIGNAL(beginContact(Box2DFixture*)), fixture, SIGNAL(beginContact(Box2DFixture*)));
         connect(chain, SIGNAL(endContact(Box2DFixture*)), fixture, SIGNAL(endContact(Box2DFixture*)));

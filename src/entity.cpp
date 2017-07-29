@@ -32,6 +32,7 @@
 #include "game.h"
 #include "behavior.h"
 #include "animatedsprite.h"
+#include "sprite.h"
 #include "../../3rdparty/qml-box2d/box2dbody.h"
 
 
@@ -115,8 +116,8 @@ void Entity::initializeEntities(QQuickItem *parent)
     foreach (item, parent->childItems()) {
         if (Entity *entity = dynamic_cast<Entity *>(item))
             entity->setScene(m_scene);
-        if (AnimatedSprite *sprite = dynamic_cast<AnimatedSprite *>(item))
-            sprite->setEntity(this);
+        if (AnimatedSprite *animatedSprite = dynamic_cast<AnimatedSprite *>(item))
+            animatedSprite->setEntity(this);
         initializeEntities(item);
     }
 }
@@ -124,6 +125,7 @@ void Entity::initializeEntities(QQuickItem *parent)
 void Entity::componentComplete()
 {
     QQuickItem::componentComplete();
+
     if (m_scene && m_scene->physics() && m_scene->world()) {
         foreach (Box2DBody *body, this->findChildren<Box2DBody *>(QString(), Qt::FindDirectChildrenOnly)) {
             body->setTarget(this);

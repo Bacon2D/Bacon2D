@@ -6,8 +6,41 @@
 #include <QQmlComponent>
 #include <QDebug>
 #include <QtQml>
+#include <QFileInfo>
+#include <QQmlIncubator>
 
 EntityManagerSingleton *EntityManagerSingleton::m_entityManagerSingleton = nullptr;
+
+class EntityIncubator : public QQmlIncubator {
+public:
+    EntityIncubator(Scene *parentScene, const QVariantMap &properties = QVariantMap())
+        : m_parentScene(parentScene)
+        , m_properties(properties)
+        , QQmlIncubator(IncubationMode::AsynchronousIfNested) { }
+protected:
+    virtual void setInitialState(QObject *object) {
+        if (!object)
+            return;
+
+        Entity *entity = qobject_cast<Entity *>(object);
+        if (!entity)
+            return;
+
+        entity->setParent(m_parentScene);
+        entity->setParentItem(m_parentScene);
+
+        if (!m_properties.isEmpty()) {
+            QVariantMap::const_iterator iter;
+            for (iter = m_properties.constBegin(); iter != m_properties.constEnd(); ++iter) {
+                if (entity->property(iter.key().toStdString().c_str()).isValid())
+                    entity->setProperty(iter.key().toStdString().c_str(), iter.value());
+            }
+        }
+    }
+private:
+    Scene *m_parentScene;
+    QVariantMap m_properties;
+};
 
 EntityManagerSingleton::EntityManagerSingleton(QObject *parent)
     : QObject(parent)
@@ -25,29 +58,53 @@ EntityManagerSingleton &EntityManagerSingleton::instance()
     return *m_entityManagerSingleton;
 }
 
-Entity *EntityManagerSingleton::createEntity(const QVariant &item, QQuickItem *parentScene, QQmlEngine *engine)
+Entity *EntityManagerSingleton::createEntity(const QVariant &item, Scene *parentScene, QQmlEngine *engine)
 {
-    if (item.isNull())
+    if (item.isNull()) {
+        qWarning() << Q_FUNC_INFO << ", Item passed in is null.";
         return nullptr;
+    }
+    if (!parentScene) {
+        qWarning() << Q_FUNC_INFO << ", parent Scene is null.";
+        return nullptr;
+    }
 
-    if (item.type() == QVariant::String)
+    if (item.type() == QVariant::String && (item.toString().startsWith("file:/") || item.toString().startsWith("http:/") || item.toString().startsWith("https:/")))
     {
         const QUrl source = item.toUrl();
 
         QQmlComponent component(engine, source);
-        Entity *entity = qobject_cast<Entity *>(component.create(QQmlEngine::contextForObject(parentScene)));
-        if (entity)
-            entity->setParentItem(parentScene);
+        EntityIncubator incubator(parentScene);
+        component.create(incubator);
+
+        Entity *entity = qobject_cast<Entity *>(incubator.object());
         return addEntity(entity);
     }
 
-    QQmlComponent *component = qvariant_cast<QQmlComponent *>(item);
-    if (component)
+    else if (item.type() == QVariant::String)
     {
-        Entity *entity = qobject_cast<Entity *>(component->create(QQmlEngine::contextForObject(parentScene)));
-        if (entity)
-            entity->setParentItem(parentScene);
+        const QUrl source = QQmlEngine::contextForObject(parentScene)->resolvedUrl(QUrl(item.toString()));
+
+        QQmlComponent component(engine, source);
+        EntityIncubator incubator(parentScene);
+        component.create(incubator);
+
+        Entity *entity = qobject_cast<Entity *>(incubator.object());
         return addEntity(entity);
+    }
+
+    else {
+        QQmlComponent *component = qvariant_cast<QQmlComponent *>(item);
+        if (component)
+        {
+            EntityIncubator incubator(parentScene);
+            component->create(incubator);
+
+            Entity *entity = qobject_cast<Entity *>(incubator.object());
+            return addEntity(entity);
+        }
+        else
+            qWarning() << Q_FUNC_INFO << ", Item passed (" << item.toString() << ") in is not a component nor a file URL.";
     }
 
     return nullptr;
@@ -84,7 +141,6 @@ Entity *EntityManagerSingleton::getEntity(const QString &entityId)
 void EntityManagerSingleton::removeEntity(const QString &entityId)
 {
     Entity *entity = m_entityMap.take(entityId);
-    //QMetaObject::invokeMethod(entity, "destroy");
     entity->deleteLater();
 }
 
@@ -139,7 +195,10 @@ Entity *EntityManager::getEntity(const QString &entityId)
 
 void EntityManager::removeEntity(const QString &entityId)
 {
+    const int initialCount = EntityManagerSingleton::instance().entityCount();
     EntityManagerSingleton::instance().removeEntity(entityId);
+    if (initialCount != entityCount())
+        emit entityCountChanged();
 }
 
 int EntityManager::entityCount() const

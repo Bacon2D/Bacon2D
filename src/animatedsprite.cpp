@@ -36,6 +36,9 @@
 
 #include <QTime>
 #include <QDebug>
+#include <QQmlEngine>
+#include <QQmlContext>
+#include <QQmlApplicationEngine>
 
 void AnimatedSprite::append_animation(QQmlListProperty<SpriteAnimation> *list, SpriteAnimation *animation)
 {
@@ -323,10 +326,6 @@ void AnimatedSprite::setEntity(Entity *entity)
         return;
 
     m_entity = entity;
-    if (!m_game) {
-        m_game = m_entity->scene()->game();
-        connect(m_game, SIGNAL(gameStateChanged()), this, SLOT(onGameStateChanged()));
-    }
     emit entityChanged();
 }
 
@@ -334,6 +333,20 @@ void AnimatedSprite::onGameStateChanged()
 {
     if (m_state != Bacon2D::Inactive)
         this->setSpriteState(m_game->gameState());
+}
+
+void AnimatedSprite::componentComplete()
+{
+    QQuickItem::componentComplete();
+
+    if (!m_game) {
+        QQmlApplicationEngine *engine = qobject_cast<QQmlApplicationEngine *>(qmlEngine(this));
+
+        if (engine && !engine->rootObjects().isEmpty()) {
+            m_game = engine->rootObjects().first()->findChild<Game *>();
+            connect(m_game, SIGNAL(gameStateChanged()), this, SLOT(onGameStateChanged()));
+        }
+    }
 }
 
 /*!

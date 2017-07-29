@@ -15,7 +15,7 @@ class EntityManagerSingleton : public QObject
 public:
     static EntityManagerSingleton &instance();
 
-    Entity *createEntity(const QVariant &, QQuickItem *parentScene, QQmlEngine *engine);
+    Entity *createEntity(const QVariant &, Scene *parentScene, QQmlEngine *engine);
     Entity *addEntity(Entity *entity);
     Entity *getEntity(const QString &entityId);
     void removeEntity(const QString &entityId);

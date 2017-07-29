@@ -106,6 +106,9 @@ signals:
     void sourceChanged();
     void sourceSizeChanged();
 
+protected:
+    virtual void componentComplete();
+
 private:
     void initializeMachine();
 
