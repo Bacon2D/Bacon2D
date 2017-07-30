@@ -29,6 +29,7 @@
 #include "plugins.h"
 
 #include "entity.h"
+#include "physicsentity.h"
 #include "enums.h"
 #include "scene.h"
 #include "spriteanimation.h"
@@ -77,6 +78,7 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<Game>("Bacon2D", 1, 0, "Game");
     qmlRegisterType<Scene>("Bacon2D", 1, 0, "Scene");
     qmlRegisterType<Entity>("Bacon2D", 1, 0, "Entity");
+    qmlRegisterType<PhysicsEntity>("Bacon2D", 1, 0, "PhysicsEntity");
     qmlRegisterType<Sprite>("Bacon2D", 1, 0, "Sprite");
     qmlRegisterType<AnimatedSprite>("Bacon2D", 1, 0, "AnimatedSprite");
     qmlRegisterType<SpriteAnimation>("Bacon2D", 1, 0, "SpriteAnimation");

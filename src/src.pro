@@ -57,7 +57,8 @@ HEADERS += entity.h \
            tiledscene.h \
     animatedsprite.h \
     sprite.h \
-    entitymanager.h
+    entitymanager.h \
+    physicsentity.h
 
 SOURCES += entity.cpp \
            enums.cpp \
@@ -81,7 +82,8 @@ SOURCES += entity.cpp \
            tiledobject.cpp \
     animatedsprite.cpp \
     sprite.cpp \
-    entitymanager.cpp
+    entitymanager.cpp \
+    physicsentity.cpp
 
 !isEmpty(QTPATH): target.path = $$QTPATH/qml/$$TARGETPATH
 else: target.path = $$[QT_INSTALL_QML]/$$replace(TARGETPATH, \\., /).$$API_VER
@@ -89,7 +91,6 @@ else: target.path = $$[QT_INSTALL_QML]/$$replace(TARGETPATH, \\., /).$$API_VER
 
 QMLFILES += \
             $$PWD/InfiniteScrollEntity.qml \
-            $$PWD/PhysicsEntity.qml \
             $$PWD/BoxBody.qml \
             $$PWD/ChainBody.qml \
             $$PWD/CircleBody.qml \

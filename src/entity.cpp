@@ -126,6 +126,7 @@ void Entity::componentComplete()
 {
     QQuickItem::componentComplete();
 
+    setScene(qobject_cast<Scene *>(parentItem()));
     if (m_scene && m_scene->physics() && m_scene->world()) {
         foreach (Box2DBody *body, this->findChildren<Box2DBody *>(QString(), Qt::FindDirectChildrenOnly)) {
             body->setTarget(this);

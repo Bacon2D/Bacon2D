@@ -74,6 +74,7 @@ $ qmlscene -I ../../build/src/imports main.qml
 * More efficient spritesheet handling
 * Easier to use sprite classes
 * Added EntityManager class for managing all entities in a game
+* Converted PhysicsEntity QML class to PhysicsEntity C++ class (as suggested by adderly)
 
 ## 5. Bug fixes
 

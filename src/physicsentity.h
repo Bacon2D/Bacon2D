@@ -1,23 +1,42 @@
-import QtQuick 2.0
-import Bacon2D 1.0
+#ifndef PHYSICSENTITY_H
+#define PHYSICSENTITY_H
 
-/*!
-  \qmltype PhysicsEntity
-  \inqmlmodule Bacon2D
-  \inherits Entity
-  \ingroup physics
-  \brief An \l Entity that participates in the \l Box2D physics world
-*/
-Entity {
-    id: item
+#include <QObject>
+#include "entity.h"
+#include "box2dbody.h"
 
-    transformOrigin: Item.TopLeft
+class QPointF;
+class Box2DBody;
+class Box2DWorld;
+class Box2DFixture;
+
+class PhysicsEntity : public Entity
+{
+    Q_OBJECT
+
+    Q_PROPERTY(Box2DBody* body READ body)
+    Q_PROPERTY(Box2DWorld* world READ world WRITE setWorld NOTIFY worldChanged)
+    Q_PROPERTY(QQuickItem* target READ target WRITE setTarget NOTIFY targetChanged)
+    Q_PROPERTY(float linearDamping READ linearDamping WRITE setLinearDamping NOTIFY linearDampingChanged)
+    Q_PROPERTY(float angularDamping READ angularDamping WRITE setAngularDamping NOTIFY angularDampingChanged)
+    Q_PROPERTY(float angularVelocity READ angularVelocity WRITE setAngularVelocity NOTIFY angularVelocityChanged)
+    Q_PROPERTY(QPointF linearVelocity READ linearVelocity WRITE setLinearVelocity NOTIFY linearVelocityChanged)
+    Q_PROPERTY(Box2DBody::BodyType bodyType READ bodyType WRITE setBodyType NOTIFY bodyTypeChanged)
+    Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
+    Q_PROPERTY(float gravityScale READ gravityScale WRITE setGravityScale NOTIFY gravityScaleChanged)
+    Q_PROPERTY(bool bullet READ isBullet WRITE setBullet NOTIFY bulletChanged)
+    Q_PROPERTY(bool sleepingAllowed READ isSleepingAllowed WRITE setSleepingAllowed NOTIFY sleepingAllowedChanged)
+    Q_PROPERTY(bool fixedRotation READ hasFixedRotation WRITE setFixedRotation NOTIFY fixedRotationChanged)
+    Q_PROPERTY(bool awake READ isAwake WRITE setAwake NOTIFY awakeChanged)
+    Q_PROPERTY(QQmlListProperty<Box2DFixture> fixtures READ fixtures)
+public:
+    explicit PhysicsEntity(Scene *parent = nullptr);
 
     /*!
       \qmlproperty Body PhysicsEntity::body
       \brief \l Box2D Bodyin the physics world
     */
-    property alias body: itemBody
+    Box2DBody* body() {  return m_body; }
 
     // Body properties
     /*!
@@ -25,10 +44,12 @@ Entity {
       \brief The world defines the physics world of the game, and all bodies found in the world
        can interact/react with other bodies in the world.
     */
-    property alias world: itemBody.world
+    Box2DWorld *world() const;
+    void setWorld(Box2DWorld *world);
 
     /*! \internal */
-    property alias target: itemBody.target
+    QQuickItem *target() const;
+    void setTarget(QQuickItem *target);
 
     /*!
       \qmlproperty float PhysicsEntity::linearDamping
@@ -36,7 +57,8 @@ Entity {
        parameter can be larger than 1.0f but the damping effect becomes sensitive
        to the time step when the damping parameter is large.
     */
-    property alias linearDamping: itemBody.linearDamping
+    float linearDamping() const;
+    void setLinearDamping(float linearDamping);
 
     /*!
       \qmlproperty float PhysicsEntity::angularDamping
@@ -44,20 +66,23 @@ Entity {
        parameter can be larger than 1.0f but the damping effect becomes sensitive
        to the time step when the damping parameter is large.
     */
-    property alias angularDamping: itemBody.angularDamping
+    float angularDamping() const;
+    void setAngularDamping(float angularDamping);
 
     /*!
       \qmlproperty float PhysicsEntity::angularVelocity
       \brief This property holds the angular velocity of the entity.
     */
-    property alias angularVelocity: itemBody.angularVelocity
+    float angularVelocity() const;
+    void setAngularVelocity(float angularVelocity);
 
     /*!
       \qmlproperty QPointF PhysicsEntity::linearVelocity
       \brief This property holds the linear velocity of the entity's origin
        in world co-ordinates.
     */
-    property alias linearVelocity: itemBody.linearVelocity
+    QPointF linearVelocity() const;
+    void setLinearVelocity(const QPointF &);
 
     /*!
       \qmlproperty enumeration PhysicsEntity::bodyType
@@ -87,20 +112,23 @@ Entity {
              of one kilogram and it won’t rotate.
       \endtable
     */
-    property alias bodyType: itemBody.bodyType
+    Box2DBody::BodyType bodyType() const;
+    void setBodyType(Box2DBody::BodyType bodyType);
 
     /*!
       \qmlproperty bool PhysicsEntity::active
       \brief Returns true if the Body is active, or False if it is sleeping
     */
-    property alias active: itemBody.active
+    bool isActive() const;
+    void setActive(bool active);
 
     /*!
       \qmlproperty float PhysicsEntity::gravityScale
       \brief This property represents the scale to adjust the gravity on
        a single entity.
     */
-    property alias gravityScale: itemBody.gravityScale
+    float gravityScale() const;
+    void setGravityScale(float gravityScale);
 
     /*!
       \qmlproperty bool PhysicsEntity::bullet
@@ -121,8 +149,8 @@ Entity {
        Fast moving objects in Box2D can be labeled as bullets. Bullets will perform CCD with both static and
        dynamic bodies. You should decide what bodies should be bullets based on your game design.
     */
-    property alias bullet: itemBody.bullet
-
+    bool isBullet() const;
+    void setBullet(bool bullet);
     /*!
       \qmlproperty bool PhysicsEntity::sleepingAllowed
       \brief What does sleep mean? Well it is expensive to simulate bodies, so the less we have to simulate the
@@ -135,7 +163,8 @@ Entity {
 
        The sleepingAllowed property lets you specify whether a body can sleep and whether a body is created sleeping.
     */
-    property alias sleepingAllowed: itemBody.sleepingAllowed
+    bool isSleepingAllowed() const;
+    void setSleepingAllowed(bool sleepingAllowed);
 
     /*!
       \qmlproperty bool PhysicsEntity::fixedRotation
@@ -143,145 +172,61 @@ Entity {
       \brief You may want a rigid body, such as a character, to have a fixed rotation. Such a body should not rotate,
        even under load. You can use the fixedRotation property to achieve this.
     */
-    property alias fixedRotation: itemBody.fixedRotation
+    bool hasFixedRotation() const;
+    void setFixedRotation(bool fixedRotation);
 
     /*!
       \qmlproperty bool PhysicsEntity::awake
       \brief Returns True if the Body is awake, or False if it is sleeping.
     */
-    property alias awake: itemBody.awake
+    bool isAwake() const;
+    void setAwake(bool awake);
 
     /*!
       \qmlproperty list<Fixture> PhysicsEntity::fixtures
       \brief This property holds a list of Box2D fixtures contained within the current Body.
     */
-    property alias fixtures: itemBody.fixtures
+    QQmlListProperty<Box2DFixture> fixtures();
 
-    /*!
-      \qmlmethod void PhysicsEntity::applyForce(const QPointF force, const QPointF point)
-    */
-    function applyForce(force, point) {
-        itemBody.applyForce(force, point);
-    }
+    Q_INVOKABLE void applyForce(QPointF force,QPointF point);
+    Q_INVOKABLE void applyForceToCenter(QPointF force);
+    Q_INVOKABLE void applyTorque(qreal torque);
+    Q_INVOKABLE void applyLinearImpulse(QPointF impulse, QPointF point);
+    Q_INVOKABLE void applyAngularImpulse(qreal torque);
+    Q_INVOKABLE QPointF getWorldCenter();
+    Q_INVOKABLE QPointF getLocalCenter();
+    Q_INVOKABLE float getMass();
+    Q_INVOKABLE void resetMassData();
+    Q_INVOKABLE float getInertia();
+    Q_INVOKABLE QPointF toWorldPoint(QPointF localPoint);
+    Q_INVOKABLE QPointF toWorldVector(QPointF localVector);
+    Q_INVOKABLE QPointF toLocalPoint(QPointF worlPoint);
+    Q_INVOKABLE QPointF toLocalVector(QPointF worldVector);
+    Q_INVOKABLE QPointF getLinearVelocityFromWorldPoint(QPointF point);
+    Q_INVOKABLE QPointF getLinearVelocityFromLocalPoint(QPointF point);
+protected:
+    virtual void componentComplete();
+signals:
+    void worldChanged();
+    void bodyTypeChanged();
+    void targetChanged();
+    void linearDampingChanged();
+    void linearVelocityChanged();
+    void angularDampingChanged();
+    void angularVelocityChanged();
+    void activeChanged();
+    void gravityScaleChanged();
+    void bulletChanged();
+    void sleepingAllowedChanged();
+    void fixedRotationChanged();
+    void awakeChanged();
+private:
+    Box2DBody* m_body;
+    QList<Box2DFixture *> m_fixtures;
 
-    /*!
-      \qmlmethod void PhysicsEntity::applyForceToCenter(const QPointF &force)
-    */
-    function applyForceToCenter(force) {
-        itemBody.applyForceToCenter(force);
-    }
+    static void append_fixture(QQmlListProperty<Box2DFixture> *, Box2DFixture *fixture);
+    static int count_fixture(QQmlListProperty<Box2DFixture> *list);
+    static Box2DFixture *at_fixture(QQmlListProperty<Box2DFixture> *list, int index);
+};
 
-    /*!
-      \qmlmethod void PhysicsEntity::applyTorque(qreal torque)
-    */
-    function applyTorque(torque) {
-        itemBody.applyTorque(torque);
-    }
-
-    /*!
-      \qmlmethod void PhysicsEntity::applyLinearImpulse(const QPointF &impulse, const QPointF &point)
-    */
-    function applyLinearImpulse(impulse, point) {
-        itemBody.applyLinearImpulse(impulse, point);
-    }
-
-    /*!
-      \qmlmethod void PhysicsEntity::applyAngularImpulse(qreal impulse)
-    */
-    function applyAngularImpulse(impulse) {
-        itemBody.applyAngularImpulse(impulse);
-    }
-
-    /*!
-      \qmlmethod QPointF PhysicsEntity::getWorldCenter() const
-    */
-    function getWorldCenter() {
-        return itemBody.getWorldCenter();
-    }
-
-    /*!
-      \qmlmethod QPointF PhysicsEntity::getLocalCenter() const
-    */
-    function getLocalCenter() {
-        return itemBody.getLocalCenter();
-    }
-
-    /*!
-      \qmlmethod float PhysicsEntity::getMass() const
-    */
-    function getMass() {
-        return itemBody.getMass();
-    }
-
-    /*!
-      \qmlmethod float PhysicsEntity::resetMassData()
-    */
-    function resetMassData() {
-        return itemBody.resetMassData();
-    }
-
-    /*!
-      \qmlmethod float PhysicsEntity::getInertia() const
-    */
-    function getInertia() {
-        return itemBody.getInertia();
-    }
-
-    /*!
-      \qmlmethod QPointF PhysicsEntity::toWorldPoint(const QPointF &localPoint) const
-    */
-    function toWorldPoint(localPoint) {
-        return itemBody.toWorldPoint(localPoint);
-    }
-
-    /*!
-      \qmlmethod QPointF PhysicsEntity::toWorldVector(const QPointF &localVector) const
-    */
-    function toWorldVector(localVector) {
-        return itemBody.toWorldVector(localVector);
-    }
-
-    /*!
-      \qmlmethod QPointF PhysicsEntity::toLocalPoint(const QPointF &worldPoint) const
-    */
-    function toLocalPoint(worldPoint) {
-        return itemBody.toLocalPoint(worldPoint);
-    }
-
-    /*!
-      \qmlmethod QPointF PhysicsEntity::toLocalVector(const QPointF &worldVector) const
-    */
-    function toLocalVector(worldVector) {
-        return itemBody.toLocalVector(worldVector);
-    }
-
-    /*!
-      \qmlmethod QPointF PhysicsEntity::getLinearVelocityFromWorldPoint(const QPointF &point) const
-    */
-    function getLinearVelocityFromWorldPoint(point) {
-        return itemBody.getLinearVelocityFromWorldPoint(point);
-    }
-
-    /*!
-      \qmlmethod QPointF PhysicsEntity::getLinearVelocityFromLocalPoint(const QPointF &point) const
-    */
-    function getLinearVelocityFromLocalPoint(point) {
-        return itemBody.getLinearVelocityFromLocalPoint(point);
-    }
-
-    /*!
-      \qmlsignal void PhysicsEntity::bodyCreated()
-      \brief Emitted when the Box2D body has finished initialization
-    */
-    signal bodyCreated()
-
-    Body {
-        id: itemBody
-        world: scene.world
-        target: item
-        signal beginContact(Fixture other)
-        signal endContact(Fixture other)
-    }
-}
-
-
+#endif // PHYSICSENTITY_H

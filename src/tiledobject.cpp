@@ -336,8 +336,6 @@ void TiledObject::initialize()
         m_objectGroup->deleteLater();
 
     m_objectGroup = new TMXObjectGroup(*tiledLayer->layer(), this);
-    if(!m_objectGroup)
-        return;
 
     int collisions = 0;
     m_collisionIndex = -1;
@@ -348,18 +346,16 @@ void TiledObject::initialize()
             if(!static_cast<TiledScene *>(tiledLayer->parentItem()))
                 return;
 
-            //if(!collisions) {
-                setProperties(object.properties());
+            setProperties(object.properties());
 
-                setX(object.x());
-                setY(object.y());
-                setWidth(object.width());
-                setHeight(object.height());
-                setRotation(object.rotation());
+            setX(object.x());
+            setY(object.y());
+            setWidth(object.width());
+            setHeight(object.height());
+            setRotation(object.rotation());
 
-                setVisible(object.isVisible());
-                setId(object.id());
-            //}
+            setVisible(object.isVisible());
+            setId(object.id());
 
             CollisionItem *item = new CollisionItem(tiledLayer->parentItem());
             item->setX(object.x());
