@@ -276,7 +276,7 @@ void TiledScene::loadTileLayer(const TMXTileLayer &layer)
 void TiledScene::loadImageLayer(const TMXImageLayer &layer)
 {
     const QPixmap &image = layer.image();
-    const QPoint &pos = layer.position();
+    const QPointF &pos = layer.offset();
     const QSize &size = QSize(image.width(), image.height());
 
     QPainter painter(&m_image);
