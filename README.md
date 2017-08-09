@@ -75,6 +75,7 @@ $ qmlscene -I ../../build/src/imports main.qml
 * Easier to use sprite classes
 * Added EntityManager class for managing all entities in a game
 * Converted PhysicsEntity QML class to PhysicsEntity C++ class (as suggested by adderly)
+* Added PausableTimer class, QML Timer with the ability to pause and resume at will
 
 ## 5. Bug fixes
 

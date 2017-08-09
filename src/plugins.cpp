@@ -43,6 +43,8 @@
 #include "settings.h"
 #include "entitymanager.h"
 
+#include "pausabletimer.h"
+
 #include "box2dworld.h"
 #include "box2dbody.h"
 #include "box2ddebugdraw.h"
@@ -88,6 +90,9 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<Settings>("Bacon2D", 1, 0, "Settings");
     qmlRegisterType<ScrollBehavior>("Bacon2D", 1, 0, "ScrollBehavior");
     qmlRegisterType<EntityManager>("Bacon2D", 1, 0, "EntityManager");
+
+    // Utilities
+    qmlRegisterType<PausableTimer>("Bacon2D", 1, 0, "PausableTimer");
 
 
     // For TiledScene

@@ -58,7 +58,8 @@ HEADERS += entity.h \
     animatedsprite.h \
     sprite.h \
     entitymanager.h \
-    physicsentity.h
+    physicsentity.h \
+    pausabletimer.h
 
 SOURCES += entity.cpp \
            enums.cpp \
@@ -83,7 +84,8 @@ SOURCES += entity.cpp \
     animatedsprite.cpp \
     sprite.cpp \
     entitymanager.cpp \
-    physicsentity.cpp
+    physicsentity.cpp \
+    pausabletimer.cpp
 
 !isEmpty(QTPATH): target.path = $$QTPATH/qml/$$TARGETPATH
 else: target.path = $$[QT_INSTALL_QML]/$$replace(TARGETPATH, \\., /).$$API_VER
