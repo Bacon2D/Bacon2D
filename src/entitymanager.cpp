@@ -133,12 +133,48 @@ Entity *EntityManagerSingleton::addEntity(Entity *entity)
     return entity;
 }
 
+Entity *EntityManagerSingleton::findEntity(const QString &entityType, const QString &property, const QVariant &value)
+{
+    if (entityType.isEmpty() || property.isEmpty() || value.isNull())
+        return nullptr;
+
+    const QStringList &entityIds = m_groupMap.value(entityType);
+    for (const QString &entityId : entityIds) {
+        if (entityId.startsWith(entityType) && m_entityMap.value(entityId) && m_entityMap.value(entityId)->property(property.toStdString().c_str()) == value)
+            return m_entityMap.value(entityId);
+    }
+
+    return nullptr;
+}
+
 Entity *EntityManagerSingleton::getEntity(const QString &entityId)
 {
     return m_entityMap.value(entityId);
 }
 
-void EntityManagerSingleton::removeEntity(const QString &entityId)
+void EntityManagerSingleton::destroyAllEntities(const QString &entityType)
+{
+    if (entityType.isEmpty()) {
+        for (Entity *entity : m_entityMap.values())
+            entity->deleteLater();
+
+        m_entityMap.clear();
+        m_groupMap.clear();
+    }
+    else {
+        const QStringList &entityIds = m_groupMap.value(entityType);
+        for (const QString &entityId : entityIds) {
+            if (entityId.startsWith(entityType) && m_entityMap.value(entityId)) {
+                Entity *entity = m_entityMap.take(entityId);
+                entity->deleteLater();
+            }
+        }
+
+        m_groupMap.remove(entityType);
+    }
+}
+
+void EntityManagerSingleton::destroyEntity(const QString &entityId)
 {
     Entity *entity = m_entityMap.take(entityId);
     entity->deleteLater();
@@ -188,15 +224,20 @@ Entity *EntityManager::createEntity(const QVariant &item)
     return entity;
 }
 
+Entity *EntityManager::findEntity(const QString &entityType, const QString &property, const QVariant &value)
+{
+    return EntityManagerSingleton::instance().findEntity(entityType, property, value);
+}
+
 Entity *EntityManager::getEntity(const QString &entityId)
 {
     return EntityManagerSingleton::instance().getEntity(entityId);
 }
 
-void EntityManager::removeEntity(const QString &entityId)
+void EntityManager::destroyEntity(const QString &entityId)
 {
     const int initialCount = EntityManagerSingleton::instance().entityCount();
-    EntityManagerSingleton::instance().removeEntity(entityId);
+    EntityManagerSingleton::instance().destroyEntity(entityId);
     if (initialCount != entityCount())
         emit entityCountChanged();
 }
@@ -209,6 +250,11 @@ int EntityManager::entityCount() const
 int EntityManager::getEntityCount(const QString &entityType)
 {
     return EntityManagerSingleton::instance().entityCount(entityType);
+}
+
+void EntityManager::destroyAllEntities(const QString &entityType)
+{
+    EntityManagerSingleton::instance().destroyAllEntities(entityType);
 }
 
 Scene *EntityManager::parentScene() const

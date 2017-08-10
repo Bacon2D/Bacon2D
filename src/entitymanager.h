@@ -17,8 +17,10 @@ public:
 
     Entity *createEntity(const QVariant &, Scene *parentScene, QQmlEngine *engine);
     Entity *addEntity(Entity *entity);
+    Entity *findEntity(const QString &entityType, const QString &property, const QVariant &value);
     Entity *getEntity(const QString &entityId);
-    void removeEntity(const QString &entityId);
+    void destroyEntity(const QString &entityId);
+    void destroyAllEntities(const QString &entityType = QString());
     int entityCount(const QString &entityType = QString());
 
     QString generateId(const QString &entityType) const;
@@ -38,9 +40,11 @@ public:
     EntityManager(QQuickItem *parent = nullptr);
 
     Q_INVOKABLE Entity *createEntity(const QVariant &);
+    Q_INVOKABLE Entity *findEntity(const QString &entityType, const QString &property, const QVariant &value);
     Q_INVOKABLE Entity *getEntity(const QString &entityId);
-    Q_INVOKABLE void removeEntity(const QString &entityId);
+    Q_INVOKABLE void destroyEntity(const QString &entityId);
     Q_INVOKABLE int getEntityCount(const QString &entityType = QString());
+    Q_INVOKABLE void destroyAllEntities(const QString &entityType = QString());
 
     int entityCount() const;
 
