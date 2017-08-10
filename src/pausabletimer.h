@@ -32,9 +32,7 @@ public:
     bool triggeredOnStart() const;
     void setTriggeredOnStart(bool triggeredOnStart);
 signals:
-    void timeout();
-    void startupTimeout();
-
+    void triggered();
     void runningChanged();
     void intervalChanged();
     void repeatChanged();

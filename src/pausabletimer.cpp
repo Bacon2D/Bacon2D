@@ -20,7 +20,7 @@ void PausableTimer::classBegin()
 void PausableTimer::componentComplete()
 {
     if (m_timer->isActive() && m_triggeredOnStart)
-        emit timeout();
+        emit triggered();
 }
 
 bool PausableTimer::running() const
@@ -124,7 +124,7 @@ void PausableTimer::stop()
 
 void PausableTimer::onTimeout()
 {
-    emit timeout();
+    emit triggered();
 
     m_timer->setInterval(m_interval);
     if (m_repeat)
