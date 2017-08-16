@@ -214,7 +214,6 @@ TiledObject::TiledObject(QQuickItem *parent) :
     QQuickItem(parent)
   , m_id(0)
   , m_objectGroup(0)
-  , m_body(0)
   , m_collisionIndex(-1)
   , m_componentCompleted(false)
 {
@@ -266,24 +265,6 @@ void TiledObject::setType(const QString &type)
 
     m_type = type;
     emit typeChanged();
-}
-
-/*!
-  \qmlproperty Body TiledObject::body
-  \brief This property holds the Box2D body of the TMX object in the TMX map.
-*/
-Box2DBody *TiledObject::body() const
-{
-    return m_body;
-}
-
-void TiledObject::setBody(Box2DBody *body)
-{
-    if(m_body == body)
-        return;
-
-    m_body = body;
-    emit bodyChanged();
 }
 
 /*!
@@ -388,7 +369,6 @@ void TiledObject::initialize()
                 break;
             }
 
-            setBody(item->body());
             collisions++;
         }
     }
@@ -418,6 +398,8 @@ void TiledObject::createRectangularFixture(const TMXMapObject &object, Collision
             return;
 
         Box2DBox *fixture = new Box2DBox(item);
+
+        copyProperties(box, fixture);
 
         // Add x and y values set by user as offsets
         fixture->setX(box->x());
@@ -468,6 +450,8 @@ void TiledObject::createEllipseFixture(const TMXMapObject &object, CollisionItem
 
         Box2DCircle *fixture = new Box2DCircle(item);
 
+        copyProperties(circle, fixture);
+
         fixture->setX(circle->x());
         fixture->setY(circle->y());
 
@@ -517,6 +501,8 @@ void TiledObject::createPolygonFixture(const TMXMapObject &object, CollisionItem
             return;
         Box2DPolygon *fixture = new Box2DPolygon(item);
 
+        copyProperties(polygon, fixture);
+
         QVariantList vertices = polygon->vertices().isEmpty() ? object.polygonAsList()
                                                                 : polygon->vertices();
         fixture->setVertices(vertices);
@@ -563,6 +549,8 @@ void TiledObject::createPolylineFixture(const TMXMapObject &object, CollisionIte
 
         Box2DChain *fixture = new Box2DChain(item);
 
+        copyProperties(chain, fixture);
+
         QVariantList vertices = chain->vertices().isEmpty() ? object.polygonAsList()
                                                                 : chain->vertices();
         fixture->setVertices(vertices);
@@ -583,6 +571,15 @@ void TiledObject::createPolylineFixture(const TMXMapObject &object, CollisionIte
     }
     body->componentComplete();
     item->setBody(body);
+}
+
+void TiledObject::copyProperties(QObject *from, QObject *to)
+{
+    if (!from || !to)
+        return;
+
+    for(int i = from->metaObject()->propertyOffset(); i < from->metaObject()->propertyCount(); ++i)
+        to->setProperty(QString::fromLatin1(from->metaObject()->property(i).name()).toStdString().c_str(), from->metaObject()->property(i).read(from));
 }
 
 /*!
@@ -752,7 +749,6 @@ bool TiledObject::setCollisionIndex(int index)
 
         setVisible(item->isVisible());
         setId(item->id());
-        setBody(item->body());
     }
 
     m_collisionIndex = index;
