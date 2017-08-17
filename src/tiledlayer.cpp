@@ -161,7 +161,7 @@ void TiledLayer::initialize()
     {
         if(layer.name() == m_name)
         {
-            if(layer.isTileLayer())
+            if(layer.isTileLayer() && layer.isVisible())
             {
                 TMXTileLayer tileLayer = static_cast<TMXTileLayer>(layer);
                 setProperties(tileLayer.properties());
@@ -176,7 +176,7 @@ void TiledLayer::initialize()
 
                 setLayer(new TMXLayer(layer.layer(), this));
             }
-            else if(layer.isImageLayer())
+            else if(layer.isImageLayer() && layer.isVisible())
             {
                 TMXImageLayer imageLayer = static_cast<TMXImageLayer>(layer);
                 setProperties(imageLayer.properties());
@@ -191,7 +191,7 @@ void TiledLayer::initialize()
 
                 setLayer(new TMXLayer(layer.layer(), this));
             }
-            else if(layer.isObjectLayer())
+            else if(layer.isObjectLayer() && layer.isVisible())
             {
                 TMXObjectGroup objectGroup = static_cast<TMXObjectGroup>(layer);
                 setProperties(objectGroup.properties());
@@ -206,8 +206,10 @@ void TiledLayer::initialize()
 
                 setLayer(new TMXLayer(layer.layer(), this));
             }
+            else if (!layer.isVisible())
+                qWarning() << "TiledLayer:" << layer.name() << "is hidden.";
             else
-                qWarning() << "Unknown layer type: " << layer.name();
+                qWarning() << "TiledLayer: Unknown layer type: " << layer.name();
 
             break;
         }

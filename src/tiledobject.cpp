@@ -395,7 +395,7 @@ void TiledObject::createRectangularFixture(const TMXMapObject &object, Collision
         // Check to see if the user of the library set the x, y, width and/or height values.
         Box2DBox *box = static_cast<Box2DBox *>(objectFixture);
         if(!box)
-            return;
+            continue;
 
         Box2DBox *fixture = new Box2DBox(item);
 
@@ -446,7 +446,7 @@ void TiledObject::createEllipseFixture(const TMXMapObject &object, CollisionItem
         // Check to see if the user of the library set the x, y, width and/or height values.
         Box2DCircle *circle = static_cast<Box2DCircle *>(objectFixture);
         if(!circle)
-            return;
+            continue;
 
         Box2DCircle *fixture = new Box2DCircle(item);
 
@@ -498,7 +498,8 @@ void TiledObject::createPolygonFixture(const TMXMapObject &object, CollisionItem
         // Check to see if the user of the library set the x, y, width and/or height values.
         Box2DPolygon *polygon = static_cast<Box2DPolygon *>(objectFixture);
         if(!polygon)
-            return;
+            continue;
+
         Box2DPolygon *fixture = new Box2DPolygon(item);
 
         copyProperties(polygon, fixture);
@@ -545,7 +546,7 @@ void TiledObject::createPolylineFixture(const TMXMapObject &object, CollisionIte
         // Check to see if the user of the library set the x, y, width and/or height values.
         Box2DChain *chain = static_cast<Box2DChain *>(objectFixture);
         if(!chain)
-            return;
+            continue;
 
         Box2DChain *fixture = new Box2DChain(item);
 
