@@ -36,6 +36,7 @@ class EntityManager : public QQuickItem
     Q_OBJECT
     Q_PROPERTY(Scene* parentScene READ parentScene WRITE setParentScene NOTIFY parentSceneChanged)
     Q_PROPERTY(int entityCount READ entityCount NOTIFY entityCountChanged)
+    Q_PROPERTY(bool autoCleanup READ autoCleanup WRITE setAutoCleanup NOTIFY autoCleanupChanged)
 public:
     EntityManager(QQuickItem *parent = nullptr);
 
@@ -48,6 +49,9 @@ public:
 
     int entityCount() const;
 
+    bool autoCleanup() const;
+    void setAutoCleanup(bool);
+
     Scene *parentScene() const;
     void setParentScene(Scene *);
 protected:
@@ -55,8 +59,10 @@ protected:
 signals:
     void parentSceneChanged();
     void entityCountChanged();
+    void autoCleanupChanged();
 private:
     Scene *m_parentScene;
+    bool m_autoCleanup;
 };
 
 #endif // ENTITYMANAGER_H
