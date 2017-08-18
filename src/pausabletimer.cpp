@@ -98,6 +98,7 @@ void PausableTimer::pause()
         return;
 
     m_paused = true;
+    if (m_timer->isActive() && m_timer->remainingTime() > -1)
     m_timer->setInterval(m_timer->remainingTime());
     m_timer->stop();
 }
