@@ -94,7 +94,7 @@ void PausableTimer::resume()
 
 void PausableTimer::pause()
 {
-    if (m_paused)
+    if (m_paused || !m_timer->isActive())
         return;
 
     m_paused = true;
