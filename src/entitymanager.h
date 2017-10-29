@@ -55,7 +55,6 @@ protected:
 signals:
     void parentSceneChanged();
     void entityCountChanged();
-    void autoCleanupChanged();
 private:
     Scene *m_parentScene;
 };
