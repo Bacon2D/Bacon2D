@@ -2,7 +2,7 @@
 #define ENTITYMANAGER_H
 
 #include <QObject>
-#include <QMap>
+#include <QHash>
 #include <QQuickItem>
 
 class QQmlComponent;
@@ -27,8 +27,8 @@ public:
 private:
     explicit EntityManagerSingleton(QObject *parent = nullptr);
     static EntityManagerSingleton *m_entityManagerSingleton;
-    QMap<QString, Entity *> m_entityMap;
-    QMap<QString, QStringList> m_groupMap;
+    QHash<QString, Entity *> m_entityMap;
+    QHash<QString, QStringList> m_groupMap;
 };
 
 class EntityManager : public QQuickItem

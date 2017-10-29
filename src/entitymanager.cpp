@@ -281,7 +281,9 @@ void EntityManager::componentComplete()
 {
     QQuickItem::componentComplete();
 
-    m_parentScene = qobject_cast<Scene *>(parentItem());
-    if (m_parentScene)
-        connect(m_parentScene, &Scene::destroyed, [this]() { destroyAllEntities(); });
+    if (!m_parentScene) {
+        m_parentScene = qobject_cast<Scene *>(parentItem());
+        if (m_parentScene)
+            connect(m_parentScene, &Scene::destroyed, [this]() { destroyAllEntities(); });
+    }
 }
