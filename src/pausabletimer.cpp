@@ -1,6 +1,42 @@
 #include "pausabletimer.h"
 #include <QTimer>
 
+/*!
+    \qmltype PausableTimer
+    \inqmlmodule Bacon2D
+    \inherits QtObject
+    \brief Timer that can be paused by the user at will
+
+    The PausableTimer component is just like the Timer provided by Qt,
+    the added ability to be paused by the user at any given time. Its
+    interface is exactly the same at \a Timer, the only difference being
+    that setting running to false does not stop the timer, but pauses it
+    until set to true again. This allows you to bind the running flag to
+    the application state, as illustrated below.
+
+    Example usage:
+    \qml
+    import QtQuick 2.0
+    import Bacon2D 1.0
+
+    Game {
+       id: game
+       ...
+    }
+
+    PhysicsEntity {
+        id: laserCannon
+        ...
+    }
+
+    PausableTimer {
+        id: fireTimer
+        running: game.gameState == Bacon2D.Paused
+        interval: 500
+        onTriggered: laserCannon.fire(); // Will not be called while the game is paused.
+    }
+   \endqml
+*/
 PausableTimer::PausableTimer(QObject *parent)
     : m_timer(new QTimer(this))
     , m_interval(0)
@@ -22,6 +58,11 @@ void PausableTimer::componentComplete()
     if (m_timer->isActive() && m_triggeredOnStart)
         emit triggered();
 }
+
+/*!
+  \qmlproperty bool PauseableTimer::running
+  \brief This property holds whether the timer is not paused or stopped.
+*/
 
 bool PausableTimer::running() const
 {

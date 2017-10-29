@@ -210,7 +210,6 @@ QString EntityManagerSingleton::generateId(const QString &entityType) const
 EntityManager::EntityManager(QQuickItem *parent)
     : QQuickItem(parent)
     , m_parentScene(nullptr)
-    , m_autoCleanup(true)
 {
 }
 
@@ -247,28 +246,6 @@ int EntityManager::entityCount() const
     return EntityManagerSingleton::instance().entityCount();
 }
 
-bool EntityManager::autoCleanup() const
-{
-    return m_autoCleanup;
-}
-
-void EntityManager::setAutoCleanup(bool autoCleanup)
-{
-    if (m_autoCleanup == autoCleanup)
-        return;
-
-    m_autoCleanup = autoCleanup;
-
-    if (m_parentScene) {
-        if (autoCleanup)
-            connect(m_parentScene, &Scene::destroyed, [this]() { destroyAllEntities(); });
-        else
-            m_parentScene->disconnect(this);
-    }
-
-    emit autoCleanupChanged();
-}
-
 int EntityManager::getEntityCount(const QString &entityType)
 {
     return EntityManagerSingleton::instance().entityCount(entityType);
@@ -289,14 +266,13 @@ void EntityManager::setParentScene(Scene *parentScene)
     if (m_parentScene == parentScene)
         return;
 
+    if (m_parentScene)
+        m_parentScene->disconnect(this);
+
     m_parentScene = parentScene;
 
-    if (m_parentScene) {
-        if (m_autoCleanup)
-            connect(m_parentScene, &Scene::destroyed, [this]() { destroyAllEntities(); });
-        else
-            m_parentScene->disconnect(this);
-    }
+    if (m_parentScene)
+        connect(m_parentScene, &Scene::destroyed, [this]() { destroyAllEntities(); });
 
     emit parentSceneChanged();
 }
