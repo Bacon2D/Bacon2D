@@ -205,7 +205,7 @@ void TiledScene::loadTileLayer(const TMXTileLayer &layer)
         // Store tiles that are used from the tileset
         if(!cell.isEmpty()) {
             TMXTile tile = cell.tile();
-            const QPoint &pos = QPoint(cellX * tile.width(), cellY * tile.height());
+            const QPoint &pos = QPoint(cellX * m_map->tileWidth(), cellY * m_map->tileHeight() - tile.height() + m_map->tileHeight());
             QPainter painter(&m_image);
 
             QPainter::PixmapFragment fragment;
