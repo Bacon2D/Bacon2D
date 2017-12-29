@@ -332,6 +332,14 @@ QQmlListProperty<TiledLayer> TiledScene::layers()
                                         0);
 }
 
+QVariant TiledScene::getProperty(const QString &name, const QVariant &defaultValue) const
+{
+    if (m_map)
+        return m_map->properties().value(name, defaultValue);
+
+    return defaultValue;
+}
+
 void TiledScene::append_layer(QQmlListProperty<TiledLayer> *list, TiledLayer *layer)
 {
     TiledScene *scene = static_cast<TiledScene *>(list->object);

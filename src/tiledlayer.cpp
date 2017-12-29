@@ -140,14 +140,14 @@ void TiledLayer::setName(const QString &name)
   \qmlmethod string TiledLayer::getProperty(string name)
   \brief This method returns the value of custom property \e name for this TMX layer.
 */
-QVariant TiledLayer::getProperty(const QString &name) const
+QVariant TiledLayer::getProperty(const QString &name, const QVariant &defaultValue) const
 {
-    if(name.toLower() == "opacity")
+    if(!m_properties.contains(name) && name.toLower() == "opacity")
         return QVariant::fromValue(m_layer->opacity());
-    else if(name.toLower() == "visible")
+    else if(!m_properties.contains(name) && name.toLower() == "visible")
         return QVariant::fromValue(m_layer->isVisible());
 
-    return m_properties.value(name);
+    return m_properties.value(name, defaultValue);
 }
 
 void TiledLayer::initialize()

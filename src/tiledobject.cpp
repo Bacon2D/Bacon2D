@@ -215,7 +215,7 @@ TiledObject::TiledObject(QQuickItem *parent) :
   , m_id(0)
   , m_objectGroup(0)
   , m_collisionIndex(-1)
-  , m_componentCompleted(false)
+  , m_componentComplete(false)
 {
 }
 
@@ -270,28 +270,29 @@ void TiledObject::setType(const QString &type)
 /*!
   \qmlmethod string TiledObject::getProperty(string name, variant defaultValue)
   \brief This method returns the value of the custom property called \e name for this TMX object.
-  If the value is not available, the \e defaultValue is used instead.
+  If the value is not provided, the \e defaultValue is used instead.
 
-  \warning This method ignores the custom property set with the names
-   \e x, \e y, \e width, \e height, \e rotation, \e visible and \e id and returns
-   the actual value. For example, if an object is 50 pixels wide, getProperty("width")
-   would return 50 pixels even if it has a custom property set for \e width.
+  \warning If this method fails to find the custom property, it attempts to
+   associate the property with the closest existing QQuickItem property. This is true for
+   the properties \e x, \e y, \e width, \e height, \e rotation, \e visible and \e id.
+   For example, if an object is 50 pixels wide, getProperty("width") would return
+   50 pixels even if no custom property was set for \e width.
 */
 QVariant TiledObject::getProperty(const QString &name, const QVariant &defaultValue) const
 {
-    if(name.toLower() == "x")
+    if(!m_properties.contains(name) && name.toLower() == "x")
         return QVariant::fromValue(x());
-    else if(name.toLower() == "y")
+    else if(!m_properties.contains(name) && name.toLower() == "y")
         return QVariant::fromValue(y());
-    else if(name.toLower() == "width")
+    else if(!m_properties.contains(name) && name.toLower() == "width")
         return QVariant::fromValue(width());
-    else if(name.toLower() == "height")
+    else if(!m_properties.contains(name) && name.toLower() == "height")
         return QVariant::fromValue(height());
-    else if(name.toLower() == "rotation")
+    else if(!m_properties.contains(name) && name.toLower() == "rotation")
         return QVariant::fromValue(rotation());
-    else if(name.toLower() == "visible")
+    else if(!m_properties.contains(name) && name.toLower() == "visible")
         return QVariant::fromValue(isVisible());
-    else if(name.toLower() == "id")
+    else if(!m_properties.contains(name) && name.toLower() == "id")
         return QVariant::fromValue(m_id);
 
     return m_properties.value(name, defaultValue);
@@ -299,8 +300,8 @@ QVariant TiledObject::getProperty(const QString &name, const QVariant &defaultVa
 
 void TiledObject::initialize()
 {
-    if(!m_componentCompleted) {
-        m_componentCompleted = true;
+    if(!m_componentComplete) {
+        m_componentComplete = true;
         return;
     }
 
@@ -601,7 +602,6 @@ int TiledObject::count() const
   \qmlmethod void TiledObject::reset()
   \brief This method positions the \l TiledObject before the first collision.
 
-  Returns true if successful, otherwise returns false.
   \sa first() next() last() previous() seek()
 */
 void TiledObject::reset()
@@ -796,7 +796,7 @@ Box2DFixture *TiledObject::at_fixture(QQmlListProperty<Box2DFixture> *list, int 
 void TiledObject::componentComplete() {
     QQuickItem::componentComplete();
 
-    if(m_componentCompleted)
+    if(m_componentComplete)
         initialize();
 }
 
