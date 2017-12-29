@@ -214,9 +214,8 @@ TiledObject::TiledObject(QQuickItem *parent) :
     QQuickItem(parent)
   , m_id(0)
   , m_objectGroup(0)
-  , m_body(0)
   , m_collisionIndex(-1)
-  , m_componentCompleted(false)
+  , m_componentComplete(false)
 {
 }
 
@@ -269,48 +268,31 @@ void TiledObject::setType(const QString &type)
 }
 
 /*!
-  \qmlproperty Body TiledObject::body
-  \brief This property holds the Box2D body of the TMX object in the TMX map.
-*/
-Box2DBody *TiledObject::body() const
-{
-    return m_body;
-}
-
-void TiledObject::setBody(Box2DBody *body)
-{
-    if(m_body == body)
-        return;
-
-    m_body = body;
-    emit bodyChanged();
-}
-
-/*!
   \qmlmethod string TiledObject::getProperty(string name, variant defaultValue)
   \brief This method returns the value of the custom property called \e name for this TMX object.
-  If the value is not available, the \e defaultValue is used instead.
+  If the value is not provided, the \e defaultValue is used instead.
 
-  \warning This method ignores the custom property set with the names
-   \e x, \e y, \e width, \e height, \e rotation, \e visible and \e id and returns
-   the actual value. For example, if an object is 50 pixels wide, getProperty("width")
-   would return 50 pixels even if it has a custom property set for \e width.
+  \warning If this method fails to find the custom property, it attempts to
+   associate the property with the closest existing QQuickItem property. This is true for
+   the properties \e x, \e y, \e width, \e height, \e rotation, \e visible and \e id.
+   For example, if an object is 50 pixels wide, getProperty("width") would return
+   50 pixels even if no custom property was set for \e width.
 */
 QVariant TiledObject::getProperty(const QString &name, const QVariant &defaultValue) const
 {
-    if(name.toLower() == "x")
+    if(!m_properties.contains(name) && name.toLower() == "x")
         return QVariant::fromValue(x());
-    else if(name.toLower() == "y")
+    else if(!m_properties.contains(name) && name.toLower() == "y")
         return QVariant::fromValue(y());
-    else if(name.toLower() == "width")
+    else if(!m_properties.contains(name) && name.toLower() == "width")
         return QVariant::fromValue(width());
-    else if(name.toLower() == "height")
+    else if(!m_properties.contains(name) && name.toLower() == "height")
         return QVariant::fromValue(height());
-    else if(name.toLower() == "rotation")
+    else if(!m_properties.contains(name) && name.toLower() == "rotation")
         return QVariant::fromValue(rotation());
-    else if(name.toLower() == "visible")
+    else if(!m_properties.contains(name) && name.toLower() == "visible")
         return QVariant::fromValue(isVisible());
-    else if(name.toLower() == "id")
+    else if(!m_properties.contains(name) && name.toLower() == "id")
         return QVariant::fromValue(m_id);
 
     return m_properties.value(name, defaultValue);
@@ -318,8 +300,8 @@ QVariant TiledObject::getProperty(const QString &name, const QVariant &defaultVa
 
 void TiledObject::initialize()
 {
-    if(!m_componentCompleted) {
-        m_componentCompleted = true;
+    if(!m_componentComplete) {
+        m_componentComplete = true;
         return;
     }
 
@@ -336,8 +318,6 @@ void TiledObject::initialize()
         m_objectGroup->deleteLater();
 
     m_objectGroup = new TMXObjectGroup(*tiledLayer->layer(), this);
-    if(!m_objectGroup)
-        return;
 
     int collisions = 0;
     m_collisionIndex = -1;
@@ -348,18 +328,16 @@ void TiledObject::initialize()
             if(!static_cast<TiledScene *>(tiledLayer->parentItem()))
                 return;
 
-            //if(!collisions) {
-                setProperties(object.properties());
+            setProperties(object.properties());
 
-                setX(object.x());
-                setY(object.y());
-                setWidth(object.width());
-                setHeight(object.height());
-                setRotation(object.rotation());
+            setX(object.x());
+            setY(object.y());
+            setWidth(object.width());
+            setHeight(object.height());
+            setRotation(object.rotation());
 
-                setVisible(object.isVisible());
-                setId(object.id());
-            //}
+            setVisible(object.isVisible());
+            setId(object.id());
 
             CollisionItem *item = new CollisionItem(tiledLayer->parentItem());
             item->setX(object.x());
@@ -392,7 +370,6 @@ void TiledObject::initialize()
                 break;
             }
 
-            setBody(item->body());
             collisions++;
         }
     }
@@ -419,9 +396,11 @@ void TiledObject::createRectangularFixture(const TMXMapObject &object, Collision
         // Check to see if the user of the library set the x, y, width and/or height values.
         Box2DBox *box = static_cast<Box2DBox *>(objectFixture);
         if(!box)
-            return;
+            continue;
 
         Box2DBox *fixture = new Box2DBox(item);
+
+        copyProperties(box, fixture);
 
         // Add x and y values set by user as offsets
         fixture->setX(box->x());
@@ -468,9 +447,11 @@ void TiledObject::createEllipseFixture(const TMXMapObject &object, CollisionItem
         // Check to see if the user of the library set the x, y, width and/or height values.
         Box2DCircle *circle = static_cast<Box2DCircle *>(objectFixture);
         if(!circle)
-            return;
+            continue;
 
         Box2DCircle *fixture = new Box2DCircle(item);
+
+        copyProperties(circle, fixture);
 
         fixture->setX(circle->x());
         fixture->setY(circle->y());
@@ -518,8 +499,11 @@ void TiledObject::createPolygonFixture(const TMXMapObject &object, CollisionItem
         // Check to see if the user of the library set the x, y, width and/or height values.
         Box2DPolygon *polygon = static_cast<Box2DPolygon *>(objectFixture);
         if(!polygon)
-            return;
+            continue;
+
         Box2DPolygon *fixture = new Box2DPolygon(item);
+
+        copyProperties(polygon, fixture);
 
         QVariantList vertices = polygon->vertices().isEmpty() ? object.polygonAsList()
                                                                 : polygon->vertices();
@@ -563,9 +547,11 @@ void TiledObject::createPolylineFixture(const TMXMapObject &object, CollisionIte
         // Check to see if the user of the library set the x, y, width and/or height values.
         Box2DChain *chain = static_cast<Box2DChain *>(objectFixture);
         if(!chain)
-            return;
+            continue;
 
         Box2DChain *fixture = new Box2DChain(item);
+
+        copyProperties(chain, fixture);
 
         QVariantList vertices = chain->vertices().isEmpty() ? object.polygonAsList()
                                                                 : chain->vertices();
@@ -578,6 +564,7 @@ void TiledObject::createPolylineFixture(const TMXMapObject &object, CollisionIte
         fixture->setCategories(chain->categories());
         fixture->setCollidesWith(chain->collidesWith());
         fixture->setGroupIndex(chain->groupIndex());
+        fixture->setLoop(chain->loop());
 
         connect(chain, SIGNAL(beginContact(Box2DFixture*)), fixture, SIGNAL(beginContact(Box2DFixture*)));
         connect(chain, SIGNAL(endContact(Box2DFixture*)), fixture, SIGNAL(endContact(Box2DFixture*)));
@@ -586,6 +573,15 @@ void TiledObject::createPolylineFixture(const TMXMapObject &object, CollisionIte
     }
     body->componentComplete();
     item->setBody(body);
+}
+
+void TiledObject::copyProperties(QObject *from, QObject *to)
+{
+    if (!from || !to)
+        return;
+
+    for(int i = from->metaObject()->propertyOffset(); i < from->metaObject()->propertyCount(); ++i)
+        to->setProperty(QString::fromLatin1(from->metaObject()->property(i).name()).toStdString().c_str(), from->metaObject()->property(i).read(from));
 }
 
 /*!
@@ -606,7 +602,6 @@ int TiledObject::count() const
   \qmlmethod void TiledObject::reset()
   \brief This method positions the \l TiledObject before the first collision.
 
-  Returns true if successful, otherwise returns false.
   \sa first() next() last() previous() seek()
 */
 void TiledObject::reset()
@@ -755,7 +750,6 @@ bool TiledObject::setCollisionIndex(int index)
 
         setVisible(item->isVisible());
         setId(item->id());
-        setBody(item->body());
     }
 
     m_collisionIndex = index;
@@ -802,7 +796,7 @@ Box2DFixture *TiledObject::at_fixture(QQmlListProperty<Box2DFixture> *list, int 
 void TiledObject::componentComplete() {
     QQuickItem::componentComplete();
 
-    if(m_componentCompleted)
+    if(m_componentComplete)
         initialize();
 }
 

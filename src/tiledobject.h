@@ -40,7 +40,6 @@ class TiledObject : public QQuickItem
     Q_OBJECT
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
-    Q_PROPERTY(Box2DBody *body READ body NOTIFY bodyChanged)
     Q_PROPERTY(QQmlListProperty<Box2DFixture> fixtures READ fixtures)
     Q_PROPERTY(QQmlListProperty<CollisionItem> collisions READ collisions)
 
@@ -56,9 +55,6 @@ public:
 
     QString type() const;
     void setType(const QString &type);
-
-    Box2DBody *body() const;
-    void setBody(Box2DBody *body);
 
     QList<Box2DFixture *> fixtureList() const { return m_fixtures; }
 
@@ -91,7 +87,6 @@ public:
 signals:
     void nameChanged();
     void typeChanged();
-    void bodyChanged();
     void collisionIndexChanged();
 private slots:
     void initialize();
@@ -100,11 +95,10 @@ private:
     QString m_name;
     QString m_type;
     QString m_layerName;
-    Box2DBody *m_body;
     QList<Box2DFixture *> m_fixtures;
     QMap<QString, QVariant> m_properties;
     TMXObjectGroup *m_objectGroup;
-    bool m_componentCompleted;
+    bool m_componentComplete;
 
     // Handling collision of object names
     QList<CollisionItem *> m_collisionItems;
@@ -114,6 +108,8 @@ private:
     void createEllipseFixture(const TMXMapObject &object, CollisionItem *item);
     void createPolygonFixture(const TMXMapObject &object, CollisionItem *item);
     void createPolylineFixture(const TMXMapObject &object, CollisionItem *item);
+
+    void copyProperties(QObject *from, QObject *to);
 };
 
 // An item that represents a single collision object.
@@ -122,6 +118,7 @@ private:
 class CollisionItem : public QQuickItem
 {
     Q_OBJECT
+    Q_PROPERTY(Box2DBody* body READ body)
 public:
     CollisionItem(QQuickItem *parent = 0) : m_id(0), m_body(0), m_collisionIndex(-1), QQuickItem(parent) {}
 

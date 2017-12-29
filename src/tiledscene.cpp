@@ -110,6 +110,7 @@
 TiledScene::TiledScene(Game *parent)
     : Scene(parent)
     , m_map(0)
+    , m_background(nullptr)
 {
     setFlag(QQuickItem::ItemHasContents, true);
 }
@@ -148,8 +149,27 @@ void TiledScene::setSource(const QUrl &source)
     m_image.fill(Qt::transparent);
 
     loadLayers();
-
     emit sourceChanged();
+}
+
+/*!
+ * \qmlproperty url TiledScene::background
+ * \brief This property allows you to override the TMX image layer set in the TMX file. Note that the
+ * background set takes the dimensions of the scene automatically and
+ * \return
+ */
+QQuickItem *TiledScene::background() const
+{
+    return m_background;
+}
+
+void TiledScene::setBackground(QQuickItem *background)
+{
+    if (m_background == background)
+        return;
+
+    m_background = background;
+    emit backgroundChanged();
 }
 
 bool TiledScene::loadMap(const QString &source)
@@ -174,6 +194,17 @@ bool TiledScene::loadMap(const QString &source)
     return true;
 }
 
+void TiledScene::loadBackground()
+{
+    if (m_background == nullptr)
+        return;
+
+    m_background->setParentItem(this);
+    m_background->setWidth(implicitWidth());
+    m_background->setHeight(implicitHeight());
+    m_background->setZ(-1);
+}
+
 void TiledScene::loadLayers()
 {
     // Extract tiles for each layer
@@ -181,12 +212,12 @@ void TiledScene::loadLayers()
     {
         if(layer.isTileLayer())
             loadTileLayer(static_cast<TMXTileLayer>(layer));
-        else if(layer.isImageLayer())
+        else if(layer.isImageLayer() && m_background == nullptr)
             loadImageLayer(static_cast<TMXImageLayer>(layer));
         else if(layer.isObjectLayer()) {
             // This layer would be loaded by the TiledLayer and TiledObject classes.
         }
-        else
+        else if (m_background == nullptr)
             qWarning() << "Unknown layer type: " << layer.name();
     }
 
@@ -245,7 +276,7 @@ void TiledScene::loadTileLayer(const TMXTileLayer &layer)
 void TiledScene::loadImageLayer(const TMXImageLayer &layer)
 {
     const QPixmap &image = layer.image();
-    const QPoint &pos = layer.position();
+    const QPointF &pos = layer.offset();
     const QSize &size = QSize(image.width(), image.height());
 
     QPainter painter(&m_image);
@@ -271,6 +302,15 @@ QSGNode *TiledScene::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
     return node;
 }
 
+void TiledScene::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+{
+    Scene::geometryChanged(newGeometry, oldGeometry);
+    if (newGeometry.isEmpty() || !isComponentComplete() || (newGeometry == oldGeometry))
+        return;
+
+    loadBackground();
+}
+
 void TiledScene::componentComplete()
 {
     Scene::componentComplete();
@@ -290,6 +330,14 @@ QQmlListProperty<TiledLayer> TiledScene::layers()
                                         &TiledScene::count_layer,
                                         &TiledScene::at_layer,
                                         0);
+}
+
+QVariant TiledScene::getProperty(const QString &name, const QVariant &defaultValue) const
+{
+    if (m_map)
+        return m_map->properties().value(name, defaultValue);
+
+    return defaultValue;
 }
 
 void TiledScene::append_layer(QQmlListProperty<TiledLayer> *list, TiledLayer *layer)

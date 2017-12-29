@@ -251,29 +251,30 @@ Window {
                 source: "images/layer_02.png"
             }
 
-            Sprite {
+            AnimatedSprite {
                 id: gameSprite
 
                 x: 10
                 y: 420
 
                 animation: "stopped"
+                source: "images/sprite.png"
 
                 animations: [
                     SpriteAnimation {
                         name: "moving"
-
-                        source: "images/moving.png"
                         frames: 20
                         duration: 450
+                        frameHeight: gameSprite.sourceSize.height / 2
                         loops: Animation.Infinite
                         inverse: gameSprite.horizontalMirror
                     },
                     SpriteAnimation {
                         name: "stopped"
-
-                        source: "images/stopped.png"
-                        frames: 7
+                        frames: 20
+                        finalFrame: 6
+                        frameY: frameHeight
+                        frameHeight: gameSprite.sourceSize.height / 2
                         duration: 5000
                         loops: Animation.Infinite
                     }
@@ -320,7 +321,7 @@ Window {
                         gameSprite.horizontalMirror = true;
 
                         if (event.isAutoRepeat) {
-                            startMoving();
+                            game.startMoving();
                             if (gameSprite.x > 0)
                                 gameSprite.x -= 5;
                         }
@@ -336,7 +337,7 @@ Window {
                         gameSprite.horizontalMirror = false;
 
                         if (event.isAutoRepeat) {
-                            startMoving();
+                            game.startMoving();
                             if (gameSprite.x + gameSprite.width <= scene5.width)
                                 gameSprite.x += 5;
                         }
@@ -355,7 +356,7 @@ Window {
                     case Qt.Key_Left:
                     case Qt.Key_Right: {
                         if (!event.isAutoRepeat) {
-                            stopMoving();
+                            game.stopMoving();
                             event.accepted = true;
                         }
                         break;

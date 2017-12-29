@@ -72,9 +72,10 @@ public:
     QString gameName();
     void setGameName(const QString& gameName);
 
-    Bacon2D::State gameState() const { return m_state; };
+    Bacon2D::State gameState() const { return m_state; }
     void setGameState(const Bacon2D::State &state);
 
+    static QHash<QUrl, QPixmap> loadedPixmaps();
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
     void timerEvent(QTimerEvent *event);
@@ -93,6 +94,7 @@ private:
     int m_ups;
     int m_timerId;
     Bacon2D::State m_state;
+    static QHash<QUrl, QPixmap> m_loadedPixmaps;
 
     //for handling scene transition
     Scene *m_enterScene;

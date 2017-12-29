@@ -2,7 +2,7 @@ import QtQuick 2.4
 import Bacon2D 1.0
 
 PhysicsEntity {
-    id: root
+    id: dog
     sleepingAllowed: false
     width: 100
     height: 75
@@ -37,62 +37,69 @@ PhysicsEntity {
             height: 2
 
             onBeginContact: {
-                root.airborne = false
+                dog.airborne = false
                 sprite.animation = "idle"
             }
 
             onEndContact: {
-                root.airborne = true
+                dog.airborne = true
             }
         }
-
     ]
 
-    Sprite {
+    AnimatedSprite {
         id: sprite
         animation: "idle"
-        horizontalMirror: root.facingLeft
+        horizontalMirror: dog.facingLeft
+        source: "images/sprite.png"
 
         animations: [
             SpriteAnimation {
                 name: "idle"
-                source: "images/dog_idle.png"
                 frames: 10
+                frameHeight: sprite.sourceSize.height / 3
                 duration: 500
                 loops: Animation.Infinite
             },
 
             SpriteAnimation {
                 name: "run"
-                source: "images/dog_run.png"
-                frames: 8
+                frames: 10
+                finalFrame: 7
                 duration: 500
+                frameY: 2 * frameHeight
+                frameHeight: sprite.sourceSize.height / 3
                 loops: Animation.Infinite
-                inverse: root.facingLeft
+                inverse: dog.facingLeft
             },
 
             SpriteAnimation {
                 name: "jump"
-                source: "images/dog_jump.png"
-                frames: 8
+                frames: 10
+                finalFrame: 7
+                frameY: frameHeight
+                frameHeight: sprite.sourceSize.height / 3
                 duration: 1000
                 loops: 1
 
                 onFinished: {
-                    root.jumping = false
+                    dog.jumping = false
 
-                    if(root.airborne && sprite.animation == name)
+                    if(dog.airborne && sprite.animation == name)
                         sprite.animation = "freefall"
                 }
             },
 
             SpriteAnimation {
                 name: "freefall"
-                source: "images/dog_freefall.png"
-                frames: 2
-                duration: 2000
+                frames: 10
+                initialFrame: 6
+                finalFrame: 7
+                frameY: frameHeight
+                duration: 500
+                frameHeight: sprite.sourceSize.height / 3
                 loops: Animation.Infinite
-                inverse: root.facingLeft
+                inverse: dog.facingLeft
             }
         ]
     }
@@ -104,7 +111,7 @@ PhysicsEntity {
         repeat: true
         triggeredOnStart: true
 
-        onTriggered: root.rMoveLeft()
+        onTriggered: dog.rMoveLeft()
     }
 
     Timer {
@@ -113,7 +120,7 @@ PhysicsEntity {
         repeat: true
         triggeredOnStart: true
 
-        onTriggered: root.rMoveRight()
+        onTriggered: dog.rMoveRight()
     }
 
     /***************************************************************/
@@ -125,9 +132,9 @@ PhysicsEntity {
 
         rMoveLeftTimer.start()
         rMoveRightTimer.stop()
-        root.facingLeft = true
+        dog.facingLeft = true
 
-        if(root.airborne && sprite.animation != "jump")
+        if(dog.airborne && sprite.animation != "jump")
             sprite.animation = "freefall"
         else
             sprite.animation = "run"
@@ -138,10 +145,10 @@ PhysicsEntity {
         if(scene.game.gameState != Bacon2D.Running)
             return
 
-        root.x -= root.xStep
-        root.facingLeft = true
+        dog.x -= dog.xStep
+        dog.facingLeft = true
 
-        if(root.airborne && sprite.animation != "jump")
+        if(dog.airborne && sprite.animation != "jump")
             sprite.animation = "freefall"
         else
             sprite.animation = "run"
@@ -152,9 +159,9 @@ PhysicsEntity {
             return
 
         rMoveLeftTimer.stop()
-        root.facingLeft = true
+        dog.facingLeft = true
 
-        if(root.airborne && sprite.animation != "jump")
+        if(dog.airborne && sprite.animation != "jump")
             sprite.animation = "freefall"
         else
             sprite.animation = "idle"
@@ -166,9 +173,9 @@ PhysicsEntity {
 
         rMoveLeftTimer.stop()
         rMoveRightTimer.start()
-        root.facingLeft = false
+        dog.facingLeft = false
 
-        if(root.airborne && sprite.animation != "jump")
+        if(dog.airborne && sprite.animation != "jump")
             sprite.animation = "freefall"
         else
             sprite.animation = "run"
@@ -179,10 +186,10 @@ PhysicsEntity {
         if(scene.game.gameState != Bacon2D.Running)
             return
 
-        root.x += root.xStep
-        root.facingLeft = false
+        dog.x += dog.xStep
+        dog.facingLeft = false
 
-        if(root.airborne && sprite.animation != "jump")
+        if(dog.airborne && sprite.animation != "jump")
             sprite.animation = "freefall"
         else
             sprite.animation = "run"
@@ -193,9 +200,9 @@ PhysicsEntity {
             return
 
         rMoveRightTimer.stop()
-        root.facingLeft = false
+        dog.facingLeft = false
 
-        if(root.airborne && sprite.animation != "jump")
+        if(dog.airborne && sprite.animation != "jump")
             sprite.animation = "freefall"
         else
             sprite.animation = "idle"
@@ -204,7 +211,7 @@ PhysicsEntity {
     function jump() {
         if(scene.game.gameState != Bacon2D.Running)
             return
-        if(root.airborne)
+        if(dog.airborne)
             return
 
         if(sprite.animation == "idle" || sprite.animation == "run")
@@ -212,7 +219,7 @@ PhysicsEntity {
         else
             return
 
-        root.applyLinearImpulse(Qt.point(0, -root.getMass() * 10), root.getWorldCenter());
+        dog.applyLinearImpulse(Qt.point(0, -dog.getMass() * 10), dog.getWorldCenter());
     }
     /**************** END ACTIONS ********************************/
 }

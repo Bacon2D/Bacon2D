@@ -47,12 +47,12 @@ Window {
         Component {
             id: spriteComponent
 
-            Sprite {
+            AnimatedSprite {
                 animation: "explosion"
+                source: "explosion.png"
 
                 animations: SpriteAnimation {
                     name: "explosion"
-                    source: "explosion.png"
                     frames: 4
                     duration: 400
                     loops: Animation.Infinite

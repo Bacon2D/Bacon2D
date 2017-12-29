@@ -32,6 +32,7 @@
 #include <QtCore/QState>
 #include <QtCore/QPropertyAnimation>
 #include <QUrl>
+#include <QSize>
 
 class SpriteSheet;
 class QPropertyAnimation;
@@ -41,18 +42,22 @@ class SpriteAnimation : public QState
     Q_OBJECT
 
     Q_PROPERTY(QString name READ name WRITE setName)
-    Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
+    Q_PROPERTY(qreal frameX READ frameX WRITE setFrameX NOTIFY frameXChanged)
+    Q_PROPERTY(qreal frameY READ frameY WRITE setFrameY NOTIFY frameYChanged)
+    Q_PROPERTY(qreal frameWidth READ frameWidth WRITE setFrameWidth NOTIFY frameWidthChanged)
+    Q_PROPERTY(qreal frameHeight READ frameHeight WRITE setFrameHeight NOTIFY frameHeightChanged)
     Q_PROPERTY(int frames READ frames WRITE setFrames NOTIFY framesChanged)
     Q_PROPERTY(int frame READ frame WRITE setFrame NOTIFY frameChanged)
     Q_PROPERTY(int initialFrame READ initialFrame WRITE setInitialFrame NOTIFY initialFrameChanged)
+    Q_PROPERTY(int finalFrame READ finalFrame WRITE setFinalFrame NOTIFY finalFrameChanged)
     Q_PROPERTY(bool running READ running  NOTIFY runningChanged)
     Q_PROPERTY(int loops READ loops WRITE setLoops NOTIFY loopsChanged)
     Q_PROPERTY(bool visible READ visible WRITE setVisible NOTIFY visibleChanged)
     Q_PROPERTY(int duration READ duration WRITE setDuration NOTIFY durationChanged)
     Q_PROPERTY(bool inverse READ inverse WRITE setInverse NOTIFY inverseChanged)
-
 public:
     SpriteAnimation(QState *parent = 0);
+    ~SpriteAnimation();
 
     QString name() const;
     void setName(const QString &name);
@@ -63,17 +68,29 @@ public:
     int loops() const;
     void setLoops(const int &loops);
 
-    QUrl source() const;
-    void setSource(const QUrl &source);
-
     int frames() const;
     void setFrames(const int &frames);
 
     int frame() const;
     void setFrame(const int &frame);
 
+    qreal frameX() const;
+    void setFrameX(const qreal &frameX);
+
+    qreal frameY() const;
+    void setFrameY(const qreal &frameY);
+
+    qreal frameWidth() const;
+    void setFrameWidth(const qreal &frameWidth);
+
+    qreal frameHeight() const;
+    void setFrameHeight(const qreal &frameHeight);
+
     int initialFrame() const;
     void setInitialFrame(const int &initialFrame);
+
+    int finalFrame() const;
+    void setFinalFrame(const int &finalFrame);
 
     bool visible() const;
     void setVisible(const bool &visible);
@@ -92,22 +109,35 @@ public:
 
     SpriteSheet *spriteSheet();
 
+    SpriteAnimation *previousAnimation() const;
+    void setPreviousAnimation(SpriteAnimation *);
+
 signals:
     void runningChanged();
     void loopsChanged();
     void sourceChanged();
     void framesChanged();
     void frameChanged();
+    void frameXChanged();
+    void frameYChanged();
+    void frameWidthChanged();
+    void frameHeightChanged();
+    void sourceSizeChanged();
     void initialFrameChanged();
+    void finalFrameChanged();
     void visibleChanged();
     void durationChanged();
     void inverseChanged();
     void finished();
 
+private slots:
+    void onStateChanged(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
+
 private:
     QString m_name;
     SpriteSheet *m_spriteSheet;
     QPropertyAnimation *m_spriteAnimation;
+    SpriteAnimation *m_previousAnimationItem;
     bool m_inverse;
 };
 

@@ -68,29 +68,28 @@ Window {
                 source: "images/layer_02.png"
             }
 
-            Sprite {
+            AnimatedSprite {
                 id: gameSprite
 
                 x: 10
                 y: 420
 
                 animation: "stopped"
+                source: "images/sprite.png"
+                horizontalFrameCount: 20
+                verticalFrameCount: 2
 
                 animations: [
                     SpriteAnimation {
                         name: "moving"
-
-                        source: "images/moving.png"
-                        frames: 20
                         duration: 450
                         loops: Animation.Infinite
                         inverse: gameSprite.horizontalMirror
                     },
                     SpriteAnimation {
                         name: "stopped"
-
-                        source: "images/stopped.png"
-                        frames: 7
+                        frameY: frameHeight
+                        finalFrame: 6
                         duration: 5000
                         loops: Animation.Infinite
                     }

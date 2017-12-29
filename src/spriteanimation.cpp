@@ -41,17 +41,29 @@ SpriteAnimation::SpriteAnimation(QState *parent)
     , m_spriteSheet(new SpriteSheet)
     , m_spriteAnimation(new QPropertyAnimation(this))
     , m_inverse(false)
+    , m_previousAnimationItem(nullptr)
 {
-    connect(m_spriteSheet, SIGNAL(sourceChanged()), this, SIGNAL(sourceChanged()));
     connect(m_spriteSheet, SIGNAL(frameChanged()), this, SIGNAL(frameChanged()));
     connect(m_spriteSheet, SIGNAL(framesChanged()), this, SIGNAL(framesChanged()));
+    connect(m_spriteSheet, SIGNAL(frameXChanged()), this, SIGNAL(frameXChanged()));
+    connect(m_spriteSheet, SIGNAL(frameYChanged()), this, SIGNAL(frameYChanged()));
+    connect(m_spriteSheet, SIGNAL(frameWidthChanged()), this, SIGNAL(frameWidthChanged()));
+    connect(m_spriteSheet, SIGNAL(frameHeightChanged()), this, SIGNAL(frameHeightChanged()));
     connect(m_spriteSheet, SIGNAL(initialFrameChanged()), this, SIGNAL(initialFrameChanged()));
+    connect(m_spriteSheet, SIGNAL(finalFrameChanged()), this, SIGNAL(finalFrameChanged()));
 
     connect(m_spriteAnimation, SIGNAL(finished()), this, SIGNAL(finished()));
+
+    connect(m_spriteAnimation, &QPropertyAnimation::stateChanged, this, &SpriteAnimation::onStateChanged);
 
     m_spriteAnimation->setTargetObject(m_spriteSheet);
     m_spriteAnimation->setPropertyName("frame");
     m_spriteAnimation->setStartValue(0);
+}
+
+SpriteAnimation::~SpriteAnimation()
+{
+    delete m_spriteSheet;
 }
 
 /*!
@@ -79,15 +91,10 @@ bool SpriteAnimation::running() const
 
 void SpriteAnimation::setRunning(const bool &running)
 {
-    if (!m_spriteAnimation) {
-        qWarning() << "SpriteAnimation" << "invalid";
-        return;
-    }
-
     bool currentState = m_spriteAnimation->state() == QAbstractAnimation::Running;
 
     if (currentState != running) {
-        if (running)
+        if (running && !(m_spriteAnimation->startValue() == m_spriteAnimation->endValue()))
             m_spriteAnimation->start();
         else
             m_spriteAnimation->stop();
@@ -117,20 +124,6 @@ void SpriteAnimation::setLoops(const int &loops)
 }
 
 /*!
- * \qmlproperty string SpriteAnimation::source
- * \brief QUrl for the source image
- */
-QUrl SpriteAnimation::source() const
-{
-    return m_spriteSheet->source();
-}
-
-void SpriteAnimation::setSource(const QUrl &source)
-{
-    m_spriteSheet->setSource(source);
-}
-
-/*!
  * \qmlproperty int SpriteAnimation::frames
  * \brief Number of frames included in the source image
  */
@@ -142,7 +135,7 @@ int SpriteAnimation::frames() const
 void SpriteAnimation::setFrames(const int &frames)
 {
     m_spriteSheet->setFrames(frames);
-    m_spriteAnimation->setEndValue(frames);
+    m_spriteAnimation->setEndValue(m_spriteSheet->finalFrame() == 0 ? frames - 1 : m_spriteSheet->finalFrame() + 1);
 }
 
 /*!
@@ -157,6 +150,46 @@ int SpriteAnimation::frame() const
 void SpriteAnimation::setFrame(const int &frame)
 {
     m_spriteSheet->setFrame(frame);
+}
+
+qreal SpriteAnimation::frameX() const
+{
+    return m_spriteSheet->frameX();
+}
+
+void SpriteAnimation::setFrameX(const qreal &frameX)
+{
+    m_spriteSheet->setFrameX(frameX);
+}
+
+qreal SpriteAnimation::frameY() const
+{
+    return m_spriteSheet->frameY();
+}
+
+void SpriteAnimation::setFrameY(const qreal &frameY)
+{
+    m_spriteSheet->setFrameY(frameY);
+}
+
+qreal SpriteAnimation::frameWidth() const
+{
+    return m_spriteSheet->frameWidth();
+}
+
+void SpriteAnimation::setFrameWidth(const qreal &frameWidth)
+{
+    m_spriteSheet->setFrameWidth(frameWidth);
+}
+
+qreal SpriteAnimation::frameHeight() const
+{
+    return m_spriteSheet->frameHeight();
+}
+
+void SpriteAnimation::setFrameHeight(const qreal &frameHeight)
+{
+    m_spriteSheet->setFrameHeight(frameHeight);
 }
 
 /*!
@@ -174,6 +207,17 @@ void SpriteAnimation::setInitialFrame(const int &initialFrame)
     m_spriteAnimation->setStartValue(initialFrame);
 }
 
+int SpriteAnimation::finalFrame() const
+{
+    return m_spriteSheet->finalFrame();
+}
+
+void SpriteAnimation::setFinalFrame(const int &finalFrame)
+{
+    m_spriteSheet->setFinalFrame(finalFrame);
+    m_spriteAnimation->setEndValue(finalFrame + 1);
+}
+
 /*!
  * \qmlproperty bool SpriteAnimation::visible
  * \brief FIXME
@@ -189,6 +233,7 @@ void SpriteAnimation::setVisible(const bool &visible)
     bool currentState = m_spriteSheet->isVisible();
     if (currentState != visible) {
         m_spriteSheet->setVisible(visible);
+        m_spriteSheet->update();
 
         emit visibleChanged();
     }
@@ -203,6 +248,25 @@ SpriteSheet *SpriteAnimation::spriteSheet()
 {
     return m_spriteSheet;
 }
+
+SpriteAnimation *SpriteAnimation::previousAnimation() const
+{
+    return m_previousAnimationItem;
+}
+
+void SpriteAnimation::setPreviousAnimation(SpriteAnimation *previousAnimationItem)
+{
+    if (m_previousAnimationItem == previousAnimationItem)
+        return;
+
+    m_previousAnimationItem = previousAnimationItem;
+}
+
+void SpriteAnimation::onStateChanged(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
+{
+    setRunning(newState == QAbstractAnimation::Running);
+}
+
 
 /*!
  * \qmlproperty int SpriteAnimation::duration
@@ -238,11 +302,11 @@ void SpriteAnimation::setInverse(const bool &inverse)
         m_inverse = inverse;
 
         if (m_inverse) {
-            m_spriteAnimation->setStartValue(frames());
-            m_spriteAnimation->setEndValue(0);
+            m_spriteAnimation->setStartValue(m_spriteSheet->finalFrame() + 1);
+            m_spriteAnimation->setEndValue(m_spriteSheet->initialFrame());
         } else {
-            m_spriteAnimation->setStartValue(0);
-            m_spriteAnimation->setEndValue(frames());
+            m_spriteAnimation->setStartValue(m_spriteSheet->initialFrame());
+            m_spriteAnimation->setEndValue(m_spriteSheet->finalFrame() + 1);
         }
 
         emit inverseChanged();

@@ -72,6 +72,8 @@ public:
     void setPosition(QPoint pos) { m_layer->setPosition(pos); }
     void setPosition(int x, int y) { m_layer->setPosition(x, y); }
 
+    QPointF offset() const { return m_layer->offset(); }
+
     int width() const { return lWidth; }
     int height() const { return lHeight; }
 

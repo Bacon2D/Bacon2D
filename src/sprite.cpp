@@ -26,6 +26,7 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
+#include "game.h"
 #include "scene.h"
 #include "sprite.h"
 #include "spritesheet.h"
@@ -33,109 +34,77 @@
 #include "animationchangeevent.h"
 #include "animationtransition.h"
 
-void Sprite::append_animation(QQmlListProperty<SpriteAnimation> *list, SpriteAnimation *animation)
-{
-    Sprite *spriteItem = qobject_cast<Sprite *>(list->object);
-
-    if (!spriteItem)
-        return;
-
-    spriteItem->m_states.insert(animation->name(), animation);
-    animation->spriteSheet()->setParentItem(spriteItem);
-}
+#include <QTime>
+#include <QDebug>
 
 /*!
   \qmltype Sprite
   \inqmlmodule Bacon2D
   \inherits Item
-  \brief A Sprite, providing state based
+  \brief An Sprite, providing state based
    management of multiple SpriteAnimation animations.
  */
 Sprite::Sprite(QQuickItem *parent)
     : QQuickItem(parent)
-    , m_entity(0)
-    , m_game(0)
-    , m_stateMachine(0)
-    , m_stateGroup(0)
+    , m_spriteSheet(new SpriteSheet(this))
     , m_verticalMirror(false)
     , m_horizontalMirror(false)
-    , m_state(Bacon2D::Running)
+    , m_verticalFrameCount(0)
+    , m_horizontalFrameCount(0)
 {
-}
-
-QQmlListProperty<SpriteAnimation> Sprite::animations() const
-{
-    return QQmlListProperty<SpriteAnimation>(const_cast<Sprite *>(this), 0, &Sprite::append_animation, 0, 0, 0);
 }
 
 /*!
- * \qmlproperty string Sprite::animation
- * \brief The current SpriteAnimation state of the Sprite as a string
+ * \qmlproperty string SpriteAnimation::source
+ * \brief QUrl for the source image
  */
-QString Sprite::animation() const
+
+QUrl Sprite::source() const
 {
-    return m_animation;
+    return m_source;
 }
 
-void Sprite::setAnimation(const QString &animation, const bool &force)
+void Sprite::setSource(const QUrl &source)
 {
-    if (!m_states.contains(animation)) {
-        qWarning() << "SpriteAnimation:" << animation << "invalid";
+    if (m_source == source)
         return;
+
+    m_source = source;
+
+    if (Game::loadedPixmaps().contains(m_source))
+        m_pixmap = Game::loadedPixmaps().value(m_source);
+    else {
+        if (m_source.url().startsWith("qrc:/"))
+            m_pixmap = QPixmap(m_source.url().replace(QString("qrc:/"), QString(":/")));
+        else
+            m_pixmap = QPixmap(m_source.toLocalFile());
     }
 
-    if (m_state == Bacon2D::Paused || m_state == Bacon2D::Suspended) {
-        qWarning() << "SpriteAnimation: isn't active";
+    if (m_pixmap.isNull())
+        qCritical() << QString("Bacon2D>>Image \'%1\' failed to load!").arg(m_source.url());
+    else
+        Game::loadedPixmaps().insert(m_source, m_pixmap);
+
+    setSourceSize(m_pixmap.size());
+
+    emit sourceChanged();
+}
+
+QSize Sprite::sourceSize() const
+{
+    return m_sourceSize;
+}
+
+void Sprite::setSourceSize(const QSize &sourceSize)
+{
+    if (m_sourceSize == sourceSize)
         return;
-    }
 
-    if (force || (m_animation != animation)) {
-        if (m_animation != QString() && m_states.contains(m_animation)) {
-            SpriteAnimation *animationItem = m_states[m_animation];
-            animationItem->setRunning(false);
-            animationItem->setVisible(false);
-        }
-        m_animation = animation;
+    m_sourceSize = sourceSize;
+    setImplicitWidth(sourceSize.width());
+    setImplicitHeight(sourceSize.height());
 
-        if (!m_stateMachine)
-            initializeMachine();
-
-        if (m_stateMachine && m_stateMachine->isRunning())
-            m_stateMachine->postEvent(new AnimationChangeEvent(m_animation));
-
-        emit animationChanged();
-    }
-}
-
-void Sprite::initializeMachine()
-{
-    m_stateMachine= new QStateMachine;
-    m_stateGroup = new QState(QState::ParallelStates);
-
-    SpriteAnimation *animation;
-    foreach (animation, m_states.values()) {
-        AnimationTransition *transition = new AnimationTransition(animation);
-        animation->setParent(m_stateGroup);
-        animation->addTransition(transition);
-
-        if (width() == 0 || height() == 0) {
-            setWidth(animation->spriteSheet()->width());
-            setHeight(animation->spriteSheet()->height());
-        }
-    }
-
-    m_stateMachine->addState(m_stateGroup);
-    m_stateMachine->setInitialState(m_stateGroup);
-
-    connect(m_stateMachine, SIGNAL(started()), this, SLOT(initializeAnimation()));
-
-    m_stateMachine->start();
-}
-
-void Sprite::initializeAnimation()
-{
-    if (m_animation != QString())
-        setAnimation(m_animation, (m_state == Bacon2D::Running));
+    emit sourceSizeChanged();
 }
 
 /*!
@@ -153,10 +122,6 @@ void Sprite::setVerticalMirror(const bool &verticalMirror)
         return;
 
     m_verticalMirror = verticalMirror;
-
-    foreach (SpriteAnimation *animation, m_states.values())
-        animation->setVerticalMirror(m_verticalMirror);
-
     emit verticalMirrorChanged();
 }
 
@@ -175,62 +140,78 @@ void Sprite::setHorizontalMirror(const bool &horizontalMirror)
         return;
 
     m_horizontalMirror = horizontalMirror;
-
-    foreach (SpriteAnimation *animation, m_states.values())
-        animation->setHorizontalMirror(m_horizontalMirror);
-
     emit horizontalMirrorChanged();
 }
 
-Entity *Sprite::entity() const
+int Sprite::verticalFrameCount() const
 {
-    return m_entity;
+    return m_verticalFrameCount;
 }
 
-void Sprite::setEntity(Entity *entity)
+void Sprite::setVerticalFrameCount(const int &verticalFrameCount)
 {
-    if (m_entity == entity)
+    if (m_verticalFrameCount == verticalFrameCount)
         return;
 
-    m_entity = entity;
-    if (!m_game) {
-        m_game = m_entity->scene()->game();
-        connect(m_game, SIGNAL(gameStateChanged()), this, SLOT(onGameStateChanged()));
-    }
-    emit entityChanged();
+    m_verticalFrameCount = verticalFrameCount;
+    emit verticalFrameCountChanged();
 }
 
-void Sprite::onGameStateChanged()
+int Sprite::horizontalFrameCount() const
 {
-    if (m_state != Bacon2D::Inactive)
-        this->setSpriteState(m_game->gameState());
+    return m_horizontalFrameCount;
 }
 
-/*!
-  \qmlproperty Bacon2D.State Sprite::spriteState
-  \brief This property holds the current spriteState.
-*/
-void Sprite::setSpriteState(const Bacon2D::State &state)
+void Sprite::setHorizontalFrameCount(const int &horizontalFrameCount)
 {
-    if (state == m_state)
+    if (m_horizontalFrameCount == horizontalFrameCount)
         return;
 
-    m_state = state;
+    m_horizontalFrameCount = horizontalFrameCount;
+    emit horizontalFrameCountChanged();
+}
 
-    if (m_animation != QString() && m_states.contains(m_animation)) {
-        SpriteAnimation *animationItem = m_states[m_animation];
-        animationItem->setRunning(m_state == Bacon2D::Running);
-        if (m_state == Bacon2D::Running || m_state == Bacon2D::Paused)
-            animationItem->setVisible(true);
-    }
+qreal Sprite::frameX() const
+{
+    return m_spriteSheet->frameX();
+}
 
-    emit spriteStateChanged();
+void Sprite::setFrameX(const qreal &frameX)
+{
+    m_spriteSheet->setFrameX(frameX);
+}
 
-    if (!m_stateMachine)
-        return;
+qreal Sprite::frameY() const
+{
+    return m_spriteSheet->frameY();
+}
 
-    if (m_state == Bacon2D::Running && !m_stateMachine->isRunning())
-        m_stateMachine->start();
-    else if (m_state != Bacon2D::Running && m_stateMachine->isRunning())
-        m_stateMachine->stop();
+void Sprite::setFrameY(const qreal &frameY)
+{
+    m_spriteSheet->setFrameY(frameY);
+}
+
+qreal Sprite::frameWidth() const
+{
+    return m_spriteSheet->frameWidth();
+}
+
+void Sprite::setFrameWidth(const qreal &frameWidth)
+{
+    m_spriteSheet->setFrameWidth(frameWidth);
+}
+
+qreal Sprite::frameHeight() const
+{
+    return m_spriteSheet->frameHeight();
+}
+
+void Sprite::setFrameHeight(const qreal &frameHeight)
+{
+    m_spriteSheet->setFrameHeight(frameHeight);
+}
+
+QPixmap Sprite::pixmap() const
+{
+    return m_pixmap;
 }

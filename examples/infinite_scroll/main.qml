@@ -65,17 +65,17 @@ Window {
                     }
                 }
             }
-            Sprite {
+            AnimatedSprite {
                 id: spriteItem
 
                 x: scene.width / 2 - spriteItem.width / 2
                 y: scene.height / 2 - spriteItem.height / 2
 
+                source: "astronaut.png"
                 animation: "falling"
 
                 animations: SpriteAnimation {
                     name: "falling"
-                    source: "astronaut.png"
                     frames: 3
                     duration: 450
                     loops: Animation.Infinite

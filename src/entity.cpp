@@ -31,6 +31,7 @@
 #include "scene.h"
 #include "game.h"
 #include "behavior.h"
+#include "animatedsprite.h"
 #include "sprite.h"
 #include "../../3rdparty/qml-box2d/box2dbody.h"
 
@@ -78,6 +79,34 @@ Entity::~Entity()
 {
 }
 
+QString Entity::entityId() const
+{
+    return m_entityId;
+}
+
+void Entity::setEntityId(const QString &entityId)
+{
+    if (m_entityId == entityId)
+        return;
+
+    m_entityId = entityId;
+    emit entityIdChanged();
+}
+
+QString Entity::entityType() const
+{
+    return m_entityType;
+}
+
+void Entity::setEntityType(const QString &entityType)
+{
+    if (m_entityType == entityType)
+        return;
+
+    m_entityType = entityType;
+    emit entityTypeChanged();
+}
+
 void Entity::initializeEntities(QQuickItem *parent)
 {
     if (!m_scene)
@@ -87,8 +116,8 @@ void Entity::initializeEntities(QQuickItem *parent)
     foreach (item, parent->childItems()) {
         if (Entity *entity = dynamic_cast<Entity *>(item))
             entity->setScene(m_scene);
-        if (Sprite *sprite = dynamic_cast<Sprite *>(item))
-            sprite->setEntity(this);
+        if (AnimatedSprite *animatedSprite = dynamic_cast<AnimatedSprite *>(item))
+            animatedSprite->setEntity(this);
         initializeEntities(item);
     }
 }
@@ -96,6 +125,8 @@ void Entity::initializeEntities(QQuickItem *parent)
 void Entity::componentComplete()
 {
     QQuickItem::componentComplete();
+
+    setScene(qobject_cast<Scene *>(parentItem()));
     if (m_scene && m_scene->physics() && m_scene->world()) {
         foreach (Box2DBody *body, this->findChildren<Box2DBody *>(QString(), Qt::FindDirectChildrenOnly)) {
             body->setTarget(this);
@@ -114,7 +145,7 @@ void Entity::itemChange(ItemChange change, const ItemChangeData &data)
         QQuickItem *child = data.item;
         if (Entity *entity = dynamic_cast<Entity *>(child))
             entity->setScene(m_scene);
-        if (Sprite *sprite = dynamic_cast<Sprite *>(child))
+        if (AnimatedSprite *sprite = dynamic_cast<AnimatedSprite *>(child))
             sprite->setEntity(this);
 
         initializeEntities(child);

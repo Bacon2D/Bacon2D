@@ -187,6 +187,8 @@ Bacon2DImageLayer::Bacon2DImageLayer(Bacon2DLayer *parent)
     : Bacon2DLayer((QQuickItem *)parent)
     , m_imageWidth(0)
     , m_imageHeight(0)
+    , m_horizontalOffset(0.0)
+    , m_verticalOffset(0.0)
     , m_geometryChanged(false)
 {
     setFlag(ItemHasContents, true);

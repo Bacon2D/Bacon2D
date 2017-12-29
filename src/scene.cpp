@@ -34,6 +34,8 @@
 
 #include <QtCore/QtGlobal>
 #include <QtQml/QQmlEngine>
+#include <QQmlContext>
+#include <QQmlApplicationEngine>
 
 #include "../../3rdparty/qml-box2d/box2dbody.h"
 
@@ -511,6 +513,15 @@ void Scene::initializeEntities(QQuickItem *parent)
 void Scene::componentComplete()
 {
     QQuickItem::componentComplete();
+
+    if (!m_game) {
+        QQmlApplicationEngine *engine = qobject_cast<QQmlApplicationEngine *>(qmlEngine(this));
+
+        if (engine && !engine->rootObjects().isEmpty()) {
+            setGame(engine->rootObjects().first()->findChild<Game *>());
+        }
+    }
+
     initializeEntities(this);
 
     if (m_world)

@@ -29,16 +29,21 @@
 #include "plugins.h"
 
 #include "entity.h"
+#include "physicsentity.h"
 #include "enums.h"
 #include "scene.h"
 #include "spriteanimation.h"
 #include "sprite.h"
+#include "animatedsprite.h"
 #include "bacon2dimagelayer.h"
 #include "game.h"
 #include "viewport.h"
 #include "behavior.h"
 #include "scriptbehavior.h"
 #include "settings.h"
+#include "entitymanager.h"
+
+#include "pausabletimer.h"
 
 #include "box2dworld.h"
 #include "box2dbody.h"
@@ -75,14 +80,19 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<Game>("Bacon2D", 1, 0, "Game");
     qmlRegisterType<Scene>("Bacon2D", 1, 0, "Scene");
     qmlRegisterType<Entity>("Bacon2D", 1, 0, "Entity");
+    qmlRegisterType<PhysicsEntity>("Bacon2D", 1, 0, "PhysicsEntity");
     qmlRegisterType<Sprite>("Bacon2D", 1, 0, "Sprite");
+    qmlRegisterType<AnimatedSprite>("Bacon2D", 1, 0, "AnimatedSprite");
     qmlRegisterType<SpriteAnimation>("Bacon2D", 1, 0, "SpriteAnimation");
     qmlRegisterType<Bacon2DImageLayer>("Bacon2D", 1, 0, "ImageLayer");
     qmlRegisterType<Viewport>("Bacon2D", 1, 0, "Viewport");
     qmlRegisterType<ScriptBehavior>("Bacon2D", 1, 0, "ScriptBehavior");
     qmlRegisterType<Settings>("Bacon2D", 1, 0, "Settings");
     qmlRegisterType<ScrollBehavior>("Bacon2D", 1, 0, "ScrollBehavior");
+    qmlRegisterType<EntityManager>("Bacon2D", 1, 0, "EntityManager");
 
+    // Utilities
+    qmlRegisterType<PausableTimer>("Bacon2D", 1, 0, "PausableTimer");
 
 
     // For TiledScene
