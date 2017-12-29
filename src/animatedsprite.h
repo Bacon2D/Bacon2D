@@ -59,6 +59,7 @@ class AnimatedSprite : public QQuickItem
 
 public:
     AnimatedSprite(QQuickItem *parent = 0);
+    ~AnimatedSprite();
 
     QUrl source() const;
     void setSource(const QUrl &source);

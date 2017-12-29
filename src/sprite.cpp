@@ -33,6 +33,7 @@
 #include "spriteanimation.h"
 #include "animationchangeevent.h"
 #include "animationtransition.h"
+#include "spritecollection.h"
 
 #include <QTime>
 #include <QDebug>
@@ -54,6 +55,11 @@ Sprite::Sprite(QQuickItem *parent)
 {
 }
 
+Sprite::~Sprite()
+{
+    SpriteCollection::instance().removeSprite(this);
+}
+
 /*!
  * \qmlproperty string SpriteAnimation::source
  * \brief QUrl for the source image
@@ -71,19 +77,7 @@ void Sprite::setSource(const QUrl &source)
 
     m_source = source;
 
-    if (Game::loadedPixmaps().contains(m_source))
-        m_pixmap = Game::loadedPixmaps().value(m_source);
-    else {
-        if (m_source.url().startsWith("qrc:/"))
-            m_pixmap = QPixmap(m_source.url().replace(QString("qrc:/"), QString(":/")));
-        else
-            m_pixmap = QPixmap(m_source.toLocalFile());
-    }
-
-    if (m_pixmap.isNull())
-        qCritical() << QString("Bacon2D>>Image \'%1\' failed to load!").arg(m_source.url());
-    else
-        Game::loadedPixmaps().insert(m_source, m_pixmap);
+    m_pixmap = SpriteCollection::instance().addSprite(this);
 
     setSourceSize(m_pixmap.size());
 

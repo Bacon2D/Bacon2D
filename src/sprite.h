@@ -56,6 +56,7 @@ class Sprite : public QQuickItem
     Q_PROPERTY(qreal frameHeight READ frameHeight WRITE setFrameHeight NOTIFY frameHeightChanged)
 public:
     Sprite(QQuickItem *parent = 0);
+    ~Sprite();
 
     QUrl source() const;
     void setSource(const QUrl &source);
