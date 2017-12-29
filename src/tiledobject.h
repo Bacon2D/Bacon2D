@@ -98,7 +98,7 @@ private:
     QList<Box2DFixture *> m_fixtures;
     QMap<QString, QVariant> m_properties;
     TMXObjectGroup *m_objectGroup;
-    bool m_componentCompleted;
+    bool m_componentComplete;
 
     // Handling collision of object names
     QList<CollisionItem *> m_collisionItems;

@@ -46,7 +46,7 @@ public:
     void setName(const QString &name);
 
     void setProperties(const QMap<QString, QVariant> &properties) { m_properties = properties; }
-    Q_INVOKABLE QVariant getProperty(const QString &name) const;
+    Q_INVOKABLE QVariant getProperty(const QString &name, const QVariant &defaultValue = QVariant()) const;
 
     TMXLayer *layer() const { return m_layer; }
     QList<TiledObject *> tiledObjects() const { return m_objects; }

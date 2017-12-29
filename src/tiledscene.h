@@ -56,6 +56,8 @@ public:
 
     QQmlListProperty<TiledLayer> layers();
 
+    Q_INVOKABLE QVariant getProperty(const QString &name, const QVariant &defaultValue = QVariant()) const;
+
     static void append_layer(QQmlListProperty<TiledLayer> *list, TiledLayer *layer);
     static int count_layer(QQmlListProperty<TiledLayer> *list);
     static TiledLayer *at_layer(QQmlListProperty<TiledLayer> *list, int index);
