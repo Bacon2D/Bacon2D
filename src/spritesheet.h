@@ -33,6 +33,7 @@
 #include <QUrl>
 #include <QtCore/QtGlobal>
 #include <QPixmap>
+#include "enums.h"
 
 class SpriteSheet : public QQuickPaintedItem
 {
@@ -81,6 +82,9 @@ public:
     bool horizontalMirror() const;
     void setHorizontalMirror(const bool &horizontalMirror);
 
+    Bacon2D::FillMode fillMode() const;
+    void setFillMode(Bacon2D::FillMode fillMode);
+
     void paint(QPainter *painter);
 
 private:
@@ -99,6 +103,7 @@ signals:
     void initialFrameChanged();
     void finalFrameChanged();
     void sourceSizeChanged();
+    void fillModeChanged();
 
 private:
     QPixmap m_pixmap;
@@ -115,6 +120,7 @@ private:
     int m_vertical;
     int m_horizontal;
     bool m_mirror;
+    Bacon2D::FillMode m_fillMode;
 };
 
 #endif /* _SPRITESHEET_H_ */

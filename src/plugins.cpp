@@ -64,6 +64,7 @@
 #include "box2draycast.h"
 #include "box2dcontact.h"
 #include "scrollbehavior.h"
+#include "spritealias.h"
 
 #include "tiledscene.h"
 #include "tiledlayer.h"
@@ -90,6 +91,7 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<Settings>("Bacon2D", 1, 0, "Settings");
     qmlRegisterType<ScrollBehavior>("Bacon2D", 1, 0, "ScrollBehavior");
     qmlRegisterType<EntityManager>("Bacon2D", 1, 0, "EntityManager");
+    qmlRegisterType<SpriteAlias>("Bacon2D", 1, 0, "SpriteAlias");
 
     // Utilities
     qmlRegisterType<PausableTimer>("Bacon2D", 1, 0, "PausableTimer");
