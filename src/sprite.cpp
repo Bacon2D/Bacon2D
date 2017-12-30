@@ -33,6 +33,7 @@
 #include "spriteanimation.h"
 #include "animationchangeevent.h"
 #include "animationtransition.h"
+#include "spritecollection.h"
 
 #include <QTime>
 #include <QDebug>
@@ -49,9 +50,16 @@ Sprite::Sprite(QQuickItem *parent)
     , m_spriteSheet(new SpriteSheet(this))
     , m_verticalMirror(false)
     , m_horizontalMirror(false)
-    , m_verticalFrameCount(0)
-    , m_horizontalFrameCount(0)
 {
+    m_spriteSheet->setVisible(true);
+    setSmooth(true);
+
+    connect(m_spriteSheet, &SpriteSheet::fillModeChanged, this, &Sprite::fillModeChanged);
+}
+
+Sprite::~Sprite()
+{
+    SpriteCollection::instance().removeSprite(this);
 }
 
 /*!
@@ -71,21 +79,9 @@ void Sprite::setSource(const QUrl &source)
 
     m_source = source;
 
-    if (Game::loadedPixmaps().contains(m_source))
-        m_pixmap = Game::loadedPixmaps().value(m_source);
-    else {
-        if (m_source.url().startsWith("qrc:/"))
-            m_pixmap = QPixmap(m_source.url().replace(QString("qrc:/"), QString(":/")));
-        else
-            m_pixmap = QPixmap(m_source.toLocalFile());
-    }
-
-    if (m_pixmap.isNull())
-        qCritical() << QString("Bacon2D>>Image \'%1\' failed to load!").arg(m_source.url());
-    else
-        Game::loadedPixmaps().insert(m_source, m_pixmap);
-
+    m_pixmap = SpriteCollection::instance().addSprite(this);
     setSourceSize(m_pixmap.size());
+    m_spriteSheet->setPixmap(m_pixmap);
 
     emit sourceChanged();
 }
@@ -143,34 +139,6 @@ void Sprite::setHorizontalMirror(const bool &horizontalMirror)
     emit horizontalMirrorChanged();
 }
 
-int Sprite::verticalFrameCount() const
-{
-    return m_verticalFrameCount;
-}
-
-void Sprite::setVerticalFrameCount(const int &verticalFrameCount)
-{
-    if (m_verticalFrameCount == verticalFrameCount)
-        return;
-
-    m_verticalFrameCount = verticalFrameCount;
-    emit verticalFrameCountChanged();
-}
-
-int Sprite::horizontalFrameCount() const
-{
-    return m_horizontalFrameCount;
-}
-
-void Sprite::setHorizontalFrameCount(const int &horizontalFrameCount)
-{
-    if (m_horizontalFrameCount == horizontalFrameCount)
-        return;
-
-    m_horizontalFrameCount = horizontalFrameCount;
-    emit horizontalFrameCountChanged();
-}
-
 qreal Sprite::frameX() const
 {
     return m_spriteSheet->frameX();
@@ -199,6 +167,7 @@ qreal Sprite::frameWidth() const
 void Sprite::setFrameWidth(const qreal &frameWidth)
 {
     m_spriteSheet->setFrameWidth(frameWidth);
+    m_spriteSheet->setWidth(frameWidth);
 }
 
 qreal Sprite::frameHeight() const
@@ -209,9 +178,78 @@ qreal Sprite::frameHeight() const
 void Sprite::setFrameHeight(const qreal &frameHeight)
 {
     m_spriteSheet->setFrameHeight(frameHeight);
+    m_spriteSheet->setHeight(frameHeight);
+}
+
+Bacon2D::FillMode Sprite::fillMode() const
+{
+    return m_spriteSheet->fillMode();
+}
+
+void Sprite::setFillMode(Bacon2D::FillMode fillMode)
+{
+    m_spriteSheet->setFillMode(fillMode);
+}
+
+QString Sprite::alias() const
+{
+    return m_alias;
+}
+
+void Sprite::setAlias(const QString &alias)
+{
+    if (m_alias == alias)
+        return;
+
+    m_alias = alias;
+
+    for (SpriteAlias *spriteAlias : m_aliases) {
+        if (spriteAlias->name() == alias) {
+            setFrameX(spriteAlias->frameX());
+            setFrameY(spriteAlias->frameY());
+            setFrameWidth(spriteAlias->frameWidth());
+            setFrameHeight(spriteAlias->frameHeight());
+        }
+    }
+    emit aliasChanged();
+}
+
+QQmlListProperty<SpriteAlias> Sprite::aliases()
+{
+    return QQmlListProperty<SpriteAlias>(this, nullptr,
+                                        &Sprite::append_object,
+                                        &Sprite::count_object,
+                                        &Sprite::at_object,
+                                        nullptr);
+}
+
+void Sprite::append_object(QQmlListProperty<SpriteAlias> *list, SpriteAlias *alias)
+{
+    Sprite *sprite = static_cast<Sprite *>(list->object);
+    alias->setParent(sprite);
+    sprite->m_aliases.append(alias);
+}
+
+int Sprite::count_object(QQmlListProperty<SpriteAlias> *list)
+{
+    Sprite *sprite = static_cast<Sprite *>(list->object);
+    return sprite->m_aliases.length();
+}
+
+SpriteAlias *Sprite::at_object(QQmlListProperty<SpriteAlias> *list, int index)
+{
+    Sprite *sprite = static_cast<Sprite *>(list->object);
+    return sprite->m_aliases.at(index);
 }
 
 QPixmap Sprite::pixmap() const
 {
     return m_pixmap;
+}
+
+void Sprite::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+{
+    QQuickItem::geometryChanged(newGeometry, oldGeometry);
+    m_spriteSheet->setWidth(newGeometry.width());
+    m_spriteSheet->setHeight(newGeometry.height());
 }

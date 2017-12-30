@@ -32,11 +32,6 @@
 class Bacon2D : public QObject
 {
     Q_OBJECT
-
-    Q_ENUMS (
-        State
-    )
-
 public:
     Bacon2D(QObject *parent = 0);
 
@@ -46,7 +41,17 @@ public:
         Running = 2,
         Paused = 3,
         Suspended = 4
-    };
+    }; Q_ENUM(State)
+
+    enum FillMode {
+        Stretch,
+        PreserveAspectFit,
+        PreserveAspectCrop,
+        Tile,
+        TileVertically,
+        TileHorizontally,
+        Pad
+    }; Q_ENUM(FillMode)
 };
 
 #endif /* _ENUMS_H_ */

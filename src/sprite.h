@@ -38,6 +38,8 @@
 #include <QtQuick/QQuickItem>
 #include <QtCore/QtGlobal>
 #include <QPixmap>
+#include "enums.h"
+#include "spritealias.h"
 
 class SpriteSheet;
 
@@ -48,14 +50,16 @@ class Sprite : public QQuickItem
     Q_PROPERTY(QSize sourceSize READ sourceSize NOTIFY sourceSizeChanged)
     Q_PROPERTY(bool verticalMirror READ verticalMirror WRITE setVerticalMirror NOTIFY verticalMirrorChanged)
     Q_PROPERTY(bool horizontalMirror READ horizontalMirror WRITE setHorizontalMirror NOTIFY horizontalMirrorChanged)
-    Q_PROPERTY(int verticalFrameCount READ verticalFrameCount WRITE setVerticalFrameCount NOTIFY verticalFrameCountChanged)
-    Q_PROPERTY(int horizontalFrameCount READ horizontalFrameCount WRITE setHorizontalFrameCount NOTIFY horizontalFrameCountChanged)
     Q_PROPERTY(qreal frameX READ frameX WRITE setFrameX NOTIFY frameXChanged)
     Q_PROPERTY(qreal frameY READ frameY WRITE setFrameY NOTIFY frameYChanged)
     Q_PROPERTY(qreal frameWidth READ frameWidth WRITE setFrameWidth NOTIFY frameWidthChanged)
     Q_PROPERTY(qreal frameHeight READ frameHeight WRITE setFrameHeight NOTIFY frameHeightChanged)
+    Q_PROPERTY(Bacon2D::FillMode fillMode READ fillMode WRITE setFillMode NOTIFY fillModeChanged)
+    Q_PROPERTY(QString alias READ alias WRITE setAlias NOTIFY aliasChanged)
+    Q_PROPERTY(QQmlListProperty<SpriteAlias> aliases READ aliases)
 public:
     Sprite(QQuickItem *parent = 0);
+    ~Sprite();
 
     QUrl source() const;
     void setSource(const QUrl &source);
@@ -69,12 +73,6 @@ public:
     bool horizontalMirror() const;
     void setHorizontalMirror(const bool &horizontalMirror);
 
-    int verticalFrameCount() const;
-    void setVerticalFrameCount(const int &verticalFrameCount);
-
-    int horizontalFrameCount() const;
-    void setHorizontalFrameCount(const int &horizontalFrameCount);
-
     qreal frameX() const;
     void setFrameX(const qreal &frameX);
 
@@ -87,31 +85,40 @@ public:
     qreal frameHeight() const;
     void setFrameHeight(const qreal &frameHeight);
 
-    QPixmap pixmap() const;
+    Bacon2D::FillMode fillMode() const;
+    void setFillMode(Bacon2D::FillMode fillMode);
 
+    QString alias() const;
+    void setAlias(const QString &alias);
+
+    QQmlListProperty<SpriteAlias> aliases();
+    static void append_object(QQmlListProperty<SpriteAlias> *list, SpriteAlias *alias);
+    static int count_object(QQmlListProperty<SpriteAlias> *list);
+    static SpriteAlias *at_object(QQmlListProperty<SpriteAlias> *list, int index);
+
+    QPixmap pixmap() const;
 signals:
     void verticalMirrorChanged();
     void horizontalMirrorChanged();
-    void verticalFrameCountChanged();
-    void horizontalFrameCountChanged();
     void sourceChanged();
     void sourceSizeChanged();
     void frameXChanged();
     void frameYChanged();
     void frameWidthChanged();
     void frameHeightChanged();
-
-private:
-
+    void fillModeChanged();
+    void aliasChanged();
+protected:
+    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
 private:
     QUrl m_source;
     QSize m_sourceSize;
     bool m_verticalMirror;
     bool m_horizontalMirror;
-    int m_verticalFrameCount;
-    int m_horizontalFrameCount;
     SpriteSheet *m_spriteSheet;
     QPixmap m_pixmap;
+    QString m_alias;
+    QList<SpriteAlias *> m_aliases;
 };
 
 #endif /* _SPRITE_H_ */
