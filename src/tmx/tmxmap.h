@@ -58,6 +58,8 @@ public:
     int tileHeight() const { return m_tiledMap->tileHeight(); }
     QSize tileSize() const { return m_tiledMap->tileSize(); }
 
+    QColor backgroundColor() const { return m_tiledMap->backgroundColor(); }
+
     QList<TMXLayer> layers() const {
         QList<TMXLayer> allLayers;
         foreach(Tiled::Layer *layer, m_tiledMap->layers())

@@ -43,7 +43,8 @@ class TiledScene : public Scene
     Q_OBJECT
 
     Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
-    Q_PROPERTY(QQuickItem *background READ background WRITE setBackground NOTIFY backgroundChanged)
+    Q_PROPERTY(QQuickItem *backgroundItem READ backgroundItem WRITE setBackgroundItem NOTIFY backgroundItemChanged)
+    Q_PROPERTY(bool useMapBackgroundColor READ useMapBackgroundColor WRITE setUseMapBackgroundColor NOTIFY useMapBackgroundColorChanged)
     Q_PROPERTY(QQmlListProperty<TiledLayer> layers READ layers)
 public:
     TiledScene(Game *parent = 0);
@@ -51,8 +52,11 @@ public:
     QUrl source() const;
     void setSource(const QUrl &source);
 
-    QQuickItem *background() const;
-    void setBackground(QQuickItem *);
+    QQuickItem *backgroundItem() const;
+    void setBackgroundItem(QQuickItem *);
+
+    bool useMapBackgroundColor() const;
+    void setUseMapBackgroundColor(bool);
 
     QQmlListProperty<TiledLayer> layers();
 
@@ -66,14 +70,16 @@ public:
     virtual void componentComplete();
 signals:
     void sourceChanged();
-    void backgroundChanged();
+    void backgroundItemChanged();
+    void useMapBackgroundColorChanged();
 protected:
     QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *);
     virtual void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
 private:
     TMXMap *m_map;
     QUrl m_source;
-    QQuickItem *m_background;
+    QQuickItem *m_backgroundItem;
+    bool m_useMapBackgroundColor;
     QPixmap m_image;
     QList<TiledLayer *> m_layers;
 
