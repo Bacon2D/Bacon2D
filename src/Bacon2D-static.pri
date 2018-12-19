@@ -26,6 +26,9 @@ include($$PWD/../3rdparty/qml-box2d/box2d-static.pri)
 include($$PWD/../3rdparty/tiled/src/libtiled/libtiled-static.pri)
 include($$PWD/tmx/tmx.pri)
 
+RESOURCES += \
+	$$PWD/bacon2d-static.qrc
+
 HEADERS += \
 	$$PWD/entity.h \
 	$$PWD/enums.h \
