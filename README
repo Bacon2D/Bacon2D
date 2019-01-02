@@ -35,6 +35,17 @@ $ qmake QTPATH=/opt/Qt5 ..
 $ make
 $ sudo make install
 
+*C++ and QML build note*
+
+If you get errors like this:
+
+```
+QQmlApplicationEngine failed to load component
+qrc:/main.qml:3 module "Bacon2D" is not installed
+```
+
+add `QML2_IMPORT_PATH=<qt_path>/imports` to your project **Build Environment**.
+On some systems `<qt_path>` might be `/usr/lib/qt5`
 
 *MacOS note*:
 
