@@ -75,9 +75,9 @@ Game::Game(QQuickItem *parent)
     : QQuickItem(parent)
     , m_ups(30)
     , m_timerId(0)
-    , m_enterScene(0)
-    , m_exitScene(0)
     , m_state(Bacon2D::Active)
+    , m_enterScene(nullptr)
+    , m_exitScene(nullptr)
 {
     m_sceneStack.clear();
     m_gameTime.start();

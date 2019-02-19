@@ -258,28 +258,31 @@ Window {
                 y: 420
 
                 animation: "stopped"
-                source: "images/sprite.png"
+                horizontalMirror: gameSprite.horizontalMirror
+                spriteSheet: SpriteSheet {
+                    id: spriteSheet
+                    source: "images/sprite.png"
+                    horizontalFrameCount: 20
+                }
 
                 animations: [
                     SpriteAnimation {
                         name: "moving"
-                        frames: 20
                         duration: 450
-                        frameHeight: gameSprite.sourceSize.height / 2
+                        spriteStrip: SpriteStrip { frameHeight: spriteSheet.sourceSize.height / 2 }
                         loops: Animation.Infinite
-                        inverse: gameSprite.horizontalMirror
                     },
                     SpriteAnimation {
                         name: "stopped"
-                        frames: 20
-                        finalFrame: 6
-                        frameY: frameHeight
-                        frameHeight: gameSprite.sourceSize.height / 2
                         duration: 5000
                         loops: Animation.Infinite
+                        spriteStrip: SpriteStrip {
+                            finalFrame: 6
+                            frameY: frameHeight
+                            frameHeight: spriteSheet.sourceSize.height / 2
+                        }
                     }
                 ]
-
             }
 
             Text{

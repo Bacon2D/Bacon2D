@@ -14,7 +14,7 @@ class PhysicsEntity : public Entity
 {
     Q_OBJECT
 
-    Q_PROPERTY(Box2DBody* body READ body)
+    Q_PROPERTY(Box2DBody* body READ body NOTIFY bodyChanged)
     Q_PROPERTY(Box2DWorld* world READ world WRITE setWorld NOTIFY worldChanged)
     Q_PROPERTY(QQuickItem* target READ target WRITE setTarget NOTIFY targetChanged)
     Q_PROPERTY(float linearDamping READ linearDamping WRITE setLinearDamping NOTIFY linearDampingChanged)
@@ -207,6 +207,7 @@ public:
 protected:
     virtual void componentComplete();
 signals:
+    void bodyChanged();
     void worldChanged();
     void bodyTypeChanged();
     void targetChanged();

@@ -22,13 +22,16 @@ PhysicsEntity {
 
     AnimatedSprite {
         animation: "spin"
-        width: parent.width
-        height: parent.height
-        source: "images/coin.png"
+        width: 30
+        height: 30
+        spriteSheet: SpriteSheet {
+            source: "images/coin.png"
+            horizontalFrameCount: 10
+            verticalFrameCount: 1
+        }
 
         animations: SpriteAnimation {
             name: "spin"
-            frames: 10
             duration: 1000
             loops: Animation.Infinite
         }

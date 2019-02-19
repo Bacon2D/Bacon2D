@@ -35,13 +35,14 @@ class SpriteAnimation;
 class AnimationTransition : public QAbstractTransition
 {
 public:
-    AnimationTransition(SpriteAnimation *spriteAnimationItem);
+    AnimationTransition(SpriteAnimation *spriteAnimation);
 
-    virtual bool eventTest(QEvent *e);
-    virtual void onTransition(QEvent *e);
+protected:
+    bool eventTest(QEvent *e) override final;
+    void onTransition(QEvent *e) override final;
 
 private:
-    SpriteAnimation *m_spriteAnimationItem;
+    SpriteAnimation *m_spriteAnimation;
 };
 
 #endif /* _ANIMATIONTRANSITION_H_ */

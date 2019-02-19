@@ -56,7 +56,7 @@ public:
 
     TMXTile tileAt(int id) const { return TMXTile(m_tileset->tileAt(id)); }
 
-    const QList<TMXTile> &tiles() const {
+    const QList<TMXTile> tiles() const {
         QList<TMXTile> allTiles;
         foreach(Tiled::Tile *tile, m_tileset->tiles())
             allTiles.append(TMXTile(tile));

@@ -25,19 +25,20 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _ANIMATIONCHANGEEVENT_H_
-#define _ANIMATIONCHANGEEVENT_H_
+#ifndef ANIMATIONCHANGEEVENT_H
+#define ANIMATIONCHANGEEVENT_H
 
 #include <QtCore/QEvent>
+#include <QString>
 
 class AnimationChangeEvent : public QEvent
 {
 public:
-    AnimationChangeEvent(const QString &val)
+    AnimationChangeEvent(const QString &animationName)
         : QEvent(QEvent::Type(QEvent::User+1))
-        , animation(val) {}
+        , animationName(animationName) {}
 
-    QString animation;
+    QString animationName;
 };
 
-#endif /* _ANIMATIONCHANGEEVENT_H_ */
+#endif /* ANIMATIONCHANGEEVENT_H */

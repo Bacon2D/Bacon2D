@@ -63,12 +63,14 @@ Window {
                 id: spriteItem
 
                 y: 175
-                source: "sliding.png"
+                spriteSheet: SpriteSheet {
+                    source: "sliding.png"
+                    horizontalFrameCount: 4
+                }
                 animation: "sliding"
 
                 animations: SpriteAnimation {
                     name: "sliding"
-                    frames: 4
                     duration: 450
                     loops: Animation.Infinite
                 }

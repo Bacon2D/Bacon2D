@@ -47,7 +47,7 @@ class TiledObject : public QQuickItem
     Q_PROPERTY(int count READ count)
     Q_PROPERTY(int index READ collisionIndex WRITE setCollisionIndex NOTIFY collisionIndexChanged)
 public:
-    TiledObject(QQuickItem *parent = 0);
+    explicit TiledObject(QQuickItem *parent = nullptr);
     ~TiledObject();
 
     QString name() const;
@@ -120,7 +120,7 @@ class CollisionItem : public QQuickItem
     Q_OBJECT
     Q_PROPERTY(Box2DBody* body READ body)
 public:
-    CollisionItem(QQuickItem *parent = 0) : m_id(0), m_body(0), m_collisionIndex(-1), QQuickItem(parent) {}
+    CollisionItem(QQuickItem *parent = 0) : QQuickItem(parent), m_id(0), m_body(0), m_collisionIndex(-1) {}
 
     QMap<QString, QVariant> properties() const { return m_properties; }
     void setProperties(const QMap<QString, QVariant> &properties) { m_properties = properties; }

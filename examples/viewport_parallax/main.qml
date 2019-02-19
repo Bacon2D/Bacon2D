@@ -75,21 +75,24 @@ Window {
                 y: 420
 
                 animation: "stopped"
-                source: "images/sprite.png"
-                horizontalFrameCount: 20
-                verticalFrameCount: 2
+                spriteSheet: SpriteSheet {
+                    source: "images/sprite.png"
+                    horizontalFrameCount: 20
+                    verticalFrameCount: 2
+                }
 
                 animations: [
                     SpriteAnimation {
                         name: "moving"
                         duration: 450
                         loops: Animation.Infinite
-                        inverse: gameSprite.horizontalMirror
                     },
                     SpriteAnimation {
                         name: "stopped"
-                        frameY: frameHeight
-                        finalFrame: 6
+                        spriteStrip: SpriteStrip {
+                            frameY: frameHeight
+                            finalFrame: 6
+                        }
                         duration: 5000
                         loops: Animation.Infinite
                     }
@@ -106,50 +109,46 @@ Window {
             focus: true
             Keys.onPressed: {
                 switch (event.key) {
-                    case Qt.Key_Left: {
-                        gameSprite.horizontalMirror = true;
+                case Qt.Key_Left:
+                    gameSprite.horizontalMirror = true;
 
-                        if (event.isAutoRepeat) {
-                            game.startMoving();
-                            if (gameSprite.x > 0)
-                                gameSprite.x -= 5;
-                        }
-
-                        event.accepted = true;
-
-                        if (gameSprite.x == gameViewport.xOffset)
-                            gameViewport.hScroll(gameViewport.xOffset - (game.width / 2));
-
-                        break;
+                    if (event.isAutoRepeat) {
+                        game.startMoving();
+                        if (gameSprite.x > 0)
+                            gameSprite.x -= 5;
                     }
-                    case Qt.Key_Right: {
-                        gameSprite.horizontalMirror = false;
 
-                        if (event.isAutoRepeat) {
-                            game.startMoving();
-                            if (gameSprite.x + gameSprite.width <= scene.width)
-                                gameSprite.x += 5;
-                        }
+                    event.accepted = true;
 
-                        event.accepted = true;
+                    if (gameSprite.x == gameViewport.xOffset)
+                        gameViewport.hScroll(gameViewport.xOffset - (game.width / 2));
+                    break;
+                case Qt.Key_Right:
+                    gameSprite.horizontalMirror = false;
 
-                        if (gameSprite.x + gameSprite.width >= gameViewport.xOffset + game.width)
-                            gameViewport.hScroll(gameViewport.xOffset + (game.width / 2));
-
-                        break;
+                    if (event.isAutoRepeat) {
+                        game.startMoving();
+                        if (gameSprite.x + gameSprite.width <= scene.width)
+                            gameSprite.x += 5;
                     }
+
+                    event.accepted = true;
+
+                    if (gameSprite.x + gameSprite.width >= gameViewport.xOffset + game.width)
+                        gameViewport.hScroll(gameViewport.xOffset + (game.width / 2));
+
+                    break;
                 }
             }
             Keys.onReleased: {
                 switch (event.key) {
-                    case Qt.Key_Left:
-                    case Qt.Key_Right: {
-                        if (!event.isAutoRepeat) {
-                            game.stopMoving();
-                            event.accepted = true;
-                        }
-                        break;
+                case Qt.Key_Left:
+                case Qt.Key_Right:
+                    if (!event.isAutoRepeat) {
+                        game.stopMoving();
+                        event.accepted = true;
                     }
+                    break;
                 }
             }
         }

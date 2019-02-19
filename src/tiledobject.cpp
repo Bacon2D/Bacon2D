@@ -210,12 +210,12 @@
    \sa TiledScene TiledLayer
 */
 
-TiledObject::TiledObject(QQuickItem *parent) :
-    QQuickItem(parent)
-  , m_id(0)
-  , m_objectGroup(0)
-  , m_collisionIndex(-1)
-  , m_componentComplete(false)
+TiledObject::TiledObject(QQuickItem *parent)
+    : QQuickItem(parent)
+    , m_id(0)
+    , m_objectGroup(nullptr)
+    , m_componentComplete(false)
+    , m_collisionIndex(-1)
 {
 }
 

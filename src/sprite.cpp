@@ -26,6 +26,12 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
+#include "spritesheet.h"
+
+#include <QtGui/QPixmap>
+#include <QtGui/QPainter>
+#include <QtQml/QQmlProperty>
+
 #include "game.h"
 #include "scene.h"
 #include "sprite.h"
@@ -33,7 +39,7 @@
 #include "spriteanimation.h"
 #include "animationchangeevent.h"
 #include "animationtransition.h"
-#include "spritecollection.h"
+#include "spritesheetgrid.h"
 
 #include <QTime>
 #include <QDebug>
@@ -42,65 +48,58 @@
   \qmltype Sprite
   \inqmlmodule Bacon2D
   \inherits Item
-  \brief An Sprite, providing state based
+  \brief A Sprite, providing state based
    management of multiple SpriteAnimation animations.
  */
 Sprite::Sprite(QQuickItem *parent)
-    : QQuickItem(parent)
-    , m_spriteSheet(new SpriteSheet(this))
-    , m_verticalMirror(false)
-    , m_horizontalMirror(false)
+    : QQuickPaintedItem(parent)
+    , m_spriteSheet(nullptr)
+    , m_frameX(0.0)
+    , m_frameY(0.0)
+    , m_frameWidth(0.0)
+    , m_frameHeight(0.0)
+    , m_vertical(1)
+    , m_horizontal(1)
+    , m_mirror(false)
+    , m_fillMode(Bacon2D::Stretch)
 {
-    m_spriteSheet->setVisible(true);
+    setVisible(true);
     setSmooth(true);
-
-    connect(m_spriteSheet, &SpriteSheet::fillModeChanged, this, &Sprite::fillModeChanged);
+    setFlag(QQuickItem::ItemHasContents);
+    QQmlProperty(this, "layer.enabled").write(true);
 }
 
-Sprite::~Sprite()
+SpriteSheetGrid *Sprite::spriteSheet() const
 {
-    SpriteCollection::instance().removeSprite(this);
+    return m_spriteSheet;
 }
 
-/*!
- * \qmlproperty string SpriteAnimation::source
- * \brief QUrl for the source image
- */
-
-QUrl Sprite::source() const
+void Sprite::setSpriteSheet(SpriteSheetGrid *spriteSheet)
 {
-    return m_source;
-}
-
-void Sprite::setSource(const QUrl &source)
-{
-    if (m_source == source)
+    if (m_spriteSheet == spriteSheet)
         return;
 
-    m_source = source;
+    if (m_spriteSheet) {
+        update();
+    }
 
-    m_pixmap = SpriteCollection::instance().addSprite(this);
-    setSourceSize(m_pixmap.size());
-    m_spriteSheet->setPixmap(m_pixmap);
+    m_spriteSheet = spriteSheet;
 
-    emit sourceChanged();
-}
+    if (m_spriteSheet) {
+        m_spriteSheetPixmap = m_spriteSheet->pixmap();
 
-QSize Sprite::sourceSize() const
-{
-    return m_sourceSize;
-}
+        if (m_frameWidth <= 0.0)
+            setFrameWidth(m_spriteSheet->frameWidth());
+        if (m_frameHeight <= 0.0)
+            setFrameHeight(m_spriteSheet->frameHeight());
 
-void Sprite::setSourceSize(const QSize &sourceSize)
-{
-    if (m_sourceSize == sourceSize)
-        return;
+        setImplicitWidth(m_spriteSheet->frameWidth());
+        setImplicitHeight(m_spriteSheet->frameHeight());
 
-    m_sourceSize = sourceSize;
-    setImplicitWidth(sourceSize.width());
-    setImplicitHeight(sourceSize.height());
+        update();
+    }
 
-    emit sourceSizeChanged();
+    emit spriteSheetChanged();
 }
 
 /*!
@@ -109,16 +108,17 @@ void Sprite::setSourceSize(const QSize &sourceSize)
  */
 bool Sprite::verticalMirror() const
 {
-    return m_verticalMirror;
+    return m_vertical == -1;
 }
 
 void Sprite::setVerticalMirror(const bool &verticalMirror)
 {
-    if (m_verticalMirror == verticalMirror)
-        return;
+    m_vertical = (verticalMirror) ? -1 : 1;
 
-    m_verticalMirror = verticalMirror;
-    emit verticalMirrorChanged();
+    if (m_vertical == -1 || m_horizontal == -1)
+        m_mirror = true;
+
+    update();
 }
 
 /*!
@@ -127,129 +127,181 @@ void Sprite::setVerticalMirror(const bool &verticalMirror)
  */
 bool Sprite::horizontalMirror() const
 {
-    return m_horizontalMirror;
+    return m_horizontal == -1;
 }
 
 void Sprite::setHorizontalMirror(const bool &horizontalMirror)
 {
-    if (m_horizontalMirror == horizontalMirror)
-        return;
+    m_horizontal = (horizontalMirror) ? -1 : 1;
 
-    m_horizontalMirror = horizontalMirror;
-    emit horizontalMirrorChanged();
-}
+    if (m_vertical == -1 || m_horizontal == -1)
+        m_mirror = true;
 
-qreal Sprite::frameX() const
-{
-    return m_spriteSheet->frameX();
-}
-
-void Sprite::setFrameX(const qreal &frameX)
-{
-    m_spriteSheet->setFrameX(frameX);
-}
-
-qreal Sprite::frameY() const
-{
-    return m_spriteSheet->frameY();
-}
-
-void Sprite::setFrameY(const qreal &frameY)
-{
-    m_spriteSheet->setFrameY(frameY);
-}
-
-qreal Sprite::frameWidth() const
-{
-    return m_spriteSheet->frameWidth();
-}
-
-void Sprite::setFrameWidth(const qreal &frameWidth)
-{
-    m_spriteSheet->setFrameWidth(frameWidth);
-    m_spriteSheet->setWidth(frameWidth);
-}
-
-qreal Sprite::frameHeight() const
-{
-    return m_spriteSheet->frameHeight();
-}
-
-void Sprite::setFrameHeight(const qreal &frameHeight)
-{
-    m_spriteSheet->setFrameHeight(frameHeight);
-    m_spriteSheet->setHeight(frameHeight);
+    update();
 }
 
 Bacon2D::FillMode Sprite::fillMode() const
 {
-    return m_spriteSheet->fillMode();
+    return m_fillMode;
 }
 
 void Sprite::setFillMode(Bacon2D::FillMode fillMode)
 {
-    m_spriteSheet->setFillMode(fillMode);
-}
-
-QString Sprite::alias() const
-{
-    return m_alias;
-}
-
-void Sprite::setAlias(const QString &alias)
-{
-    if (m_alias == alias)
+    if (m_fillMode == fillMode)
         return;
 
-    m_alias = alias;
+    m_fillMode = fillMode;
+    update();
 
-    for (SpriteAlias *spriteAlias : m_aliases) {
-        if (spriteAlias->name() == alias) {
-            setFrameX(spriteAlias->frameX());
-            setFrameY(spriteAlias->frameY());
-            setFrameWidth(spriteAlias->frameWidth());
-            setFrameHeight(spriteAlias->frameHeight());
-        }
-    }
-    emit aliasChanged();
+    emit fillModeChanged();
 }
 
-QQmlListProperty<SpriteAlias> Sprite::aliases()
+void Sprite::componentComplete()
 {
-    return QQmlListProperty<SpriteAlias>(this, nullptr,
-                                        &Sprite::append_object,
-                                        &Sprite::count_object,
-                                        &Sprite::at_object,
-                                        nullptr);
-}
+    QQuickPaintedItem::componentComplete();
 
-void Sprite::append_object(QQmlListProperty<SpriteAlias> *list, SpriteAlias *alias)
-{
-    Sprite *sprite = static_cast<Sprite *>(list->object);
-    alias->setParent(sprite);
-    sprite->m_aliases.append(alias);
-}
-
-int Sprite::count_object(QQmlListProperty<SpriteAlias> *list)
-{
-    Sprite *sprite = static_cast<Sprite *>(list->object);
-    return sprite->m_aliases.length();
-}
-
-SpriteAlias *Sprite::at_object(QQmlListProperty<SpriteAlias> *list, int index)
-{
-    Sprite *sprite = static_cast<Sprite *>(list->object);
-    return sprite->m_aliases.at(index);
-}
-
-QPixmap Sprite::pixmap() const
-{
-    return m_pixmap;
+    if (m_spriteSheet)
+        m_spriteSheetPixmap = m_spriteSheet->pixmap();
 }
 
 void Sprite::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
-    m_spriteSheet->setWidth(newGeometry.width());
-    m_spriteSheet->setHeight(newGeometry.height());
+}
+
+void Sprite::paint(QPainter *painter)
+{
+    if (!m_spriteSheetPixmap.isNull()) {
+        if (frameWidth() <= 0.0) {
+            m_pixmap = m_spriteSheetPixmap.scaled(width(), height(),
+                                                  Bacon2D::PreserveAspectFit ? Qt::KeepAspectRatio : (Bacon2D::PreserveAspectCrop ? Qt::KeepAspectRatioByExpanding : Qt::IgnoreAspectRatio),
+                                                  smooth() ? Qt::SmoothTransformation : Qt::FastTransformation);
+            painter->drawPixmap(0, 0, m_pixmap);
+        } else if(m_fillMode == Bacon2D::TileHorizontally) {
+            QRectF target = QRectF(boundingRect());
+            m_pixmap = m_spriteSheetPixmap.transformed(QTransform().scale(m_horizontal, m_vertical),
+                                                       smooth() ? Qt::SmoothTransformation : Qt::FastTransformation);
+            QRectF source = QRectF(frameX(),
+                                   frameY(),
+                                   frameWidth(),
+                                   frameHeight());
+
+            for (qreal x = 0.0; x < boundingRect().width(); x += frameWidth()) {
+                painter->drawPixmap(target, m_pixmap, source);
+                target.setX(x + frameWidth());
+            }
+        } else if (m_fillMode == Bacon2D::TileVertically) {
+            QRectF target = QRectF(boundingRect());
+            m_pixmap = m_spriteSheetPixmap.transformed(QTransform().scale(m_horizontal, m_vertical),
+                                                       smooth() ? Qt::SmoothTransformation : Qt::FastTransformation);
+            QRectF source = QRectF(/*(horizontalMirror() ? ((m_frames - (m_finalFrame + 1) + m_frame - m_initialFrame) * frameWidth())
+                                                                              : (m_frame * frameWidth())) + */frameX(),
+                                   frameY(),
+                                   frameWidth(),
+                                   frameHeight());
+
+            for (qreal y = 0.0; y < boundingRect().height(); y += frameHeight()) {
+                painter->drawPixmap(target, m_pixmap, source);
+                target.setY(y + frameHeight());
+            }
+        } else if (m_fillMode == Bacon2D::Tile) {
+            qWarning() << "Untested implementation for Bacon2D::Tile!";
+
+            QRectF target = QRectF(boundingRect());
+            m_pixmap = m_spriteSheetPixmap.transformed(QTransform().scale(m_horizontal, m_vertical),
+                                                       smooth() ? Qt::SmoothTransformation : Qt::FastTransformation);
+            QRectF source = QRectF(frameX(),
+                                   frameY(),
+                                   frameWidth(),
+                                   frameHeight());
+
+            for (qreal x = 0.0; x < boundingRect().width(); x += frameWidth()) {
+                painter->drawPixmap(target, m_pixmap, source);
+                target.setX(x + frameWidth());
+            }
+
+            for (qreal y = 0.0; y < boundingRect().height(); y += frameHeight()) {
+                painter->drawPixmap(target, m_pixmap, source);
+                target.setY(y + frameHeight());
+            }
+        } else {
+            QRectF target = QRectF(boundingRect());
+            m_pixmap = m_spriteSheetPixmap.transformed(QTransform().scale(m_horizontal, m_vertical),
+                                                       smooth() ? Qt::SmoothTransformation : Qt::FastTransformation);
+            QRectF source = QRectF(frameX(),
+                                   frameY(),
+                                   frameWidth(),
+                                   frameHeight());
+
+            painter->drawPixmap(target, m_pixmap, source);
+        }
+    }
+}
+
+qreal Sprite::frameX() const
+{
+    return m_frameX <= 0.0 ? 0.0 : m_frameX;
+}
+
+void Sprite::setFrameX(const qreal &frameX)
+{
+    if (frameX == m_frameX)
+        return;
+
+    m_frameX = frameX;
+    update();
+
+    emit frameXChanged();
+}
+
+qreal Sprite::frameY() const
+{
+    return m_frameY <= 0.0 ? 0.0 : m_frameY;
+}
+
+void Sprite::setFrameY(const qreal &frameY)
+{
+    if (m_frameY == frameY)
+        return;
+
+    m_frameY = frameY;
+    update();
+
+    emit frameYChanged();
+}
+
+qreal Sprite::frameWidth() const
+{
+    // Default value if frame width is not set
+    if (m_frameWidth <= 0.0 && m_spriteSheet && m_spriteSheet->horizontalFrameCount() > 0)
+        return m_spriteSheetPixmap.width() / m_spriteSheet->horizontalFrameCount();
+
+    return m_frameWidth;
+}
+
+void Sprite::setFrameWidth(const qreal &frameWidth)
+{
+    if (m_frameWidth == frameWidth)
+        return;
+
+    m_frameWidth = frameWidth;
+    emit frameWidthChanged();
+}
+
+qreal Sprite::frameHeight() const
+{
+    // Default value if frame height is not set
+    if (m_frameHeight <= 0.0 && m_spriteSheet && m_spriteSheet->verticalFrameCount() > 0)
+        return m_spriteSheetPixmap.height() / m_spriteSheet->verticalFrameCount();
+
+    return m_frameHeight;
+}
+
+void Sprite::setFrameHeight(const qreal &frameHeight)
+{
+    if (m_frameHeight == frameHeight)
+        return;
+
+    m_frameHeight = frameHeight;
+    emit frameHeightChanged();
 }

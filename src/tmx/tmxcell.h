@@ -37,12 +37,12 @@ class TMXCell : public QObject
 {
     Q_OBJECT
 public:
-    explicit TMXCell(const Tiled::Cell &cell, QObject *parent = 0)   : QObject(parent), m_cell(cell.tile()){
+    explicit TMXCell(const Tiled::Cell &cell, QObject *parent = nullptr)   : QObject(parent), m_cell(cell.tile()){
         m_cell.setFlippedAntiDiagonally(cell.flippedAntiDiagonally());
         m_cell.setFlippedHorizontally(cell.flippedHorizontally());
         m_cell.setFlippedVertically(cell.flippedVertically());
     }
-    TMXCell(const TMXCell &other) { setCell(other.cell()); }
+    TMXCell(const TMXCell &other) : QObject(nullptr) { setCell(other.cell()); }
     TMXCell &operator=(const TMXCell &other) { setCell(other.cell()); return *this; }
 
     Tiled::Cell cell() const { return m_cell; }

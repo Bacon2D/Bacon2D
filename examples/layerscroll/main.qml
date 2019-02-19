@@ -61,13 +61,14 @@ Window {
                     y: parent.scene.height / 2 - spriteItem.height / 2
 
                     AnimatedSprite {
-                        anchors.fill: parent
                         animation: "falling"
-                        source: "astronaut.png"
+                        spriteSheet: SpriteSheet {
+                            source: "astronaut.png"
+                            horizontalFrameCount: 3
+                        }
 
                         animations: SpriteAnimation {
                             name: "falling"
-                            frames: 3
                             duration: 450
                             loops: Animation.Infinite
                         }

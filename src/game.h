@@ -87,7 +87,6 @@ signals:
     void stackLevelChanged();
 
 private:
-
     QTime m_gameTime;
     int m_ups;
     int m_timerId;

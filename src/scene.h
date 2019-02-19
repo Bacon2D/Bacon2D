@@ -65,7 +65,7 @@ class Scene : public QQuickItem
     Q_PROPERTY(QObject *exitAnimation READ exitAnimation WRITE setExitAnimation NOTIFY exitAnimationChanged)
 
 public:
-    Scene(Game *parent = 0);
+    explicit Scene(QQuickItem *parent = nullptr);
     ~Scene();
 
     bool running() const;
@@ -121,6 +121,9 @@ public:
 
     QObject *exitAnimation() const;
     void setExitAnimation(QObject *animation);
+
+    void componentComplete() override;
+
 signals:
     void runningChanged();
     void viewportChanged();
@@ -148,13 +151,6 @@ protected slots:
     void onWorldChanged();
 
 protected:
-    virtual void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
-    virtual void componentComplete();
-    virtual void itemChange(ItemChange change, const ItemChangeData &data);
-    void updateEntities(QQuickItem *parent, const int &delta);
-    void initializeEntities(QQuickItem *parent);
-    void createWorld();
-
     bool m_running;
     Viewport *m_viewport;
     Game *m_game;
@@ -165,6 +161,12 @@ protected:
 
     QObject *m_enterAnimation;
     QObject *m_exitAnimation;
+
+    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
+    void itemChange(ItemChange change, const ItemChangeData &data) override;
+    void updateEntities(QQuickItem *parent, const int &delta);
+    void initializeEntities(QQuickItem *parent);
+    void createWorld();
 };
 
 

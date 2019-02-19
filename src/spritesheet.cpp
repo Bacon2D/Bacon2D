@@ -41,12 +41,12 @@ SpriteSheet::SpriteSheet(QQuickItem *parent)
     , m_frame(0)
     , m_initialFrame(0)
     , m_finalFrame(0)
-    , m_vertical(1)
-    , m_horizontal(1)
     , m_frameX(0.0)
     , m_frameY(0.0)
     , m_frameWidth(0.0)
     , m_frameHeight(0.0)
+    , m_vertical(1)
+    , m_horizontal(1)
     , m_mirror(false)
     , m_fillMode(Bacon2D::Stretch)
 {
@@ -65,8 +65,10 @@ void SpriteSheet::paint(QPainter *painter)
 {
     if (!m_pixmap.isNull()) {
         if (!m_frames && frameWidth() <= 0.0) {
-            painter->drawPixmap(0, 0, m_pixmap.scaled(width(), height(),
-                                                      Bacon2D::PreserveAspectFit ? Qt::KeepAspectRatio : (Bacon2D::PreserveAspectCrop ? Qt::KeepAspectRatioByExpanding : Qt::IgnoreAspectRatio),
+            painter->drawPixmap(0, 0, m_pixmap.scaled(static_cast<int>(width()), static_cast<int>(height()),
+                                                      m_fillMode == Bacon2D::PreserveAspectFit ? Qt::KeepAspectRatio
+                                                                                               : (m_fillMode == Bacon2D::PreserveAspectCrop
+                                                                                                  ? Qt::KeepAspectRatioByExpanding : Qt::IgnoreAspectRatio),
                                                       smooth() ? Qt::SmoothTransformation : Qt::FastTransformation));
         } else if(!m_frames && m_fillMode == Bacon2D::TileHorizontally) {
             QRectF target = QRectF(boundingRect());
@@ -119,7 +121,17 @@ void SpriteSheet::paint(QPainter *painter)
             }
         } else {
             QRectF target = QRectF(boundingRect());
-            QPixmap pixmap = m_pixmap.transformed(QTransform().scale(m_horizontal, m_vertical), smooth() ? Qt::SmoothTransformation : Qt::FastTransformation);
+            QPixmap pixmap;
+
+//            if (widthValid() && heightValid()) {
+//                pixmap = m_pixmap.transformed(QTransform().scale(m_horizontal, m_vertical), smooth() ? Qt::SmoothTransformation : Qt::FastTransformation)
+//                        .scaled(width(), height(),
+//                                Bacon2D::PreserveAspectFit ? Qt::KeepAspectRatio : (Bacon2D::PreserveAspectCrop ? Qt::KeepAspectRatioByExpanding : Qt::IgnoreAspectRatio),
+//                                        smooth() ? Qt::SmoothTransformation : Qt::FastTransformation);
+
+//            } else {
+            pixmap = m_pixmap.transformed(QTransform().scale(m_horizontal, m_vertical), smooth() ? Qt::SmoothTransformation : Qt::FastTransformation);
+            //}
             QRectF source = QRectF((horizontalMirror() ? ((m_frames - (m_finalFrame + 1) + m_frame - m_initialFrame) * frameWidth())
                                                        : (m_frame * frameWidth())) + frameX(),
                                    frameY(),

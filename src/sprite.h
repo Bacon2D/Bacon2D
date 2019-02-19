@@ -38,16 +38,16 @@
 #include <QtQuick/QQuickItem>
 #include <QtCore/QtGlobal>
 #include <QPixmap>
+#include <QQuickPaintedItem>
 #include "enums.h"
-#include "spritealias.h"
+#include "spritesheetgrid.h"
 
 class SpriteSheet;
 
-class Sprite : public QQuickItem
+class Sprite : public QQuickPaintedItem
 {
     Q_OBJECT
-    Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
-    Q_PROPERTY(QSize sourceSize READ sourceSize NOTIFY sourceSizeChanged)
+    Q_PROPERTY(SpriteSheetGrid* spriteSheet READ spriteSheet WRITE setSpriteSheet NOTIFY spriteSheetChanged)
     Q_PROPERTY(bool verticalMirror READ verticalMirror WRITE setVerticalMirror NOTIFY verticalMirrorChanged)
     Q_PROPERTY(bool horizontalMirror READ horizontalMirror WRITE setHorizontalMirror NOTIFY horizontalMirrorChanged)
     Q_PROPERTY(qreal frameX READ frameX WRITE setFrameX NOTIFY frameXChanged)
@@ -55,17 +55,11 @@ class Sprite : public QQuickItem
     Q_PROPERTY(qreal frameWidth READ frameWidth WRITE setFrameWidth NOTIFY frameWidthChanged)
     Q_PROPERTY(qreal frameHeight READ frameHeight WRITE setFrameHeight NOTIFY frameHeightChanged)
     Q_PROPERTY(Bacon2D::FillMode fillMode READ fillMode WRITE setFillMode NOTIFY fillModeChanged)
-    Q_PROPERTY(QString alias READ alias WRITE setAlias NOTIFY aliasChanged)
-    Q_PROPERTY(QQmlListProperty<SpriteAlias> aliases READ aliases)
 public:
-    Sprite(QQuickItem *parent = 0);
-    ~Sprite();
+    Sprite(QQuickItem *parent = nullptr);
 
-    QUrl source() const;
-    void setSource(const QUrl &source);
-
-    QSize sourceSize() const;
-    void setSourceSize(const QSize &sourceSize);
+    SpriteSheetGrid *spriteSheet() const;
+    void setSpriteSheet(SpriteSheetGrid *spriteSheet);
 
     bool verticalMirror() const;
     void setVerticalMirror(const bool &verticalMirror);
@@ -88,37 +82,31 @@ public:
     Bacon2D::FillMode fillMode() const;
     void setFillMode(Bacon2D::FillMode fillMode);
 
-    QString alias() const;
-    void setAlias(const QString &alias);
-
-    QQmlListProperty<SpriteAlias> aliases();
-    static void append_object(QQmlListProperty<SpriteAlias> *list, SpriteAlias *alias);
-    static int count_object(QQmlListProperty<SpriteAlias> *list);
-    static SpriteAlias *at_object(QQmlListProperty<SpriteAlias> *list, int index);
-
-    QPixmap pixmap() const;
+    void paint(QPainter *painter) override;
+    void componentComplete() override;
 signals:
-    void verticalMirrorChanged();
-    void horizontalMirrorChanged();
-    void sourceChanged();
-    void sourceSizeChanged();
+    void spriteSheetChanged();
     void frameXChanged();
     void frameYChanged();
     void frameWidthChanged();
     void frameHeightChanged();
+    void verticalMirrorChanged();
+    void horizontalMirrorChanged();
     void fillModeChanged();
-    void aliasChanged();
 protected:
-    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
+    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override final;
 private:
-    QUrl m_source;
-    QSize m_sourceSize;
-    bool m_verticalMirror;
-    bool m_horizontalMirror;
-    SpriteSheet *m_spriteSheet;
+    SpriteSheetGrid *m_spriteSheet;
+    qreal m_frameX;
+    qreal m_frameY;
+    qreal m_frameWidth;
+    qreal m_frameHeight;
+    int m_vertical;
+    int m_horizontal;
+    bool m_mirror;
+    Bacon2D::FillMode m_fillMode;
+    QPixmap m_spriteSheetPixmap;
     QPixmap m_pixmap;
-    QString m_alias;
-    QList<SpriteAlias *> m_aliases;
 };
 
 #endif /* _SPRITE_H_ */

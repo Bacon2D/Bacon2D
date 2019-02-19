@@ -55,13 +55,13 @@ HEADERS += entity.h \
            tiledobject.h \
            tiledlayer.h \
            tiledscene.h \
-    animatedsprite.h \
-    sprite.h \
-    entitymanager.h \
-    physicsentity.h \
-    pausabletimer.h \
-    spritecollection.h \
-    spritealias.h
+           animatedsprite.h \
+           sprite.h \
+           entitymanager.h \
+           physicsentity.h \
+           pausabletimer.h \
+           spritestrip.h \
+           spritesheetgrid.h
 
 SOURCES += entity.cpp \
            enums.cpp \
@@ -83,13 +83,13 @@ SOURCES += entity.cpp \
            tiledscene.cpp \
            tiledlayer.cpp \
            tiledobject.cpp \
-    animatedsprite.cpp \
-    sprite.cpp \
-    entitymanager.cpp \
-    physicsentity.cpp \
-    pausabletimer.cpp \
-    spritecollection.cpp \
-    spritealias.cpp
+           animatedsprite.cpp \
+           sprite.cpp \
+           entitymanager.cpp \
+           physicsentity.cpp \
+           pausabletimer.cpp \
+           spritestrip.cpp \
+           spritesheetgrid.cpp
 
 !isEmpty(QTPATH): target.path = $$QTPATH/qml/$$TARGETPATH
 else: target.path = $$[QT_INSTALL_QML]/$$replace(TARGETPATH, \\., /).$$API_VER

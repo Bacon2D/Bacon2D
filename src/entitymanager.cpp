@@ -14,9 +14,9 @@ EntityManagerSingleton *EntityManagerSingleton::m_entityManagerSingleton = nullp
 class EntityIncubator : public QQmlIncubator {
 public:
     EntityIncubator(Scene *parentScene, const QVariantMap &properties = QVariantMap())
-        : m_parentScene(parentScene)
-        , m_properties(properties)
-        , QQmlIncubator(IncubationMode::AsynchronousIfNested) { }
+        : QQmlIncubator(IncubationMode::AsynchronousIfNested)
+        , m_parentScene(parentScene)
+        , m_properties(properties) { }
 protected:
     virtual void setInitialState(QObject *object) {
         if (!object)

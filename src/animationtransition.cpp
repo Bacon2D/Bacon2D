@@ -30,13 +30,13 @@
 #include "animationchangeevent.h"
 #include "spriteanimation.h"
 #include "animatedsprite.h"
-#include "spritesheet.h"
+#include "spritestrip.h"
 
 #include <QDebug>
 
-AnimationTransition::AnimationTransition(SpriteAnimation *spriteAnimationItem)
+AnimationTransition::AnimationTransition(SpriteAnimation *spriteAnimation)
     : QAbstractTransition()
-    , m_spriteAnimationItem(spriteAnimationItem)
+    , m_spriteAnimation(spriteAnimation)
 {
 }
 
@@ -47,18 +47,15 @@ bool AnimationTransition::eventTest(QEvent *e)
         return false;
 
     AnimationChangeEvent *ae = static_cast<AnimationChangeEvent*>(e);
-    return (m_spriteAnimationItem->name() == ae->animation);
+    return (m_spriteAnimation->name() == ae->animationName);
 }
 
 void AnimationTransition::onTransition(QEvent *e)
 {
     Q_UNUSED(e)
 
-    if (m_spriteAnimationItem->previousAnimation() != nullptr) {
-        m_spriteAnimationItem->previousAnimation()->setVisible(false);
-        m_spriteAnimationItem->previousAnimation()->setRunning(false);
-    }
+    if (m_spriteAnimation->previousAnimation())
+        m_spriteAnimation->previousAnimation()->setRunning(false);
 
-    m_spriteAnimationItem->spriteSheet()->setVisible(true);
-    m_spriteAnimationItem->setRunning(true);
+    m_spriteAnimation->setRunning(true);
 }

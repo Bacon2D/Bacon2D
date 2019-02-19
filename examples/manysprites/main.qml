@@ -49,11 +49,13 @@ Window {
 
             AnimatedSprite {
                 animation: "explosion"
-                source: "explosion.png"
+                spriteSheet: SpriteSheet {
+                    source: "explosion.png"
+                    horizontalFrameCount: 4
+                }
 
                 animations: SpriteAnimation {
                     name: "explosion"
-                    frames: 4
                     duration: 400
                     loops: Animation.Infinite
                 }

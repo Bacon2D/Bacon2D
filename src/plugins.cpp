@@ -35,6 +35,8 @@
 #include "spriteanimation.h"
 #include "sprite.h"
 #include "animatedsprite.h"
+#include "spritestrip.h"
+#include "spritesheetgrid.h"
 #include "bacon2dimagelayer.h"
 #include "game.h"
 #include "viewport.h"
@@ -64,7 +66,6 @@
 #include "box2draycast.h"
 #include "box2dcontact.h"
 #include "scrollbehavior.h"
-#include "spritealias.h"
 
 #include "tiledscene.h"
 #include "tiledlayer.h"
@@ -73,7 +74,6 @@
 void Plugins::registerTypes(const char *uri)
 {
     Q_UNUSED(uri)
-
     qmlRegisterType<Bacon2DLayer>("Bacon2D", 1, 0, "Layer");
     qmlRegisterUncreatableType<Behavior>("Bacon2D", 1, 0, "Bacon2DBehavior", "Don't use Bacon2DBehavior directly, use one specialized behavior");
     qmlRegisterUncreatableType<Bacon2D>("Bacon2D", 1, 0, "Bacon2D", "Not creatable as an object, use only to access enums");
@@ -85,13 +85,14 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<Sprite>("Bacon2D", 1, 0, "Sprite");
     qmlRegisterType<AnimatedSprite>("Bacon2D", 1, 0, "AnimatedSprite");
     qmlRegisterType<SpriteAnimation>("Bacon2D", 1, 0, "SpriteAnimation");
+    qmlRegisterType<SpriteStrip>("Bacon2D", 1, 0, "SpriteStrip");
+    qmlRegisterType<SpriteSheetGrid>("Bacon2D", 1, 0, "SpriteSheet");
     qmlRegisterType<Bacon2DImageLayer>("Bacon2D", 1, 0, "ImageLayer");
     qmlRegisterType<Viewport>("Bacon2D", 1, 0, "Viewport");
     qmlRegisterType<ScriptBehavior>("Bacon2D", 1, 0, "ScriptBehavior");
     qmlRegisterType<Settings>("Bacon2D", 1, 0, "Settings");
     qmlRegisterType<ScrollBehavior>("Bacon2D", 1, 0, "ScrollBehavior");
     qmlRegisterType<EntityManager>("Bacon2D", 1, 0, "EntityManager");
-    qmlRegisterType<SpriteAlias>("Bacon2D", 1, 0, "SpriteAlias");
 
     // Utilities
     qmlRegisterType<PausableTimer>("Bacon2D", 1, 0, "PausableTimer");
