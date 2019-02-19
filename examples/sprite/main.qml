@@ -59,24 +59,25 @@ Window {
                 AnimatedSprite {
                     id: spriteItem
                     animation: "sliding"
-                    source: "images/sprite.png"
+                    spriteSheet: SpriteSheet {
+                        source: "images/sprite.png"
+                        horizontalFrameCount: 10
+                        verticalFrameCount: 2
+                    }
                     animations: [
                         SpriteAnimation {
                             name: "sliding"
-                            frames: 10
-                            finalFrame: 3
-                            frameY: frameHeight
+                            spriteStrip: SpriteStrip {
+                                finalFrame: 3
+                                frameY: frameHeight
+                            }
                             duration: 400
                             loops: Animation.Infinite
-                            frameHeight: spriteItem.sourceSize.height / 2
                         },
                         SpriteAnimation {
                             name: "jumping"
-                            frames: 10
                             duration: 600
                             loops: 2
-                            frameHeight: spriteItem.sourceSize.height / 2
-
                             onFinished: {
                                 spriteItem.animation = "sliding"
                             }

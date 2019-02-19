@@ -8,7 +8,7 @@
     \brief Timer that can be paused by the user at will
 
     The PausableTimer component is just like the Timer provided by Qt,
-    the added ability to be paused by the user at any given time. Its
+    with the added ability to be paused by the user at any given time. Its
     interface is exactly the same at \a Timer, the only difference being
     that setting running to false does not stop the timer, but pauses it
     until set to true again. This allows you to bind the running flag to
@@ -38,12 +38,12 @@
    \endqml
 */
 PausableTimer::PausableTimer(QObject *parent)
-    : m_timer(new QTimer(this))
+    : QObject(parent)
+    , m_timer(new QTimer(this))
     , m_interval(0)
     , m_paused(true)
     , m_repeat(false)
     , m_triggeredOnStart(false)
-    , QObject(parent)
 {
 }
 

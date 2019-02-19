@@ -41,7 +41,7 @@ public:
     explicit TMXObject(Tiled::Object *tiledObject, QObject *parent = 0)
         : QObject(parent), m_tiledObject(tiledObject) {}
 
-    TMXObject(const TMXObject &other) { setTiledObject(other.tiledObject()); }
+    TMXObject(const TMXObject &other) : QObject(nullptr) { setTiledObject(other.tiledObject()); }
 
     Tiled::Object *tiledObject() const { return m_tiledObject; }
     void setTiledObject(Tiled::Object *tiledObject) { m_tiledObject = tiledObject; }

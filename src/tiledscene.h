@@ -46,8 +46,9 @@ class TiledScene : public Scene
     Q_PROPERTY(QQuickItem *backgroundItem READ backgroundItem WRITE setBackgroundItem NOTIFY backgroundItemChanged)
     Q_PROPERTY(bool useMapBackgroundColor READ useMapBackgroundColor WRITE setUseMapBackgroundColor NOTIFY useMapBackgroundColorChanged)
     Q_PROPERTY(QQmlListProperty<TiledLayer> layers READ layers)
+
 public:
-    TiledScene(Game *parent = 0);
+    explicit TiledScene(QQuickItem *parent = nullptr);
 
     QUrl source() const;
     void setSource(const QUrl &source);
@@ -67,14 +68,16 @@ public:
     static TiledLayer *at_layer(QQmlListProperty<TiledLayer> *list, int index);
 
     TMXMap *tiledMap() const { return m_map; }
-    virtual void componentComplete();
+
 signals:
     void sourceChanged();
     void backgroundItemChanged();
     void useMapBackgroundColorChanged();
+
 protected:
     QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *);
-    virtual void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
+    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
+
 private:
     TMXMap *m_map;
     QUrl m_source;

@@ -49,38 +49,41 @@ PhysicsEntity {
 
     AnimatedSprite {
         id: sprite
+        anchors.fill: parent
         animation: "idle"
         horizontalMirror: dog.facingLeft
-        source: "images/sprite.png"
+        spriteSheet: SpriteSheet {
+            id: spriteSheet
+            source: "images/sprite.png"
+            horizontalFrameCount: 10
+            verticalFrameCount: 3
+        }
 
         animations: [
             SpriteAnimation {
                 name: "idle"
-                frames: 10
-                frameHeight: sprite.sourceSize.height / 3
                 duration: 500
                 loops: Animation.Infinite
             },
 
             SpriteAnimation {
                 name: "run"
-                frames: 10
-                finalFrame: 7
                 duration: 500
-                frameY: 2 * frameHeight
-                frameHeight: sprite.sourceSize.height / 3
                 loops: Animation.Infinite
-                inverse: dog.facingLeft
+                spriteStrip: SpriteStrip {
+                    finalFrame: 7
+                    frameY: 2 * frameHeight
+                }
             },
 
             SpriteAnimation {
                 name: "jump"
-                frames: 10
-                finalFrame: 7
-                frameY: frameHeight
-                frameHeight: sprite.sourceSize.height / 3
                 duration: 1000
                 loops: 1
+                spriteStrip: SpriteStrip {
+                    frameY: frameHeight
+                    finalFrame: 7
+                }
 
                 onFinished: {
                     dog.jumping = false
@@ -92,14 +95,13 @@ PhysicsEntity {
 
             SpriteAnimation {
                 name: "freefall"
-                frames: 10
-                initialFrame: 6
-                finalFrame: 7
-                frameY: frameHeight
                 duration: 500
-                frameHeight: sprite.sourceSize.height / 3
                 loops: Animation.Infinite
-                inverse: dog.facingLeft
+                spriteStrip: SpriteStrip {
+                    frameY: frameHeight
+                    initialFrame: 6
+                    finalFrame: 7
+                }
             }
         ]
     }

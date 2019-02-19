@@ -76,17 +76,17 @@
    }
    \endqml
 */
-Scene::Scene(Game *parent)
+Scene::Scene(QQuickItem *parent)
     : QQuickItem(parent)
     , m_running(false)
-    , m_viewport(0)
-    , m_game(parent)
-    , m_world(0)
+    , m_viewport(nullptr)
+    , m_game(nullptr)
+    , m_world(nullptr)
+    , m_debugDraw(nullptr)
     , m_physics(false)
-    , m_debugDraw(0)
     , m_debug(false)
-    , m_enterAnimation(0)
-    , m_exitAnimation(0)
+    , m_enterAnimation(nullptr)
+    , m_exitAnimation(nullptr)
 {
     setVisible(false);
 
@@ -155,7 +155,7 @@ void Scene::setEnterAnimation(QObject *animation)
 {
     const QMetaObject *meta = animation->metaObject();
     do{
-        if(QString("QQuickAbstractAnimation") == QString::fromLocal8Bit(meta->className())){
+        if(QStringLiteral("QQuickAbstractAnimation") == QString::fromLocal8Bit(meta->className())){
             m_enterAnimation = animation;
             break;
         }
@@ -201,7 +201,7 @@ void Scene::setExitAnimation(QObject *animation)
 {
     const QMetaObject *meta = animation->metaObject();
     do{
-        if(QString("QQuickAbstractAnimation") == QString::fromLocal8Bit(meta->className())){
+        if(QStringLiteral("QQuickAbstractAnimation") == QString::fromLocal8Bit(meta->className())){
             m_exitAnimation = animation;
             break;
         }
@@ -518,7 +518,7 @@ void Scene::componentComplete()
         QQmlApplicationEngine *engine = qobject_cast<QQmlApplicationEngine *>(qmlEngine(this));
 
         if (engine && !engine->rootObjects().isEmpty()) {
-            setGame(engine->rootObjects().first()->findChild<Game *>());
+            setGame(engine->rootObjects().last()->findChild<Game *>());
         }
     }
 

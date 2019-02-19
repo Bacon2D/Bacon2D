@@ -48,8 +48,8 @@ public:
     Tiled::TileLayer *tileLayer() const { return m_tileLayer; }
     void setTileLayer(Tiled::TileLayer *tileLayer) { m_tileLayer = tileLayer; }
 
-    TMXCell cellAt(const QPoint &point) const {m_tileLayer->cellAt(point.x(), point.y()); }
-    TMXCell cellAt(int x, int y) const {m_tileLayer->cellAt(x, y); }
+    TMXCell cellAt(const QPoint &point) const { return TMXCell(m_tileLayer->cellAt(point.x(), point.y())); }
+    TMXCell cellAt(int x, int y) const { return TMXCell(m_tileLayer->cellAt(x, y)); }
 
     QList<TMXCell> cells() const
     {

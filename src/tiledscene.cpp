@@ -107,7 +107,7 @@
 */
 
 // TiledScene
-TiledScene::TiledScene(Game *parent)
+TiledScene::TiledScene(QQuickItem *parent)
     : Scene(parent)
     , m_map(0)
     , m_backgroundItem(nullptr)
@@ -154,9 +154,9 @@ void TiledScene::setSource(const QUrl &source)
 }
 
 /*!
- * \qmlproperty url TiledScene::background
+ * \qmlproperty Item TiledScene::backgroundItem
  * \brief This property allows you to override the TMX image layer set in the TMX file. Note that the
- * background set takes the dimensions of the scene automatically and
+ * background set takes the dimensions of the scene automatically.
  * \return
  */
 QQuickItem *TiledScene::backgroundItem() const
@@ -173,6 +173,14 @@ void TiledScene::setBackgroundItem(QQuickItem *backgroundItem)
     emit backgroundItemChanged();
 }
 
+/*!
+ * \qmlproperty bool TiledScene::useMapBackgroundColor
+ * \brief This property determines whether the map background color is used as the background color
+ * of this scene.
+ *
+ * The default value is false.
+ * \return
+ */
 bool TiledScene::useMapBackgroundColor() const
 {
     return m_useMapBackgroundColor;
@@ -190,7 +198,7 @@ void TiledScene::setUseMapBackgroundColor(bool useMapBackgroundColor)
 bool TiledScene::loadMap(const QString &source)
 {
     Tiled::MapReader reader;
-    Tiled::Map *tiledMap = 0;
+    Tiled::Map *tiledMap = nullptr;
 
     if (m_map)
         m_map->deleteLater();
@@ -324,11 +332,6 @@ void TiledScene::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeo
         return;
 
     loadBackground();
-}
-
-void TiledScene::componentComplete()
-{
-    Scene::componentComplete();
 }
 
 /*!

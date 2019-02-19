@@ -28,6 +28,8 @@
 
 #include "spriteanimation.h"
 #include "spritesheet.h"
+#include "spritestrip.h"
+#include "animatedsprite.h"
 
 #include <QtCore/QPropertyAnimation>
 
@@ -36,34 +38,27 @@
   \inqmlmodule Bacon2D
   \brief An animation representing a state of a \l Sprite
  */
-SpriteAnimation::SpriteAnimation(QState *parent)
-    : QState(parent)
-    , m_spriteSheet(new SpriteSheet)
-    , m_spriteAnimation(new QPropertyAnimation(this))
+SpriteAnimation::SpriteAnimation(QObject *parent)
+    : QObject(parent)
+    , m_spriteStrip(nullptr)
+    , m_defaultSpriteStrip(nullptr)
+    , m_spriteSheet(nullptr)
+    , m_animation(new QPropertyAnimation(this))
+    , m_state(nullptr)
+    , m_previousSpriteAnimation(nullptr)
     , m_inverse(false)
-    , m_previousAnimationItem(nullptr)
 {
-    connect(m_spriteSheet, SIGNAL(frameChanged()), this, SIGNAL(frameChanged()));
-    connect(m_spriteSheet, SIGNAL(framesChanged()), this, SIGNAL(framesChanged()));
-    connect(m_spriteSheet, SIGNAL(frameXChanged()), this, SIGNAL(frameXChanged()));
-    connect(m_spriteSheet, SIGNAL(frameYChanged()), this, SIGNAL(frameYChanged()));
-    connect(m_spriteSheet, SIGNAL(frameWidthChanged()), this, SIGNAL(frameWidthChanged()));
-    connect(m_spriteSheet, SIGNAL(frameHeightChanged()), this, SIGNAL(frameHeightChanged()));
-    connect(m_spriteSheet, SIGNAL(initialFrameChanged()), this, SIGNAL(initialFrameChanged()));
-    connect(m_spriteSheet, SIGNAL(finalFrameChanged()), this, SIGNAL(finalFrameChanged()));
+    connect(m_animation, &QPropertyAnimation::finished, this, &SpriteAnimation::finished);
+    connect(m_animation, &QPropertyAnimation::stateChanged, this, &SpriteAnimation::onStateChanged);
 
-    connect(m_spriteAnimation, SIGNAL(finished()), this, SIGNAL(finished()));
-
-    connect(m_spriteAnimation, &QPropertyAnimation::stateChanged, this, &SpriteAnimation::onStateChanged);
-
-    m_spriteAnimation->setTargetObject(m_spriteSheet);
-    m_spriteAnimation->setPropertyName("frame");
-    m_spriteAnimation->setStartValue(0);
+    m_animation->setStartValue(0);
+    m_animation->setEndValue(0);
 }
 
 SpriteAnimation::~SpriteAnimation()
 {
-    delete m_spriteSheet;
+    if (!m_state->parent())
+        delete m_state;
 }
 
 /*!
@@ -86,21 +81,21 @@ void SpriteAnimation::setName(const QString &name)
  */
 bool SpriteAnimation::running() const
 {
-    return m_spriteAnimation->state() == QAbstractAnimation::Running;
+    return m_animation->state() == QAbstractAnimation::Running;
 }
 
 void SpriteAnimation::setRunning(const bool &running)
 {
-    bool currentState = m_spriteAnimation->state() == QAbstractAnimation::Running;
+    const bool currentState = m_animation->state() == QAbstractAnimation::Running;
+    if (currentState == running)
+        return;
 
-    if (currentState != running) {
-        if (running && !(m_spriteAnimation->startValue() == m_spriteAnimation->endValue()))
-            m_spriteAnimation->start();
-        else
-            m_spriteAnimation->stop();
+    if (running && !(m_animation->startValue() == m_animation->endValue()))
+        m_animation->start();
+    else
+        m_animation->stop();
 
-        emit runningChanged();
-    }
+    emit runningChanged();
 }
 
 /*!
@@ -109,18 +104,58 @@ void SpriteAnimation::setRunning(const bool &running)
  */
 int SpriteAnimation::loops() const
 {
-    return m_spriteAnimation->loopCount();
+    return m_animation->loopCount();
 }
 
 void SpriteAnimation::setLoops(const int &loops)
 {
-    int currentState = m_spriteAnimation->loopCount();
+    const int currentState = m_animation->loopCount();
+    if (currentState == loops)
+        return;
 
-    if (currentState != loops) {
-        m_spriteAnimation->setLoopCount(loops);
+    m_animation->setLoopCount(loops);
+    emit loopsChanged();
+}
 
-        emit loopsChanged();
+SpriteSheetGrid *SpriteAnimation::spriteSheet() const
+{
+    return m_spriteSheet;
+}
+
+SpriteStrip *SpriteAnimation::spriteStrip() const
+{
+    return m_spriteStrip;
+}
+
+void SpriteAnimation::setSpriteStrip(SpriteStrip *spriteStrip)
+{
+    if (m_spriteStrip == spriteStrip)
+        return;
+    if (m_spriteStrip && m_spriteStrip == m_defaultSpriteStrip) {
+        m_defaultSpriteStrip->deleteLater();
+        m_defaultSpriteStrip = nullptr;
     }
+
+    if (m_spriteStrip) {
+        disconnect(m_spriteStrip, &SpriteStrip::framesChanged, this, &SpriteAnimation::updateEndValue);
+        disconnect(m_spriteStrip, &SpriteStrip::initialFrameChanged, this, &SpriteAnimation::updateStartValue);
+        disconnect(m_spriteStrip, &SpriteStrip::finalFrameChanged, this, &SpriteAnimation::updateEndValue);
+        disconnect(m_spriteStrip, &SpriteStrip::frameChanged, this, &SpriteAnimation::frameChanged);
+    }
+
+    m_spriteStrip = spriteStrip;
+
+    if (m_spriteStrip) {
+        connect(m_spriteStrip, &SpriteStrip::framesChanged, this, &SpriteAnimation::updateEndValue);
+        connect(m_spriteStrip, &SpriteStrip::initialFrameChanged, this, &SpriteAnimation::updateStartValue);
+        connect(m_spriteStrip, &SpriteStrip::finalFrameChanged, this, &SpriteAnimation::updateEndValue);
+        connect(m_spriteStrip, &SpriteStrip::frameChanged, this, &SpriteAnimation::frameChanged);
+
+        if (!m_spriteStrip->spriteSheet())
+            m_spriteStrip->setSpriteSheet(m_spriteSheet);
+    }
+
+    emit spriteStripChanged();
 }
 
 /*!
@@ -129,13 +164,7 @@ void SpriteAnimation::setLoops(const int &loops)
  */
 int SpriteAnimation::frames() const
 {
-    return m_spriteSheet->frames();
-}
-
-void SpriteAnimation::setFrames(const int &frames)
-{
-    m_spriteSheet->setFrames(frames);
-    m_spriteAnimation->setEndValue(m_spriteSheet->finalFrame() == 0 ? frames - 1 : m_spriteSheet->finalFrame() + 1);
+    return m_spriteStrip->frames();
 }
 
 /*!
@@ -144,147 +173,97 @@ void SpriteAnimation::setFrames(const int &frames)
  */
 int SpriteAnimation::frame() const
 {
-    return m_spriteSheet->frame();
-}
-
-void SpriteAnimation::setFrame(const int &frame)
-{
-    m_spriteSheet->setFrame(frame);
-}
-
-qreal SpriteAnimation::frameX() const
-{
-    return m_spriteSheet->frameX();
-}
-
-void SpriteAnimation::setFrameX(const qreal &frameX)
-{
-    m_spriteSheet->setFrameX(frameX);
-}
-
-qreal SpriteAnimation::frameY() const
-{
-    return m_spriteSheet->frameY();
-}
-
-void SpriteAnimation::setFrameY(const qreal &frameY)
-{
-    m_spriteSheet->setFrameY(frameY);
-}
-
-qreal SpriteAnimation::frameWidth() const
-{
-    return m_spriteSheet->frameWidth();
-}
-
-void SpriteAnimation::setFrameWidth(const qreal &frameWidth)
-{
-    m_spriteSheet->setFrameWidth(frameWidth);
-}
-
-qreal SpriteAnimation::frameHeight() const
-{
-    return m_spriteSheet->frameHeight();
-}
-
-void SpriteAnimation::setFrameHeight(const qreal &frameHeight)
-{
-    m_spriteSheet->setFrameHeight(frameHeight);
+    return m_spriteStrip->frame();
 }
 
 /*!
  * \qmlproperty int SpriteAnimation::initialFrame
  * \brief Starting frame to be shown in the SpriteAnimation
  */
-int SpriteAnimation::initialFrame() const
-{
-    return m_spriteSheet->initialFrame();
-}
-
-void SpriteAnimation::setInitialFrame(const int &initialFrame)
-{
-    m_spriteSheet->setInitialFrame(initialFrame);
-    m_spriteAnimation->setStartValue(initialFrame);
-}
-
-int SpriteAnimation::finalFrame() const
-{
-    return m_spriteSheet->finalFrame();
-}
-
-void SpriteAnimation::setFinalFrame(const int &finalFrame)
-{
-    m_spriteSheet->setFinalFrame(finalFrame);
-    m_spriteAnimation->setEndValue(finalFrame + 1);
-}
-
-/*!
- * \qmlproperty bool SpriteAnimation::visible
- * \brief FIXME
- * \internal
- */
-bool SpriteAnimation::visible() const
-{
-    return m_spriteSheet->isVisible();
-}
-
-void SpriteAnimation::setVisible(const bool &visible)
-{
-    bool currentState = m_spriteSheet->isVisible();
-    if (currentState != visible) {
-        m_spriteSheet->setVisible(visible);
-        m_spriteSheet->update();
-
-        emit visibleChanged();
-    }
-}
-
-/*!
- * \qmlproperty SpriteSheet SpriteAnimation::spriteSheet
- * \brief FIXME
- * \internal
- */
-SpriteSheet *SpriteAnimation::spriteSheet()
-{
-    return m_spriteSheet;
-}
 
 SpriteAnimation *SpriteAnimation::previousAnimation() const
 {
-    return m_previousAnimationItem;
+    return m_previousSpriteAnimation;
 }
 
-void SpriteAnimation::setPreviousAnimation(SpriteAnimation *previousAnimationItem)
+void SpriteAnimation::setPreviousAnimation(SpriteAnimation *previousAnimation)
 {
-    if (m_previousAnimationItem == previousAnimationItem)
-        return;
+    m_previousSpriteAnimation = previousAnimation;
+}
 
-    m_previousAnimationItem = previousAnimationItem;
+QState *SpriteAnimation::state() const
+{
+    return m_state;
+}
+
+QAbstractAnimation *SpriteAnimation::animation() const
+{
+    return m_animation;
+}
+
+void SpriteAnimation::classBegin()
+{
+
+}
+
+void SpriteAnimation::componentComplete()
+{
+    if (!m_spriteStrip) {
+        SpriteStrip *spriteStrip = new SpriteStrip;
+        m_defaultSpriteStrip = spriteStrip;
+        setSpriteStrip(spriteStrip);
+    }
+
+    m_animation->setTargetObject(m_spriteStrip);
+    m_animation->setPropertyName("frame");
+    m_animation->setStartValue(m_spriteStrip->initialFrame());
+    m_animation->setEndValue(m_spriteStrip->finalFrame());
+    connect(m_spriteStrip, &SpriteStrip::framesChanged, this, &SpriteAnimation::updateEndValue);
+    connect(m_spriteStrip, &SpriteStrip::finalFrameChanged, this, &SpriteAnimation::updateEndValue);
+}
+
+void SpriteAnimation::setParentState(QState *state)
+{
+    if (m_state)
+        delete m_state;
+
+    m_state = new QState(state);
 }
 
 void SpriteAnimation::onStateChanged(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
 {
+    Q_UNUSED(oldState)
     setRunning(newState == QAbstractAnimation::Running);
 }
 
+void SpriteAnimation::updateStartValue()
+{
+    m_animation->setStartValue(m_spriteStrip->initialFrame());
+}
+
+void SpriteAnimation::updateEndValue()
+{
+    m_animation->setEndValue(m_spriteStrip->finalFrame() <= 0 ? m_spriteStrip->frames() - 1 : m_spriteStrip->finalFrame() + 1);
+}
 
 /*!
  * \qmlproperty int SpriteAnimation::duration
- * \brief Duration in milliseconds of all frames in the animation per loop.  
+ * \brief Duration in milliseconds of all frames in the animation per loop.
  */
 int SpriteAnimation::duration() const
 {
-    return m_spriteAnimation->duration();
+    return m_animation->duration();
 }
 
 void SpriteAnimation::setDuration(const int &duration)
 {
-    int currentState = m_spriteAnimation->duration();
-    if (currentState != duration) {
-        m_spriteAnimation->setDuration(duration);
+    int currentState = m_animation->duration();
+    if (currentState == duration)
+        return;
 
-        emit durationChanged();
-    }
+    m_animation->setDuration(duration);
+
+    emit durationChanged();
 }
 
 /*!
@@ -298,45 +277,30 @@ bool SpriteAnimation::inverse() const
 
 void SpriteAnimation::setInverse(const bool &inverse)
 {
-    if (m_inverse != inverse) {
-        m_inverse = inverse;
+    if (m_inverse == inverse)
+        return;
 
-        if (m_inverse) {
-            m_spriteAnimation->setStartValue(m_spriteSheet->finalFrame() + 1);
-            m_spriteAnimation->setEndValue(m_spriteSheet->initialFrame());
-        } else {
-            m_spriteAnimation->setStartValue(m_spriteSheet->initialFrame());
-            m_spriteAnimation->setEndValue(m_spriteSheet->finalFrame() + 1);
-        }
+    m_inverse = inverse;
 
-        emit inverseChanged();
+    //m_animation->setDirection(m_inverse ? QAbstractAnimation::Backward : QAbstractAnimation::Forward);
+
+    if (m_inverse) {
+        m_animation->setStartValue(m_spriteStrip->finalFrame() + 1);
+        m_animation->setEndValue(m_spriteStrip->initialFrame());
+    } else {
+        m_animation->setStartValue(m_spriteStrip->initialFrame());
+        m_animation->setEndValue(m_spriteStrip->finalFrame() + 1);
     }
-}
 
-/*!
- * \qmlproperty bool SpriteAnimation::verticalMirror
- * \brief Shows the Sprite mirrored (flipped) vertically
- */
-bool SpriteAnimation::verticalMirror() const
-{
-    return m_spriteSheet->verticalMirror();
+    emit inverseChanged();
 }
 
 void SpriteAnimation::setVerticalMirror(const bool &verticalMirror)
 {
-    m_spriteSheet->setVerticalMirror(verticalMirror);
-}
-
-/*!
- * \qmlproperty bool SpriteAnimation::horizontalMirror
- * \brief Shows the Sprite mirrored (flipped) horizontally
- */
-bool SpriteAnimation::horizontalMirror() const
-{
-    return m_spriteSheet->horizontalMirror();
+    m_spriteStrip->setVerticalMirror(verticalMirror);
 }
 
 void SpriteAnimation::setHorizontalMirror(const bool &horizontalMirror)
 {
-    m_spriteSheet->setHorizontalMirror(horizontalMirror);
+    m_spriteStrip->setHorizontalMirror(horizontalMirror);
 }

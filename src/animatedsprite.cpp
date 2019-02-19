@@ -33,38 +33,27 @@
 #include "spriteanimation.h"
 #include "animationchangeevent.h"
 #include "animationtransition.h"
-#include "spritecollection.h"
+#include "spritesheetgrid.h"
+#include "spritestrip.h"
 
 #include <QTime>
 #include <QDebug>
-#include <QQmlEngine>
-#include <QQmlContext>
 #include <QQmlApplicationEngine>
+#include <QPainter>
+#include <QQmlProperty>
 
-void AnimatedSprite::append_animation(QQmlListProperty<SpriteAnimation> *list, SpriteAnimation *animation)
+void AnimatedSprite::append_animation(QQmlListProperty<SpriteAnimation> *list, SpriteAnimation *spriteAnimation)
 {
     AnimatedSprite *spriteItem = qobject_cast<AnimatedSprite *>(list->object);
 
     if (!spriteItem)
         return;
 
-    spriteItem->m_states.insert(animation->name(), animation);
-    animation->spriteSheet()->setParentItem(spriteItem);
-    animation->spriteSheet()->setPixmap(spriteItem->pixmap());
-    animation->spriteSheet()->setHorizontalFrameCount(spriteItem->horizontalFrameCount());
-    animation->spriteSheet()->setVerticalFrameCount(spriteItem->verticalFrameCount());
+    spriteItem->m_states.insert(spriteAnimation->name(), spriteAnimation);
+    connect(spriteAnimation, &SpriteAnimation::frameChanged, spriteItem, [=]() { spriteItem->update(); });
 
-    connect(spriteItem, &AnimatedSprite::sourceChanged, [animation, spriteItem]() {
-        animation->spriteSheet()->setPixmap(spriteItem->pixmap());
-    });
-    connect(spriteItem, &AnimatedSprite::verticalFrameCountChanged, [animation, spriteItem]() {
-        animation->spriteSheet()->setVerticalFrameCount(spriteItem->verticalFrameCount());
-    });
-
-    connect(spriteItem, &AnimatedSprite::horizontalFrameCountChanged, [animation, spriteItem]() {
-        animation->spriteSheet()->setHorizontalFrameCount(spriteItem->horizontalFrameCount());
-        animation->setFrames(animation->spriteSheet()->frames());
-    });
+    if (spriteAnimation->spriteStrip() && !spriteAnimation->spriteStrip()->spriteSheet())
+        spriteAnimation->spriteStrip()->setSpriteSheet(spriteItem->spriteSheet());
 }
 
 int AnimatedSprite::count_animation(QQmlListProperty<SpriteAnimation> *list)
@@ -95,72 +84,44 @@ SpriteAnimation *AnimatedSprite::at_animation(QQmlListProperty<SpriteAnimation> 
    management of multiple SpriteAnimation animations.
  */
 AnimatedSprite::AnimatedSprite(QQuickItem *parent)
-    : QQuickItem(parent)
-    , m_stateMachine(0)
-    , m_stateGroup(0)
-    , m_entity(0)
-    , m_game(0)
-    , m_verticalMirror(false)
-    , m_horizontalMirror(false)
-    , m_verticalFrameCount(0)
-    , m_horizontalFrameCount(0)
+    : QQuickPaintedItem(parent)
+    , m_stateMachine(nullptr)
+    , m_stateGroup(nullptr)
+    , m_spriteSheet(nullptr)
+    , m_verticalScale(1)
+    , m_horizontalScale(1)
+    , m_fillMode(Bacon2D::PreserveAspectFit)
+    , m_entity(nullptr)
+    , m_game(nullptr)
     , m_state(Bacon2D::Running)
 {
+    QQmlProperty(this, "layer.enabled").write(true);
+    setFlag(QQuickItem::ItemHasContents);
+    setVisible(true);
+    setSmooth(true);
 }
 
-AnimatedSprite::~AnimatedSprite()
+SpriteSheetGrid *AnimatedSprite::spriteSheet() const
 {
-    SpriteCollection::instance().removeSprite(this);
+    return m_spriteSheet;
 }
 
-/*!
- * \qmlproperty string SpriteAnimation::source
- * \brief QUrl for the source image
- */
-
-QUrl AnimatedSprite::source() const
+void AnimatedSprite::setSpriteSheet(SpriteSheetGrid *spriteSheet)
 {
-    return m_source;
-}
-
-void AnimatedSprite::setSource(const QUrl &source)
-{
-    if (m_source == source)
+    if (m_spriteSheet == spriteSheet)
         return;
 
-    m_source = source;
-
-    m_pixmap = SpriteCollection::instance().addSprite(this);
-
-    setSourceSize(m_pixmap.size());
-
-    emit sourceChanged();
-}
-
-QSize AnimatedSprite::sourceSize() const
-{
-    return m_sourceSize;
-}
-
-void AnimatedSprite::setSourceSize(const QSize &sourceSize)
-{
-    if (m_sourceSize == sourceSize)
-        return;
-
-    m_sourceSize = sourceSize;
-    setImplicitWidth(sourceSize.width());
-    setImplicitHeight(sourceSize.height());
-
-    emit sourceSizeChanged();
+    m_spriteSheet = spriteSheet;
+    emit spriteSheetChanged();
 }
 
 QQmlListProperty<SpriteAnimation> AnimatedSprite::animations() const
 {
-    return QQmlListProperty<SpriteAnimation>(const_cast<AnimatedSprite *>(this), 0,
+    return QQmlListProperty<SpriteAnimation>(const_cast<AnimatedSprite *>(this), nullptr,
                                              &AnimatedSprite::append_animation,
                                              &AnimatedSprite::count_animation,
                                              &AnimatedSprite::at_animation,
-                                             0);
+                                             nullptr);
 }
 
 /*!
@@ -169,13 +130,13 @@ QQmlListProperty<SpriteAnimation> AnimatedSprite::animations() const
  */
 QString AnimatedSprite::animation() const
 {
-    return m_animation;
+    return m_animationName;
 }
 
-void AnimatedSprite::setAnimation(const QString &animation, const bool &force)
+void AnimatedSprite::setAnimation(const QString &animationName, const bool &force)
 {
-    if (!m_states.contains(animation)) {
-        qWarning() << "SpriteAnimation:" << animation << "invalid";
+    if (!m_states.contains(animationName)) {
+        qWarning() << "SpriteAnimation:" << animationName << "invalid";
         return;
     }
 
@@ -184,28 +145,31 @@ void AnimatedSprite::setAnimation(const QString &animation, const bool &force)
         return;
     }
 
-    if (force || (m_animation != animation)) {
+    if (force || (m_animationName != animationName)) {
         // Store previous animation to stop it later
-        SpriteAnimation *previousAnimationItem = nullptr;
-        if (m_animation != QString() && m_states.contains(m_animation))
-            previousAnimationItem = m_states[m_animation];
+        SpriteAnimation *previousSpriteAnimation = nullptr;
+        if (m_states.contains(m_animationName))
+            previousSpriteAnimation = m_states[m_animationName];
 
-        m_animation = animation;
+        m_animationName = animationName;
 
         // Set width and height after animation is set, also set previous animation
-        if (m_animation != QString() && m_states.contains(m_animation)) {
-            SpriteAnimation *animationItem = m_states[m_animation];
-            setImplicitWidth(animationItem->spriteSheet()->width());
-            setImplicitHeight(animationItem->spriteSheet()->height());
+        if (m_states.contains(m_animationName)) {
+            SpriteAnimation *spriteAnimation = m_states[m_animationName];
 
-            animationItem->setPreviousAnimation(previousAnimationItem);
+            if (spriteAnimation->spriteSheet()) {
+                setImplicitWidth(spriteAnimation->spriteSheet()->width());
+                setImplicitHeight(spriteAnimation->spriteSheet()->height());
+
+                spriteAnimation->setPreviousAnimation(previousSpriteAnimation);
+            }
         }
 
         if (!m_stateMachine)
             initializeMachine();
 
         if (m_stateMachine && m_stateMachine->isRunning())
-            m_stateMachine->postEvent(new AnimationChangeEvent(m_animation));
+            m_stateMachine->postEvent(new AnimationChangeEvent(m_animationName));
 
         emit animationChanged();
     }
@@ -213,18 +177,15 @@ void AnimatedSprite::setAnimation(const QString &animation, const bool &force)
 
 void AnimatedSprite::initializeMachine()
 {
-    m_stateMachine= new QStateMachine;
-    m_stateGroup = new QState(QState::ParallelStates);
+    m_stateMachine = new QStateMachine(this);
 
-    SpriteAnimation *animation;
-    foreach (animation, m_states.values()) {
-        AnimationTransition *transition = new AnimationTransition(animation);
-        animation->setParent(m_stateGroup);
-        animation->addTransition(transition);
+    for (SpriteAnimation *spriteAnimation : m_states.values()) {
+        AnimationTransition *transition = new AnimationTransition(spriteAnimation);
+        spriteAnimation->setParentState(m_stateMachine);
+        m_stateMachine->addTransition(transition);
     }
 
-    m_stateMachine->addState(m_stateGroup);
-    m_stateMachine->setInitialState(m_stateGroup);
+    m_stateMachine->setInitialState(m_states.value(m_animationName)->state());
 
     connect(m_stateMachine, SIGNAL(started()), this, SLOT(initializeAnimation()));
 
@@ -233,8 +194,8 @@ void AnimatedSprite::initializeMachine()
 
 void AnimatedSprite::initializeAnimation()
 {
-    if (m_animation != QString())
-        setAnimation(m_animation, (m_state == Bacon2D::Running));
+    if (!m_animationName.isEmpty())
+        setAnimation(m_animationName, (m_state == Bacon2D::Running));
 }
 
 /*!
@@ -243,18 +204,19 @@ void AnimatedSprite::initializeAnimation()
  */
 bool AnimatedSprite::verticalMirror() const
 {
-    return m_verticalMirror;
+    return m_verticalScale == -1;
 }
 
 void AnimatedSprite::setVerticalMirror(const bool &verticalMirror)
 {
-    if (m_verticalMirror == verticalMirror)
+    const bool currentState = this->verticalMirror();
+    if (currentState == verticalMirror)
         return;
 
-    m_verticalMirror = verticalMirror;
+    m_verticalScale = verticalMirror ? -1 : 1;
 
-    foreach (SpriteAnimation *animation, m_states.values())
-        animation->setVerticalMirror(m_verticalMirror);
+    for (SpriteAnimation *animation : m_states.values())
+        animation->setVerticalMirror(verticalMirror);
 
     emit verticalMirrorChanged();
 }
@@ -265,48 +227,21 @@ void AnimatedSprite::setVerticalMirror(const bool &verticalMirror)
  */
 bool AnimatedSprite::horizontalMirror() const
 {
-    return m_horizontalMirror;
+    return m_horizontalScale == -1;
 }
 
 void AnimatedSprite::setHorizontalMirror(const bool &horizontalMirror)
 {
-    if (m_horizontalMirror == horizontalMirror)
+    const bool currentState = this->horizontalMirror();
+    if (currentState == horizontalMirror)
         return;
 
-    m_horizontalMirror = horizontalMirror;
+    m_horizontalScale = horizontalMirror ? -1 : 1;
 
-    foreach (SpriteAnimation *animation, m_states.values())
-        animation->setHorizontalMirror(m_horizontalMirror);
+    for (SpriteAnimation *animation : m_states.values())
+        animation->setHorizontalMirror(horizontalMirror);
 
     emit horizontalMirrorChanged();
-}
-
-int AnimatedSprite::verticalFrameCount() const
-{
-    return m_verticalFrameCount;
-}
-
-void AnimatedSprite::setVerticalFrameCount(const int &verticalFrameCount)
-{
-    if (m_verticalFrameCount == verticalFrameCount)
-        return;
-
-    m_verticalFrameCount = verticalFrameCount;
-    emit verticalFrameCountChanged();
-}
-
-int AnimatedSprite::horizontalFrameCount() const
-{
-    return m_horizontalFrameCount;
-}
-
-void AnimatedSprite::setHorizontalFrameCount(const int &horizontalFrameCount)
-{
-    if (m_horizontalFrameCount == horizontalFrameCount)
-        return;
-
-    m_horizontalFrameCount = horizontalFrameCount;
-    emit horizontalFrameCountChanged();
 }
 
 Entity *AnimatedSprite::entity() const
@@ -326,7 +261,7 @@ void AnimatedSprite::setEntity(Entity *entity)
 void AnimatedSprite::onGameStateChanged()
 {
     if (m_state != Bacon2D::Inactive)
-        this->setSpriteState(m_game->gameState());
+        setSpriteState(m_game->gameState());
 }
 
 void AnimatedSprite::componentComplete()
@@ -338,7 +273,95 @@ void AnimatedSprite::componentComplete()
 
         if (engine && !engine->rootObjects().isEmpty()) {
             m_game = engine->rootObjects().first()->findChild<Game *>();
-            connect(m_game, SIGNAL(gameStateChanged()), this, SLOT(onGameStateChanged()));
+            connect(m_game, &Game::gameStateChanged, this, &AnimatedSprite::onGameStateChanged);
+        }
+    }
+
+    m_entity = qobject_cast<Entity *>(parentItem());
+
+    if (m_spriteSheet) {
+        for (SpriteAnimation *spriteAnimation : m_states.values()) {
+            if (spriteAnimation->spriteStrip()) {
+                if (!spriteAnimation->spriteStrip()->spriteSheet())
+                    spriteAnimation->spriteStrip()->setSpriteSheet(m_spriteSheet);
+
+                setImplicitWidth(spriteAnimation->spriteStrip()->frameWidth());
+                setImplicitHeight(spriteAnimation->spriteStrip()->frameHeight());
+            }
+        }
+    }
+}
+
+void AnimatedSprite::paint(QPainter *painter)
+{
+    if (!painter)
+        return;
+
+    const SpriteAnimation *currentSpriteAnimation = m_states.value(m_animationName);
+
+    if (m_spriteSheet && currentSpriteAnimation->spriteStrip() && !m_spriteSheet->pixmap().isNull()) {
+        const SpriteStrip *spriteStrip = currentSpriteAnimation->spriteStrip();
+        if (spriteStrip->frameWidth() <= 0.0) {
+            QPixmap pixmap = m_spriteSheet->pixmap().scaled(width(), height(),
+                                                  Bacon2D::PreserveAspectFit ? Qt::KeepAspectRatio : (Bacon2D::PreserveAspectCrop ? Qt::KeepAspectRatioByExpanding : Qt::IgnoreAspectRatio),
+                                                  smooth() ? Qt::SmoothTransformation : Qt::FastTransformation);
+            painter->drawPixmap(0, 0, pixmap);
+        } else if(m_fillMode == Bacon2D::TileHorizontally) {
+            QRectF target = QRectF(boundingRect());
+            QPixmap pixmap = m_spriteSheet->pixmap().transformed(QTransform().scale(m_horizontalScale, m_verticalScale),
+                                                       smooth() ? Qt::SmoothTransformation : Qt::FastTransformation);
+            QRectF source = QRectF(spriteStrip->currentFrameX(),
+                                   spriteStrip->frameY(),
+                                   spriteStrip->frameWidth(),
+                                   spriteStrip->frameHeight());
+
+            for (qreal x = 0.0; x < boundingRect().width(); x += spriteStrip->frameWidth()) {
+                painter->drawPixmap(target, pixmap, source);
+                target.setX(x + spriteStrip->frameWidth());
+            }
+        } else if (m_fillMode == Bacon2D::TileVertically) {
+            QRectF target = QRectF(boundingRect());
+            QPixmap pixmap = m_spriteSheet->pixmap().transformed(QTransform().scale(m_horizontalScale, m_verticalScale),
+                                                       smooth() ? Qt::SmoothTransformation : Qt::FastTransformation);
+            QRectF source = QRectF(spriteStrip->currentFrameX(),
+                                   spriteStrip->frameY(),
+                                   spriteStrip->frameWidth(),
+                                   spriteStrip->frameHeight());
+
+            for (qreal y = 0.0; y < boundingRect().height(); y += spriteStrip->frameHeight()) {
+                painter->drawPixmap(target, pixmap, source);
+                target.setY(y + spriteStrip->frameHeight());
+            }
+        } else if (m_fillMode == Bacon2D::Tile) {
+            qWarning() << "Untested implementation for Bacon2D::Tile!";
+
+            QRectF target = QRectF(boundingRect());
+            QPixmap pixmap = m_spriteSheet->pixmap().transformed(QTransform().scale(m_horizontalScale, m_verticalScale),
+                                                       smooth() ? Qt::SmoothTransformation : Qt::FastTransformation);
+            QRectF source = QRectF(spriteStrip->currentFrameX(),
+                                   spriteStrip->frameY(),
+                                   spriteStrip->frameWidth(),
+                                   spriteStrip->frameHeight());
+
+            for (qreal x = 0.0; x < boundingRect().width(); x += spriteStrip->frameWidth()) {
+                painter->drawPixmap(target, pixmap, source);
+                target.setX(x + spriteStrip->frameWidth());
+            }
+
+            for (qreal y = 0.0; y < boundingRect().height(); y += spriteStrip->frameHeight()) {
+                painter->drawPixmap(target, pixmap, source);
+                target.setY(y + spriteStrip->frameHeight());
+            }
+        } else {
+            QRectF target = QRectF(boundingRect());
+            QPixmap pixmap = m_spriteSheet->pixmap().transformed(QTransform().scale(m_horizontalScale, m_verticalScale),
+                                                       smooth() ? Qt::SmoothTransformation : Qt::FastTransformation);
+            QRectF source = QRectF(spriteStrip->currentFrameX(),
+                                   spriteStrip->frameY(),
+                                   spriteStrip->frameWidth(),
+                                   spriteStrip->frameHeight());
+
+            painter->drawPixmap(target, pixmap, source);
         }
     }
 }
@@ -354,17 +377,15 @@ void AnimatedSprite::setSpriteState(const Bacon2D::State &state)
 
     m_state = state;
 
-    if (m_animation != QString() && m_states.contains(m_animation)) {
-        SpriteAnimation *animationItem = m_states[m_animation];
-        animationItem->setRunning(m_state == Bacon2D::Running);
-        if (m_state == Bacon2D::Running || m_state == Bacon2D::Paused)
-            animationItem->setVisible(true);
+    if (!m_animationName.isEmpty() && m_states.contains(m_animationName)) {
+        SpriteAnimation *spriteAnimation = m_states[m_animationName];
+        spriteAnimation->setRunning(m_state == Bacon2D::Running);
     }
 
     emit spriteStateChanged();
 
     if (!m_stateMachine)
-        return;
+        initializeMachine();
 
     if (m_state == Bacon2D::Running && !m_stateMachine->isRunning())
         m_stateMachine->start();
@@ -375,4 +396,27 @@ void AnimatedSprite::setSpriteState(const Bacon2D::State &state)
 QPixmap AnimatedSprite::pixmap() const
 {
     return m_pixmap;
+}
+
+void AnimatedSprite::updateSize()
+{
+    const SpriteAnimation *currentSpriteAnimation = m_states.value(m_animationName);
+    if (currentSpriteAnimation && currentSpriteAnimation->spriteStrip()) {
+        setImplicitWidth(currentSpriteAnimation->spriteStrip()->frameWidth());
+        setImplicitHeight(currentSpriteAnimation->spriteStrip()->height());
+    }
+}
+
+void AnimatedSprite::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+{
+    QQuickItem::geometryChanged(newGeometry, oldGeometry);
+//    const QStringList &names = m_states.keys();
+
+//    for (const QString &name : names) {
+//        SpriteSheet *spriteSheet = m_states.value(name)->spriteSheet();
+//        if (spriteSheet) {
+//            spriteSheet->setWidth(newGeometry.width());
+//            spriteSheet->setHeight(newGeometry.height());
+//        }
+//    }
 }

@@ -32,10 +32,11 @@
 #include "entity.h"
 #include "enums.h"
 #include "game.h"
+#include "spritesheetgrid.h"
 
 #include <QtCore/QHash>
 #include <QtCore/QStateMachine>
-#include <QtQuick/QQuickItem>
+#include <QQuickPaintedItem>
 #include <QtCore/QtGlobal>
 #include <QPixmap>
 
@@ -43,34 +44,27 @@ class Scene;
 class SpriteAnimation;
 class SpriteSheet;
 
-class AnimatedSprite : public QQuickItem
+class AnimatedSprite : public QQuickPaintedItem
 {
     Q_OBJECT
-    Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
-    Q_PROPERTY(QSize sourceSize READ sourceSize NOTIFY sourceSizeChanged)
+    Q_PROPERTY(SpriteSheetGrid* spriteSheet READ spriteSheet WRITE setSpriteSheet NOTIFY spriteSheetChanged)
     Q_PROPERTY(QQmlListProperty<SpriteAnimation> animations READ animations)
     Q_PROPERTY(QString animation READ animation WRITE setAnimation NOTIFY animationChanged)
     Q_PROPERTY(bool verticalMirror READ verticalMirror WRITE setVerticalMirror NOTIFY verticalMirrorChanged)
     Q_PROPERTY(bool horizontalMirror READ horizontalMirror WRITE setHorizontalMirror NOTIFY horizontalMirrorChanged)
-    Q_PROPERTY(int verticalFrameCount READ verticalFrameCount WRITE setVerticalFrameCount NOTIFY verticalFrameCountChanged)
-    Q_PROPERTY(int horizontalFrameCount READ horizontalFrameCount WRITE setHorizontalFrameCount NOTIFY horizontalFrameCountChanged)
     Q_PROPERTY(Entity *entity READ entity WRITE setEntity NOTIFY entityChanged)
     Q_PROPERTY(Bacon2D::State spriteState READ spriteState WRITE setSpriteState NOTIFY spriteStateChanged)
 
 public:
-    AnimatedSprite(QQuickItem *parent = 0);
-    ~AnimatedSprite();
+    explicit AnimatedSprite(QQuickItem *parent = nullptr);
 
-    QUrl source() const;
-    void setSource(const QUrl &source);
-
-    QSize sourceSize() const;
-    void setSourceSize(const QSize &sourceSize);
+    SpriteSheetGrid *spriteSheet() const;
+    void setSpriteSheet(SpriteSheetGrid *spriteSheet);
 
     QQmlListProperty<SpriteAnimation> animations() const;
 
     QString animation() const;
-    void setAnimation(const QString &animation, const bool &force = false);
+    void setAnimation(const QString &animationName, const bool &force = false);
 
     bool verticalMirror() const;
     void setVerticalMirror(const bool &verticalMirror);
@@ -78,11 +72,8 @@ public:
     bool horizontalMirror() const;
     void setHorizontalMirror(const bool &horizontalMirror);
 
-    int verticalFrameCount() const;
-    void setVerticalFrameCount(const int &verticalFrameCount);
-
-    int horizontalFrameCount() const;
-    void setHorizontalFrameCount(const int &horizontalFrameCount);
+    Bacon2D::FillMode fillMode() const;
+    void setFillMode(Bacon2D::FillMode fillMode);
 
     Entity *entity() const;
     void setEntity(Entity *entity);
@@ -92,46 +83,45 @@ public:
 
     QPixmap pixmap() const;
 
+    void updateSize();
+
+    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
+    void componentComplete() override;
+    void paint(QPainter *painter) override;
+
 public slots:
     void initializeAnimation();
     void onGameStateChanged();
 
 signals:
+    void spriteSheetChanged();
     void animationChanged();
     void verticalMirrorChanged();
     void horizontalMirrorChanged();
-    void verticalFrameCountChanged();
-    void horizontalFrameCountChanged();
+    void fillModeChanged();
     void entityChanged();
     void spriteStateChanged();
-    void sourceChanged();
-    void sourceSizeChanged();
-
-protected:
-    virtual void componentComplete();
 
 private:
     void initializeMachine();
 
 private:
-    static void append_animation(QQmlListProperty<SpriteAnimation> *list, SpriteAnimation *animation);
-    static int count_animation(QQmlListProperty<SpriteAnimation> *list);
-    static SpriteAnimation *at_animation(QQmlListProperty<SpriteAnimation> *list, int index);
-
     QStateMachine *m_stateMachine;
     QState *m_stateGroup;
+    SpriteSheetGrid *m_spriteSheet;
     QHash<QString, SpriteAnimation *> m_states;
-    QUrl m_source;
-    QSize m_sourceSize;
-    QString m_animation;
-    bool m_verticalMirror;
-    bool m_horizontalMirror;
-    int m_verticalFrameCount;
-    int m_horizontalFrameCount;
+    QString m_animationName;
+    int m_verticalScale;
+    int m_horizontalScale;
+    int m_fillMode;
     Entity *m_entity;
     Game *m_game;
     Bacon2D::State m_state;
     QPixmap m_pixmap;
+
+    static void append_animation(QQmlListProperty<SpriteAnimation> *list, SpriteAnimation *spriteAnimation);
+    static int count_animation(QQmlListProperty<SpriteAnimation> *list);
+    static SpriteAnimation *at_animation(QQmlListProperty<SpriteAnimation> *list, int index);
 };
 
 #endif /* _ANIMATEDSPRITE_H_ */

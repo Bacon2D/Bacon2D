@@ -4,8 +4,8 @@
 #include "scene.h"
 
 PhysicsEntity::PhysicsEntity(Scene *parent)
-    : m_body(new Box2DBody(this))
-    , Entity(parent)
+    : Entity(parent)
+    , m_body(new Box2DBody(this))
 {
     m_body->setTarget(this);
     setTransformOrigin(QQuickItem::TopLeft);
@@ -151,7 +151,7 @@ void PhysicsEntity::setFixedRotation(bool fixedRotation)
 
 bool PhysicsEntity::isAwake() const
 {
-    m_body->isAwake();
+    return m_body->isAwake();
 }
 
 void PhysicsEntity::setAwake(bool awake)
