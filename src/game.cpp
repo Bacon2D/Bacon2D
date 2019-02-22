@@ -181,7 +181,7 @@ void Game::setGameState(const Bacon2D::State &state)
 Scene *Game::currentScene() const
 {
     if(m_sceneStack.isEmpty())
-        return NULL;
+        return nullptr;
     return m_sceneStack.top();
 }
 
@@ -231,7 +231,7 @@ void Game::setCurrentScene(Scene *currentScene)
         activateScene(currentScene);
         if(m_exitScene)
             m_exitScene->setVisible(false);
-        m_exitScene = NULL;
+        m_exitScene = nullptr;
     }
 }
 
@@ -277,7 +277,7 @@ void Game::pushScene(Scene *scene)
         }
     }
 
-    Scene *topScene = NULL;
+    Scene *topScene = nullptr;
 
     if(!m_sceneStack.isEmpty()){
         topScene = m_sceneStack.top();
@@ -314,7 +314,7 @@ the exit will be animated. When there is no scene on stack, it will do nothing.
 Scene* Game::popScene()
 {
     if(m_sceneStack.isEmpty())
-        return NULL;
+        return nullptr;
 
     Scene *topScene = m_sceneStack.pop();
 
@@ -377,7 +377,7 @@ void Game::update()
         return;
 
     Scene *currentScene = m_sceneStack.top();
-    long elapsedTime = m_gameTime.restart();
+    int elapsedTime = m_gameTime.restart();
 
     if (currentScene && currentScene->running())
         currentScene->update(elapsedTime);
@@ -481,10 +481,10 @@ void Game::handleEnterAnimationRunningChanged(bool running)
     if(running)
         return;
 
-    disconnect(sender(), 0, this, SLOT(handleEnterAnimationRunningChanged(bool)));
+    disconnect(sender(), nullptr, this, SLOT(handleEnterAnimationRunningChanged(bool)));
 
    activateScene(m_enterScene);
-   m_enterScene = NULL;
+   m_enterScene = nullptr;
 
    if(m_exitScene)
        m_exitScene->setVisible(false);
@@ -516,7 +516,7 @@ void Game::handleExitAnimationRunningChanged(bool running)
 {
    if(running)
        return;
-   disconnect(sender(), 0, this, SLOT(handleExitAnimationRunningChanged(bool)));
+   disconnect(sender(), nullptr, this, SLOT(handleExitAnimationRunningChanged(bool)));
 
    if(m_exitScene){
        if(m_exitScene->viewport()){
@@ -524,7 +524,7 @@ void Game::handleExitAnimationRunningChanged(bool running)
        }
        m_exitScene->setVisible(false);
    }
-   m_exitScene = NULL;
+   m_exitScene = nullptr;
 
    if(!m_sceneStack.isEmpty()){
        if(!m_sceneStack.top()->running()){

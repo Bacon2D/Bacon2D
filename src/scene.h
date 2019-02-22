@@ -66,7 +66,7 @@ class Scene : public QQuickItem
 
 public:
     explicit Scene(QQuickItem *parent = nullptr);
-    ~Scene();
+    virtual ~Scene() override = default;
 
     bool running() const;
     void setRunning(const bool &running);

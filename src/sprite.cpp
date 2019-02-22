@@ -113,10 +113,12 @@ bool Sprite::verticalMirror() const
 
 void Sprite::setVerticalMirror(const bool &verticalMirror)
 {
-    m_vertical = (verticalMirror) ? -1 : 1;
+    if (this->verticalMirror() == verticalMirror)
+        return;
 
-    if (m_vertical == -1 || m_horizontal == -1)
-        m_mirror = true;
+    m_vertical = (verticalMirror) ? -1 : 1;
+    m_mirror = m_vertical == -1 || m_horizontal == -1;
+    emit verticalMirrorChanged();
 
     update();
 }
@@ -132,10 +134,12 @@ bool Sprite::horizontalMirror() const
 
 void Sprite::setHorizontalMirror(const bool &horizontalMirror)
 {
-    m_horizontal = (horizontalMirror) ? -1 : 1;
+    if (this->horizontalMirror() == horizontalMirror)
+        return;
 
-    if (m_vertical == -1 || m_horizontal == -1)
-        m_mirror = true;
+    m_horizontal = (horizontalMirror) ? -1 : 1;
+    m_mirror = m_vertical == -1 || m_horizontal == -1;
+    emit horizontalMirrorChanged();
 
     update();
 }

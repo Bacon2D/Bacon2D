@@ -122,16 +122,8 @@ void SpriteSheet::paint(QPainter *painter)
         } else {
             QRectF target = QRectF(boundingRect());
             QPixmap pixmap;
-
-//            if (widthValid() && heightValid()) {
-//                pixmap = m_pixmap.transformed(QTransform().scale(m_horizontal, m_vertical), smooth() ? Qt::SmoothTransformation : Qt::FastTransformation)
-//                        .scaled(width(), height(),
-//                                Bacon2D::PreserveAspectFit ? Qt::KeepAspectRatio : (Bacon2D::PreserveAspectCrop ? Qt::KeepAspectRatioByExpanding : Qt::IgnoreAspectRatio),
-//                                        smooth() ? Qt::SmoothTransformation : Qt::FastTransformation);
-
-//            } else {
             pixmap = m_pixmap.transformed(QTransform().scale(m_horizontal, m_vertical), smooth() ? Qt::SmoothTransformation : Qt::FastTransformation);
-            //}
+
             QRectF source = QRectF((horizontalMirror() ? ((m_frames - (m_finalFrame + 1) + m_frame - m_initialFrame) * frameWidth())
                                                        : (m_frame * frameWidth())) + frameX(),
                                    frameY(),

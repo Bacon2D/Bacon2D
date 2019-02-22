@@ -85,7 +85,6 @@ public:
 
     void updateSize();
 
-    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
     void componentComplete() override;
     void paint(QPainter *painter) override;
 

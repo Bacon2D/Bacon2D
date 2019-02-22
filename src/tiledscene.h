@@ -49,6 +49,7 @@ class TiledScene : public Scene
 
 public:
     explicit TiledScene(QQuickItem *parent = nullptr);
+    ~TiledScene() override = default;
 
     QUrl source() const;
     void setSource(const QUrl &source);

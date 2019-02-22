@@ -294,13 +294,3 @@ void SpriteAnimation::setInverse(const bool &inverse)
 
     emit inverseChanged();
 }
-
-void SpriteAnimation::setVerticalMirror(const bool &verticalMirror)
-{
-    m_spriteStrip->setVerticalMirror(verticalMirror);
-}
-
-void SpriteAnimation::setHorizontalMirror(const bool &horizontalMirror)
-{
-    m_spriteStrip->setHorizontalMirror(horizontalMirror);
-}

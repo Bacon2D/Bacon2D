@@ -93,14 +93,9 @@ Scene::Scene(QQuickItem *parent)
     connect(this, SIGNAL(worldChanged()), SLOT(onWorldChanged()));
 }
 
-Scene::~Scene()
-{
-}
-
 void Scene::updateEntities(QQuickItem *parent, const int &delta)
 {
-    QQuickItem *item;
-    foreach (item, parent->childItems()) {
+    for (auto item : parent->childItems()) {
         if (Entity *entity = qobject_cast<Entity *>(item))
             entity->update(delta);
         else if (Bacon2DLayer *layer = qobject_cast<Bacon2DLayer *>(item))
@@ -160,7 +155,7 @@ void Scene::setEnterAnimation(QObject *animation)
             break;
         }
     }
-    while( (meta = meta->superClass()) != 0);
+    while( (meta = meta->superClass()) != nullptr);
 }
 
 /*!
@@ -206,7 +201,7 @@ void Scene::setExitAnimation(QObject *animation)
             break;
         }
     }
-    while( (meta = meta->superClass()) != 0);
+    while( (meta = meta->superClass()) != nullptr);
 }
 
 /*!
@@ -332,7 +327,7 @@ void Scene::setDebug(const bool &debug)
     if(!debug && m_debugDraw) {
         m_debugDraw->setVisible(false);
         m_debugDraw->deleteLater();
-        m_debugDraw = 0;
+        m_debugDraw = nullptr;
     }
 
     if(debug != m_debug){
@@ -432,7 +427,7 @@ void Scene::setAutoClearForces(bool autoClearForces)
 Box2DProfile *Scene::profile() const
 {
     if (!m_world)
-        return NULL;
+        return nullptr;
 
     return m_world->profile();
 }

@@ -216,7 +216,7 @@ void AnimatedSprite::setVerticalMirror(const bool &verticalMirror)
     m_verticalScale = verticalMirror ? -1 : 1;
 
     for (SpriteAnimation *animation : m_states.values())
-        animation->setVerticalMirror(verticalMirror);
+        animation->spriteStrip()->setVerticalMirror(verticalMirror);
 
     emit verticalMirrorChanged();
 }
@@ -239,7 +239,7 @@ void AnimatedSprite::setHorizontalMirror(const bool &horizontalMirror)
     m_horizontalScale = horizontalMirror ? -1 : 1;
 
     for (SpriteAnimation *animation : m_states.values())
-        animation->setHorizontalMirror(horizontalMirror);
+        animation->spriteStrip()->setHorizontalMirror(horizontalMirror);
 
     emit horizontalMirrorChanged();
 }
@@ -302,8 +302,8 @@ void AnimatedSprite::paint(QPainter *painter)
     if (m_spriteSheet && currentSpriteAnimation->spriteStrip() && !m_spriteSheet->pixmap().isNull()) {
         const SpriteStrip *spriteStrip = currentSpriteAnimation->spriteStrip();
         if (spriteStrip->frameWidth() <= 0.0) {
-            QPixmap pixmap = m_spriteSheet->pixmap().scaled(width(), height(),
-                                                  Bacon2D::PreserveAspectFit ? Qt::KeepAspectRatio : (Bacon2D::PreserveAspectCrop ? Qt::KeepAspectRatioByExpanding : Qt::IgnoreAspectRatio),
+            QPixmap pixmap = m_spriteSheet->pixmap().scaled(static_cast<int>(width()), static_cast<int>(height()),
+                                                  m_fillMode == Bacon2D::PreserveAspectFit ? Qt::KeepAspectRatio : (m_fillMode == Bacon2D::PreserveAspectCrop ? Qt::KeepAspectRatioByExpanding : Qt::IgnoreAspectRatio),
                                                   smooth() ? Qt::SmoothTransformation : Qt::FastTransformation);
             painter->drawPixmap(0, 0, pixmap);
         } else if(m_fillMode == Bacon2D::TileHorizontally) {
@@ -405,18 +405,4 @@ void AnimatedSprite::updateSize()
         setImplicitWidth(currentSpriteAnimation->spriteStrip()->frameWidth());
         setImplicitHeight(currentSpriteAnimation->spriteStrip()->height());
     }
-}
-
-void AnimatedSprite::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
-{
-    QQuickItem::geometryChanged(newGeometry, oldGeometry);
-//    const QStringList &names = m_states.keys();
-
-//    for (const QString &name : names) {
-//        SpriteSheet *spriteSheet = m_states.value(name)->spriteSheet();
-//        if (spriteSheet) {
-//            spriteSheet->setWidth(newGeometry.width());
-//            spriteSheet->setHeight(newGeometry.height());
-//        }
-//    }
 }

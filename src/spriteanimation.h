@@ -76,9 +76,6 @@ public:
     bool inverse() const;
     void setInverse(const bool &inverse);
 
-    void setVerticalMirror(const bool &verticalMirror);
-    void setHorizontalMirror(const bool &horizontalMirror);
-
     SpriteSheetGrid *spriteSheet() const;
 
     SpriteAnimation *previousAnimation() const;
@@ -101,7 +98,6 @@ signals:
     void durationChanged();
     void inverseChanged();
     void finished();
-
 private:
     QString m_name;
     SpriteStrip *m_spriteStrip;
