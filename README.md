@@ -76,11 +76,11 @@ $ qmlscene -I ../../build/src/imports main.qml
 * Added EntityManager class for managing all entities in a game
 * Converted PhysicsEntity QML class to PhysicsEntity C++ class (as suggested by adderly)
 * Added PausableTimer class, QML Timer with the ability to pause and resume at will
-* Added SpriteCollection class for easier handling of the lifetime of sprites in memory
-* Added SpriteAlias class, which maps sprite coordinates (like frameX, frameY, etc.) to a name, making it easier to refer to sprites and change sprite sources through QML bindings
-* Added "alias" and "aliases" properties to Sprite class
+* Added SpriteSheet and SpriteStrip QML component
+* Added TiledMapping for mapping properties in a TMX file to properties of a PhysicsEntity
+* Added TiledBackground to get properties of a Tiled background
+* Swapped a parallel state machine for a sequential state machine for sprite animations, preventing parallel running sprite animations
 * Added getProperty() method to TiledScene to allow user to get properties from a TMX map 
-* Added backgroundItem property to TiledScene to allow user to override background image with custom QQuickItem
 * Added useMapBackgroundColor property to TiledScene to allow user to use background color specified in TMX file
 
 ## 5. Bug fixes
