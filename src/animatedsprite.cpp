@@ -26,9 +26,9 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
+#include "animatedsprite.h"
 #include "game.h"
 #include "scene.h"
-#include "animatedsprite.h"
 #include "spritesheet.h"
 #include "spriteanimation.h"
 #include "animationchangeevent.h"
@@ -187,7 +187,7 @@ void AnimatedSprite::initializeMachine()
 
     m_stateMachine->setInitialState(m_states.value(m_animationName)->state());
 
-    connect(m_stateMachine, SIGNAL(started()), this, SLOT(initializeAnimation()));
+    connect(m_stateMachine, &QStateMachine::started, this, &AnimatedSprite::initializeAnimation);
 
     m_stateMachine->start();
 }
@@ -239,7 +239,8 @@ void AnimatedSprite::setHorizontalMirror(const bool &horizontalMirror)
     m_horizontalScale = horizontalMirror ? -1 : 1;
 
     for (SpriteAnimation *animation : m_states.values())
-        animation->spriteStrip()->setHorizontalMirror(horizontalMirror);
+        if (animation->spriteStrip())
+            animation->spriteStrip()->setHorizontalMirror(horizontalMirror);
 
     emit horizontalMirrorChanged();
 }

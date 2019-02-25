@@ -36,7 +36,7 @@ class TMXObjectLayer : public TMXLayer
     Q_OBJECT
 
 public:
-    explicit TMXObjectLayer(Tiled::ObjectGroup *objLayer, QObject *parent = 0)
+    explicit TMXObjectLayer(Tiled::ObjectGroup *objLayer, QObject *parent = nullptr)
         : TMXLayer(objLayer, parent), m_objectLayer(objLayer) {}
 
     Tiled::ObjectGroup *tiledObjectLayer() const { return m_objectLayer; }

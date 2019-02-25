@@ -245,8 +245,3 @@ qreal SpriteStrip::currentFrameX() const
 
     return 0.0;
 }
-
-void SpriteStrip::componentComplete()
-{
-    QQuickItem::componentComplete();
-}

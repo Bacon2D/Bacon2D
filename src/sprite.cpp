@@ -177,8 +177,12 @@ void Sprite::paint(QPainter *painter)
 {
     if (!m_spriteSheetPixmap.isNull()) {
         if (frameWidth() <= 0.0) {
-            m_pixmap = m_spriteSheetPixmap.scaled(width(), height(),
-                                                  Bacon2D::PreserveAspectFit ? Qt::KeepAspectRatio : (Bacon2D::PreserveAspectCrop ? Qt::KeepAspectRatioByExpanding : Qt::IgnoreAspectRatio),
+            m_pixmap = m_spriteSheetPixmap.scaled(static_cast<int>(width()),
+                                                  static_cast<int>(height()),
+                                                  m_fillMode == Bacon2D::PreserveAspectFit ? Qt::KeepAspectRatio
+                                                                                           : (m_fillMode == Bacon2D::PreserveAspectCrop
+                                                                                              ? Qt::KeepAspectRatioByExpanding
+                                                                                              : Qt::IgnoreAspectRatio),
                                                   smooth() ? Qt::SmoothTransformation : Qt::FastTransformation);
             painter->drawPixmap(0, 0, m_pixmap);
         } else if(m_fillMode == Bacon2D::TileHorizontally) {

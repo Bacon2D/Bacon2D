@@ -63,7 +63,7 @@
  */
 ScriptBehavior::ScriptBehavior(QObject *parent)
     : Behavior(parent)
-    , m_expression(0)
+    , m_expression(nullptr)
 {
 }
 

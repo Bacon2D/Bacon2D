@@ -42,7 +42,7 @@ class TMXMap : public TMXObject
     Q_OBJECT
 
 public:
-    explicit TMXMap(Tiled::Map *tiledMap, QObject *parent = 0)
+    explicit TMXMap(Tiled::Map *tiledMap, QObject *parent = nullptr)
         : TMXObject(tiledMap, parent), m_tiledMap(tiledMap) {}
 
     Tiled::Map *tiledMap() const { return m_tiledMap; }
@@ -62,7 +62,7 @@ public:
 
     QList<TMXLayer> layers() const {
         QList<TMXLayer> allLayers;
-        foreach(Tiled::Layer *layer, m_tiledMap->layers())
+        for (Tiled::Layer *layer : m_tiledMap->layers())
             allLayers.append(TMXLayer(layer));
 
         return allLayers;
@@ -70,7 +70,7 @@ public:
 
     QList<TMXObjectGroup> objectGroups() const {
         QList<TMXObjectGroup> allObjectGroups;
-        foreach(Tiled::ObjectGroup *objectGroup, m_tiledMap->objectGroups())
+        for (Tiled::ObjectGroup *objectGroup : m_tiledMap->objectGroups())
             allObjectGroups.append(TMXObjectGroup(objectGroup));
 
         return allObjectGroups;
@@ -78,7 +78,7 @@ public:
 
     QList<TMXTileLayer> tileLayers() const {
         QList<TMXTileLayer> allTileLayers;
-        foreach(Tiled::TileLayer *tileLayer, m_tiledMap->tileLayers())
+        for (Tiled::TileLayer *tileLayer : m_tiledMap->tileLayers())
             allTileLayers.append(TMXTileLayer(tileLayer));
 
         return allTileLayers;
@@ -86,8 +86,7 @@ public:
 
     QList<TMXTileset> tilesets() const {
         QList<TMXTileset> allTilesets;
-
-        foreach(Tiled::SharedTileset tileset, m_tiledMap->tilesets())
+        for (Tiled::SharedTileset tileset : m_tiledMap->tilesets())
             allTilesets.append(TMXTileset(tileset.data()));
 
         return allTilesets;

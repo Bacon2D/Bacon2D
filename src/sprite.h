@@ -56,7 +56,7 @@ class Sprite : public QQuickPaintedItem
     Q_PROPERTY(qreal frameHeight READ frameHeight WRITE setFrameHeight NOTIFY frameHeightChanged)
     Q_PROPERTY(Bacon2D::FillMode fillMode READ fillMode WRITE setFillMode NOTIFY fillModeChanged)
 public:
-    Sprite(QQuickItem *parent = nullptr);
+    explicit Sprite(QQuickItem *parent = nullptr);
 
     SpriteSheetGrid *spriteSheet() const;
     void setSpriteSheet(SpriteSheetGrid *spriteSheet);

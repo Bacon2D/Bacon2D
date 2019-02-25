@@ -34,7 +34,6 @@
 
 SpriteSheet::SpriteSheet(QQuickItem *parent)
     : QQuickPaintedItem(parent)
-    , m_pixmap(QPixmap())
     , m_horizontalFrameCount(0)
     , m_verticalFrameCount(0)
     , m_frames(0)

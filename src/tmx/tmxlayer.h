@@ -38,9 +38,8 @@ class TMXImageLayer;
 class TMXLayer : public TMXObject
 {
     Q_OBJECT
-
 public:
-    explicit TMXLayer(Tiled::Layer *layer, QObject *parent = 0)
+    explicit TMXLayer(Tiled::Layer *layer, QObject *parent = nullptr)
         : TMXObject(layer, parent), m_layer(layer) {}
 
     TMXLayer &operator=(const TMXLayer &other) { setLayer(other.layer()); return *this; }
@@ -74,13 +73,13 @@ public:
 
     QPointF offset() const { return m_layer->offset(); }
 
-    int width() const { return lWidth; }
-    int height() const { return lHeight; }
+    int width() const { return m_width; }
+    int height() const { return m_height; }
 
-    QRect bounds() const { return QRect(m_layer->x(), m_layer->y(), lWidth, lHeight); }
+    QRect bounds() const { return QRect(m_layer->x(), m_layer->y(), m_width, m_height); }
 
-    QSize size() const { return QSize(lWidth, lHeight); }
-    void setSize(const QSize &size) { lWidth = size.width(); lHeight = size.height(); }
+    QSize size() const { return QSize(m_width, m_height); }
+    void setSize(const QSize &size) { m_width = size.width(); m_height = size.height(); }
 
     bool isTileLayer() const { return m_layer->isTileLayer(); }
     bool isImageLayer() const { return m_layer->isImageLayer(); }
@@ -90,8 +89,8 @@ public:
 private:
     Tiled::Layer *m_layer;
     TMXMap *m_map;
-    int lWidth;
-    int lHeight;
+    int m_width;
+    int m_height;
 };
 
 #endif // TMXLAYER_H

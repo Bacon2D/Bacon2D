@@ -42,16 +42,11 @@ Bacon2DLayer::Bacon2DLayer(QQuickItem *parent)
     : QQuickItem(parent)
     , m_type(Bacon2DLayer::Infinite)
     , m_updateInterval(0)
-    , m_behavior(0)
-    , m_scene(0)
+    , m_behavior(nullptr)
+    , m_scene(nullptr)
 {
     // this activates the item layered mode
     QQmlProperty(this, "layer.enabled").write(true);
-}
-
-//! Class destructor
-Bacon2DLayer::~Bacon2DLayer()
-{
 }
 
 /*!
@@ -120,7 +115,7 @@ Game *Bacon2DLayer::game() const
     if (m_scene)
         return m_scene->game();
 
-    return 0;
+    return nullptr;
 }
 
 int Bacon2DLayer::updateInterval() const

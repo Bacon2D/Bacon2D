@@ -23,30 +23,29 @@
  *
  */
 
-#ifndef _TILEDSCENE_H_
-#define _TILEDSCENE_H_
+#ifndef TILEDSCENE_H
+#define TILEDSCENE_H
 
-#include "game.h"
 #include "scene.h"
-#include "tmxmap.h"
-#include "tmxtileset.h"
-#include "tmxtilelayer.h"
+#include <QColor>
+#include <QPixmap>
 
-#include <QSGTexture>
-#include <QQuickWindow>
-#include <QSGSimpleMaterialShader>
-#include <QSGGeometryNode>
-#include "tiledlayer.h"
+class QSGNode;
+class TMXMap;
+class UpdatePaintNodeData;
+class QRectF;
+class TiledLayer;
+class TMXTileLayer;
+class TMXImageLayer;
 
 class TiledScene : public Scene
 {
     Q_OBJECT
-
     Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(QQuickItem *backgroundItem READ backgroundItem WRITE setBackgroundItem NOTIFY backgroundItemChanged)
     Q_PROPERTY(bool useMapBackgroundColor READ useMapBackgroundColor WRITE setUseMapBackgroundColor NOTIFY useMapBackgroundColorChanged)
+    Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
     Q_PROPERTY(QQmlListProperty<TiledLayer> layers READ layers)
-
 public:
     explicit TiledScene(QQuickItem *parent = nullptr);
     ~TiledScene() override = default;
@@ -60,25 +59,26 @@ public:
     bool useMapBackgroundColor() const;
     void setUseMapBackgroundColor(bool);
 
+    QColor color() const;
+    void setColor(const QColor &color);
+
     QQmlListProperty<TiledLayer> layers();
 
     Q_INVOKABLE QVariant getProperty(const QString &name, const QVariant &defaultValue = QVariant()) const;
 
-    static void append_layer(QQmlListProperty<TiledLayer> *list, TiledLayer *layer);
-    static int count_layer(QQmlListProperty<TiledLayer> *list);
-    static TiledLayer *at_layer(QQmlListProperty<TiledLayer> *list, int index);
-
     TMXMap *tiledMap() const { return m_map; }
-
 signals:
     void sourceChanged();
     void backgroundItemChanged();
     void useMapBackgroundColorChanged();
-
+    void colorChanged();
 protected:
-    QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *);
+    QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *) override;
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
-
+private:
+    static void append_layer(QQmlListProperty<TiledLayer> *list, TiledLayer *layer);
+    static int count_layer(QQmlListProperty<TiledLayer> *list);
+    static TiledLayer *at_layer(QQmlListProperty<TiledLayer> *list, int index);
 private:
     TMXMap *m_map;
     QUrl m_source;
@@ -96,5 +96,5 @@ private:
 };
 
 
-#endif // _TILEDSCENE_H_
+#endif // TILEDSCENE_H
 

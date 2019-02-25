@@ -26,8 +26,8 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _BEHAVIOR_H_
-#define _BEHAVIOR_H_
+#ifndef BEHAVIOR_H
+#define BEHAVIOR_H
 
 #include <QtCore/QObject>
 #include <QtQuick/QQuickItem>
@@ -35,12 +35,11 @@
 class Behavior : public QObject
 {
     Q_OBJECT
-
     Q_PROPERTY(QQuickItem *target READ target)
     Q_PROPERTY(int delta READ delta)
-
 public:
-    Behavior(QObject *parent = 0);
+    explicit Behavior(QObject *parent = nullptr);
+    virtual ~Behavior() = default;
 
     QQuickItem *target() const;
     virtual void setTarget(QQuickItem *target);
@@ -49,10 +48,9 @@ public:
     int delta() const;
 
     virtual void update(const int &delta) { Q_UNUSED(delta);  }
-
 protected:
     QQuickItem *m_target;
     int m_delta;
 };
 
-#endif /* _BEHAVIOR_H_ */
+#endif // BEHAVIOR_H

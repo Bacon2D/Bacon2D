@@ -25,8 +25,8 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _ANIMATIONTRANSITION_H_
-#define _ANIMATIONTRANSITION_H_
+#ifndef ANIMATIONTRANSITION_H
+#define ANIMATIONTRANSITION_H
 
 #include <QtCore/QAbstractTransition>
 
@@ -45,4 +45,4 @@ private:
     SpriteAnimation *m_spriteAnimation;
 };
 
-#endif /* _ANIMATIONTRANSITION_H_ */
+#endif // ANIMATIONTRANSITION_H

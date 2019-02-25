@@ -27,20 +27,19 @@
 #define _TILEDLAYER_H_
 
 #include <QQuickItem>
-#include "box2dfixture.h"
-#include "tiledobject.h"
 
 class TMXLayer;
+class TiledObject;
 
 class TiledLayer : public QQuickItem
 {
     Q_OBJECT
-
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QQmlListProperty<TiledObject> objects READ objects)
+    Q_CLASSINFO("DefaultProperty", "objects")
 public:
-    TiledLayer(QQuickItem *parent = 0);
-    ~TiledLayer();
+    TiledLayer(QQuickItem *parent = nullptr);
+    ~TiledLayer() override = default;
 
     QString name() const;
     void setName(const QString &name);
@@ -53,21 +52,21 @@ public:
 
     QQmlListProperty<TiledObject> objects();
 
-    static void append_object(QQmlListProperty<TiledObject> *list, TiledObject *layer);
-    static int count_object(QQmlListProperty<TiledObject> *list);
-    static TiledObject *at_object(QQmlListProperty<TiledObject> *list, int index);
+    void initialize();
 signals:
     void nameChanged();
     void layerChanged();
-private slots:
-    void initialize();
+private:
+    static void append_object(QQmlListProperty<TiledObject> *list, TiledObject *layer);
+    static int count_object(QQmlListProperty<TiledObject> *list);
+    static TiledObject *at_object(QQmlListProperty<TiledObject> *list, int index);
+
+    void setLayer(TMXLayer *layer);
 private:
     QString m_name;
     QList<TiledObject *> m_objects;
     QMap<QString, QVariant> m_properties;
     TMXLayer *m_layer;
-
-    void setLayer(TMXLayer *layer);
 };
 
 #endif // _TILEDLAYER_H_

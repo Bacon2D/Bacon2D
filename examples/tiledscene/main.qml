@@ -15,7 +15,6 @@ Window {
 
         TiledScene {
             id: scene
-            //debug: true
             physics: true
             source: "levels/example.tmx"
             viewport: Viewport {
@@ -27,117 +26,98 @@ Window {
             layers: [
                 TiledLayer {
                     name: "Player"
-                    objects: TiledObject {
-                        id: playerObject
+
+                    TiledObject {
+                        id: player
+                        entity: Dog { }
+
+                        TiledPropertyMapping { property: "x" }
+                        TiledPropertyMapping { property: "y" }
                     }
                 },
 
                 TiledLayer {
                     name: "Ground"
-                    objects: [
-                        TiledObject {
-                            id: groundObject
 
-                            fixtures: Box {
-                                width: groundObject.width
-                                height: groundObject.height
-                                density: 1
-                                restitution: 0
-                                friction: 1
-                            }
-                        },
+                    TiledObject {
+                        entity: Ground { }
 
-                        TiledObject {
-                            name: "polyground"
+                        TiledPropertyMapping { property: "x" }
+                        TiledPropertyMapping { property: "y" }
+                        TiledPropertyMapping { property: "width" }
+                        TiledPropertyMapping { property: "height" }
+                    }
 
-                            fixtures: Polygon {
-                                density: 1
-                                restitution: 0
-                                friction: 1
-                            }
-                        }
-                    ]
+                    TiledObject {
+                        name: "polyground"
+
+                        entity: Polyground { }
+
+                        TiledPropertyMapping { property: "x" }
+                        TiledPropertyMapping { property: "y" }
+                    }
                 },
 
                 TiledLayer {
-                    id: coinLayer
                     name: "Coins"
-                    objects: TiledObject { }
+
+                    TiledObject {
+                        entity: Coin { }
+
+                        TiledPropertyMapping { property: "x" }
+                        TiledPropertyMapping { property: "y" }
+                        TiledPropertyMapping { property: "width" }
+                        TiledPropertyMapping { property: "height" }
+                    }
                 },
 
                 TiledLayer {
-                    id: boundariesLayer
                     name: "Boundaries"
-                    objects: TiledObject {
-                        fixtures: Chain {
-                            density: 1
-                            restitution: 1
-                            friction: 1
-                        }
+
+                    TiledObject {
+                        entity: LevelBoundaries { }
+
+                        TiledPropertyMapping { property: "x" }
+                        TiledPropertyMapping { property: "y" }
                     }
                 }
             ]
 
-
-            Dog { id: player }
-
-            Component {
-                id: coinComponent
-                Coin {}
-            }
-
-            /**************************** INPUT HANDLING ***************************/
             // Key handling
             Keys.onPressed: {
-                switch(event.key) {
-                case Qt.Key_Left:
-                    player.moveLeft()
-                    break;
-                case Qt.Key_Right:
-                    player.moveRight()
-                    break;
-                case Qt.Key_Up:
-                    player.jump()
-                    break
+                if (!event.isAutoRepeat) {
+                    switch (event.key) {
+                    case Qt.Key_Left:
+                        player.getEntity().handleEvent("left", "press");
+                        break;
+                    case Qt.Key_Right:
+                        player.getEntity().handleEvent("right", "press");
+                        break;
+                    case Qt.Key_Up:
+                        player.getEntity().handleEvent("up", "press");
+                        break;
+                    }
                 }
 
-                event.accepted = true
+                event.accepted = true;
             }
 
             Keys.onReleased: {
-                switch(event.key) {
-                case Qt.Key_Left:
-                    if(!event.isAutoRepeat)
-                        player.stopMovingLeft();
-                    break;
-                case Qt.Key_Right:
-                    if(!event.isAutoRepeat)
-                        player.stopMovingRight();
-                    break;
-                }
-
-                event.accepted = true
-            }
-            /*************************** END OF INPUT HANDLING ************************/
-
-            Component.onCompleted: {
-                player.x = playerObject.x;
-                player.y = playerObject.y
-
-                // Create coins
-                // Loop through every "collision" of the coin object layer
-                for(var i = 0; i < coinLayer.objects.length; ++i)
-                {
-                    var collision = coinLayer.objects[i];
-                    while(collision.next())
-                    {
-                        var coin = coinComponent.createObject(scene);
-                        coin.x = collision.x;
-                        coin.y = collision.y
-                        coin.width = collision.width
-                        coin.height = collision.height
+                if (!event.isAutoRepeat) {
+                    switch (event.key) {
+                    case Qt.Key_Left:
+                        player.getEntity().handleEvent("left", "release");
+                        break;
+                    case Qt.Key_Right:
+                        player.getEntity().handleEvent("right", "release");
+                        break;
+                    case Qt.Key_Up:
+                        player.getEntity().handleEvent("up", "release");
+                        break;
                     }
                 }
+
+                event.accepted = true;
             }
         }
     }

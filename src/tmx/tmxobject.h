@@ -36,9 +36,8 @@
 class TMXObject : public QObject
 {
     Q_OBJECT
-
 public:
-    explicit TMXObject(Tiled::Object *tiledObject, QObject *parent = 0)
+    explicit TMXObject(Tiled::Object *tiledObject, QObject *parent = nullptr)
         : QObject(parent), m_tiledObject(tiledObject) {}
 
     TMXObject(const TMXObject &other) : QObject(nullptr) { setTiledObject(other.tiledObject()); }
@@ -49,7 +48,6 @@ public:
     QVariant property(const QString &name) const { return m_tiledObject->property(name); }
     void setProperty(const QString &name, const QVariant &value) { m_tiledObject->setProperty(name, value); }
     const QMap<QString, QVariant> &properties() const { return m_tiledObject->properties(); }
-
 private:
     Tiled::Object *m_tiledObject;
 };

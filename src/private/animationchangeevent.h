@@ -41,4 +41,4 @@ public:
     QString animationName;
 };
 
-#endif /* ANIMATIONCHANGEEVENT_H */
+#endif // ANIMATIONCHANGEEVENT_H

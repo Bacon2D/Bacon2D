@@ -24,8 +24,8 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _LAYERSCROLLBEHAVIOR_H_
-#define _LAYERSCROLLBEHAVIOR_H_
+#ifndef LAYERSCROLLBEHAVIOR_H
+#define LAYERSCROLLBEHAVIOR_H
 
 #include "scrollbehaviorimpl.h"
 
@@ -33,9 +33,9 @@ class LayerScrollBehavior : public ScrollBehaviorImpl
 {
     Q_OBJECT
 public:
-    LayerScrollBehavior(QObject *parent=0);
+    explicit LayerScrollBehavior(QObject *parent = nullptr);
 
     virtual void update(const int &delta);
 };
 
-#endif
+#endif // LAYERSCROLLBEHAVIOR_H

@@ -26,8 +26,8 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _PLUGINS_H_
-#define _PLUGINS_H_
+#ifndef PLUGINS_H
+#define PLUGINS_H
 
 #include <QtCore/QtGlobal>
 #include <QtQml/QQmlExtensionPlugin>
@@ -36,9 +36,8 @@ class Plugins : public QQmlExtensionPlugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
-
 public:
     void registerTypes(const char *uri);
 };
 
-#endif /* _PLUGINS_H_ */
+#endif // PLUGINS_H

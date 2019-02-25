@@ -8,28 +8,7 @@
 class QQmlComponent;
 class Entity;
 class Scene;
-
-class EntityManagerSingleton : public QObject
-{
-    Q_OBJECT
-public:
-    static EntityManagerSingleton &instance();
-
-    Entity *createEntity(const QVariant &, Scene *parentScene, QQmlEngine *engine);
-    Entity *addEntity(Entity *entity);
-    Entity *findEntity(const QString &entityType, const QString &property, const QVariant &value);
-    Entity *getEntity(const QString &entityId);
-    void destroyEntity(const QString &entityId);
-    void destroyAllEntities(const QString &entityType = QString());
-    int entityCount(const QString &entityType = QString());
-
-    QString generateId(const QString &entityType) const;
-private:
-    explicit EntityManagerSingleton(QObject *parent = nullptr);
-    static EntityManagerSingleton *m_entityManagerSingleton;
-    QHash<QString, Entity *> m_entityMap;
-    QHash<QString, QStringList> m_groupMap;
-};
+class EntityManagerSingleton;
 
 class EntityManager : public QQuickItem
 {

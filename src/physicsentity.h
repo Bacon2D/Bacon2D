@@ -4,6 +4,7 @@
 #include <QObject>
 #include "entity.h"
 #include "box2dbody.h"
+#include "entitymanagersingleton.h"
 
 class QPointF;
 class Box2DBody;
@@ -13,7 +14,6 @@ class Box2DFixture;
 class PhysicsEntity : public Entity
 {
     Q_OBJECT
-
     Q_PROPERTY(Box2DBody* body READ body NOTIFY bodyChanged)
     Q_PROPERTY(Box2DWorld* world READ world WRITE setWorld NOTIFY worldChanged)
     Q_PROPERTY(QQuickItem* target READ target WRITE setTarget NOTIFY targetChanged)
@@ -31,6 +31,7 @@ class PhysicsEntity : public Entity
     Q_PROPERTY(QQmlListProperty<Box2DFixture> fixtures READ fixtures)
 public:
     explicit PhysicsEntity(Scene *parent = nullptr);
+    virtual ~PhysicsEntity() override = default;
 
     /*!
       \qmlproperty Body PhysicsEntity::body
@@ -187,6 +188,11 @@ public:
       \brief This property holds a list of Box2D fixtures contained within the current Body.
     */
     QQmlListProperty<Box2DFixture> fixtures();
+    QList<Box2DFixture *> fixtureList() const;
+    void componentComplete() override;
+
+    EntityManagerSingleton::FixturePolicy fixturePolicy() const;
+    void setFixturePolicy(EntityManagerSingleton::FixturePolicy policy);
 
     Q_INVOKABLE void applyForce(QPointF force,QPointF point);
     Q_INVOKABLE void applyForceToCenter(QPointF force);
@@ -204,8 +210,6 @@ public:
     Q_INVOKABLE QPointF toLocalVector(QPointF worldVector);
     Q_INVOKABLE QPointF getLinearVelocityFromWorldPoint(QPointF point);
     Q_INVOKABLE QPointF getLinearVelocityFromLocalPoint(QPointF point);
-protected:
-    virtual void componentComplete();
 signals:
     void bodyChanged();
     void worldChanged();
@@ -224,7 +228,9 @@ signals:
 private:
     Box2DBody* m_body;
     QList<Box2DFixture *> m_fixtures;
+    EntityManagerSingleton::FixturePolicy m_fixturePolicy;
 
+    void addFixtures();
     static void append_fixture(QQmlListProperty<Box2DFixture> *, Box2DFixture *fixture);
     static int count_fixture(QQmlListProperty<Box2DFixture> *list);
     static Box2DFixture *at_fixture(QQmlListProperty<Box2DFixture> *list, int index);

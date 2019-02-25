@@ -20,7 +20,6 @@ class SpriteStrip : public QQuickItem
     Q_PROPERTY(int frames READ frames WRITE setFrames NOTIFY framesChanged)
     Q_PROPERTY(int initialFrame READ initialFrame WRITE setInitialFrame NOTIFY initialFrameChanged)
     Q_PROPERTY(int finalFrame READ finalFrame WRITE setFinalFrame NOTIFY finalFrameChanged)
-
 public:
     explicit SpriteStrip(QQuickItem *parent = nullptr);
 
@@ -64,9 +63,6 @@ public:
     void setSpriteSheet(SpriteSheetGrid *spriteSheet);
 
     qreal currentFrameX() const;
-
-    void componentComplete() override;
-
 signals:
     void spriteSheetChanged();
     void nameChanged();
@@ -80,7 +76,8 @@ signals:
     void finalFrameChanged();
     void verticalMirrorChanged();
     void horizontalMirrorChanged();
-
+private:
+    void updateSizeInfo();
 private:
     QVector<Sprite *> m_sprites;
     SpriteSheetGrid *m_spriteSheet;
@@ -95,8 +92,6 @@ private:
     int m_finalFrame;
     int m_verticalScale;
     int m_horizontalScale;
-
-    void updateSizeInfo();
 };
 
 #endif // SPRITESTRIP_H

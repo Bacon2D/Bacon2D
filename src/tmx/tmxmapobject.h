@@ -44,7 +44,7 @@ public:
         Ellipse
     };
 
-    explicit TMXMapObject(Tiled::MapObject *mapObject, QObject *parent = 0)
+    explicit TMXMapObject(Tiled::MapObject *mapObject, QObject *parent = nullptr)
         : TMXObject(mapObject, parent), m_mapObject(mapObject) {}
 
     TMXMapObject& operator=(const TMXMapObject &other)
@@ -92,7 +92,7 @@ public:
     QVariantList polygonAsList() const
     {
         QVariantList allVertices;
-        foreach(const QPointF &point, m_mapObject->polygon())
+        for (const QPointF &point : m_mapObject->polygon())
             allVertices.append(QVariant(point));
 
         return allVertices;

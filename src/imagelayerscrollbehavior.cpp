@@ -36,7 +36,7 @@ void ImageLayerScrollBehavior::update(const int &delta)
 {
     Q_UNUSED(delta);
 
-	Bacon2DImageLayer *target = 0;
+    Bacon2DImageLayer *target = nullptr;
 	if (!(target = dynamic_cast<Bacon2DImageLayer*>(m_target)))
 		return;
 

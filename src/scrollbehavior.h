@@ -24,20 +24,18 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _SCROLLBEHAVIOR_H_
-#define _SCROLLBEHAVIOR_H_
+#ifndef SCROLLBEHAVIOR_H
+#define SCROLLBEHAVIOR_H
 
 #include "scrollbehaviorimpl.h"
 
 class ScrollBehavior : public Behavior
 {
     Q_OBJECT
-
     Q_PROPERTY(qreal horizontalStep READ horizontalStep WRITE setHorizontalStep)
     Q_PROPERTY(qreal verticalStep READ verticalStep WRITE setVerticalStep)
-
 public:
-    ScrollBehavior(QObject *parent = 0);
+    explicit ScrollBehavior(QObject *parent = nullptr);
 
     virtual void update(const int &delta);
     virtual void setTarget(QQuickItem *target);
@@ -47,11 +45,10 @@ public:
 
     qreal verticalStep();
     void setVerticalStep(qreal step);
-
 private:
     ScrollBehaviorImpl *m_currentBehavior;
     qreal m_horizontalStep;
     qreal m_verticalStep;
 };
 
-#endif
+#endif // SCROLLBEHAVIOR_H

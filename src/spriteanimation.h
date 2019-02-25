@@ -41,7 +41,7 @@ class SpriteStrip;
 class SpriteAnimation : public QObject, public QQmlParserStatus
 {
     Q_OBJECT
-
+    Q_INTERFACES(QQmlParserStatus)
     Q_PROPERTY(QString name READ name WRITE setName)
     Q_PROPERTY(SpriteStrip* spriteStrip READ spriteStrip WRITE setSpriteStrip NOTIFY spriteStripChanged)
     Q_PROPERTY(int frames READ frames NOTIFY framesChanged)
@@ -50,7 +50,6 @@ class SpriteAnimation : public QObject, public QQmlParserStatus
     Q_PROPERTY(int loops READ loops WRITE setLoops NOTIFY loopsChanged)
     Q_PROPERTY(int duration READ duration WRITE setDuration NOTIFY durationChanged)
     Q_PROPERTY(bool inverse READ inverse WRITE setInverse NOTIFY inverseChanged)
-
 public:
     explicit SpriteAnimation(QObject *parent = nullptr);
     ~SpriteAnimation() override;
@@ -88,7 +87,6 @@ public:
     void componentComplete() override;
 
     void setParentState(QState *state);
-
 signals:
     void spriteStripChanged();
     void runningChanged();
@@ -99,6 +97,10 @@ signals:
     void inverseChanged();
     void finished();
 private:
+    void onStateChanged(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
+    void updateStartValue();
+    void updateEndValue();
+private:
     QString m_name;
     SpriteStrip *m_spriteStrip;
     SpriteStrip *m_defaultSpriteStrip;
@@ -107,10 +109,6 @@ private:
     QState *m_state;
     SpriteAnimation *m_previousSpriteAnimation;
     bool m_inverse;
-
-    void onStateChanged(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
-    void updateStartValue();
-    void updateEndValue();
 };
 
 #endif /* _SPRITEANIMATION_H_ */

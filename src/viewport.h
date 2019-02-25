@@ -26,8 +26,8 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _VIEWPORT_H_
-#define _VIEWPORT_H_
+#ifndef VIEWPORT_H
+#define VIEWPORT_H
 
 #include <QtCore/QPropertyAnimation>
 #include <QtCore/QEasingCurve>
@@ -44,9 +44,8 @@ class Viewport : public Entity
     Q_PROPERTY(float contentWidth READ contentWidth WRITE setContentWidth NOTIFY contentWidthChanged)
     Q_PROPERTY(float contentHeight READ contentHeight WRITE setContentHeight NOTIFY contentHeightChanged)
     Q_PROPERTY(int animationDuration READ animationDuration WRITE setAnimationDuration NOTIFY animationDurationChanged)
-
 public:
-    Viewport(Scene *parent = 0);
+    Viewport(Scene *parent = nullptr);
 
     float xOffset();
     void setXOffset(float xOffset);
@@ -69,14 +68,12 @@ public:
 
     Q_INVOKABLE void hScroll(float step);
     Q_INVOKABLE void vScroll(float step);
-
 signals:
     void xOffsetChanged();
     void yOffsetChanged();
     void contentWidthChanged();
     void contentHeightChanged();
     void animationDurationChanged();
-
 private:
     QEasingCurve m_animationEasingCurve; // TODO expose property?
     float m_xOffset;
@@ -92,4 +89,4 @@ private:
     int m_animationDuration;
 };
 
-#endif /* _VIEWPORT_H_ */
+#endif // VIEWPORT_H
