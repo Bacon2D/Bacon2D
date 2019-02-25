@@ -24,19 +24,18 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _IMAGELAYERSCROLLBEHAVIOR_H_
-#define _IMAGELAYERSCROLLBEHAVIOR_H_
+#ifndef IMAGELAYERSCROLLBEHAVIOR_H
+#define IMAGELAYERSCROLLBEHAVIOR_H
 
 #include "scrollbehaviorimpl.h"
 
 class ImageLayerScrollBehavior : public ScrollBehaviorImpl
 {
     Q_OBJECT
-
 public:
-    ImageLayerScrollBehavior(QObject *parent = 0);
+    ImageLayerScrollBehavior(QObject *parent = nullptr);
 
     virtual void update(const int &delta);
 };
 
-#endif
+#endif // IMAGELAYERSCROLLBEHAVIOR_H

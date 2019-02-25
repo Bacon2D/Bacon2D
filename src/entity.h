@@ -26,8 +26,8 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _ENTITY_H_
-#define _ENTITY_H_
+#ifndef ENTITY_H
+#define ENTITY_H
 
 #include <QtCore/QtGlobal>
 #include <QtCore/QTime>
@@ -40,17 +40,15 @@ class Behavior;
 class Entity : public QQuickItem
 {
     Q_OBJECT
-
     Q_PROPERTY(QString entityId READ entityId NOTIFY entityIdChanged)
     Q_PROPERTY(QString entityType READ entityType WRITE setEntityType NOTIFY entityTypeChanged)
     Q_PROPERTY(int updateInterval READ updateInterval WRITE setUpdateInterval NOTIFY updateIntervalChanged)
     Q_PROPERTY(Game *game READ game)
     Q_PROPERTY(Scene *scene READ scene NOTIFY sceneChanged)
     Q_PROPERTY(Behavior *behavior READ behavior WRITE setBehavior NOTIFY behaviorChanged)
-
 public:
-    Entity(Scene *parent = 0);
-    ~Entity();
+    explicit Entity(Scene *parent = nullptr);
+    virtual ~Entity() = default;
 
     QString entityId() const;
     void setEntityId(const QString &);
@@ -80,7 +78,6 @@ protected:
     virtual void componentComplete();
     virtual void itemChange(ItemChange change, const ItemChangeData &data);
     void initializeEntities(QQuickItem *parent);
-
 private:
     QString m_entityId;
     QString m_entityType;
@@ -90,4 +87,4 @@ private:
     Behavior *m_behavior;
 };
 
-#endif /* _ENTITY_H_ */
+#endif // ENTITY_H

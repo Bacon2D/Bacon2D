@@ -59,10 +59,6 @@ Settings::Settings(QObject *parent)
 {
 }
 
-Settings::~Settings()
-{
-}
-
 void Settings::componentComplete()
 {
     load();

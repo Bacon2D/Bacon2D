@@ -26,8 +26,8 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _IMAGELAYER_H_
-#define _IMAGELAYER_H_
+#ifndef BACON2DIMAGELAYER_H
+#define BACON2DIMAGELAYER_H
 
 #include "bacon2dlayer.h"
 
@@ -53,7 +53,6 @@ struct ImageLayerState
 class ImageLayerShader : public QSGSimpleMaterialShader<ImageLayerState>
 {
     QSG_DECLARE_SIMPLE_SHADER(ImageLayerShader, ImageLayerState)
-
 public:
     const char *vertexShader() const;
     const char *fragmentShader() const;
@@ -62,7 +61,6 @@ public:
     void initialize();
     void updateState(const ImageLayerState *newState, const ImageLayerState *oldState);
     void resolveUniforms();
-
 private:
     int m_idTexture;
     int m_idXPos;
@@ -82,7 +80,6 @@ public:
 
     qreal imageWidth() const;
     qreal imageHeight() const;
-
 private:
     qreal m_width;
     qreal m_height;
@@ -93,15 +90,13 @@ private:
 class Bacon2DImageLayer : public Bacon2DLayer
 {
     Q_OBJECT
-
     Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(qreal imageWidth READ imageWidth)
     Q_PROPERTY(qreal imageHeight READ imageHeight)
     Q_PROPERTY(qreal horizontalOffset READ horizontalOffset WRITE setHorizontalOffset)
     Q_PROPERTY(qreal verticalOffset READ verticalOffset WRITE setVerticalOffset)
-
 public:
-    Bacon2DImageLayer(Bacon2DLayer *parent = 0);
+    Bacon2DImageLayer(Bacon2DLayer *parent = nullptr);
     ~Bacon2DImageLayer();
 
     virtual void update(const int &delta);
@@ -120,16 +115,11 @@ public:
 
     QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *);
     void setContentGeometry(const QRectF &geometry);
-
 signals:
     void sourceChanged();
-
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
-
-protected:
     void componentComplete();
-
 private:
     QUrl m_source;
 
@@ -142,4 +132,4 @@ private:
 };
 // ImageLayer
 
-#endif /* _IMAGELAYER_H_ */
+#endif // BACON2DIMAGELAYER_H

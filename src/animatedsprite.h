@@ -26,8 +26,8 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _ANIMATEDSPRITE_H_
-#define _ANIMATEDSPRITE_H_
+#ifndef ANIMATEDSPRITE_H
+#define ANIMATEDSPRITE_H
 
 #include "entity.h"
 #include "enums.h"
@@ -54,7 +54,6 @@ class AnimatedSprite : public QQuickPaintedItem
     Q_PROPERTY(bool horizontalMirror READ horizontalMirror WRITE setHorizontalMirror NOTIFY horizontalMirrorChanged)
     Q_PROPERTY(Entity *entity READ entity WRITE setEntity NOTIFY entityChanged)
     Q_PROPERTY(Bacon2D::State spriteState READ spriteState WRITE setSpriteState NOTIFY spriteStateChanged)
-
 public:
     explicit AnimatedSprite(QQuickItem *parent = nullptr);
 
@@ -87,11 +86,9 @@ public:
 
     void componentComplete() override;
     void paint(QPainter *painter) override;
-
 public slots:
     void initializeAnimation();
     void onGameStateChanged();
-
 signals:
     void spriteSheetChanged();
     void animationChanged();
@@ -100,10 +97,11 @@ signals:
     void fillModeChanged();
     void entityChanged();
     void spriteStateChanged();
-
 private:
     void initializeMachine();
-
+    static void append_animation(QQmlListProperty<SpriteAnimation> *list, SpriteAnimation *spriteAnimation);
+    static int count_animation(QQmlListProperty<SpriteAnimation> *list);
+    static SpriteAnimation *at_animation(QQmlListProperty<SpriteAnimation> *list, int index);
 private:
     QStateMachine *m_stateMachine;
     QState *m_stateGroup;
@@ -117,10 +115,6 @@ private:
     Game *m_game;
     Bacon2D::State m_state;
     QPixmap m_pixmap;
-
-    static void append_animation(QQmlListProperty<SpriteAnimation> *list, SpriteAnimation *spriteAnimation);
-    static int count_animation(QQmlListProperty<SpriteAnimation> *list);
-    static SpriteAnimation *at_animation(QQmlListProperty<SpriteAnimation> *list, int index);
 };
 
-#endif /* _ANIMATEDSPRITE_H_ */
+#endif // ANIMATEDSPRITE_H

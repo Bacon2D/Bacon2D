@@ -2,22 +2,24 @@
 #include "box2dbody.h"
 #include "box2dworld.h"
 #include "scene.h"
+#include "entitymanagersingleton.h"
 
 PhysicsEntity::PhysicsEntity(Scene *parent)
     : Entity(parent)
     , m_body(new Box2DBody(this))
+    , m_fixturePolicy(EntityManagerSingleton::FixturePolicy::AddFixtures)
 {
     m_body->setTarget(this);
     setTransformOrigin(QQuickItem::TopLeft);
 
-    connect(m_body, SIGNAL(targetChanged()), this, SIGNAL(targetChanged()));
-    connect(m_body, SIGNAL(linearDampingChanged()), this, SIGNAL(linearDampingChanged()));
-    connect(m_body, SIGNAL(angularDampingChanged()), this, SIGNAL(angularDampingChanged()));
-    connect(m_body, SIGNAL(angularVelocityChanged()), this, SIGNAL(angularVelocityChanged()));
-    connect(m_body, SIGNAL(gravityScaleChanged()), this, SIGNAL(gravityScaleChanged()));
-    connect(m_body, SIGNAL(bulletChanged()), this, SIGNAL(bulletChanged()));
-    connect(m_body, SIGNAL(sleepingAllowedChanged()), this, SIGNAL(sleepingAllowedChanged()));
-    connect(m_body, SIGNAL(fixedRotationChanged()), this, SIGNAL(fixedRotationChanged()));
+    connect(m_body, &Box2DBody::targetChanged, this, &PhysicsEntity::targetChanged);
+    connect(m_body, &Box2DBody::linearDampingChanged, this, &PhysicsEntity::linearDampingChanged);
+    connect(m_body, &Box2DBody::angularDampingChanged, this, &PhysicsEntity::angularDampingChanged);
+    connect(m_body, &Box2DBody::angularVelocityChanged, this, &PhysicsEntity::angularVelocityChanged);
+    connect(m_body, &Box2DBody::gravityScaleChanged, this, &PhysicsEntity::gravityScaleChanged);
+    connect(m_body, &Box2DBody::bulletChanged, this, &PhysicsEntity::bulletChanged);
+    connect(m_body, &Box2DBody::sleepingAllowedChanged, this, &PhysicsEntity::sleepingAllowedChanged);
+    connect(m_body, &Box2DBody::fixedRotationChanged, this, &PhysicsEntity::fixedRotationChanged);
 }
 
 Box2DWorld *PhysicsEntity::world() const
@@ -165,18 +167,21 @@ void PhysicsEntity::setAwake(bool awake)
 
 QQmlListProperty<Box2DFixture> PhysicsEntity::fixtures()
 {
-    return QQmlListProperty<Box2DFixture>(this, 0,
+    return QQmlListProperty<Box2DFixture>(this, nullptr,
                                           &PhysicsEntity::append_fixture,
                                           &PhysicsEntity::count_fixture,
                                           &PhysicsEntity::at_fixture,
-                                          0);
+                                          nullptr);
 }
 
-void PhysicsEntity::append_fixture(QQmlListProperty<Box2DFixture> *list,
-                               Box2DFixture *fixture)
+QList<Box2DFixture *> PhysicsEntity::fixtureList() const
+{
+    return m_fixtures;
+}
+
+void PhysicsEntity::append_fixture(QQmlListProperty<Box2DFixture> *list, Box2DFixture *fixture)
 {
     PhysicsEntity *entity = static_cast<PhysicsEntity *>(list->object);
-    entity->body()->addFixture(fixture);
     entity->m_fixtures.append(fixture);
 }
 
@@ -272,10 +277,29 @@ QPointF PhysicsEntity::getLinearVelocityFromLocalPoint(QPointF point)
     return m_body->getLinearVelocityFromLocalPoint(point);
 }
 
+void PhysicsEntity::addFixtures()
+{
+    for (auto fixture : m_fixtures) {
+        if (m_fixturePolicy == EntityManagerSingleton::FixturePolicy::AddFixtures)
+            body()->addFixture(fixture);
+    }
+}
+
 void PhysicsEntity::componentComplete()
 {
     Entity::componentComplete();
 
+    addFixtures();
     m_body->setWorld(scene()->world());
     m_body->componentComplete();
+}
+
+void PhysicsEntity::setFixturePolicy(EntityManagerSingleton::FixturePolicy fixturePolicy)
+{
+    m_fixturePolicy = fixturePolicy;
+}
+
+EntityManagerSingleton::FixturePolicy PhysicsEntity::fixturePolicy() const
+{
+    return m_fixturePolicy;
 }

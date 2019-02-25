@@ -38,12 +38,12 @@ class TMXTileLayer : public TMXLayer
 {
     Q_OBJECT
 public:
-    explicit TMXTileLayer(Tiled::TileLayer *tileLayer, QObject *parent = 0)
+    explicit TMXTileLayer(Tiled::TileLayer *tileLayer, QObject *parent = nullptr)
         : TMXLayer(tileLayer, parent), m_tileLayer(tileLayer) {}
-    explicit TMXTileLayer(const TMXLayer &layer, QObject *parent = 0)
+    explicit TMXTileLayer(const TMXLayer &layer, QObject *parent = nullptr)
         : TMXLayer(layer.layer()->asTileLayer(), parent), m_tileLayer(layer.layer()->asTileLayer()) {}
 
-    bool isNull() const { return m_tileLayer == 0; }
+    bool isNull() const { return m_tileLayer == nullptr; }
 
     Tiled::TileLayer *tileLayer() const { return m_tileLayer; }
     void setTileLayer(Tiled::TileLayer *tileLayer) { m_tileLayer = tileLayer; }
@@ -54,7 +54,7 @@ public:
     QList<TMXCell> cells() const
     {
         QList<TMXCell> allCells;
-        for(int x = 0; x < m_tileLayer->width(); ++x) {
+        for (int x = 0; x < m_tileLayer->width(); ++x) {
             for(int y = 0; y < m_tileLayer->height(); ++y)
                 allCells.append(TMXCell(m_tileLayer->cellAt(x, y)));
         }

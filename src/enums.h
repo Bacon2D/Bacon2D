@@ -24,8 +24,8 @@
  * @author Ken VanDine <ken@vandine.org>
  */
 
-#ifndef _ENUMS_H_
-#define _ENUMS_H_
+#ifndef ENUMS_H
+#define ENUMS_H
 
 #include <QObject>
 
@@ -33,7 +33,7 @@ class Bacon2D : public QObject
 {
     Q_OBJECT
 public:
-    Bacon2D(QObject *parent = 0);
+    explicit Bacon2D(QObject *parent = nullptr);
 
     enum State {
         Active = 0,
@@ -54,4 +54,4 @@ public:
     }; Q_ENUM(FillMode)
 };
 
-#endif /* _ENUMS_H_ */
+#endif // ENUMS_H

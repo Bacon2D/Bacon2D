@@ -26,8 +26,8 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _LAYER_H_
-#define _LAYER_H_
+#ifndef BACON2DLAYER_H
+#define BACON2DLAYER_H
 
 #include "behavior.h"
 #include "game.h"
@@ -41,20 +41,15 @@
 class Bacon2DLayer: public QQuickItem
 {
     Q_OBJECT
-
     Q_PROPERTY(Bacon2DLayer::LayerType layerType READ layerType WRITE setLayerType NOTIFY layerTypeChanged)
     Q_PROPERTY(Behavior *behavior READ behavior WRITE setBehavior NOTIFY behaviorChanged)
     Q_PROPERTY(Game *game READ game)
     Q_PROPERTY(Scene *scene READ scene WRITE setScene NOTIFY sceneChanged)
     Q_PROPERTY(int updateInterval READ updateInterval WRITE setUpdateInterval NOTIFY updateIntervalChanged)
-
-    Q_ENUMS (
-        LayerType
-    )
-
+    Q_ENUMS(LayerType)
 public:
-    Bacon2DLayer(QQuickItem *parent = 0);
-    virtual ~Bacon2DLayer();
+    explicit Bacon2DLayer(QQuickItem *parent = nullptr);
+    virtual ~Bacon2DLayer() = default;
 
     virtual void update(const int &delta);
 
@@ -76,13 +71,11 @@ public:
 
     Bacon2DLayer::LayerType layerType() const { return m_type; }
     void setLayerType(const Bacon2DLayer::LayerType &type);
-
 signals:
     void layerTypeChanged();
     void updateIntervalChanged();
     void behaviorChanged();
     void sceneChanged();
-
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
     void updateEntities(const int &delta);
@@ -96,4 +89,4 @@ protected:
     Scene *m_scene;
 };
 
-#endif /* _LAYER */
+#endif // BACON2DLAYER_H

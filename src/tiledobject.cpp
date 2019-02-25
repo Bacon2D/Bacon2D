@@ -30,8 +30,15 @@
 #include "tiledlayer.h"
 #include "tmxobjectgroup.h"
 #include "tiledscene.h"
+#include "entitymanager.h"
+#include "tiledscene.h"
+#include "tiledpropertymapping.h"
+#include "physicsentity.h"
+#include "entitymanagersingleton.h"
+
 #include <QDebug>
 #include <QVariant>
+#include <QQmlProperty>
 
 /*!
   \qmltype TiledObject
@@ -210,19 +217,38 @@
    \sa TiledScene TiledLayer
 */
 
+TiledObjectAttached::TiledObjectAttached(QObject *parent)
+    : QObject(parent)
+    , m_instance(nullptr)
+{
+    Entity *entity = qobject_cast<Entity *>(parent);
+    m_instance = qobject_cast<TiledObject *>(entity->parent());
+    //qDebug() << "TiledObjectAttached? " << entity->entityId() << entity->objectName() << qobject_cast<TiledObject *>(entity->parent());
+}
+
+TiledObject *TiledObjectAttached::instance() const
+{
+    return m_instance;
+}
+
+void TiledObjectAttached::setInstance(TiledObject *instance)
+{
+    if (m_instance == instance)
+        return;
+
+    m_instance = instance;
+    emit instanceChanged();
+}
+
 TiledObject::TiledObject(QQuickItem *parent)
-    : QQuickItem(parent)
+    : QObject (parent)
     , m_id(0)
     , m_objectGroup(nullptr)
     , m_componentComplete(false)
-    , m_collisionIndex(-1)
+    , m_entityComponent(nullptr)
+    , m_autoMapProperties(false)
+    , m_ignoreFixtures(false)
 {
-}
-
-TiledObject::~TiledObject()
-{
-    qDeleteAll(m_fixtures);
-    qDeleteAll(m_collisionItems);
 }
 
 /*!
@@ -267,6 +293,53 @@ void TiledObject::setType(const QString &type)
     emit typeChanged();
 }
 
+QQmlComponent *TiledObject::entity() const
+{
+    return m_entityComponent;
+}
+
+void TiledObject::setEntity(QQmlComponent *entity)
+{
+    if (m_entityComponent == entity)
+        return;
+    if (!m_entities.isEmpty()) {
+        for (auto entity : m_entities.values())
+            EntityManagerSingleton::instance().destroyEntity(entity->entityId());
+        m_entities.clear();
+    }
+
+    m_entityComponent = entity;
+    emit entityChanged();
+}
+
+bool TiledObject::autoMapProperties() const
+{
+    return m_autoMapProperties;
+}
+
+void TiledObject::setAutoMapProperties(bool enabled)
+{
+    if (m_autoMapProperties == enabled)
+        return;
+
+    m_autoMapProperties = enabled;
+    emit autoMapPropertiesChanged();
+}
+
+bool TiledObject::ignoreFixtures() const
+{
+    return m_ignoreFixtures;
+}
+
+void TiledObject::setIgnoreFixtures(bool enabled)
+{
+    if (m_ignoreFixtures == enabled)
+        return;
+
+    m_ignoreFixtures = enabled;
+    emit ignoreFixturesChanged();
+}
+
 /*!
   \qmlmethod string TiledObject::getProperty(string name, variant defaultValue)
   \brief This method returns the value of the custom property called \e name for this TMX object.
@@ -278,24 +351,47 @@ void TiledObject::setType(const QString &type)
    For example, if an object is 50 pixels wide, getProperty("width") would return
    50 pixels even if no custom property was set for \e width.
 */
-QVariant TiledObject::getProperty(const QString &name, const QVariant &defaultValue) const
+QVariant TiledObject::getProperty(const QString &entityId, const QString &property) const
 {
-    if(!m_properties.contains(name) && name.toLower() == "x")
-        return QVariant::fromValue(x());
-    else if(!m_properties.contains(name) && name.toLower() == "y")
-        return QVariant::fromValue(y());
-    else if(!m_properties.contains(name) && name.toLower() == "width")
-        return QVariant::fromValue(width());
-    else if(!m_properties.contains(name) && name.toLower() == "height")
-        return QVariant::fromValue(height());
-    else if(!m_properties.contains(name) && name.toLower() == "rotation")
-        return QVariant::fromValue(rotation());
-    else if(!m_properties.contains(name) && name.toLower() == "visible")
-        return QVariant::fromValue(isVisible());
-    else if(!m_properties.contains(name) && name.toLower() == "id")
-        return QVariant::fromValue(m_id);
+    Entity *entity = m_entities.value(entityId);
+    const QVariantMap &properties = entity->property("__tiledobject__properties").toMap();
 
-    return m_properties.value(name, defaultValue);
+    if(!properties.contains(property) && property.toLower() == "x")
+        return QVariant::fromValue(entity->property("__tiledobject__x").toDouble());
+    else if(!properties.contains(property) && property.toLower() == "y")
+        return QVariant::fromValue(entity->property("__tiledobject__y").toDouble());
+    else if(!properties.contains(property) && property.toLower() == "width")
+        return QVariant::fromValue(entity->property("__tiledobject__width").toDouble());
+    else if(!properties.contains(property) && property.toLower() == "height")
+        return QVariant::fromValue(entity->property("__tiledobject__height").toDouble());
+    else if(!properties.contains(property) && property.toLower() == "rotation")
+        return QVariant::fromValue(entity->property("__tiledobject__rotation").toDouble());
+    else if(!properties.contains(property) && property.toLower() == "visible")
+        return QVariant::fromValue(entity->property("__tiledobject__visible").toBool());
+    else if(!properties.contains(property) && property.toLower() == "id")
+        return QVariant::fromValue(entity->property("__tiledobject__id").toInt());
+
+    return properties.value(property);
+}
+
+QVariant TiledObject::getProperty(const QString &property) const
+{
+    if (m_entities.isEmpty())
+        return QVariant();
+    if (m_entities.count() > 1) {
+        qWarning() << "TiledObject: Can't get property: Multiple entities created. Use overload TiledObject::getProperty(string, string).";
+        return QVariant();
+    }
+
+    return getProperty(m_entities.values().first()->entityId(), property);
+}
+
+Entity *TiledObject::getEntity(const QString &entityId) const
+{
+    if (entityId.isNull() && !m_entities.isEmpty())
+        return m_entities.values().first();
+
+    return m_entities.value(entityId);
 }
 
 void TiledObject::initialize()
@@ -307,515 +403,247 @@ void TiledObject::initialize()
 
     // Extract properties from layer
     TiledLayer *tiledLayer = qobject_cast<TiledLayer *>(parent());
-    if(!tiledLayer && !tiledLayer->layer())
-        return;
-    if(!tiledLayer->layer()->isObjectLayer())
+    if((!tiledLayer && !tiledLayer->layer()) || !tiledLayer->layer()->isObjectLayer())
         return;
 
     m_layerName = tiledLayer->name();
 
-    if(m_objectGroup)
+    if(m_objectGroup) {
         m_objectGroup->deleteLater();
+        m_objectGroup = nullptr;
+    }
 
     m_objectGroup = new TMXObjectGroup(*tiledLayer->layer(), this);
 
-    int collisions = 0;
-    m_collisionIndex = -1;
-    foreach(const TMXMapObject &object, m_objectGroup->objects())
+    for (const TMXMapObject &object : m_objectGroup->objects())
     {
         if(object.name() == m_name && object.type() == m_type)
         {
             if(!static_cast<TiledScene *>(tiledLayer->parentItem()))
                 return;
 
-            setProperties(object.properties());
-
-            setX(object.x());
-            setY(object.y());
-            setWidth(object.width());
-            setHeight(object.height());
-            setRotation(object.rotation());
-
-            setVisible(object.isVisible());
-            setId(object.id());
-
-            CollisionItem *item = new CollisionItem(tiledLayer->parentItem());
-            item->setX(object.x());
-            item->setY(object.y());
-            item->setWidth(object.width());
-            item->setHeight(object.height());
-            item->setRotation(object.rotation());
-            item->setVisible(object.isVisible());
-            item->setId(object.id());
-            item->setProperties(object.properties());
-            item->setCollisionIndex(collisions);
-            m_collisionItems.append(item);
-
-            switch(object.shape())
-            {
-            case TMXMapObject::Rectangle:
-                createRectangularFixture(object, item);
-                break;
-            case TMXMapObject::Ellipse:
-                createEllipseFixture(object, item);
-                break;
-            case TMXMapObject::Polygon:
-                createPolygonFixture(object, item);
-                break;
-            case TMXMapObject::Polyline:
-                createPolylineFixture(object, item);
-                break;
-            default:
-                qWarning() << "Unhandled object group: " << object.name();
-                break;
-            }
-
-            collisions++;
+            createEntity(object);
         }
     }
 }
 
-void TiledObject::createRectangularFixture(const TMXMapObject &object, CollisionItem *item)
+void TiledObject::createEntity(const TMXMapObject &object)
 {
-    if(!item)
+    auto parentScene = findParentScene();
+    if (parentScene) {
+        Entity *entity = EntityManagerSingleton::instance().createEntity(QVariant::fromValue(m_entityComponent),
+                                                                         parentScene,
+                                                                         qmlEngine(this),
+                                                                         EntityManagerSingleton::FixturePolicy::DontAddFixtures);
+        if (entity) {
+            entity->setParent(this);
+            entity->setProperty("__tiledobject__x", object.x());
+            entity->setProperty("__tiledobject__y", object.y());
+            entity->setProperty("__tiledobject__width", object.width());
+            entity->setProperty("__tiledobject__height", object.height());
+            entity->setProperty("__tiledobject__rotation", object.rotation());
+            entity->setProperty("__tiledobject__visible", object.isVisible());
+            entity->setProperty("__tiledobject__id", object.id());
+            entity->setProperty("__tiledobject__properties", object.properties());
+
+            TiledObjectAttached *attached = qobject_cast<TiledObjectAttached *>(qmlAttachedPropertiesObject<TiledObject>(entity));
+            attached->setInstance(this);
+
+            if (m_autoMapProperties)
+                attemptAutoMapping(entity, object);
+
+            applyMappings(entity, object);
+            applyFixtureProperties(entity, object);
+        }
+
+        m_entities.insert(entity->entityId(), entity);
+        emit entityCreated(entity);
+    } else if (m_componentComplete) {
+        qWarning() << "TiledObject: Cannot create entity with null parent scene.";
+    }
+}
+
+void TiledObject::applyFixtureProperties(Entity *entity, const TMXMapObject &object)
+{
+    PhysicsEntity *physicsEntity = qobject_cast<PhysicsEntity *>(entity);
+    if (!physicsEntity)
         return;
-    if(m_fixtures.isEmpty())
+
+    const QList<Box2DFixture *> &fixtures = physicsEntity->fixtureList();
+    if (fixtures.isEmpty())
         return;
 
-    Box2DBody *body = new Box2DBody(item);
-    body->setBodyType(Box2DBody::Static);
-    body->setTarget(item);
-    body->setActive(true);
-    body->setSleepingAllowed(false);
+    switch (object.shape()) {
+    case TMXMapObject::Rectangle:
+        for (Box2DFixture *fixture : fixtures)
+        {
+            Box2DBox *box = static_cast<Box2DBox *>(fixture);
+            if(box && !m_ignoreFixtures) {
+                box->setWidth(box->width() == 0.0 ? object.width() : box->width());
+                box->setHeight(box->height() == 0.0 ? object.height() : box->height());
+            }
+            physicsEntity->body()->addFixture(box);
+        }
+        break;
+    case TMXMapObject::Ellipse:
+        for (Box2DFixture *fixture : fixtures)
+        {
+            Box2DCircle *circle = static_cast<Box2DCircle *>(fixture);
+            if(circle && !m_ignoreFixtures) {
+                circle->setRadius(object.width() == 0.0
+                                  ? static_cast<float>(object.height())
+                                  : static_cast<float>(object.width()));
+            }
 
-    foreach(Box2DFixture *objectFixture, m_fixtures)
-    {
-        if(!objectFixture)
-            continue;
+            physicsEntity->body()->addFixture(circle);
+        }
+        break;
+    case TMXMapObject::Polygon:
+        for (Box2DFixture *fixture : fixtures) {
+            Box2DPolygon *polygon = static_cast<Box2DPolygon *>(fixture);
+            if(polygon && !m_ignoreFixtures) {
+                const QVariantList &vertices = polygon->vertices().isEmpty() ? object.polygonAsList()
+                                                                             : polygon->vertices();
 
-        // Check to see if the user of the library set the x, y, width and/or height values.
-        Box2DBox *box = static_cast<Box2DBox *>(objectFixture);
-        if(!box)
-            continue;
+                polygon->setVertices(vertices);
+            }
+            physicsEntity->body()->addFixture(polygon);
+        }
+        break;
+    case TMXMapObject::Polyline:
+        for (Box2DFixture *fixture : fixtures)
+        {
+            Box2DChain *chain = static_cast<Box2DChain *>(fixture);
+            if(chain && !m_ignoreFixtures) {
+                const QVariantList &vertices = chain->vertices().isEmpty() ? object.polygonAsList()
+                                                                           : chain->vertices();
+                chain->setVertices(vertices);
+            }
+            physicsEntity->body()->addFixture(chain);
+        }
+        break;
+    }
+}
 
-        Box2DBox *fixture = new Box2DBox(item);
+TiledScene* TiledObject::findParentScene() const
+{
+    QObject *parent = this->parent();
+    while (parent) {
+        auto tiledScene = qobject_cast<TiledScene *>(parent);
+        if (tiledScene)
+            return tiledScene;
 
-        copyProperties(box, fixture);
-
-        // Add x and y values set by user as offsets
-        fixture->setX(box->x());
-        fixture->setY(box->y());
-        fixture->setWidth(box->width() == 0 ? object.width() : box->width());
-        fixture->setHeight(box->height() == 0 ? object.height() : box->height());
-
-        fixture->setDensity(box->density());
-        fixture->setFriction(box->friction());
-        fixture->setRestitution(box->restitution());
-        fixture->setSensor(box->isSensor());
-        fixture->setCategories(box->categories());
-        fixture->setCollidesWith(box->collidesWith());
-        fixture->setGroupIndex(box->groupIndex());
-
-        connect(box, SIGNAL(beginContact(Box2DFixture*)), fixture, SIGNAL(beginContact(Box2DFixture*)));
-        connect(box, SIGNAL(endContact(Box2DFixture*)), fixture, SIGNAL(endContact(Box2DFixture*)));
-
-        body->addFixture(fixture);
+        parent = parent->parent();
     }
 
-    body->componentComplete();
-    item->setBody(body);
+    return nullptr;
 }
 
-void TiledObject::createEllipseFixture(const TMXMapObject &object, CollisionItem *item)
+void TiledObject::attemptAutoMapping(Entity *entity, const TMXMapObject &object)
 {
-    if(!item)
-        return;
-    if(m_fixtures.isEmpty())
+    if (entity == nullptr)
         return;
 
-    Box2DBody *body = new Box2DBody(item);
-    body->setBodyType(Box2DBody::Static);
-    body->setTarget(item);
-    body->setActive(true);
-    body->setSleepingAllowed(false);
+    const QStringList defaultProperties {
+        "x", "y", "width", "height", "rotation", "visible" // id intentionally omitted
+    };
+    const QVariantMap &properties = object.properties();
 
-    foreach(Box2DFixture *objectFixture, m_fixtures)
-    {
-        if(!objectFixture)
-            continue;
-
-        // Check to see if the user of the library set the x, y, width and/or height values.
-        Box2DCircle *circle = static_cast<Box2DCircle *>(objectFixture);
-        if(!circle)
-            continue;
-
-        Box2DCircle *fixture = new Box2DCircle(item);
-
-        copyProperties(circle, fixture);
-
-        fixture->setX(circle->x());
-        fixture->setY(circle->y());
-
-        if(circle->radius() == 0.0)
-            fixture->setRadius(object.width() == 0.0 ? object.height() : object.width());
-        else
-            fixture->setRadius(circle->radius());
-
-        fixture->setDensity(circle->density());
-        fixture->setFriction(circle->friction());
-        fixture->setRestitution(circle->restitution());
-        fixture->setSensor(circle->isSensor());
-        fixture->setCategories(circle->categories());
-        fixture->setCollidesWith(circle->collidesWith());
-        fixture->setGroupIndex(circle->groupIndex());
-
-        connect(circle, SIGNAL(beginContact(Box2DFixture*)), fixture, SIGNAL(beginContact(Box2DFixture*)));
-        connect(circle, SIGNAL(endContact(Box2DFixture*)), fixture, SIGNAL(endContact(Box2DFixture*)));
-
-        body->addFixture(fixture);
-    }
-    body->componentComplete();
-    item->setBody(body);
-}
-
-void TiledObject::createPolygonFixture(const TMXMapObject &object, CollisionItem *item)
-{
-    if(!item)
-        return;
-    if(m_fixtures.isEmpty())
-        return;
-
-    Box2DBody *body = new Box2DBody(item);
-    body->setBodyType(Box2DBody::Static);
-    body->setTarget(item);
-    body->setActive(true);
-    body->setSleepingAllowed(false);
-
-    foreach(Box2DFixture *objectFixture, m_fixtures)
-    {
-        if(!objectFixture)
-            continue;
-
-        // Check to see if the user of the library set the x, y, width and/or height values.
-        Box2DPolygon *polygon = static_cast<Box2DPolygon *>(objectFixture);
-        if(!polygon)
-            continue;
-
-        Box2DPolygon *fixture = new Box2DPolygon(item);
-
-        copyProperties(polygon, fixture);
-
-        QVariantList vertices = polygon->vertices().isEmpty() ? object.polygonAsList()
-                                                                : polygon->vertices();
-        fixture->setVertices(vertices);
-
-        fixture->setDensity(polygon->density());
-        fixture->setFriction(polygon->friction());
-        fixture->setRestitution(polygon->restitution());
-        fixture->setSensor(polygon->isSensor());
-        fixture->setCategories(polygon->categories());
-        fixture->setCollidesWith(polygon->collidesWith());
-        fixture->setGroupIndex(polygon->groupIndex());
-
-        connect(polygon, SIGNAL(beginContact(Box2DFixture*)), fixture, SIGNAL(beginContact(Box2DFixture*)));
-        connect(polygon, SIGNAL(endContact(Box2DFixture*)), fixture, SIGNAL(endContact(Box2DFixture*)));
-
-        body->addFixture(fixture);
-    }
-    body->componentComplete();
-    item->setBody(body);
-}
-
-void TiledObject::createPolylineFixture(const TMXMapObject &object, CollisionItem *item)
-{
-    if(!item)
-        return;
-    if(m_fixtures.isEmpty())
-        return;
-
-    Box2DBody *body = new Box2DBody(item);
-    body->setBodyType(Box2DBody::Static);
-    body->setTarget(item);
-    body->setActive(true);
-    body->setSleepingAllowed(false);
-
-    foreach(Box2DFixture *objectFixture, m_fixtures)
-    {
-        if(!objectFixture)
-            continue;
-
-        // Check to see if the user of the library set the x, y, width and/or height values.
-        Box2DChain *chain = static_cast<Box2DChain *>(objectFixture);
-        if(!chain)
-            continue;
-
-        Box2DChain *fixture = new Box2DChain(item);
-
-        copyProperties(chain, fixture);
-
-        QVariantList vertices = chain->vertices().isEmpty() ? object.polygonAsList()
-                                                                : chain->vertices();
-        fixture->setVertices(vertices);
-
-        fixture->setDensity(chain->density());
-        fixture->setFriction(chain->friction());
-        fixture->setRestitution(chain->restitution());
-        fixture->setSensor(chain->isSensor());
-        fixture->setCategories(chain->categories());
-        fixture->setCollidesWith(chain->collidesWith());
-        fixture->setGroupIndex(chain->groupIndex());
-        fixture->setLoop(chain->loop());
-
-        connect(chain, SIGNAL(beginContact(Box2DFixture*)), fixture, SIGNAL(beginContact(Box2DFixture*)));
-        connect(chain, SIGNAL(endContact(Box2DFixture*)), fixture, SIGNAL(endContact(Box2DFixture*)));
-
-        body->addFixture(fixture);
-    }
-    body->componentComplete();
-    item->setBody(body);
-}
-
-void TiledObject::copyProperties(QObject *from, QObject *to)
-{
-    if (!from || !to)
-        return;
-
-    for(int i = from->metaObject()->propertyOffset(); i < from->metaObject()->propertyCount(); ++i)
-        to->setProperty(QString::fromLatin1(from->metaObject()->property(i).name()).toStdString().c_str(), from->metaObject()->property(i).read(from));
-}
-
-/*!
-  \qmlproperty int TiledObject::count
-  \brief This property holds the total number of collisions.
-
-   A collision is a TMX object that has exactly the same name and type as another
-   object or group of objects on the same TMX layer. The name and type can be
-   empty strings.
-   \sa index
-*/
-int TiledObject::count() const
-{
-    return m_collisionItems.count();
-}
-
-/*!
-  \qmlmethod void TiledObject::reset()
-  \brief This method positions the \l TiledObject before the first collision.
-
-  \sa first() next() last() previous() seek()
-*/
-void TiledObject::reset()
-{
-    setCollisionIndex(-1);
-}
-
-/*!
-  \qmlmethod bool TiledObject::next()
-  \brief This method retrieves the next collision in the \l TiledObject, if
-    available, and positions the \l TiledObject on the retrieved collision.
-
-   The following rules apply:
-   \list
-        \li If the \l TiledObject is currently located before the first collision,
-         e.g. immediately after a \l TiledObject is created, an attempt is
-         made to retrieve the first collision.
-        \li If the \l TiledObject is currently located after the last collision,
-         there is no change and false is returned.
-        \li If the \l TiledObject is located somewhere in the middle, an attempt
-         is made to retrieve the next collision.
-   \endlist
-
-   If the collision could not be retrieved, the \l TiledObject is positioned after the last
-   collision and false is returned. If the collision is successfully retrieved, true is
-   returned.
-
-   \sa first() last() previous() reset() seek()
-*/
-bool TiledObject::next()
-{
-    return setCollisionIndex(m_collisionIndex + 1);
-}
-
-/*!
-  \qmlmethod bool TiledObject::previous()
-  \brief This method retrieves the previous collision in the \l TiledObject, if
-   available, and positions the \l TiledObject on the retrieved collision.
-
-   The following rules apply:
-  \list
-   \li If the \l TiledObject is currently located before the first collision, there
-    is no change and false is returned.
-   \li If the \l TiledObject is currently located after the last collision, an
-    attempt is made to retrieve the last record.
-   \li If the \l TiledObject result is somewhere in the middle, an attempt is
-    made to retrieve the previous collision.
-  \endlist
-
-  If the collision could not be retrieved, the \l TiledObject is positioned before
-  the first collision and false is returned. If the collision is successfully
-  retrieved, true is returned.
-  \sa first() next() last() reset() seek()
-*/
-bool TiledObject::previous()
-{
-    return setCollisionIndex(m_collisionIndex - 1);
-}
-
-/*!
-  \qmlmethod bool TiledObject::first()
-  \brief This method retrieves the first collision in the \l TiledObject, if available, and
-   positions the \l TiledObject on the retrieved collision.
-
-   Returns true if successful. If unsuccessful the \l TiledObject position is set to an invalid
-   position and false is returned.
-  \sa next() last() previous() reset() seek()
-*/
-bool TiledObject::first()
-{
-    return setCollisionIndex(0);
-}
-
-/*!
-  \qmlmethod bool TiledObject::last()
-  \brief This method retrieves the last collision in the \l TiledObject, if available,
-   and positions the \l TiledObject on the retrieved collision.
-
-   Returns true if successful. If unsuccessful the \l TiledObject position is set to an
-   invalid position and false is returned.
-   \sa first() next() previous() reset() seek()
-*/
-bool TiledObject::last()
-{
-    return setCollisionIndex(m_collisionItems.count() - 1);
-}
-
-/*!
-  \qmlmethod bool TiledObject::seek(int index)
-  \brief This method retrieves the collision at position \e index, if available, and
-   positions the \l TiledObject on the retrieved collision. The first collision is at position 0.
-
-   Returns true if successful. If unsuccessful the \l TiledObject position is set to an
-   invalid position and false is returned.
-  \sa index
-*/
-bool TiledObject::seek(int index)
-{
-    return setCollisionIndex(index);
-}
-
-/*!
-  \qmlproperty int TiledObject::index
-  \brief This property holds the current collision index.
-
-  A collision is a TMX object that has the same name and type as
-  another TMX object or group of objects.
-
-  You can set the value of the index to any value within the
-  range of collisions. This has the same effect as \l seek().
-  \sa seek()
-*/
-int TiledObject::collisionIndex() const
-{
-    return m_collisionIndex;
-}
-
-bool TiledObject::setCollisionIndex(int index)
-{
-    if(m_collisionIndex == index)
-        return false;
-    if(index < -1 || index > m_collisionItems.count())
-    {
-        qWarning() << "TiledObject: Collision index out of range.";
-        return false;
-    }
-    if(index == -1 || index == m_collisionItems.count())
-    {
-        m_collisionIndex = index;
-        emit collisionIndexChanged();
-        return false;
+    for (const auto &property : defaultProperties) {
+        const QVariant &value = propertyFromMapObject(property, object);
+        if (entity->property(property.toStdString().c_str()).isValid()) {
+            if (value.isValid())
+                QQmlProperty::write(entity, property, value);
+            else
+                qWarning() << "TiledPropertyMapping:" << property << "invalid";
+        } else {
+            qWarning() << "TiledPropertyMapping:" << property << "does not exist.";
+        }
     }
 
-    if(index >= 0 && index < m_collisionItems.count())
-    {
-        CollisionItem *item = m_collisionItems[index];
-        if(!item)
-            return false;
-
-        setProperties(item->properties());
-        setX(item->x());
-        setY(item->y());
-        setWidth(item->width());
-        setHeight(item->height());
-        setRotation(item->rotation());
-
-        setVisible(item->isVisible());
-        setId(item->id());
+    for (const auto &property : properties.keys()) {
+        const QVariant &value = propertyFromMapObject(property, object);
+        if (entity->property(property.toStdString().c_str()).isValid()) {
+            if (value.isValid())
+                QQmlProperty::write(entity, property, value);
+            else
+                qWarning() << "TiledPropertyMapping:" << property << "invalid";
+        } else {
+            qWarning() << "TiledPropertyMapping:" << property << "does not exist.";
+        }
     }
-
-    m_collisionIndex = index;
-    emit collisionIndexChanged();
-
-    return true;
 }
 
-/*!
-  \qmlproperty list<Fixture> TiledObject::fixtures
-  \brief This property holds the fixtures of the object.
-
-   \warning The fixtures set must match the shape used in the TMX map e.g. \l Box must be used for
-   rectangular shapes. Using any other type would cause undefined behavior.
-*/
-QQmlListProperty<Box2DFixture> TiledObject::fixtures()
+void TiledObject::applyMappings(Entity *entity, const TMXMapObject &object)
 {
-    return QQmlListProperty<Box2DFixture>(this, 0,
-                                        &TiledObject::append_fixture,
-                                        &TiledObject::count_fixture,
-                                        &TiledObject::at_fixture,
-                                        0);
+    for (const auto mapping : m_mappings) {
+        const QVariant &value = propertyFromMapObject(mapping->property(), object);
+        if (entity->property(mapping->property().toStdString().c_str()).isValid()) {
+            if (value.isValid())
+                QQmlProperty::write(entity, mapping->property(), value);
+            else
+                qWarning() << "TiledPropertyMapping:" << mapping->property() << "invalid";
+        } else {
+            qWarning() << "TiledPropertyMapping:" << mapping->property() << "does not exist.";
+        }
+    }
 }
 
-void TiledObject::append_fixture(QQmlListProperty<Box2DFixture> *list, Box2DFixture *fixture)
+QVariant TiledObject::propertyFromMapObject(const QString &property, const TMXMapObject &object)
 {
-    TiledObject *object = static_cast<TiledObject *>(list->object);
-    fixture->setParent(object);
-    object->m_fixtures.append(fixture);
+    if(!object.properties().contains(property) && property.toLower() == "x")
+        return QVariant::fromValue(object.x());
+    else if(!object.properties().contains(property) && property.toLower() == "y")
+        return QVariant::fromValue(object.y());
+    else if(!object.properties().contains(property) && property.toLower() == "width")
+        return QVariant::fromValue(object.width());
+    else if(!object.properties().contains(property) && property.toLower() == "height")
+        return QVariant::fromValue(object.height());
+    else if(!object.properties().contains(property) && property.toLower() == "rotation")
+        return QVariant::fromValue(object.rotation());
+    else if(!object.properties().contains(property) && property.toLower() == "visible")
+        return QVariant::fromValue(object.isVisible());
+    else if(!object.properties().contains(property) && property.toLower() == "id")
+        return QVariant::fromValue(object.id());
+
+    return object.properties().value(property);
 }
 
-int TiledObject::count_fixture(QQmlListProperty<Box2DFixture> *list)
+void TiledObject::classBegin()
 {
-    TiledObject *object = static_cast<TiledObject *>(list->object);
-    return object->m_fixtures.length();
+
 }
 
-Box2DFixture *TiledObject::at_fixture(QQmlListProperty<Box2DFixture> *list, int index)
+void TiledObject::componentComplete()
 {
-    TiledObject *object = static_cast<TiledObject *>(list->object);
-    return object->m_fixtures.at(index);
-}
-
-void TiledObject::componentComplete() {
-    QQuickItem::componentComplete();
-
-    if(m_componentComplete)
+    if (m_componentComplete)
         initialize();
 }
 
-QQmlListProperty<CollisionItem> TiledObject::collisions()
+QQmlListProperty<TiledPropertyMapping> TiledObject::mappings()
 {
-    return QQmlListProperty<CollisionItem>(this, 0,
-                                        &TiledObject::count_collision,
-                                        &TiledObject::at_collision);
+    return QQmlListProperty<TiledPropertyMapping>(this, nullptr,
+                                                  &TiledObject::append_mapping,
+                                                  &TiledObject::count_mapping,
+                                                  &TiledObject::at_mapping,
+                                                  nullptr);
 }
 
-int TiledObject::count_collision(QQmlListProperty<CollisionItem> *list)
-{
-    TiledObject *object = static_cast<TiledObject *>(list->object);
-    return object->m_collisionItems.length();
-}
-
-CollisionItem *TiledObject::at_collision(QQmlListProperty<CollisionItem> *list, int index)
+void TiledObject::append_mapping(QQmlListProperty<TiledPropertyMapping> *list, TiledPropertyMapping *mapping)
 {
     TiledObject *object = static_cast<TiledObject *>(list->object);
-    return object->m_collisionItems.at(index);
+    mapping->setParent(object);
+    object->m_mappings.append(mapping);
 }
 
+int TiledObject::count_mapping(QQmlListProperty<TiledPropertyMapping> *list)
+{
+    TiledObject *object = static_cast<TiledObject *>(list->object);
+    return object->m_mappings.count();
+}
+
+TiledPropertyMapping *TiledObject::at_mapping(QQmlListProperty<TiledPropertyMapping> *list, int index)
+{
+    TiledObject *object = static_cast<TiledObject *>(list->object);
+    return object->m_mappings.at(index);
+}

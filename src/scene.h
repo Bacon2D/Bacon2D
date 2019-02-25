@@ -26,8 +26,8 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _SCENE_H_
-#define _SCENE_H_
+#ifndef SCENE_H
+#define SCENE_H
 
 #include "entity.h"
 #include "box2dcontact.h"
@@ -45,7 +45,6 @@ class Viewport;
 class Scene : public QQuickItem
 {
     Q_OBJECT
-
     Q_PROPERTY(bool running READ running NOTIFY runningChanged)
     Q_PROPERTY(Viewport *viewport READ viewport WRITE setViewport NOTIFY viewportChanged)
     Q_PROPERTY(Game *game READ game CONSTANT)
@@ -63,7 +62,6 @@ class Scene : public QQuickItem
     /* End Box2DWorld wrapped properties */
     Q_PROPERTY(QObject *enterAnimation READ enterAnimation WRITE setEnterAnimation NOTIFY enterAnimationChanged)
     Q_PROPERTY(QObject *exitAnimation READ exitAnimation WRITE setExitAnimation NOTIFY exitAnimationChanged)
-
 public:
     explicit Scene(QQuickItem *parent = nullptr);
     virtual ~Scene() override = default;
@@ -123,7 +121,6 @@ public:
     void setExitAnimation(QObject *animation);
 
     void componentComplete() override;
-
 signals:
     void runningChanged();
     void viewportChanged();
@@ -146,10 +143,8 @@ signals:
 
     void enterAnimationChanged();
     void exitAnimationChanged();
-
 protected slots:
     void onWorldChanged();
-
 protected:
     bool m_running;
     Viewport *m_viewport;
@@ -169,6 +164,4 @@ protected:
     void createWorld();
 };
 
-
-
-#endif /* _SCENE_H_ */
+#endif // SCENE_H

@@ -26,8 +26,8 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _SPRITESHEET_H_
-#define _SPRITESHEET_H_
+#ifndef SPRITESHEET_H
+#define SPRITESHEET_H
 
 #include <QtQuick/QQuickPaintedItem>
 #include <QUrl>
@@ -42,7 +42,7 @@ class SpriteSheet : public QQuickPaintedItem
     Q_PROPERTY(int frame READ frame WRITE setFrame NOTIFY frameChanged)
 
 public:
-    SpriteSheet(QQuickItem *parent = 0);
+    explicit SpriteSheet(QQuickItem *parent = nullptr);
 
     void setPixmap(const QPixmap &pixmap);
 
@@ -86,10 +86,6 @@ public:
     void setFillMode(Bacon2D::FillMode fillMode);
 
     void paint(QPainter *painter);
-
-private:
-    void updateSizeInfo();
-
 signals:
     void sourceChanged();
     void horizontalFrameCountChanged();
@@ -104,7 +100,6 @@ signals:
     void finalFrameChanged();
     void sourceSizeChanged();
     void fillModeChanged();
-
 private:
     QPixmap m_pixmap;
     int m_horizontalFrameCount;
@@ -121,6 +116,8 @@ private:
     int m_horizontal;
     bool m_mirror;
     Bacon2D::FillMode m_fillMode;
+private:
+    void updateSizeInfo();
 };
 
-#endif /* _SPRITESHEET_H_ */
+#endif // SPRITESHEET_H

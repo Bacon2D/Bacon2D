@@ -26,28 +26,30 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#include "behavior.h"
+#ifndef SCRIPTBEHAVIOR_H
+#define SCRIPTBEHAVIOR_H
 
+#include "behavior.h"
 #include <QtQml/QQmlScriptString>
+
 class QQmlExpression;
 
-class ScriptBehavior : public  Behavior
+class ScriptBehavior : public Behavior
 {
     Q_OBJECT
-
     Q_PROPERTY(QQmlScriptString script READ script WRITE setScript NOTIFY scriptChanged)
-
 public:
-    ScriptBehavior(QObject *parent = 0);
+    explicit ScriptBehavior(QObject *parent = nullptr);
+    ~ScriptBehavior() = default;
 
     QQmlScriptString script() const;
     void setScript(const QQmlScriptString &script);
     void update(const int &delta);
-
 signals:
     void scriptChanged();
-
 private:
     QQmlScriptString m_script;
     QQmlExpression *m_expression;
 };
+
+#endif // SCRIPTBEHAVIOR_H

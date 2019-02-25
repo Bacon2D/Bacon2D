@@ -12,6 +12,7 @@
 class SpriteSheetGrid : public QObject, public QQmlParserStatus
 {
     Q_OBJECT
+    Q_INTERFACES(QQmlParserStatus)
     Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(QSize sourceSize READ sourceSize WRITE setSourceSize NOTIFY sourceSizeChanged)
     Q_PROPERTY(qreal width READ width NOTIFY widthChanged)
@@ -58,7 +59,6 @@ public:
 
     void classBegin() override;
     void componentComplete() override;
-
 signals:
     void sourceChanged();
     void sourceSizeChanged();
@@ -71,7 +71,13 @@ signals:
     void frameWidthChanged();
     void frameHeightChanged();
     void fillModeChanged();
+private:
+    void setWidth(qreal width);
+    void setHeight(qreal height);
+    void setImplicitWidth(qreal implicitWidth);
+    void setImplicitHeight(qreal implicitHeight);
 
+    void savePixmap();
 private:
     QPixmap m_pixmap;
     QPixmapCache::Key m_key;
@@ -86,13 +92,6 @@ private:
     qreal m_frameWidth;
     qreal m_frameHeight;
     Bacon2D::FillMode m_fillMode;
-
-    void setWidth(qreal width);
-    void setHeight(qreal height);
-    void setImplicitWidth(qreal implicitWidth);
-    void setImplicitHeight(qreal implicitHeight);
-
-    void savePixmap();
 };
 
 #endif // SPRITESHEETGRID_H

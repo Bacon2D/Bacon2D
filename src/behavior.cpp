@@ -36,7 +36,7 @@
 */
 Behavior::Behavior(QObject *parent)
     : QObject(parent)
-    , m_target(0)
+    , m_target(nullptr)
     , m_delta(0)
 {
 }

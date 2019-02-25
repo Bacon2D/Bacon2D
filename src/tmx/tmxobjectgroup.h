@@ -39,10 +39,10 @@ class TMXObjectGroup : public TMXLayer
     Q_OBJECT
 
 public:
-    explicit TMXObjectGroup(Tiled::ObjectGroup *tiledObjectGroup, QObject *parent = 0)
+    explicit TMXObjectGroup(Tiled::ObjectGroup *tiledObjectGroup, QObject *parent = nullptr)
         : TMXLayer(tiledObjectGroup, parent), m_tiledObjectGroup(tiledObjectGroup) {}
 
-    explicit TMXObjectGroup(const TMXLayer &layer, QObject *parent = 0)
+    explicit TMXObjectGroup(const TMXLayer &layer, QObject *parent = nullptr)
         : TMXLayer(layer.layer()->asObjectGroup(), parent), m_tiledObjectGroup(layer.layer()->asObjectGroup()) {}
 
     Tiled::ObjectGroup *tiledObjectGroup() { return m_tiledObjectGroup; }
@@ -50,7 +50,7 @@ public:
 
     QList<TMXMapObject> objects() const {
         QList<TMXMapObject> allObjects;
-        for(auto& object : m_tiledObjectGroup->objects())
+        for (auto& object : m_tiledObjectGroup->objects())
             allObjects.append(TMXMapObject(object));
 
         return allObjects;

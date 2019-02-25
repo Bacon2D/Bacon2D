@@ -70,7 +70,7 @@
  */
 ScrollBehavior::ScrollBehavior(QObject *parent)
     : Behavior(parent)
-    , m_currentBehavior(0)
+    , m_currentBehavior(nullptr)
     , m_horizontalStep(0)
     , m_verticalStep(0)
 {
@@ -96,7 +96,7 @@ void ScrollBehavior::setTarget(QQuickItem *target)
 
     if (m_currentBehavior) {
         delete m_currentBehavior;
-        m_currentBehavior = 0;
+        m_currentBehavior = nullptr;
     }
 
     if (dynamic_cast<Bacon2DImageLayer*>(target))

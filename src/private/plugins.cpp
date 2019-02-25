@@ -44,6 +44,7 @@
 #include "scriptbehavior.h"
 #include "settings.h"
 #include "entitymanager.h"
+#include "tiledbackground.h"
 
 #include "pausabletimer.h"
 
@@ -70,6 +71,7 @@
 #include "tiledscene.h"
 #include "tiledlayer.h"
 #include "tiledobject.h"
+#include "tiledpropertymapping.h"
 
 void Plugins::registerTypes(const char *uri)
 {
@@ -78,6 +80,7 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterUncreatableType<Behavior>("Bacon2D", 1, 0, "Bacon2DBehavior", "Don't use Bacon2DBehavior directly, use one specialized behavior");
     qmlRegisterUncreatableType<Bacon2D>("Bacon2D", 1, 0, "Bacon2D", "Not creatable as an object, use only to access enums");
 
+    // Bacon2D
     qmlRegisterType<Game>("Bacon2D", 1, 0, "Game");
     qmlRegisterType<Scene>("Bacon2D", 1, 0, "Scene");
     qmlRegisterType<Entity>("Bacon2D", 1, 0, "Entity");
@@ -97,14 +100,14 @@ void Plugins::registerTypes(const char *uri)
     // Utilities
     qmlRegisterType<PausableTimer>("Bacon2D", 1, 0, "PausableTimer");
 
-
-    // For TiledScene
+    // Tiled
     qmlRegisterType<TiledScene>("Bacon2D", 1, 0, "TiledScene");
+    qmlRegisterType<TiledBackground>("Bacon2D", 1, 0, "TiledBackground");
     qmlRegisterType<TiledLayer>("Bacon2D", 1, 0, "TiledLayer");
     qmlRegisterType<TiledObject>("Bacon2D", 1, 0, "TiledObject");
-    qmlRegisterType<CollisionItem>("Bacon2D", 1, 0, "CollisionItem");
+    qmlRegisterType<TiledPropertyMapping>("Bacon2D", 1, 0, "TiledPropertyMapping");
 
-
+    // Box2D
     qmlRegisterUncreatableType<Box2DWorld>("Bacon2D", 1, 0, "World",
                                            QStringLiteral("World created by Scene if physics is enabled"));
     qmlRegisterUncreatableType<Box2DBody>("Bacon2D", 1, 0, "Body",

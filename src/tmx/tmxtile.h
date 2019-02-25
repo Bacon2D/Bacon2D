@@ -37,7 +37,7 @@ class TMXTile: public TMXObject
     Q_OBJECT
 
 public:
-    explicit TMXTile(Tiled::Tile *tile, QObject *parent = 0)
+    explicit TMXTile(Tiled::Tile *tile, QObject *parent = nullptr)
         : TMXObject(tile, parent), m_tile(tile) {}
 
     TMXTile &operator=(const TMXTile &other) { setTile(other.tile()); return *this; }

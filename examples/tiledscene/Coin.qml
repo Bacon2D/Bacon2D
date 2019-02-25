@@ -3,13 +3,17 @@ import Bacon2D 1.0
 
 PhysicsEntity {
     id: coin
+
+    property bool picked: false
+
+    EntityManager { id: entityManager }
+
     width: 100
     height: 62
     sleepingAllowed: false
     bodyType: Body.Static
     transformOrigin: Item.Center
 
-    property bool picked: false
 
     fixtures: Box {
         width: target.width
@@ -45,7 +49,7 @@ PhysicsEntity {
             NumberAnimation { target: coin; property: "opacity"; to: 0 }
         }
 
-        ScriptAction { script: coin.destroy(); }
+        ScriptAction { script: entityManager.destroyEntity(coin.entityId); }
     }
 }
 

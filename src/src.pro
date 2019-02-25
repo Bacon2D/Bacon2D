@@ -21,6 +21,7 @@ MOC_DIR = tmp
 
 DEPENDPATH += .
 INCLUDEPATH += .
+INCLUDEPATH += ./private/
 INCLUDEPATH += ../3rdparty/qml-box2d/
 INCLUDEPATH += ../3rdparty/tiled/src/
 
@@ -33,63 +34,71 @@ include($$PWD/tmx/tmx.pri)
 
 win32:DEFINES += WIN32
 
-HEADERS += entity.h \
-           enums.h \
-           scene.h \
-           game.h \
-           plugins.h \
-           spritesheet.h \
-           spriteanimation.h \
-           animationtransition.h \
-           animationchangeevent.h \
-           bacon2dlayer.h \
-           bacon2dimagelayer.h \
-           viewport.h \
-           behavior.h \
-           scriptbehavior.h \
-           scrollbehavior.h \
-           scrollbehaviorimpl.h \
-           imagelayerscrollbehavior.h \
-           layerscrollbehavior.h \
-           settings.h \
-           tiledobject.h \
-           tiledlayer.h \
-           tiledscene.h \
-           animatedsprite.h \
-           sprite.h \
-           entitymanager.h \
-           physicsentity.h \
-           pausabletimer.h \
-           spritestrip.h \
-           spritesheetgrid.h
+HEADERS += \
+    enums.h \
+    scene.h \
+    game.h \
+    private/plugins.h \
+    private/spritesheet.h \
+    spriteanimation.h \
+    private/animationtransition.h \
+    private/animationchangeevent.h \
+    viewport.h \
+    scriptbehavior.h \
+    scrollbehavior.h \
+    scrollbehaviorimpl.h \
+    imagelayerscrollbehavior.h \
+    layerscrollbehavior.h \
+    settings.h \
+    tiledobject.h \
+    tiledlayer.h \
+    tiledscene.h \
+    sprite.h \
+    physicsentity.h \
+    pausabletimer.h \
+    spritestrip.h \
+    spritesheetgrid.h \
+    tiledpropertymapping.h \
+    animatedsprite.h \
+    behavior.h \
+    entity.h \
+    entitymanager.h \
+    bacon2dimagelayer.h \
+    bacon2dlayer.h \
+    tiledbackground.h \
+    private/entitymanagersingleton.h
 
-SOURCES += entity.cpp \
-           enums.cpp \
-           scene.cpp \
-           game.cpp \
-           plugins.cpp \
-           spritesheet.cpp \
-           spriteanimation.cpp \
-           animationtransition.cpp \
-           bacon2dlayer.cpp \
-           bacon2dimagelayer.cpp \
-           viewport.cpp \
-           behavior.cpp \
-           scriptbehavior.cpp \
-           scrollbehavior.cpp \
-           imagelayerscrollbehavior.cpp \
-           layerscrollbehavior.cpp \
-           settings.cpp \
-           tiledscene.cpp \
-           tiledlayer.cpp \
-           tiledobject.cpp \
-           animatedsprite.cpp \
-           sprite.cpp \
-           entitymanager.cpp \
-           physicsentity.cpp \
-           pausabletimer.cpp \
-           spritestrip.cpp \
-           spritesheetgrid.cpp
+SOURCES += \
+    enums.cpp \
+    scene.cpp \
+    game.cpp \
+    private/plugins.cpp \
+    private/spritesheet.cpp \
+    spriteanimation.cpp \
+    private/animationtransition.cpp \
+    viewport.cpp \
+    scriptbehavior.cpp \
+    scrollbehavior.cpp \
+    imagelayerscrollbehavior.cpp \
+    layerscrollbehavior.cpp \
+    settings.cpp \
+    tiledscene.cpp \
+    tiledlayer.cpp \
+    tiledobject.cpp \
+    sprite.cpp \
+    physicsentity.cpp \
+    pausabletimer.cpp \
+    spritestrip.cpp \
+    spritesheetgrid.cpp \
+    tiledpropertymapping.cpp \
+    animatedsprite.cpp \
+    behavior.cpp \
+    entity.cpp \
+    entitymanager.cpp \
+    bacon2dimagelayer.cpp \
+    bacon2dlayer.cpp \
+    tiledbackground.cpp \
+    private/entitymanagersingleton.cpp
 
 !isEmpty(QTPATH): target.path = $$QTPATH/qml/$$TARGETPATH
 else: target.path = $$[QT_INSTALL_QML]/$$replace(TARGETPATH, \\., /).$$API_VER

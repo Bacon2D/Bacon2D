@@ -55,32 +55,26 @@ class Settings : public QObject, public QQmlParserStatus
     Q_DISABLE_COPY(Settings)
     Q_INTERFACES(QQmlParserStatus)
     Q_PROPERTY(QString category READ category WRITE setCategory FINAL)
-
 public:
-    Settings(QObject *parent = 0);
-    ~Settings();
+    Settings(QObject *parent = nullptr);
+    ~Settings() override = default;
 
     QString category() const;
     void setCategory(const QString &category);
-
 protected:
-    void timerEvent(QTimerEvent *event);
-
-    //void classBegin();
-    void classBegin() {}
-    void componentComplete();
-
+    void timerEvent(QTimerEvent *event) override;
+    void classBegin() override {}
+    void componentComplete() override;
 public slots:
     void propertyChanged();
-
 private:
     void load();
     void store();
+private:
     int initialPropertyCount;
     int timerId;
     int propertyChanges;
     bool isComplete;
-
     QSettings m_settings;
 };
 

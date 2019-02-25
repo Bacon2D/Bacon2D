@@ -24,18 +24,20 @@
  */
 
 #include "tiledscene.h"
+#include "box2dbody.h"
+#include "box2dfixture.h"
+#include "viewport.h"
+#include "tmxmap.h"
+#include "tiledlayer.h"
+#include <libtiled/mapreader.h>
+
 #include <QFile>
 #include <QDebug>
 #include <QPainter>
 #include <QSGSimpleTextureNode>
 #include <QQmlEngine>
 #include <QQmlContext>
-
-#include "box2dbody.h"
-#include "box2dfixture.h"
-#include "viewport.h"
-
-#include <libtiled/mapreader.h>
+#include <QQuickWindow>
 
 /*!
   \qmltype TiledScene
@@ -109,7 +111,7 @@
 // TiledScene
 TiledScene::TiledScene(QQuickItem *parent)
     : Scene(parent)
-    , m_map(0)
+    , m_map(nullptr)
     , m_backgroundItem(nullptr)
     , m_useMapBackgroundColor(false)
 {
@@ -200,8 +202,10 @@ bool TiledScene::loadMap(const QString &source)
     Tiled::MapReader reader;
     Tiled::Map *tiledMap = nullptr;
 
-    if (m_map)
+    if (m_map) {
         m_map->deleteLater();
+        m_map = nullptr;
+    }
 
     if(!QFile::exists(source))
         qWarning() << source << " does not exist.";
@@ -230,12 +234,11 @@ void TiledScene::loadBackground()
 
 void TiledScene::loadLayers()
 {
-    // Extract tiles for each layer
-    foreach(const TMXLayer &layer, m_map->layers())
+    for (const TMXLayer &layer : m_map->layers())
     {
         if(layer.isTileLayer())
             loadTileLayer(static_cast<TMXTileLayer>(layer));
-        else if(layer.isImageLayer() && m_backgroundItem == nullptr)
+        else if(layer.isImageLayer() && !m_backgroundItem)
             loadImageLayer(static_cast<TMXImageLayer>(layer));
         else if(layer.isObjectLayer()) {
             // This layer would be loaded by the TiledLayer and TiledObject classes.
@@ -254,7 +257,7 @@ void TiledScene::loadTileLayer(const TMXTileLayer &layer)
     int cellX, cellY;
     cellX = cellY = 0;
 
-    foreach(const TMXCell &cell, layer.cells())
+    for (const TMXCell &cell : layer.cells())
     {
         // Store tiles that are used from the tileset
         if(!cell.isEmpty()) {
@@ -318,7 +321,7 @@ QSGNode *TiledScene::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
         QSGTexture *texture = window()->createTextureFromImage(m_image.toImage());
         node->setTexture(texture);
 
-        connect(this, SIGNAL(destroyed()), texture, SLOT(deleteLater()));
+        connect(this, &TiledScene::destroyed, texture, &QSGTexture::deleteLater);
     }
     node->setRect(boundingRect());
 
@@ -343,11 +346,11 @@ void TiledScene::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeo
 
 QQmlListProperty<TiledLayer> TiledScene::layers()
 {
-    return QQmlListProperty<TiledLayer>(this, 0,
+    return QQmlListProperty<TiledLayer>(this, nullptr,
                                         &TiledScene::append_layer,
                                         &TiledScene::count_layer,
                                         &TiledScene::at_layer,
-                                        0);
+                                        nullptr);
 }
 
 QVariant TiledScene::getProperty(const QString &name, const QVariant &defaultValue) const
@@ -361,9 +364,8 @@ QVariant TiledScene::getProperty(const QString &name, const QVariant &defaultVal
 void TiledScene::append_layer(QQmlListProperty<TiledLayer> *list, TiledLayer *layer)
 {
     TiledScene *scene = static_cast<TiledScene *>(list->object);
-    layer->setParent(scene);
     layer->setParentItem(scene);
-    connect(scene, SIGNAL(sourceChanged()), layer, SLOT(initialize()));
+    connect (scene, &TiledScene::sourceChanged, layer, &TiledLayer::initialize);
     scene->m_layers.append(layer);
 }
 

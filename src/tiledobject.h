@@ -23,32 +23,52 @@
  *
  */
 
-#ifndef _TILEDOBJECT_H_
-#define _TILEDOBJECT_H_
+#ifndef TILEDOBJECT_H
+#define TILEDOBJECT_H
 
 #include <QQuickItem>
 #include "tmxmapobject.h"
 
-class Box2DBody;
-class Box2DFixture;
 class TMXObjectGroup;
+class Entity;
+class TiledScene;
+class TiledObject;
+class QQmlComponent;
+class TiledPropertyMapping;
 
-class CollisionItem;
+class TiledObjectAttached : public QObject {
+    Q_OBJECT
+    Q_PROPERTY(TiledObject *instance READ instance NOTIFY instanceChanged)
+public:
+    explicit TiledObjectAttached(QObject *parent = nullptr);
+    TiledObject *instance() const;
+    void setInstance(TiledObject *instance);
+signals:
+    void instanceChanged();
+private:
+    TiledObject *m_instance;
+};
 
-class TiledObject : public QQuickItem
+class TiledObject : public QObject, public QQmlParserStatus
 {
     Q_OBJECT
+    Q_INTERFACES(QQmlParserStatus)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
-    Q_PROPERTY(QQmlListProperty<Box2DFixture> fixtures READ fixtures)
-    Q_PROPERTY(QQmlListProperty<CollisionItem> collisions READ collisions)
-
-    // To handle objects that have the same name
-    Q_PROPERTY(int count READ count)
-    Q_PROPERTY(int index READ collisionIndex WRITE setCollisionIndex NOTIFY collisionIndexChanged)
+    Q_PROPERTY(QQmlComponent *entity READ entity WRITE setEntity NOTIFY entityChanged)
+    Q_PROPERTY(bool autoMapProperties READ autoMapProperties WRITE setAutoMapProperties NOTIFY autoMapPropertiesChanged)
+    Q_PROPERTY(bool ignoreFixtures READ ignoreFixtures WRITE setIgnoreFixtures NOTIFY ignoreFixturesChanged)
+    Q_PROPERTY(QQmlListProperty<TiledPropertyMapping> mappings READ mappings)
+    Q_CLASSINFO("DefaultProperty", "mappings")
 public:
     explicit TiledObject(QQuickItem *parent = nullptr);
-    ~TiledObject();
+    ~TiledObject() override = default;
+
+    Q_INVOKABLE QVariant getProperty(const QString &entityId, const QString &property) const;
+    Q_INVOKABLE QVariant getProperty(const QString &property) const;
+    Q_INVOKABLE Entity *getEntity(const QString &entityId = QString()) const;
+
+    void initialize();
 
     QString name() const;
     void setName(const QString &name);
@@ -56,89 +76,57 @@ public:
     QString type() const;
     void setType(const QString &type);
 
-    QList<Box2DFixture *> fixtureList() const { return m_fixtures; }
+    QQmlComponent *entity() const;
+    void setEntity(QQmlComponent *entity);
 
-    void setProperties(const QMap<QString, QVariant> &properties) { m_properties = properties; }
-    void setId(int id) { m_id = id; }
-    Q_INVOKABLE QVariant getProperty(const QString &name, const QVariant &defaultValue = QVariant()) const;
+    bool autoMapProperties() const;
+    void setAutoMapProperties(bool enabled);
 
-    QQmlListProperty<Box2DFixture> fixtures();
-    static void append_fixture(QQmlListProperty<Box2DFixture> *list, Box2DFixture *fixture);
-    static int count_fixture(QQmlListProperty<Box2DFixture> *list);
-    static Box2DFixture *at_fixture(QQmlListProperty<Box2DFixture> *list, int index);
+    bool ignoreFixtures() const;
+    void setIgnoreFixtures(bool enabled);
 
-    QQmlListProperty<CollisionItem> collisions();
-    static int count_collision(QQmlListProperty<CollisionItem> *list);
-    static CollisionItem *at_collision(QQmlListProperty<CollisionItem> *list, int index);
+    QQmlListProperty<TiledPropertyMapping> mappings();
 
-    void componentComplete();
+    void classBegin() override;
+    void componentComplete() override;
 
-    // Handling collision of object names
-    Q_INVOKABLE bool next();
-    Q_INVOKABLE bool previous();
-    Q_INVOKABLE bool first();
-    Q_INVOKABLE bool last();
-    Q_INVOKABLE bool seek(int index);
-    int count() const;
-    Q_INVOKABLE void reset();
-
-    int collisionIndex() const;
-    bool setCollisionIndex(int index);
+    static TiledObjectAttached *qmlAttachedProperties(QObject *entity)
+    {
+        return new TiledObjectAttached(entity);
+    }
 signals:
     void nameChanged();
     void typeChanged();
-    void collisionIndexChanged();
-private slots:
-    void initialize();
+    void entityChanged();
+    void autoMapPropertiesChanged();
+    void ignoreFixturesChanged();
+    void entityCreated(Entity *entity);
+private:
+    void createEntity(const TMXMapObject &object);
+    TiledScene *findParentScene() const;
+    void attemptAutoMapping(Entity *entity, const TMXMapObject &object);
+    void applyMappings(Entity *entity, const TMXMapObject &object);
+    void applyFixtureProperties(Entity *entity, const TMXMapObject &object);
+    static QVariant propertyFromMapObject(const QString &property, const TMXMapObject &object);
+
+    static void append_mapping(QQmlListProperty<TiledPropertyMapping> *list, TiledPropertyMapping *mapping);
+    static int count_mapping(QQmlListProperty<TiledPropertyMapping> *list);
+    static TiledPropertyMapping *at_mapping(QQmlListProperty<TiledPropertyMapping> *list, int index);
 private:
     int m_id;
     QString m_name;
     QString m_type;
     QString m_layerName;
-    QList<Box2DFixture *> m_fixtures;
     QMap<QString, QVariant> m_properties;
     TMXObjectGroup *m_objectGroup;
     bool m_componentComplete;
+    QQmlComponent *m_entityComponent;
+    TiledScene *m_parentScene;
+    bool m_autoMapProperties;
+    bool m_ignoreFixtures;
+    QHash<QString, Entity *> m_entities;
+    QList<TiledPropertyMapping *> m_mappings;
+}; QML_DECLARE_TYPEINFO(TiledObject, QML_HAS_ATTACHED_PROPERTIES)
 
-    // Handling collision of object names
-    QList<CollisionItem *> m_collisionItems;
-    int m_collisionIndex;
-
-    void createRectangularFixture(const TMXMapObject &object, CollisionItem *item);
-    void createEllipseFixture(const TMXMapObject &object, CollisionItem *item);
-    void createPolygonFixture(const TMXMapObject &object, CollisionItem *item);
-    void createPolylineFixture(const TMXMapObject &object, CollisionItem *item);
-
-    void copyProperties(QObject *from, QObject *to);
-};
-
-// An item that represents a single collision object.
-// A collision object is an object that has the same name with another object.
-// This library has this feature to avoid having to type properties for each object.
-class CollisionItem : public QQuickItem
-{
-    Q_OBJECT
-    Q_PROPERTY(Box2DBody* body READ body)
-public:
-    CollisionItem(QQuickItem *parent = 0) : QQuickItem(parent), m_id(0), m_body(0), m_collisionIndex(-1) {}
-
-    QMap<QString, QVariant> properties() const { return m_properties; }
-    void setProperties(const QMap<QString, QVariant> &properties) { m_properties = properties; }
-
-    Box2DBody *body() const { return m_body; }
-    void setBody(Box2DBody *body) { m_body = body; }
-
-    int id() const { return m_id; }
-    void setId(int id) { m_id = id; }
-
-    int collisionIndex() const { return m_collisionIndex; }
-    void setCollisionIndex(int index) { m_collisionIndex = index; }
-private:
-    int m_id;
-    Box2DBody *m_body;
-    QMap<QString, QVariant> m_properties;
-    int m_collisionIndex;
-};
-
-#endif // _TILEDOBJECT_H_
+#endif // TILEDOBJECT_H
 

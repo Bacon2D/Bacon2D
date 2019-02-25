@@ -215,14 +215,14 @@ void Viewport::setScene(Scene *scene)
 {
     m_scene = scene;
     scene->setParentItem(this);
-    setContentWidth(scene->width());
-    setContentHeight(scene->height());
+    setContentWidth(static_cast<float>(scene->width()));
+    setContentHeight(static_cast<float>(scene->height()));
     setVisible(true);
     updateMaxOffsets();
 }
 
 void Viewport::updateMaxOffsets()
 {
-    m_maxXOffset = m_contentWidth - width();
-    m_maxYOffset = m_contentHeight - height();
+    m_maxXOffset = m_contentWidth - static_cast<float>(width());
+    m_maxYOffset = m_contentHeight - static_cast<float>(height());
 }

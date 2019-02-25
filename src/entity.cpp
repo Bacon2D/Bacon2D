@@ -34,6 +34,7 @@
 #include "animatedsprite.h"
 #include "sprite.h"
 #include "../../3rdparty/qml-box2d/box2dbody.h"
+#include "entitymanager.h"
 
 
 /*!
@@ -70,12 +71,8 @@
 Entity::Entity(Scene *parent)
     : QQuickItem(parent)
     , m_updateInterval(0)
-    , m_scene(0)
-    , m_behavior(0)
-{
-}
-
-Entity::~Entity()
+    , m_scene(nullptr)
+    , m_behavior(nullptr)
 {
 }
 
@@ -112,8 +109,7 @@ void Entity::initializeEntities(QQuickItem *parent)
     if (!m_scene)
         return;
 
-    QQuickItem *item;
-    foreach (item, parent->childItems()) {
+    for (auto item : parent->childItems()) {
         if (Entity *entity = dynamic_cast<Entity *>(item))
             entity->setScene(m_scene);
         if (AnimatedSprite *animatedSprite = dynamic_cast<AnimatedSprite *>(item))
@@ -128,7 +124,7 @@ void Entity::componentComplete()
 
     setScene(qobject_cast<Scene *>(parentItem()));
     if (m_scene && m_scene->physics() && m_scene->world()) {
-        foreach (Box2DBody *body, this->findChildren<Box2DBody *>(QString(), Qt::FindDirectChildrenOnly)) {
+        for (Box2DBody *body : this->findChildren<Box2DBody *>(QString(), Qt::FindDirectChildrenOnly)) {
             body->setTarget(this);
             body->setWorld(m_scene->world());
         }
@@ -163,12 +159,11 @@ void Entity::update(const int &delta)
             m_behavior->setDelta(delta);
             m_behavior->setTarget(this);
             m_behavior->update(delta);
-            m_behavior->setTarget(0);
+            m_behavior->setTarget(nullptr);
         }
     }
 
-    QQuickItem *child;
-    foreach (child, childItems())
+    for (QQuickItem *child : childItems())
         if (Entity *item = dynamic_cast<Entity *>(child))
             item->update(delta);
 }
@@ -214,7 +209,7 @@ Game *Entity::game() const
     if (m_scene)
         return m_scene->game();
 
-    return 0;
+    return nullptr;
 }
 
 /*!

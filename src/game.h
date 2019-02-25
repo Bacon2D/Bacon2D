@@ -26,8 +26,8 @@
  * @author Roger Felipe Zanoni da Silva <roger.zanoni@openbossa.org>
  */
 
-#ifndef _GAME_H_
-#define _GAME_H_
+#ifndef GAME_H
+#define GAME_H
 
 #include "enums.h"
 
@@ -45,14 +45,12 @@ class Viewport;
 class Game : public QQuickItem
 {
     Q_OBJECT
-
     Q_PROPERTY(Scene *currentScene READ currentScene WRITE setCurrentScene NOTIFY currentSceneChanged)
     Q_PROPERTY(int ups READ ups WRITE setUps NOTIFY upsChanged)
     Q_PROPERTY(QPointF mouse READ mouse)
     Q_PROPERTY(QString gameName READ gameName WRITE setGameName NOTIFY gameNameChanged)
     Q_PROPERTY(Bacon2D::State gameState READ gameState WRITE setGameState NOTIFY gameStateChanged)
     Q_PROPERTY(int stackLevel READ stackLevel NOTIFY stackLevelChanged)
-
 public:
     Game(QQuickItem *parent = nullptr);
     virtual ~Game();
@@ -78,14 +76,12 @@ protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
     void timerEvent(QTimerEvent *event);
     void update();
-
 signals:
     void currentSceneChanged();
     void upsChanged();
     void gameNameChanged();
     void gameStateChanged();
     void stackLevelChanged();
-
 private:
     QTime m_gameTime;
     int m_ups;
@@ -104,11 +100,10 @@ private:
     void deactivateScene(Scene *scene);
     bool triggerExitAnimation(Scene *scene);
     bool triggerEnterAnimation(Scene *scene);
-
 private slots:
     void handleEnterAnimationRunningChanged(bool running);
     void handleExitAnimationRunningChanged(bool running);
     void onApplicationStateChanged(Qt::ApplicationState state);
 };
 
-#endif /* _GAME_H_ */
+#endif // GAME_H

@@ -553,15 +553,15 @@ void Scene::onWorldChanged()
 {
     if (m_world) {
         /* Wrap signals from Box2DWorld */
-        connect(m_world, SIGNAL(preSolve(Box2DContact *)), this, SIGNAL(preSolve(Box2DContact *)));
-        connect(m_world, SIGNAL(postSolve(Box2DContact *)), this, SIGNAL(postSolve(Box2DContact *)));
-        connect(m_world, SIGNAL(timeStepChanged()), this, SIGNAL(timeStepChanged()));
-        connect(m_world, SIGNAL(velocityIterationsChanged()), this, SIGNAL(velocityIterationsChanged()));
-        connect(m_world, SIGNAL(positionIterationsChanged()), this, SIGNAL(positionIterationsChanged()));
-        connect(m_world, SIGNAL(gravityChanged()), this, SIGNAL(gravityChanged()));
-        connect(m_world, SIGNAL(autoClearForcesChanged()), this, SIGNAL(autoClearForcesChanged()));
-        connect(m_world, SIGNAL(stepped()), this, SIGNAL(stepped()));
-        connect(m_world, SIGNAL(pixelsPerMeterChanged()), this, SIGNAL(pixelsPerMeterChanged()));
+        connect(m_world, &Box2DWorld::preSolve, this, &Scene::preSolve);
+        connect(m_world, &Box2DWorld::postSolve, this, &Scene::postSolve);
+        connect(m_world, &Box2DWorld::timeStepChanged, this, &Scene::timeStepChanged);
+        connect(m_world, &Box2DWorld::velocityIterationsChanged, this, &Scene::velocityIterationsChanged);
+        connect(m_world, &Box2DWorld::positionIterationsChanged, this, &Scene::positionIterationsChanged);
+        connect(m_world, &Box2DWorld::gravityChanged, this, &Scene::gravityChanged);
+        connect(m_world, &Box2DWorld::autoClearForcesChanged, this, &Scene::autoClearForcesChanged);
+        connect(m_world, &Box2DWorld::stepped, this, &Scene::stepped);
+        connect(m_world, &Box2DWorld::pixelsPerMeterChanged, this, &Scene::pixelsPerMeterChanged);
         /* End wrapped signals from Box2DWorld */
 
         /* if debug is enabled, create a DebugDraw */

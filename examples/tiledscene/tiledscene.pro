@@ -1,7 +1,10 @@
 EXAMPLE_QML_FILES += \
     Coin.qml \
     Dog.qml \
-    main.qml
+    Ground.qml \
+    LevelBoundaries.qml \
+    main.qml \
+    Polyground.qml
 
 EXAMPLE_IMAGE_FILES += \
     images/coin.png \

@@ -26,6 +26,10 @@
 #include "tiledlayer.h"
 #include "tiledscene.h"
 #include "tmxlayer.h"
+#include "tmxmap.h"
+#include "box2dfixture.h"
+#include "tiledobject.h"
+
 #include <QVariant>
 
 /*!
@@ -107,15 +111,10 @@
    \sa TiledScene TiledObject
 */
 
-TiledLayer::TiledLayer(QQuickItem *parent) :
-    QQuickItem(parent)
-  , m_layer(0)
+TiledLayer::TiledLayer(QQuickItem *parent)
+    : QQuickItem(parent)
+    , m_layer(nullptr)
 {
-}
-
-TiledLayer::~TiledLayer()
-{
-
 }
 
 /*!
@@ -154,15 +153,12 @@ void TiledLayer::initialize()
 {
     // Extract properties from layer
     TiledScene *scene = qobject_cast<TiledScene *>(parent());
-    if(!scene || !scene->tiledMap())
+    if (!scene || !scene->tiledMap())
         return;
 
-    foreach(const TMXLayer &layer, scene->tiledMap()->layers())
-    {
-        if(layer.name() == m_name)
-        {
-            if(layer.isTileLayer() && layer.isVisible())
-            {
+    for (const TMXLayer &layer : scene->tiledMap()->layers()) {
+        if (layer.name() == m_name) {
+            if (layer.isTileLayer() && layer.isVisible()) {
                 TMXTileLayer tileLayer = static_cast<TMXTileLayer>(layer);
                 setProperties(tileLayer.properties());
 
@@ -171,13 +167,12 @@ void TiledLayer::initialize()
                 setWidth(tileLayer.width());
                 setHeight(tileLayer.height());
 
-                setOpacity(tileLayer.opacity());
+                setOpacity(static_cast<qreal>(tileLayer.opacity()));
                 setVisible(tileLayer.isVisible());
 
                 setLayer(new TMXLayer(layer.layer(), this));
             }
-            else if(layer.isImageLayer() && layer.isVisible())
-            {
+            else if (layer.isImageLayer() && layer.isVisible()) {
                 TMXImageLayer imageLayer = static_cast<TMXImageLayer>(layer);
                 setProperties(imageLayer.properties());
 
@@ -186,13 +181,12 @@ void TiledLayer::initialize()
                 setWidth(imageLayer.width());
                 setHeight(imageLayer.height());
 
-                setOpacity(imageLayer.opacity());
+                setOpacity(static_cast<qreal>(imageLayer.opacity()));
                 setVisible(imageLayer.isVisible());
 
                 setLayer(new TMXLayer(layer.layer(), this));
             }
-            else if(layer.isObjectLayer() && layer.isVisible())
-            {
+            else if (layer.isObjectLayer() && layer.isVisible()) {
                 TMXObjectGroup objectGroup = static_cast<TMXObjectGroup>(layer);
                 setProperties(objectGroup.properties());
 
@@ -201,16 +195,16 @@ void TiledLayer::initialize()
                 setWidth(objectGroup.width());
                 setHeight(objectGroup.height());
 
-                setOpacity(objectGroup.opacity());
+                setOpacity(static_cast<qreal>(objectGroup.opacity()));
                 setVisible(objectGroup.isVisible());
 
                 setLayer(new TMXLayer(layer.layer(), this));
             }
-            else if (!layer.isVisible())
+            else if (!layer.isVisible()) {
                 qWarning() << "TiledLayer:" << layer.name() << "is hidden.";
-            else
+            } else {
                 qWarning() << "TiledLayer: Unknown layer type: " << layer.name();
-
+            }
             break;
         }
     }
@@ -232,19 +226,18 @@ void TiledLayer::setLayer(TMXLayer *layer)
 */
 QQmlListProperty<TiledObject> TiledLayer::objects()
 {
-    return QQmlListProperty<TiledObject>(this, 0,
-                                        &TiledLayer::append_object,
-                                        &TiledLayer::count_object,
-                                        &TiledLayer::at_object,
-                                        0);
+    return QQmlListProperty<TiledObject>(this, nullptr,
+                                         &TiledLayer::append_object,
+                                         &TiledLayer::count_object,
+                                         &TiledLayer::at_object,
+                                         nullptr);
 }
 
 void TiledLayer::append_object(QQmlListProperty<TiledObject> *list, TiledObject *object)
 {
     TiledLayer *layer = static_cast<TiledLayer *>(list->object);
     object->setParent(layer);
-    object->setParentItem(layer);
-    connect(layer, SIGNAL(layerChanged()), object, SLOT(initialize()));
+    connect(layer, &TiledLayer::layerChanged, object, &TiledObject::initialize);
     layer->m_objects.append(object);
 }
 
@@ -259,4 +252,3 @@ TiledObject *TiledLayer::at_object(QQmlListProperty<TiledObject> *list, int inde
     TiledLayer *layer = static_cast<TiledLayer *>(list->object);
     return layer->m_objects.at(index);
 }
-

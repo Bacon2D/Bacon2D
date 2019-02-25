@@ -38,7 +38,7 @@ class TMXTileset: public TMXObject
     Q_OBJECT
 
 public:
-    explicit TMXTileset(Tiled::Tileset *tileset, QObject *parent = 0)
+    explicit TMXTileset(Tiled::Tileset *tileset, QObject *parent = nullptr)
         : TMXObject(tileset, parent), m_tileset(tileset) {}
 
     TMXTileset &operator=(const TMXTileset &other) { setTileset(other.tileset()); return *this; }
@@ -58,7 +58,7 @@ public:
 
     const QList<TMXTile> tiles() const {
         QList<TMXTile> allTiles;
-        foreach(Tiled::Tile *tile, m_tileset->tiles())
+        for (Tiled::Tile *tile : m_tileset->tiles())
             allTiles.append(TMXTile(tile));
 
         return allTiles;
