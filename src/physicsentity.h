@@ -4,7 +4,7 @@
 #include <QObject>
 #include "entity.h"
 #include "box2dbody.h"
-#include "entitymanagersingleton.h"
+#include "entityfactory.h"
 
 class QPointF;
 class Box2DBody;
@@ -191,8 +191,8 @@ public:
     QList<Box2DFixture *> fixtureList() const;
     void componentComplete() override;
 
-    EntityManagerSingleton::FixturePolicy fixturePolicy() const;
-    void setFixturePolicy(EntityManagerSingleton::FixturePolicy policy);
+    EntityFactory::FixturePolicy fixturePolicy() const;
+    void setFixturePolicy(EntityFactory::FixturePolicy policy);
 
     Q_INVOKABLE void applyForce(QPointF force,QPointF point);
     Q_INVOKABLE void applyForceToCenter(QPointF force);
@@ -228,7 +228,7 @@ signals:
 private:
     Box2DBody* m_body;
     QList<Box2DFixture *> m_fixtures;
-    EntityManagerSingleton::FixturePolicy m_fixturePolicy;
+    EntityFactory::FixturePolicy m_fixturePolicy;
 
     void addFixtures();
     static void append_fixture(QQmlListProperty<Box2DFixture> *, Box2DFixture *fixture);

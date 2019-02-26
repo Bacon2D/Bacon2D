@@ -56,13 +56,14 @@ class TiledObject : public QObject, public QQmlParserStatus
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(QQmlComponent *entity READ entity WRITE setEntity NOTIFY entityChanged)
+    Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
     Q_PROPERTY(bool autoMapProperties READ autoMapProperties WRITE setAutoMapProperties NOTIFY autoMapPropertiesChanged)
     Q_PROPERTY(bool ignoreFixtures READ ignoreFixtures WRITE setIgnoreFixtures NOTIFY ignoreFixturesChanged)
     Q_PROPERTY(QQmlListProperty<TiledPropertyMapping> mappings READ mappings)
     Q_CLASSINFO("DefaultProperty", "mappings")
 public:
     explicit TiledObject(QQuickItem *parent = nullptr);
-    ~TiledObject() override = default;
+    ~TiledObject() override;
 
     Q_INVOKABLE QVariant getProperty(const QString &entityId, const QString &property) const;
     Q_INVOKABLE QVariant getProperty(const QString &property) const;
@@ -78,6 +79,9 @@ public:
 
     QQmlComponent *entity() const;
     void setEntity(QQmlComponent *entity);
+
+    bool isActive() const;
+    void setActive(bool active);
 
     bool autoMapProperties() const;
     void setAutoMapProperties(bool enabled);
@@ -98,9 +102,12 @@ signals:
     void nameChanged();
     void typeChanged();
     void entityChanged();
+    void activeChanged();
     void autoMapPropertiesChanged();
     void ignoreFixturesChanged();
+
     void entityCreated(Entity *entity);
+    void entityDestroyed(Entity *entity);
 private:
     void createEntity(const TMXMapObject &object);
     TiledScene *findParentScene() const;
@@ -108,6 +115,7 @@ private:
     void applyMappings(Entity *entity, const TMXMapObject &object);
     void applyFixtureProperties(Entity *entity, const TMXMapObject &object);
     static QVariant propertyFromMapObject(const QString &property, const TMXMapObject &object);
+    void deinitialize();
 
     static void append_mapping(QQmlListProperty<TiledPropertyMapping> *list, TiledPropertyMapping *mapping);
     static int count_mapping(QQmlListProperty<TiledPropertyMapping> *list);
@@ -122,6 +130,7 @@ private:
     bool m_componentComplete;
     QQmlComponent *m_entityComponent;
     TiledScene *m_parentScene;
+    bool m_active;
     bool m_autoMapProperties;
     bool m_ignoreFixtures;
     QHash<QString, Entity *> m_entities;

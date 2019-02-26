@@ -2,7 +2,7 @@
 #include "entity.h"
 #include "scene.h"
 #include "physicsentity.h"
-#include "private/entitymanagersingleton.h"
+#include "private/entityfactory.h"
 
 #include <QMap>
 #include <QCoreApplication>
@@ -21,7 +21,7 @@ EntityManager::EntityManager(QQuickItem *parent)
 Entity *EntityManager::createEntity(const QVariant &item)
 {
     const int initialCount = entityCount();
-    Entity *entity = EntityManagerSingleton::instance().createEntity(item, m_parentScene, qmlEngine(this));
+    Entity *entity = EntityFactory::instance().createEntity(item, m_parentScene, qmlEngine(this));
     if (initialCount != entityCount())
         emit entityCountChanged();
 
@@ -30,35 +30,35 @@ Entity *EntityManager::createEntity(const QVariant &item)
 
 Entity *EntityManager::findEntity(const QString &entityType, const QString &property, const QVariant &value)
 {
-    return EntityManagerSingleton::instance().findEntity(entityType, property, value);
+    return EntityFactory::instance().findEntity(entityType, property, value);
 }
 
 Entity *EntityManager::getEntity(const QString &entityId)
 {
-    return EntityManagerSingleton::instance().getEntity(entityId);
+    return EntityFactory::instance().getEntity(entityId);
 }
 
 void EntityManager::destroyEntity(const QString &entityId)
 {
-    const int initialCount = EntityManagerSingleton::instance().entityCount();
-    EntityManagerSingleton::instance().destroyEntity(entityId);
+    const int initialCount = EntityFactory::instance().entityCount();
+    EntityFactory::instance().destroyEntity(entityId);
     if (initialCount != entityCount())
         emit entityCountChanged();
 }
 
 int EntityManager::entityCount() const
 {
-    return EntityManagerSingleton::instance().entityCount();
+    return EntityFactory::instance().entityCount();
 }
 
 int EntityManager::getEntityCount(const QString &entityType)
 {
-    return EntityManagerSingleton::instance().entityCount(entityType);
+    return EntityFactory::instance().entityCount(entityType);
 }
 
 void EntityManager::destroyAllEntities(const QString &entityType)
 {
-    EntityManagerSingleton::instance().destroyAllEntities(entityType);
+    EntityFactory::instance().destroyAllEntities(entityType);
 }
 
 Scene *EntityManager::parentScene() const

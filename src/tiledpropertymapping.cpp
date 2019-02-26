@@ -33,3 +33,17 @@ void TiledPropertyMapping::setMapsTo(const QString &mapsTo)
     m_mapsTo = mapsTo;
     emit mapsToChanged();
 }
+
+QVariant TiledPropertyMapping::defaultValue() const
+{
+    return m_defaultValue;
+}
+
+void TiledPropertyMapping::setDefaultValue(const QVariant &defaultValue)
+{
+    if (m_defaultValue == defaultValue)
+        return;
+
+    m_defaultValue = defaultValue;
+    emit defaultValueChanged();
+}

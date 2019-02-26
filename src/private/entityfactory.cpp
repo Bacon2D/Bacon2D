@@ -1,4 +1,4 @@
-#include "entitymanagersingleton.h"
+#include "entityfactory.h"
 #include "entity.h"
 #include "scene.h"
 #include "physicsentity.h"
@@ -18,9 +18,9 @@ public:
         : QQmlIncubator(IncubationMode::AsynchronousIfNested)
         , m_parentScene(parentScene)
         , m_properties(properties)
-        , m_fixturePolicy(EntityManagerSingleton::FixturePolicy::AddFixtures) { }
+        , m_fixturePolicy(EntityFactory::FixturePolicy::AddFixtures) { }
 
-    explicit EntityIncubator(Scene *parentScene, const EntityManagerSingleton::FixturePolicy fixturePolicy)
+    explicit EntityIncubator(Scene *parentScene, const EntityFactory::FixturePolicy fixturePolicy)
         : QQmlIncubator(IncubationMode::AsynchronousIfNested)
         , m_parentScene(parentScene)
         , m_fixturePolicy(fixturePolicy) { }
@@ -28,13 +28,13 @@ public:
     ~EntityIncubator() override = default;
 protected:
     void setInitialState(QObject *object) override {
-        if (m_fixturePolicy == EntityManagerSingleton::FixturePolicy::DontAddFixtures) {
+        if (m_fixturePolicy == EntityFactory::FixturePolicy::DontAddFixtures) {
             PhysicsEntity *entity = qobject_cast<PhysicsEntity *>(object);
             if (!entity)
                 return;
 
             entity->setParentItem(m_parentScene);
-            entity->setFixturePolicy(EntityManagerSingleton::FixturePolicy::DontAddFixtures);
+            entity->setFixturePolicy(EntityFactory::FixturePolicy::DontAddFixtures);
 
             if (!m_properties.isEmpty()) {
                 QVariantMap::const_iterator iter;
@@ -62,22 +62,22 @@ protected:
 private:
     Scene *m_parentScene;
     QVariantMap m_properties;
-    EntityManagerSingleton::FixturePolicy m_fixturePolicy;
+    EntityFactory::FixturePolicy m_fixturePolicy;
 };
 
-EntityManagerSingleton::EntityManagerSingleton(QObject *parent)
+EntityFactory::EntityFactory(QObject *parent)
     : QObject(parent)
 {
 
 }
 
-EntityManagerSingleton &EntityManagerSingleton::instance()
+EntityFactory &EntityFactory::instance()
 {
-    static EntityManagerSingleton instance;
+    static EntityFactory instance;
     return instance;
 }
 
-Entity *EntityManagerSingleton::createEntity(const QVariant &item, Scene *parentScene, QQmlEngine *engine, FixturePolicy policy)
+Entity *EntityFactory::createEntity(const QVariant &item, Scene *parentScene, QQmlEngine *engine, FixturePolicy policy)
 {
     if (item.isNull()) {
         qWarning() << Q_FUNC_INFO << ", Item passed in is null.";
@@ -135,7 +135,7 @@ Entity *EntityManagerSingleton::createEntity(const QVariant &item, Scene *parent
     return nullptr;
 }
 
-Entity *EntityManagerSingleton::addEntity(Entity *entity)
+Entity *EntityFactory::addEntity(Entity *entity)
 {
     if (!entity) {
         qWarning() << "Bacon2D: Entity is null.";
@@ -157,7 +157,7 @@ Entity *EntityManagerSingleton::addEntity(Entity *entity)
     return entity;
 }
 
-Entity *EntityManagerSingleton::findEntity(const QString &entityType, const QString &property, const QVariant &value)
+Entity *EntityFactory::findEntity(const QString &entityType, const QString &property, const QVariant &value)
 {
     if (entityType.isEmpty() || property.isEmpty() || value.isNull())
         return nullptr;
@@ -173,12 +173,12 @@ Entity *EntityManagerSingleton::findEntity(const QString &entityType, const QStr
     return nullptr;
 }
 
-Entity *EntityManagerSingleton::getEntity(const QString &entityId)
+Entity *EntityFactory::getEntity(const QString &entityId)
 {
     return m_entityMap.value(entityId);
 }
 
-void EntityManagerSingleton::destroyAllEntities(const QString &entityType)
+void EntityFactory::destroyAllEntities(const QString &entityType)
 {
     if (entityType.isEmpty()) {
         for (Entity *entity : m_entityMap.values())
@@ -200,13 +200,13 @@ void EntityManagerSingleton::destroyAllEntities(const QString &entityType)
     }
 }
 
-void EntityManagerSingleton::destroyEntity(const QString &entityId)
+void EntityFactory::destroyEntity(const QString &entityId)
 {
     Entity *entity = m_entityMap.take(entityId);
     entity->deleteLater();
 }
 
-int EntityManagerSingleton::entityCount(const QString &entityType)
+int EntityFactory::entityCount(const QString &entityType)
 {
     if (entityType.isEmpty())
         return m_entityMap.count();
@@ -214,7 +214,7 @@ int EntityManagerSingleton::entityCount(const QString &entityType)
     return m_groupMap.value(entityType).count();
 }
 
-QString EntityManagerSingleton::generateId(const QString &entityType) const
+QString EntityFactory::generateId(const QString &entityType) const
 {
     QString baseName = entityType;
     QString entityId;
