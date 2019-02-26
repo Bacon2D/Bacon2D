@@ -2,12 +2,12 @@
 #include "box2dbody.h"
 #include "box2dworld.h"
 #include "scene.h"
-#include "entitymanagersingleton.h"
+#include "entityfactory.h"
 
 PhysicsEntity::PhysicsEntity(Scene *parent)
     : Entity(parent)
     , m_body(new Box2DBody(this))
-    , m_fixturePolicy(EntityManagerSingleton::FixturePolicy::AddFixtures)
+    , m_fixturePolicy(EntityFactory::FixturePolicy::AddFixtures)
 {
     m_body->setTarget(this);
     setTransformOrigin(QQuickItem::TopLeft);
@@ -280,7 +280,7 @@ QPointF PhysicsEntity::getLinearVelocityFromLocalPoint(QPointF point)
 void PhysicsEntity::addFixtures()
 {
     for (auto fixture : m_fixtures) {
-        if (m_fixturePolicy == EntityManagerSingleton::FixturePolicy::AddFixtures)
+        if (m_fixturePolicy == EntityFactory::FixturePolicy::AddFixtures)
             body()->addFixture(fixture);
     }
 }
@@ -294,12 +294,12 @@ void PhysicsEntity::componentComplete()
     m_body->componentComplete();
 }
 
-void PhysicsEntity::setFixturePolicy(EntityManagerSingleton::FixturePolicy fixturePolicy)
+void PhysicsEntity::setFixturePolicy(EntityFactory::FixturePolicy fixturePolicy)
 {
     m_fixturePolicy = fixturePolicy;
 }
 
-EntityManagerSingleton::FixturePolicy PhysicsEntity::fixturePolicy() const
+EntityFactory::FixturePolicy PhysicsEntity::fixturePolicy() const
 {
     return m_fixturePolicy;
 }

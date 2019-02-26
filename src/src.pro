@@ -66,7 +66,7 @@ HEADERS += \
     bacon2dimagelayer.h \
     bacon2dlayer.h \
     tiledbackground.h \
-    private/entitymanagersingleton.h
+    private/entityfactory.h
 
 SOURCES += \
     enums.cpp \
@@ -98,7 +98,7 @@ SOURCES += \
     bacon2dimagelayer.cpp \
     bacon2dlayer.cpp \
     tiledbackground.cpp \
-    private/entitymanagersingleton.cpp
+    private/entityfactory.cpp
 
 !isEmpty(QTPATH): target.path = $$QTPATH/qml/$$TARGETPATH
 else: target.path = $$[QT_INSTALL_QML]/$$replace(TARGETPATH, \\., /).$$API_VER

@@ -1,12 +1,12 @@
-#ifndef ENTITYMANAGERSINGLETON_H
-#define ENTITYMANAGERSINGLETON_H
+#ifndef ENTITYFACTORY_H
+#define ENTITYFACTORY_H
 
 #include <QQmlComponent>
 
 class Entity;
 class Scene;
 
-class EntityManagerSingleton : public QObject
+class EntityFactory : public QObject
 {
     Q_OBJECT
 public:
@@ -14,7 +14,7 @@ public:
         AddFixtures,
         DontAddFixtures
     };
-    static EntityManagerSingleton &instance();
+    static EntityFactory &instance();
 
     Entity *createEntity(const QVariant &, Scene *parentScene, QQmlEngine *engine, FixturePolicy policy = FixturePolicy::AddFixtures);
     Entity *addEntity(Entity *entity);
@@ -26,12 +26,12 @@ public:
 
     QString generateId(const QString &entityType) const;
 private:
-    explicit EntityManagerSingleton(QObject *parent = nullptr);
-//    EntityManagerSingleton(const EntityManagerSingleton &) = delete;
-//    EntityManagerSingleton& operator=(const EntityManagerSingleton &) = delete;
+    explicit EntityFactory(QObject *parent = nullptr);
+    explicit EntityFactory(const EntityFactory &) = delete;
+    EntityFactory& operator=(const EntityFactory &) = delete;
 
     QHash<QString, Entity *> m_entityMap;
     QHash<QString, QStringList> m_groupMap;
 };
 
-#endif // ENTITYMANAGERSINGLETON_H
+#endif // ENTITYFACTORY_H

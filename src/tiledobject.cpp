@@ -34,7 +34,7 @@
 #include "tiledscene.h"
 #include "tiledpropertymapping.h"
 #include "physicsentity.h"
-#include "entitymanagersingleton.h"
+#include "entityfactory.h"
 
 #include <QDebug>
 #include <QVariant>
@@ -246,9 +246,15 @@ TiledObject::TiledObject(QQuickItem *parent)
     , m_objectGroup(nullptr)
     , m_componentComplete(false)
     , m_entityComponent(nullptr)
+    , m_active(true)
     , m_autoMapProperties(false)
     , m_ignoreFixtures(false)
 {
+}
+
+TiledObject::~TiledObject()
+{
+    deinitialize();
 }
 
 /*!
@@ -302,14 +308,31 @@ void TiledObject::setEntity(QQmlComponent *entity)
 {
     if (m_entityComponent == entity)
         return;
-    if (!m_entities.isEmpty()) {
-        for (auto entity : m_entities.values())
-            EntityManagerSingleton::instance().destroyEntity(entity->entityId());
-        m_entities.clear();
-    }
+    if (!m_entities.isEmpty())
+        deinitialize();
 
     m_entityComponent = entity;
+    initialize();
     emit entityChanged();
+}
+
+bool TiledObject::isActive() const
+{
+    return m_active;
+}
+
+void TiledObject::setActive(bool active)
+{
+    if (m_active == active)
+        return;
+
+    if (active)
+        initialize();
+    else
+        deinitialize();
+
+    m_active = active;
+    emit activeChanged();
 }
 
 bool TiledObject::autoMapProperties() const
@@ -401,7 +424,8 @@ void TiledObject::initialize()
         return;
     }
 
-    // Extract properties from layer
+    deinitialize();
+
     TiledLayer *tiledLayer = qobject_cast<TiledLayer *>(parent());
     if((!tiledLayer && !tiledLayer->layer()) || !tiledLayer->layer()->isObjectLayer())
         return;
@@ -427,14 +451,24 @@ void TiledObject::initialize()
     }
 }
 
+void TiledObject::deinitialize()
+{
+    for (const auto entity : m_entities.values()) {
+        emit entityDestroyed(entity);
+        EntityFactory::instance().destroyEntity(entity->entityId());
+    }
+
+    m_entities.clear();
+}
+
 void TiledObject::createEntity(const TMXMapObject &object)
 {
     auto parentScene = findParentScene();
     if (parentScene) {
-        Entity *entity = EntityManagerSingleton::instance().createEntity(QVariant::fromValue(m_entityComponent),
+        Entity *entity = EntityFactory::instance().createEntity(QVariant::fromValue(m_entityComponent),
                                                                          parentScene,
                                                                          qmlEngine(this),
-                                                                         EntityManagerSingleton::FixturePolicy::DontAddFixtures);
+                                                                         EntityFactory::FixturePolicy::DontAddFixtures);
         if (entity) {
             entity->setParent(this);
             entity->setProperty("__tiledobject__x", object.x());
@@ -445,9 +479,6 @@ void TiledObject::createEntity(const TMXMapObject &object)
             entity->setProperty("__tiledobject__visible", object.isVisible());
             entity->setProperty("__tiledobject__id", object.id());
             entity->setProperty("__tiledobject__properties", object.properties());
-
-            TiledObjectAttached *attached = qobject_cast<TiledObjectAttached *>(qmlAttachedPropertiesObject<TiledObject>(entity));
-            attached->setInstance(this);
 
             if (m_autoMapProperties)
                 attemptAutoMapping(entity, object);
@@ -577,10 +608,14 @@ void TiledObject::attemptAutoMapping(Entity *entity, const TMXMapObject &object)
 void TiledObject::applyMappings(Entity *entity, const TMXMapObject &object)
 {
     for (const auto mapping : m_mappings) {
-        const QVariant &value = propertyFromMapObject(mapping->property(), object);
-        if (entity->property(mapping->property().toStdString().c_str()).isValid()) {
+        const QString &property = mapping->mapsTo().isNull() ? mapping->property()
+                                                              : mapping->mapsTo();
+        const QVariant &value = mapping->defaultValue().isNull() ? propertyFromMapObject(property, object)
+                                                                 : mapping->defaultValue();
+
+        if (entity->property(property.toStdString().c_str()).isValid()) {
             if (value.isValid())
-                QQmlProperty::write(entity, mapping->property(), value);
+                QQmlProperty::write(entity, property, value);
             else
                 qWarning() << "TiledPropertyMapping:" << mapping->property() << "invalid";
         } else {
