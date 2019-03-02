@@ -10,6 +10,20 @@ class QPointF;
 class Box2DBody;
 class Box2DWorld;
 class Box2DFixture;
+class PhysicsEntity;
+
+class PhysicsEntityAttached : public QObject {
+    Q_OBJECT
+    Q_PROPERTY(PhysicsEntity *instance READ instance NOTIFY instanceChanged)
+public:
+    explicit PhysicsEntityAttached(QObject *parent = nullptr);
+    PhysicsEntity *instance() const;
+    void setInstance(PhysicsEntity *instance);
+signals:
+    void instanceChanged();
+private:
+    PhysicsEntity *m_instance;
+};
 
 class PhysicsEntity : public Entity
 {
@@ -210,6 +224,11 @@ public:
     Q_INVOKABLE QPointF toLocalVector(QPointF worldVector);
     Q_INVOKABLE QPointF getLinearVelocityFromWorldPoint(QPointF point);
     Q_INVOKABLE QPointF getLinearVelocityFromLocalPoint(QPointF point);
+
+    static PhysicsEntityAttached *qmlAttachedProperties(QObject *fixture)
+    {
+        return new PhysicsEntityAttached(fixture);
+    }
 signals:
     void bodyChanged();
     void worldChanged();
@@ -234,6 +253,6 @@ private:
     static void append_fixture(QQmlListProperty<Box2DFixture> *, Box2DFixture *fixture);
     static int count_fixture(QQmlListProperty<Box2DFixture> *list);
     static Box2DFixture *at_fixture(QQmlListProperty<Box2DFixture> *list, int index);
-};
+}; QML_DECLARE_TYPEINFO(PhysicsEntity, QML_HAS_ATTACHED_PROPERTIES)
 
 #endif // PHYSICSENTITY_H

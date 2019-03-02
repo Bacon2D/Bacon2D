@@ -2,6 +2,7 @@
 #include "entity.h"
 #include "scene.h"
 #include "physicsentity.h"
+#include "tiledobjectgroup.h"
 
 #include <QMap>
 #include <QCoreApplication>
@@ -14,22 +15,18 @@
 
 class EntityIncubator : public QQmlIncubator {
 public:
-    explicit EntityIncubator(Scene *parentScene, const QVariantMap &properties = QVariantMap())
+    explicit EntityIncubator(Scene *parentScene,
+                             const QVariantMap &properties = QVariantMap())
         : QQmlIncubator(IncubationMode::AsynchronousIfNested)
         , m_parentScene(parentScene)
         , m_properties(properties)
         , m_fixturePolicy(EntityFactory::FixturePolicy::AddFixtures) { }
 
-    explicit EntityIncubator(Scene *parentScene, const EntityFactory::FixturePolicy fixturePolicy)
-        : QQmlIncubator(IncubationMode::AsynchronousIfNested)
-        , m_parentScene(parentScene)
-        , m_fixturePolicy(fixturePolicy) { }
-
     ~EntityIncubator() override = default;
 protected:
-    void setInitialState(QObject *object) override {
+    void setInitialState(QObject *entityObject) override {
         if (m_fixturePolicy == EntityFactory::FixturePolicy::DontAddFixtures) {
-            PhysicsEntity *entity = qobject_cast<PhysicsEntity *>(object);
+            PhysicsEntity *entity = qobject_cast<PhysicsEntity *>(entityObject);
             if (!entity)
                 return;
 
@@ -44,7 +41,7 @@ protected:
                 }
             }
         } else {
-            Entity *entity = qobject_cast<Entity *>(object);
+            Entity *entity = qobject_cast<Entity *>(entityObject);
             if (!entity)
                 return;
 
@@ -77,7 +74,7 @@ EntityFactory &EntityFactory::instance()
     return instance;
 }
 
-Entity *EntityFactory::createEntity(const QVariant &item, Scene *parentScene, QQmlEngine *engine, FixturePolicy policy)
+Entity *EntityFactory::createEntity(const QVariant &item, Scene *parentScene, QQmlEngine *engine)
 {
     if (item.isNull()) {
         qWarning() << Q_FUNC_INFO << ", Item passed in is null.";
@@ -90,46 +87,74 @@ Entity *EntityFactory::createEntity(const QVariant &item, Scene *parentScene, QQ
 
     if (item.type() == QVariant::String && (item.toString().startsWith("file:/")
                                             || item.toString().startsWith("http:/")
-                                            || item.toString().startsWith("https:/")))
-    {
+                                            || item.toString().startsWith("https:/"))) {
         const QUrl source = item.toUrl();
 
         QQmlComponent component(engine, source);
         EntityIncubator incubator(parentScene);
         component.create(incubator);
 
-        Entity *entity = qobject_cast<Entity *>(incubator.object());
-        return addEntity(entity);
-    }
+        if (component.isError()) {
+            qWarning() << "EntityFactory:" << component.errorString();
+            return nullptr;
+        }
 
-    else if (item.type() == QVariant::String)
-    {
+        Entity *entity = qobject_cast<Entity *>(incubator.object());
+        if (!entity) {
+            qWarning() << "EntityFactory: Component must inherit Entity.";
+            incubator.object()->deleteLater();
+            return nullptr;
+        }
+
+        return addEntity(entity);
+    } else if (item.type() == QVariant::String) {
         const QUrl source = QQmlEngine::contextForObject(parentScene)->resolvedUrl(QUrl(item.toString()));
 
         QQmlComponent component(engine, source);
         EntityIncubator incubator(parentScene);
         component.create(incubator);
 
+        if (component.isError()) {
+            qWarning() << "EntityFactory:" << component.errorString();
+            return nullptr;
+        }
+
         Entity *entity = qobject_cast<Entity *>(incubator.object());
+        if (!entity) {
+            qWarning() << "EntityFactory: Component must inherit Entity.";
+            incubator.object()->deleteLater();
+            return nullptr;
+        }
+
         return addEntity(entity);
-    }
-
-    else {
-        QQmlComponent *component = qvariant_cast<QQmlComponent *>(item);
-        if (component)
-        {
-            EntityIncubator incubator(parentScene, policy);
-            component->create(incubator);
-
-            if (component->status() == QQmlComponent::Error)
-                qDebug() << "EntityManager:" << component->errorString();
-
-            Entity *entity = qobject_cast<Entity *>(incubator.object());
-            return addEntity(entity);
+    } else if (TiledEntityComponent *entityComponent = item.value<TiledEntityComponent *>()) {
+        QObject *entityObject = entityComponent->beginCreate(qmlContext(parentScene));
+        if (entityComponent->isError()) {
+            qWarning() << "EntityFactory:" << entityComponent->errorString();
+            return nullptr;
         }
-        else {
-            qWarning() << "EntityManager: Item passed (" << item.toString() << ") in is not a component nor a file URL.";
+
+        PhysicsEntity *entity = qobject_cast<PhysicsEntity *>(entityObject);
+        if (!entity) {
+            qWarning() << "EntityFactory: Component must inherit Entity.";
+            entityComponent->completeCreate();
+            entityObject->deleteLater();
+            return nullptr;
         }
+
+        entity->setParentItem(parentScene);
+        entity->setParent(entityComponent->objectGroup());
+        entity->setFixturePolicy(EntityFactory::FixturePolicy::DontAddFixtures);
+        entity->setProperty("__TiledObjectGroup__x", entityComponent->mapObject().x());
+        entity->setProperty("__TiledObjectGroup__y", entityComponent->mapObject().y());
+        entity->setProperty("__TiledObjectGroup__width", entityComponent->mapObject().width());
+        entity->setProperty("__TiledObjectGroup__height", entityComponent->mapObject().height());
+        entity->setProperty("__TiledObjectGroup__rotation", entityComponent->mapObject().rotation());
+        entity->setProperty("__TiledObjectGroup__visible", entityComponent->mapObject().isVisible());
+        entity->setProperty("__TiledObjectGroup__id", entityComponent->mapObject().id());
+        entity->setProperty("__TiledObjectGroup__properties", entityComponent->mapObject().properties());
+
+        return addEntity(entity);
     }
 
     return nullptr;
@@ -138,11 +163,11 @@ Entity *EntityFactory::createEntity(const QVariant &item, Scene *parentScene, QQ
 Entity *EntityFactory::addEntity(Entity *entity)
 {
     if (!entity) {
-        qWarning() << "Bacon2D: Entity is null.";
+        qWarning() << "EntityFactory: Entity is null.";
         return nullptr;
     }
     if (m_entityMap.contains(entity->entityId())) {
-        qWarning() << "Bacon2D: Entity already exists.";
+        qWarning() << "EntityFactory: Entity already exists.";
         entity->deleteLater();
         return nullptr;
     }
@@ -157,17 +182,27 @@ Entity *EntityFactory::addEntity(Entity *entity)
     return entity;
 }
 
-Entity *EntityFactory::findEntity(const QString &entityType, const QString &property, const QVariant &value)
+Entity *EntityFactory::findEntity(const QString &entityType, const QVariantMap &properties)
 {
-    if (entityType.isEmpty() || property.isEmpty() || value.isNull())
+    if (entityType.isEmpty())
         return nullptr;
 
     const QStringList &entityIds = m_groupMap.value(entityType);
+    int matchedPropertyCount = 0;
     for (const QString &entityId : entityIds) {
-        if (entityId.startsWith(entityType)
-                && m_entityMap.value(entityId)
-                && m_entityMap.value(entityId)->property(property.toStdString().c_str()) == value)
-            return m_entityMap.value(entityId);
+        matchedPropertyCount = 0;
+
+        Entity *entity = m_entityMap.value(entityId);
+        if (properties.isEmpty()) {
+            return entity;
+        } else {
+            for (const QString &property : properties.keys()) {
+                if (QQmlProperty::read(entity, property) == properties.value(property))
+                    matchedPropertyCount++;
+                if (matchedPropertyCount == properties.count())
+                    return entity;
+            }
+        }
     }
 
     return nullptr;

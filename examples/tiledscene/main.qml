@@ -27,8 +27,9 @@ Window {
                 TiledLayer {
                     name: "Player"
 
-                    TiledObject {
+                    TiledObjectGroup {
                         id: player
+                        objectName: "dog"
                         entity: Dog { }
 
                         TiledPropertyMapping { property: "x" }
@@ -39,7 +40,7 @@ Window {
                 TiledLayer {
                     name: "Ground"
 
-                    TiledObject {
+                    TiledObjectGroup {
                         entity: Ground { }
 
                         TiledPropertyMapping { property: "x" }
@@ -48,7 +49,7 @@ Window {
                         TiledPropertyMapping { property: "height" }
                     }
 
-                    TiledObject {
+                    TiledObjectGroup {
                         name: "polyground"
 
                         entity: Polyground { }
@@ -61,7 +62,7 @@ Window {
                 TiledLayer {
                     name: "Coins"
 
-                    TiledObject {
+                    TiledObjectGroup {
                         entity: Coin { }
 
                         TiledPropertyMapping { property: "x" }
@@ -74,7 +75,7 @@ Window {
                 TiledLayer {
                     name: "Boundaries"
 
-                    TiledObject {
+                    TiledObjectGroup {
                         entity: LevelBoundaries { }
 
                         TiledPropertyMapping { property: "x" }

@@ -28,7 +28,7 @@
 #include "tmxlayer.h"
 #include "tmxmap.h"
 #include "box2dfixture.h"
-#include "tiledobject.h"
+#include "tiledobjectgroup.h"
 
 #include <QVariant>
 
@@ -111,8 +111,14 @@
    \sa TiledScene TiledObject
 */
 
-TiledLayer::TiledLayer(QQuickItem *parent)
-    : QQuickItem(parent)
+TiledLayer::TiledLayer(QObject *parent)
+    : QObject(parent)
+    , m_x(0.0)
+    , m_y(0.0)
+    , m_width(0.0)
+    , m_height(0.0)
+    , m_opacity(0.0)
+    , m_visible(false)
     , m_layer(nullptr)
 {
 }
@@ -208,15 +214,98 @@ void TiledLayer::initialize()
             break;
         }
     }
+
+    for (auto objectGroup : m_objectGroups)
+        objectGroup->initialize();
+}
+
+qreal TiledLayer::x() const
+{
+    return m_x;
+}
+
+void TiledLayer::setX(qreal x)
+{
+    if (m_x == x)
+        return;
+
+    m_x = x;
+    emit xChanged();
+}
+
+qreal TiledLayer::y() const
+{
+    return m_y;
+}
+
+void TiledLayer::setY(qreal y)
+{
+    if (m_y == y)
+        return;
+
+    m_y = y;
+    emit yChanged();
+}
+
+qreal TiledLayer::width() const
+{
+    return m_width;
+}
+
+void TiledLayer::setWidth(qreal width)
+{
+    if (m_width == width)
+        return;
+
+    m_width = width;
+    emit widthChanged();
+}
+
+qreal TiledLayer::height() const
+{
+    return m_height;
+}
+
+void TiledLayer::setHeight(qreal height)
+{
+    if (m_height == height)
+        return;
+
+    m_height = height;
+    emit heightChanged();
+}
+
+qreal TiledLayer::opacity() const
+{
+    return m_opacity;
+}
+
+void TiledLayer::setOpacity(qreal opacity)
+{
+    if (m_opacity == opacity)
+        return;
+
+    m_opacity = opacity;
+    emit opacityChanged();
+}
+
+bool TiledLayer::isVisible() const
+{
+    return m_visible;
+}
+
+void TiledLayer::setVisible(bool visible)
+{
+    if (m_visible == visible)
+        return;
+
+    m_visible = visible;
+    emit visibleChanged();
 }
 
 void TiledLayer::setLayer(TMXLayer *layer)
 {
-    if(m_layer == layer)
-        return;
-
     m_layer = layer;
-    emit layerChanged();
 }
 
 /*!
@@ -224,31 +313,35 @@ void TiledLayer::setLayer(TMXLayer *layer)
   \brief This property holds a list of \l TiledObject objects that exist on
    this TMX layer.
 */
-QQmlListProperty<TiledObject> TiledLayer::objects()
+QQmlListProperty<TiledObjectGroup> TiledLayer::objectGroups()
 {
-    return QQmlListProperty<TiledObject>(this, nullptr,
-                                         &TiledLayer::append_object,
-                                         &TiledLayer::count_object,
-                                         &TiledLayer::at_object,
-                                         nullptr);
+    return QQmlListProperty<TiledObjectGroup>(this, nullptr,
+                                         &TiledLayer::append_object_group,
+                                         &TiledLayer::count_object_group,
+                                         &TiledLayer::at_object_group,
+                                              nullptr);
 }
 
-void TiledLayer::append_object(QQmlListProperty<TiledObject> *list, TiledObject *object)
+void TiledLayer::setProperties(const QVariantMap &properties)
+{
+    m_properties = properties;
+}
+
+void TiledLayer::append_object_group(QQmlListProperty<TiledObjectGroup> *list, TiledObjectGroup *object)
 {
     TiledLayer *layer = static_cast<TiledLayer *>(list->object);
     object->setParent(layer);
-    connect(layer, &TiledLayer::layerChanged, object, &TiledObject::initialize);
-    layer->m_objects.append(object);
+    layer->m_objectGroups.append(object);
 }
 
-int TiledLayer::count_object(QQmlListProperty<TiledObject> *list)
+int TiledLayer::count_object_group(QQmlListProperty<TiledObjectGroup> *list)
 {
     TiledLayer *layer = static_cast<TiledLayer *>(list->object);
-    return layer->m_objects.length();
+    return layer->m_objectGroups.length();
 }
 
-TiledObject *TiledLayer::at_object(QQmlListProperty<TiledObject> *list, int index)
+TiledObjectGroup *TiledLayer::at_object_group(QQmlListProperty<TiledObjectGroup> *list, int index)
 {
     TiledLayer *layer = static_cast<TiledLayer *>(list->object);
-    return layer->m_objects.at(index);
+    return layer->m_objectGroups.at(index);
 }

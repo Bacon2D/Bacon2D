@@ -70,7 +70,7 @@
 
 #include "tiledscene.h"
 #include "tiledlayer.h"
-#include "tiledobject.h"
+#include "tiledobjectgroup.h"
 #include "tiledpropertymapping.h"
 
 void Plugins::registerTypes(const char *uri)
@@ -104,7 +104,7 @@ void Plugins::registerTypes(const char *uri)
     qmlRegisterType<TiledScene>("Bacon2D", 1, 0, "TiledScene");
     qmlRegisterType<TiledBackground>("Bacon2D", 1, 0, "TiledBackground");
     qmlRegisterType<TiledLayer>("Bacon2D", 1, 0, "TiledLayer");
-    qmlRegisterType<TiledObject>("Bacon2D", 1, 0, "TiledObject");
+    qmlRegisterType<TiledObjectGroup>("Bacon2D", 1, 0, "TiledObjectGroup");
     qmlRegisterType<TiledPropertyMapping>("Bacon2D", 1, 0, "TiledPropertyMapping");
 
     // Box2D

@@ -23,7 +23,7 @@
  *
  */
 
-#include "tiledobject.h"
+#include "tiledobjectgroup.h"
 #include "box2dbody.h"
 #include "box2dfixture.h"
 #include "tmxlayer.h"
@@ -41,10 +41,10 @@
 #include <QQmlProperty>
 
 /*!
-  \qmltype TiledObject
+  \qmltype TiledObjectGroup
   \inqmlmodule Bacon2D
   \inherits Item
-  \brief TiledObject encapsulates one or more TMX objects on a TMX map.
+  \brief TiledObjectGroup encapsulates one or more TMX objects on a TMX map.
 
    This class exposes all the properties of a TMX object on a TMX map.
    These properties can be accessed in two ways:
@@ -57,7 +57,7 @@
     \endlist
 
    You can set the properties of \l Entity objects on your scene to the properties
-   retrieved from the \l TiledObject to position, rotate etc. your created entities.
+   retrieved from the \l TiledObjectGroup to position, rotate etc. your created entities.
 
   Example usage:
   \qml
@@ -79,8 +79,8 @@
             layers: [
                 TiledLayer {
                     name: "Player"
-                    objects: [
-                        TiledObject {
+                    objectGroups: [
+                        TiledObjectGroup {
                             id: playerObject
                         }
                     ]
@@ -118,7 +118,7 @@
     }
    \endqml
 
-   You can set the \l fixtures for a \l TiledObject as shown below.
+   You can set the \l fixtures for a \l TiledObjectGroup as shown below.
 
   \qml
     TiledScene {
@@ -130,7 +130,7 @@
         layers: [
             TiledLayer {
                 name: "Ground"
-                objects: TiledObject {
+                objects: TiledObjectGroup {
 
                     fixtures: Box {
                         // Set fixtures of the TMX object here
@@ -142,7 +142,7 @@
     }
    \endqml
 
-    The \l TiledObject class also handles \e collisions. A \e collision is a TMX
+    The \l TiledObjectGroup class also handles \e collisions. A \e collision is a TMX
     object that has exactly the same name and type as another object or group of
     objects on the same TMX layer. This also includes TMX objects that have
     empty strings as names and types.
@@ -156,7 +156,7 @@
         \li \l seek()
     \endlist
     These methods allow the programmer to move forward, backward or arbitrarily
-    through the collisions of a \l TiledObject. Once a TMX object is positioned on a
+    through the collisions of a \l TiledObjectGroup. Once a TMX object is positioned on a
     valid collision, properties can be retrieved using \l getProperty().
 
     The following example sets the properties of all collisions on the \e Enemy TMX
@@ -174,7 +174,7 @@
                 name: "Enemy"
 
                 // Default initialization of object
-                objects: TiledObject {}
+                objects: TiledObjectGroup {}
             }
         ]
 
@@ -217,21 +217,59 @@
    \sa TiledScene TiledLayer
 */
 
-TiledObjectAttached::TiledObjectAttached(QObject *parent)
+TiledEntityComponent::TiledEntityComponent(QQmlComponent *component,
+                                           const TMXMapObject &object,
+                                           TiledObjectGroup *objectGroup)
+    : m_component(component)
+    , m_mapObject(object)
+    , m_objectGroup(objectGroup)
+{
+}
+
+QObject *TiledEntityComponent::beginCreate(QQmlContext *publicContext)
+{
+    return m_component->beginCreate(publicContext);
+}
+
+void TiledEntityComponent::completeCreate()
+{
+    m_component->completeCreate();
+}
+
+QQmlComponent *TiledEntityComponent::component() const
+{
+    return m_component;
+}
+
+TMXMapObject TiledEntityComponent::mapObject() const
+{
+    return m_mapObject;
+}
+
+TiledObjectGroup *TiledEntityComponent::objectGroup()
+{
+    return m_objectGroup;
+}
+
+TiledObjectGroupAttached::TiledObjectGroupAttached(QObject *parent)
     : QObject(parent)
     , m_instance(nullptr)
 {
-    Entity *entity = qobject_cast<Entity *>(parent);
-    m_instance = qobject_cast<TiledObject *>(entity->parent());
-    //qDebug() << "TiledObjectAttached? " << entity->entityId() << entity->objectName() << qobject_cast<TiledObject *>(entity->parent());
+    if (parent) {
+        Entity *entity = qobject_cast<Entity *>(parent);
+        if (entity)
+            m_instance = qobject_cast<TiledObjectGroup *>(entity->parent());
+        else
+            qWarning() << "TiledObjectGroup: Component must inherit from Entity.";
+    }
 }
 
-TiledObject *TiledObjectAttached::instance() const
+TiledObjectGroup *TiledObjectGroupAttached::instance() const
 {
     return m_instance;
 }
 
-void TiledObjectAttached::setInstance(TiledObject *instance)
+void TiledObjectGroupAttached::setInstance(TiledObjectGroup *instance)
 {
     if (m_instance == instance)
         return;
@@ -240,36 +278,30 @@ void TiledObjectAttached::setInstance(TiledObject *instance)
     emit instanceChanged();
 }
 
-TiledObject::TiledObject(QQuickItem *parent)
+TiledObjectGroup::TiledObjectGroup(QQuickItem *parent)
     : QObject (parent)
-    , m_id(0)
     , m_objectGroup(nullptr)
-    , m_componentComplete(false)
     , m_entityComponent(nullptr)
     , m_active(true)
     , m_autoMapProperties(false)
     , m_ignoreFixtures(false)
+    , m_count(0)
 {
-}
-
-TiledObject::~TiledObject()
-{
-    deinitialize();
 }
 
 /*!
-  \qmlproperty string TiledObject::name
+  \qmlproperty string TiledObjectGroup::name
   \brief This property holds the name of the TMX object in the TMX map.
 
    If multiple TMX objects have the same name, you can access them by using the
    \l first(), \l next(), \l last(), \l previous(), and \l seek().
 */
-QString TiledObject::name() const
+QString TiledObjectGroup::name() const
 {
     return m_name;
 }
 
-void TiledObject::setName(const QString &name)
+void TiledObjectGroup::setName(const QString &name)
 {
     if(m_name == name)
         return;
@@ -279,18 +311,18 @@ void TiledObject::setName(const QString &name)
 }
 
 /*!
-  \qmlproperty string TiledObject::type
+  \qmlproperty string TiledObjectGroup::type
   \brief This property holds the type of the TMX object defined in the TMX map.
 
    If multiple TMX objects have the same name, you can access them by using the
    \l first(), \l next(), \l last(), \l previous(), and \l seek().
 */
-QString TiledObject::type() const
+QString TiledObjectGroup::type() const
 {
     return m_type;
 }
 
-void TiledObject::setType(const QString &type)
+void TiledObjectGroup::setType(const QString &type)
 {
     if(m_type == type)
         return;
@@ -299,12 +331,12 @@ void TiledObject::setType(const QString &type)
     emit typeChanged();
 }
 
-QQmlComponent *TiledObject::entity() const
+QQmlComponent *TiledObjectGroup::entity() const
 {
     return m_entityComponent;
 }
 
-void TiledObject::setEntity(QQmlComponent *entity)
+void TiledObjectGroup::setEntity(QQmlComponent *entity)
 {
     if (m_entityComponent == entity)
         return;
@@ -312,16 +344,15 @@ void TiledObject::setEntity(QQmlComponent *entity)
         deinitialize();
 
     m_entityComponent = entity;
-    initialize();
     emit entityChanged();
 }
 
-bool TiledObject::isActive() const
+bool TiledObjectGroup::isActive() const
 {
     return m_active;
 }
 
-void TiledObject::setActive(bool active)
+void TiledObjectGroup::setActive(bool active)
 {
     if (m_active == active)
         return;
@@ -335,12 +366,12 @@ void TiledObject::setActive(bool active)
     emit activeChanged();
 }
 
-bool TiledObject::autoMapProperties() const
+bool TiledObjectGroup::autoMapProperties() const
 {
     return m_autoMapProperties;
 }
 
-void TiledObject::setAutoMapProperties(bool enabled)
+void TiledObjectGroup::setAutoMapProperties(bool enabled)
 {
     if (m_autoMapProperties == enabled)
         return;
@@ -349,12 +380,12 @@ void TiledObject::setAutoMapProperties(bool enabled)
     emit autoMapPropertiesChanged();
 }
 
-bool TiledObject::ignoreFixtures() const
+bool TiledObjectGroup::ignoreFixtures() const
 {
     return m_ignoreFixtures;
 }
 
-void TiledObject::setIgnoreFixtures(bool enabled)
+void TiledObjectGroup::setIgnoreFixtures(bool enabled)
 {
     if (m_ignoreFixtures == enabled)
         return;
@@ -363,8 +394,22 @@ void TiledObject::setIgnoreFixtures(bool enabled)
     emit ignoreFixturesChanged();
 }
 
+int TiledObjectGroup::count() const
+{
+    return m_count;
+}
+
+void TiledObjectGroup::setCount(int count)
+{
+    if (m_count == count)
+        return;
+
+    m_count = count;
+    emit countChanged();
+}
+
 /*!
-  \qmlmethod string TiledObject::getProperty(string name, variant defaultValue)
+  \qmlmethod string TiledObjectGroup::getProperty(string name, variant defaultValue)
   \brief This method returns the value of the custom property called \e name for this TMX object.
   If the value is not provided, the \e defaultValue is used instead.
 
@@ -374,42 +419,45 @@ void TiledObject::setIgnoreFixtures(bool enabled)
    For example, if an object is 50 pixels wide, getProperty("width") would return
    50 pixels even if no custom property was set for \e width.
 */
-QVariant TiledObject::getProperty(const QString &entityId, const QString &property) const
+QVariant TiledObjectGroup::getProperty(const QString &entityId, const QString &property) const
 {
     Entity *entity = m_entities.value(entityId);
-    const QVariantMap &properties = entity->property("__tiledobject__properties").toMap();
+    if (!entity)
+        return QVariant();
+
+    const QVariantMap &properties = entity->property("__TiledObjectGroup__properties").toMap();
 
     if(!properties.contains(property) && property.toLower() == "x")
-        return QVariant::fromValue(entity->property("__tiledobject__x").toDouble());
+        return QVariant::fromValue(entity->property("__TiledObjectGroup__x").toDouble());
     else if(!properties.contains(property) && property.toLower() == "y")
-        return QVariant::fromValue(entity->property("__tiledobject__y").toDouble());
+        return QVariant::fromValue(entity->property("__TiledObjectGroup__y").toDouble());
     else if(!properties.contains(property) && property.toLower() == "width")
-        return QVariant::fromValue(entity->property("__tiledobject__width").toDouble());
+        return QVariant::fromValue(entity->property("__TiledObjectGroup__width").toDouble());
     else if(!properties.contains(property) && property.toLower() == "height")
-        return QVariant::fromValue(entity->property("__tiledobject__height").toDouble());
+        return QVariant::fromValue(entity->property("__TiledObjectGroup__height").toDouble());
     else if(!properties.contains(property) && property.toLower() == "rotation")
-        return QVariant::fromValue(entity->property("__tiledobject__rotation").toDouble());
+        return QVariant::fromValue(entity->property("__TiledObjectGroup__rotation").toDouble());
     else if(!properties.contains(property) && property.toLower() == "visible")
-        return QVariant::fromValue(entity->property("__tiledobject__visible").toBool());
+        return QVariant::fromValue(entity->property("__TiledObjectGroup__visible").toBool());
     else if(!properties.contains(property) && property.toLower() == "id")
-        return QVariant::fromValue(entity->property("__tiledobject__id").toInt());
+        return QVariant::fromValue(entity->property("__TiledObjectGroup__id").toInt());
 
     return properties.value(property);
 }
 
-QVariant TiledObject::getProperty(const QString &property) const
+QVariant TiledObjectGroup::getProperty(const QString &property) const
 {
     if (m_entities.isEmpty())
         return QVariant();
     if (m_entities.count() > 1) {
-        qWarning() << "TiledObject: Can't get property: Multiple entities created. Use overload TiledObject::getProperty(string, string).";
+        qWarning() << "TiledObjectGroup: Can't get property: Multiple entities created. Use overload TiledObjectGroup::getProperty(string, string).";
         return QVariant();
     }
 
     return getProperty(m_entities.values().first()->entityId(), property);
 }
 
-Entity *TiledObject::getEntity(const QString &entityId) const
+Entity *TiledObjectGroup::getEntity(const QString &entityId) const
 {
     if (entityId.isNull() && !m_entities.isEmpty())
         return m_entities.values().first();
@@ -417,84 +465,76 @@ Entity *TiledObject::getEntity(const QString &entityId) const
     return m_entities.value(entityId);
 }
 
-void TiledObject::initialize()
+void TiledObjectGroup::initialize()
 {
-    if(!m_componentComplete) {
-        m_componentComplete = true;
-        return;
-    }
-
-    deinitialize();
+    if (!m_entities.isEmpty())
+        deinitialize();
 
     TiledLayer *tiledLayer = qobject_cast<TiledLayer *>(parent());
-    if((!tiledLayer && !tiledLayer->layer()) || !tiledLayer->layer()->isObjectLayer())
+    if (!tiledLayer || !tiledLayer->layer() || !tiledLayer->layer()->isObjectLayer())
         return;
 
     m_layerName = tiledLayer->name();
 
-    if(m_objectGroup) {
+    if (m_objectGroup) {
         m_objectGroup->deleteLater();
         m_objectGroup = nullptr;
     }
 
     m_objectGroup = new TMXObjectGroup(*tiledLayer->layer(), this);
 
-    for (const TMXMapObject &object : m_objectGroup->objects())
-    {
-        if(object.name() == m_name && object.type() == m_type)
-        {
-            if(!static_cast<TiledScene *>(tiledLayer->parentItem()))
+    for (const TMXMapObject &object : m_objectGroup->objects()) {
+        if (object.name() == m_name && object.type() == m_type) {
+            if (!static_cast<TiledScene *>(tiledLayer->parent()))
                 return;
 
             createEntity(object);
         }
     }
+
+    setCount(m_objectGroup->objects().count());
 }
 
-void TiledObject::deinitialize()
+void TiledObjectGroup::deinitialize()
 {
     for (const auto entity : m_entities.values()) {
-        emit entityDestroyed(entity);
-        EntityFactory::instance().destroyEntity(entity->entityId());
+        if (entity)
+            EntityFactory::instance().destroyEntity(entity->entityId());
     }
 
+    setCount(0);
     m_entities.clear();
 }
 
-void TiledObject::createEntity(const TMXMapObject &object)
+void TiledObjectGroup::createEntity(const TMXMapObject &object)
 {
     auto parentScene = findParentScene();
     if (parentScene) {
-        Entity *entity = EntityFactory::instance().createEntity(QVariant::fromValue(m_entityComponent),
-                                                                         parentScene,
-                                                                         qmlEngine(this),
-                                                                         EntityFactory::FixturePolicy::DontAddFixtures);
-        if (entity) {
-            entity->setParent(this);
-            entity->setProperty("__tiledobject__x", object.x());
-            entity->setProperty("__tiledobject__y", object.y());
-            entity->setProperty("__tiledobject__width", object.width());
-            entity->setProperty("__tiledobject__height", object.height());
-            entity->setProperty("__tiledobject__rotation", object.rotation());
-            entity->setProperty("__tiledobject__visible", object.isVisible());
-            entity->setProperty("__tiledobject__id", object.id());
-            entity->setProperty("__tiledobject__properties", object.properties());
+        if (!m_entityComponent)
+            return;
 
+        QScopedPointer<TiledEntityComponent> component(new TiledEntityComponent(m_entityComponent, object, this));
+        Entity *entity = EntityFactory::instance().createEntity(QVariant::fromValue(component.data()),
+                                                                parentScene,
+                                                                qmlEngine(this));
+        if (entity) {
             if (m_autoMapProperties)
                 attemptAutoMapping(entity, object);
 
             applyMappings(entity, object);
             applyFixtureProperties(entity, object);
-        }
 
-        m_entities.insert(entity->entityId(), entity);
-        emit entityCreated(entity);
-    } else if (m_componentComplete) {
-        qWarning() << "TiledObject: Cannot create entity with null parent scene.";
+            m_entities.insert(entity->entityId(), entity);
+            component->completeCreate();
+            connect(entity, &Entity::destroyed, this, [this](QObject *object) {
+                emit entityDestroyed(static_cast<Entity *>(object));
+            });
+            emit entityCreated(entity);
+        }
     }
 }
 
-void TiledObject::applyFixtureProperties(Entity *entity, const TMXMapObject &object)
+void TiledObjectGroup::applyFixtureProperties(Entity *entity, const TMXMapObject &object)
 {
     PhysicsEntity *physicsEntity = qobject_cast<PhysicsEntity *>(entity);
     if (!physicsEntity)
@@ -556,7 +596,7 @@ void TiledObject::applyFixtureProperties(Entity *entity, const TMXMapObject &obj
     }
 }
 
-TiledScene* TiledObject::findParentScene() const
+TiledScene* TiledObjectGroup::findParentScene() const
 {
     QObject *parent = this->parent();
     while (parent) {
@@ -570,7 +610,7 @@ TiledScene* TiledObject::findParentScene() const
     return nullptr;
 }
 
-void TiledObject::attemptAutoMapping(Entity *entity, const TMXMapObject &object)
+void TiledObjectGroup::attemptAutoMapping(Entity *entity, const TMXMapObject &object)
 {
     if (entity == nullptr)
         return;
@@ -605,80 +645,69 @@ void TiledObject::attemptAutoMapping(Entity *entity, const TMXMapObject &object)
     }
 }
 
-void TiledObject::applyMappings(Entity *entity, const TMXMapObject &object)
+void TiledObjectGroup::applyMappings(Entity *entity, const TMXMapObject &object)
 {
     for (const auto mapping : m_mappings) {
         const QString &property = mapping->mapsTo().isNull() ? mapping->property()
-                                                              : mapping->mapsTo();
-        const QVariant &value = mapping->defaultValue().isNull() ? propertyFromMapObject(property, object)
+                                                             : mapping->mapsTo();
+        const QVariant &value = mapping->defaultValue().isNull() ? propertyFromMapObject(mapping->property(), object)
                                                                  : mapping->defaultValue();
 
-        if (entity->property(property.toStdString().c_str()).isValid()) {
+        if (QQmlProperty::read(entity, property).isValid()) {
             if (value.isValid())
                 QQmlProperty::write(entity, property, value);
             else
-                qWarning() << "TiledPropertyMapping:" << mapping->property() << "invalid";
+                qWarning() << "TiledPropertyMapping:" << mapping->property() << "invalid" << entity;
         } else {
-            qWarning() << "TiledPropertyMapping:" << mapping->property() << "does not exist.";
+            qWarning() << "TiledPropertyMapping:" << mapping->property() << "does not exist." << entity;
         }
     }
 }
 
-QVariant TiledObject::propertyFromMapObject(const QString &property, const TMXMapObject &object)
+QVariant TiledObjectGroup::propertyFromMapObject(const QString &property, const TMXMapObject &object)
 {
     if(!object.properties().contains(property) && property.toLower() == "x")
-        return QVariant::fromValue(object.x());
+        return object.x();
     else if(!object.properties().contains(property) && property.toLower() == "y")
-        return QVariant::fromValue(object.y());
+        return object.y();
     else if(!object.properties().contains(property) && property.toLower() == "width")
-        return QVariant::fromValue(object.width());
+        return object.width();
     else if(!object.properties().contains(property) && property.toLower() == "height")
-        return QVariant::fromValue(object.height());
+        return object.height();
     else if(!object.properties().contains(property) && property.toLower() == "rotation")
-        return QVariant::fromValue(object.rotation());
+        return object.rotation();
     else if(!object.properties().contains(property) && property.toLower() == "visible")
-        return QVariant::fromValue(object.isVisible());
+        return object.isVisible();
     else if(!object.properties().contains(property) && property.toLower() == "id")
-        return QVariant::fromValue(object.id());
+        return object.id();
 
     return object.properties().value(property);
 }
 
-void TiledObject::classBegin()
-{
-
-}
-
-void TiledObject::componentComplete()
-{
-    if (m_componentComplete)
-        initialize();
-}
-
-QQmlListProperty<TiledPropertyMapping> TiledObject::mappings()
+QQmlListProperty<TiledPropertyMapping> TiledObjectGroup::mappings()
 {
     return QQmlListProperty<TiledPropertyMapping>(this, nullptr,
-                                                  &TiledObject::append_mapping,
-                                                  &TiledObject::count_mapping,
-                                                  &TiledObject::at_mapping,
+                                                  &TiledObjectGroup::append_mapping,
+                                                  &TiledObjectGroup::count_mapping,
+                                                  &TiledObjectGroup::at_mapping,
                                                   nullptr);
 }
 
-void TiledObject::append_mapping(QQmlListProperty<TiledPropertyMapping> *list, TiledPropertyMapping *mapping)
+void TiledObjectGroup::append_mapping(QQmlListProperty<TiledPropertyMapping> *list, TiledPropertyMapping *mapping)
 {
-    TiledObject *object = static_cast<TiledObject *>(list->object);
+    TiledObjectGroup *object = static_cast<TiledObjectGroup *>(list->object);
     mapping->setParent(object);
     object->m_mappings.append(mapping);
 }
 
-int TiledObject::count_mapping(QQmlListProperty<TiledPropertyMapping> *list)
+int TiledObjectGroup::count_mapping(QQmlListProperty<TiledPropertyMapping> *list)
 {
-    TiledObject *object = static_cast<TiledObject *>(list->object);
+    TiledObjectGroup *object = static_cast<TiledObjectGroup *>(list->object);
     return object->m_mappings.count();
 }
 
-TiledPropertyMapping *TiledObject::at_mapping(QQmlListProperty<TiledPropertyMapping> *list, int index)
+TiledPropertyMapping *TiledObjectGroup::at_mapping(QQmlListProperty<TiledPropertyMapping> *list, int index)
 {
-    TiledObject *object = static_cast<TiledObject *>(list->object);
+    TiledObjectGroup *object = static_cast<TiledObjectGroup *>(list->object);
     return object->m_mappings.at(index);
 }
