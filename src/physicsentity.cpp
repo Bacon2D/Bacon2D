@@ -3,6 +3,31 @@
 #include "box2dworld.h"
 #include "scene.h"
 #include "entityfactory.h"
+#include "box2dfixture.h"
+
+PhysicsEntityAttached::PhysicsEntityAttached(QObject *parent)
+    : QObject(parent)
+    , m_instance(nullptr)
+{
+    if (parent) {
+        Box2DFixture *fixture = qobject_cast<Box2DFixture *>(parent);
+        m_instance = qobject_cast<PhysicsEntity *>(fixture->parent());
+    }
+}
+
+PhysicsEntity *PhysicsEntityAttached::instance() const
+{
+    return m_instance;
+}
+
+void PhysicsEntityAttached::setInstance(PhysicsEntity *instance)
+{
+    if (m_instance == instance)
+        return;
+
+    m_instance = instance;
+    emit instanceChanged();
+}
 
 PhysicsEntity::PhysicsEntity(Scene *parent)
     : Entity(parent)
@@ -182,6 +207,7 @@ QList<Box2DFixture *> PhysicsEntity::fixtureList() const
 void PhysicsEntity::append_fixture(QQmlListProperty<Box2DFixture> *list, Box2DFixture *fixture)
 {
     PhysicsEntity *entity = static_cast<PhysicsEntity *>(list->object);
+    fixture->setParent(entity);
     entity->m_fixtures.append(fixture);
 }
 

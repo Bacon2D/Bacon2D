@@ -197,6 +197,20 @@ void TiledScene::setUseMapBackgroundColor(bool useMapBackgroundColor)
     emit useMapBackgroundColorChanged();
 }
 
+QColor TiledScene::color() const
+{
+    return m_color;
+}
+
+void TiledScene::setColor(const QColor &color)
+{
+    if (m_color == color)
+        return;
+
+    m_color = color;
+    emit colorChanged();
+}
+
 bool TiledScene::loadMap(const QString &source)
 {
     Tiled::MapReader reader;
@@ -208,7 +222,7 @@ bool TiledScene::loadMap(const QString &source)
     }
 
     if(!QFile::exists(source))
-        qWarning() << source << " does not exist.";
+        qWarning() << "TiledScene:" << source << " does not exist.";
 
     tiledMap = reader.readMap(source);
     if (!tiledMap) {
@@ -234,18 +248,17 @@ void TiledScene::loadBackground()
 
 void TiledScene::loadLayers()
 {
-    for (const TMXLayer &layer : m_map->layers())
-    {
+    for (const TMXLayer &layer : m_map->layers()) {
         if(layer.isTileLayer())
             loadTileLayer(static_cast<TMXTileLayer>(layer));
         else if(layer.isImageLayer() && !m_backgroundItem)
             loadImageLayer(static_cast<TMXImageLayer>(layer));
-        else if(layer.isObjectLayer()) {
-            // This layer would be loaded by the TiledLayer and TiledObject classes.
-        }
-        else if (m_backgroundItem == nullptr)
+        else if (!layer.isObjectLayer() && m_backgroundItem == nullptr)
             qWarning() << "Unknown layer type: " << layer.name();
     }
+
+    for (auto layer : m_layers)
+        layer->initialize();
 
     QQuickItem::update();
 }
@@ -364,8 +377,7 @@ QVariant TiledScene::getProperty(const QString &name, const QVariant &defaultVal
 void TiledScene::append_layer(QQmlListProperty<TiledLayer> *list, TiledLayer *layer)
 {
     TiledScene *scene = static_cast<TiledScene *>(list->object);
-    layer->setParentItem(scene);
-    connect (scene, &TiledScene::sourceChanged, layer, &TiledLayer::initialize);
+    layer->setParent(scene);
     scene->m_layers.append(layer);
 }
 

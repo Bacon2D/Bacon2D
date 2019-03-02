@@ -3,6 +3,7 @@ import Bacon2D 1.0
 
 PhysicsEntity {
     id: coin
+    entityType: "coin"
 
     property bool picked: false
 

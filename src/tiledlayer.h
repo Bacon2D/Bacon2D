@@ -23,50 +23,85 @@
  *
  */
 
-#ifndef _TILEDLAYER_H_
-#define _TILEDLAYER_H_
+#ifndef TILEDLAYER_H
+#define TILEDLAYER_H
 
-#include <QQuickItem>
+#include <QObject>
+#include <QQmlListProperty>
 
 class TMXLayer;
-class TiledObject;
+class TiledObjectGroup;
 
-class TiledLayer : public QQuickItem
+class TiledLayer : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(qreal x READ x WRITE setX NOTIFY xChanged)
+    Q_PROPERTY(qreal y READ y WRITE setY NOTIFY yChanged)
+    Q_PROPERTY(qreal width READ width WRITE setWidth NOTIFY widthChanged)
+    Q_PROPERTY(qreal height READ height WRITE setHeight NOTIFY heightChanged)
+    Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity NOTIFY opacityChanged)
+    Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY visibleChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-    Q_PROPERTY(QQmlListProperty<TiledObject> objects READ objects)
-    Q_CLASSINFO("DefaultProperty", "objects")
+    Q_PROPERTY(QQmlListProperty<TiledObjectGroup> objectGroups READ objectGroups)
+    Q_CLASSINFO("DefaultProperty", "objectGroups")
 public:
-    TiledLayer(QQuickItem *parent = nullptr);
+    explicit TiledLayer(QObject *parent = nullptr);
     ~TiledLayer() override = default;
+
+    void initialize();
+
+    qreal x() const;
+    void setX(qreal x);
+
+    qreal y() const;
+    void setY(qreal y);
+
+    qreal width() const;
+    void setWidth(qreal width);
+
+    qreal height() const;
+    void setHeight(qreal height);
+
+    qreal opacity() const;
+    void setOpacity(qreal opacity);
+
+    bool isVisible() const;
+    void setVisible(bool visible);
 
     QString name() const;
     void setName(const QString &name);
 
-    void setProperties(const QMap<QString, QVariant> &properties) { m_properties = properties; }
+    QQmlListProperty<TiledObjectGroup> objectGroups();
+
+    void setProperties(const QVariantMap &properties);
     Q_INVOKABLE QVariant getProperty(const QString &name, const QVariant &defaultValue = QVariant()) const;
 
     TMXLayer *layer() const { return m_layer; }
-    QList<TiledObject *> tiledObjects() const { return m_objects; }
-
-    QQmlListProperty<TiledObject> objects();
-
-    void initialize();
 signals:
+    void xChanged();
+    void yChanged();
+    void widthChanged();
+    void heightChanged();
+    void opacityChanged();
+    void visibleChanged();
     void nameChanged();
-    void layerChanged();
 private:
-    static void append_object(QQmlListProperty<TiledObject> *list, TiledObject *layer);
-    static int count_object(QQmlListProperty<TiledObject> *list);
-    static TiledObject *at_object(QQmlListProperty<TiledObject> *list, int index);
+    static void append_object_group(QQmlListProperty<TiledObjectGroup> *list, TiledObjectGroup *layer);
+    static int count_object_group(QQmlListProperty<TiledObjectGroup> *list);
+    static TiledObjectGroup *at_object_group(QQmlListProperty<TiledObjectGroup> *list, int index);
 
     void setLayer(TMXLayer *layer);
 private:
+    qreal m_x;
+    qreal m_y;
+    qreal m_width;
+    qreal m_height;
+    qreal m_opacity;
+    qreal m_visible;
     QString m_name;
-    QList<TiledObject *> m_objects;
-    QMap<QString, QVariant> m_properties;
     TMXLayer *m_layer;
+    QList<TiledObjectGroup *> m_objectGroups;
+    QMap<QString, QVariant> m_properties;
 };
 
-#endif // _TILEDLAYER_H_
+#endif // TILEDLAYER_H

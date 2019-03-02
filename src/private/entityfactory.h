@@ -16,20 +16,20 @@ public:
     };
     static EntityFactory &instance();
 
-    Entity *createEntity(const QVariant &, Scene *parentScene, QQmlEngine *engine, FixturePolicy policy = FixturePolicy::AddFixtures);
+    Entity *createEntity(const QVariant &, Scene *parentScene, QQmlEngine *engine);
     Entity *addEntity(Entity *entity);
-    Entity *findEntity(const QString &entityType, const QString &property, const QVariant &value);
+    Entity *findEntity(const QString &entityType, const QVariantMap &properties);
     Entity *getEntity(const QString &entityId);
     void destroyEntity(const QString &entityId);
     void destroyAllEntities(const QString &entityType = QString());
     int entityCount(const QString &entityType = QString());
-
-    QString generateId(const QString &entityType) const;
 private:
     explicit EntityFactory(QObject *parent = nullptr);
     explicit EntityFactory(const EntityFactory &) = delete;
     EntityFactory& operator=(const EntityFactory &) = delete;
 
+    QString generateId(const QString &entityType) const;
+private:
     QHash<QString, Entity *> m_entityMap;
     QHash<QString, QStringList> m_groupMap;
 };

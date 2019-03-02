@@ -50,7 +50,6 @@ HEADERS += \
     imagelayerscrollbehavior.h \
     layerscrollbehavior.h \
     settings.h \
-    tiledobject.h \
     tiledlayer.h \
     tiledscene.h \
     sprite.h \
@@ -66,7 +65,8 @@ HEADERS += \
     bacon2dimagelayer.h \
     bacon2dlayer.h \
     tiledbackground.h \
-    private/entityfactory.h
+    private/entityfactory.h \
+    tiledobjectgroup.h
 
 SOURCES += \
     enums.cpp \
@@ -84,7 +84,6 @@ SOURCES += \
     settings.cpp \
     tiledscene.cpp \
     tiledlayer.cpp \
-    tiledobject.cpp \
     sprite.cpp \
     physicsentity.cpp \
     pausabletimer.cpp \
@@ -98,7 +97,8 @@ SOURCES += \
     bacon2dimagelayer.cpp \
     bacon2dlayer.cpp \
     tiledbackground.cpp \
-    private/entityfactory.cpp
+    private/entityfactory.cpp \
+    tiledobjectgroup.cpp
 
 !isEmpty(QTPATH): target.path = $$QTPATH/qml/$$TARGETPATH
 else: target.path = $$[QT_INSTALL_QML]/$$replace(TARGETPATH, \\., /).$$API_VER

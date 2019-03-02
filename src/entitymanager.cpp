@@ -28,9 +28,9 @@ Entity *EntityManager::createEntity(const QVariant &item)
     return entity;
 }
 
-Entity *EntityManager::findEntity(const QString &entityType, const QString &property, const QVariant &value)
+Entity *EntityManager::findEntity(const QString &entityType, const QVariantMap &properties)
 {
-    return EntityFactory::instance().findEntity(entityType, property, value);
+    return EntityFactory::instance().findEntity(entityType, properties);
 }
 
 Entity *EntityManager::getEntity(const QString &entityId)

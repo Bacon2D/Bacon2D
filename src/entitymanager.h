@@ -8,7 +8,6 @@
 class QQmlComponent;
 class Entity;
 class Scene;
-class EntityManagerSingleton;
 
 class EntityManager : public QQuickItem
 {
@@ -19,7 +18,7 @@ public:
     EntityManager(QQuickItem *parent = nullptr);
 
     Q_INVOKABLE Entity *createEntity(const QVariant &);
-    Q_INVOKABLE Entity *findEntity(const QString &entityType, const QString &property, const QVariant &value);
+    Q_INVOKABLE Entity *findEntity(const QString &entityType, const QVariantMap &properties);
     Q_INVOKABLE Entity *getEntity(const QString &entityId);
     Q_INVOKABLE void destroyEntity(const QString &entityId);
     Q_INVOKABLE int getEntityCount(const QString &entityType = QString());

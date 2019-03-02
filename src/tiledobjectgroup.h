@@ -28,42 +28,60 @@
 
 #include <QQuickItem>
 #include "tmxmapobject.h"
+#include "entity.h"
 
 class TMXObjectGroup;
+class TiledObjectGroup;
 class Entity;
 class TiledScene;
-class TiledObject;
 class QQmlComponent;
 class TiledPropertyMapping;
 
-class TiledObjectAttached : public QObject {
+class TiledObjectGroupAttached : public QObject {
     Q_OBJECT
-    Q_PROPERTY(TiledObject *instance READ instance NOTIFY instanceChanged)
+    Q_PROPERTY(TiledObjectGroup *instance READ instance NOTIFY instanceChanged)
 public:
-    explicit TiledObjectAttached(QObject *parent = nullptr);
-    TiledObject *instance() const;
-    void setInstance(TiledObject *instance);
+    explicit TiledObjectGroupAttached(QObject *parent = nullptr);
+    TiledObjectGroup *instance() const;
+    void setInstance(TiledObjectGroup *instance);
 signals:
     void instanceChanged();
 private:
-    TiledObject *m_instance;
+    TiledObjectGroup *m_instance;
 };
 
-class TiledObject : public QObject, public QQmlParserStatus
+class TiledEntityComponent : public QQmlComponent {
+    Q_OBJECT
+public:
+    explicit TiledEntityComponent(QQmlComponent *component, const TMXMapObject &object, TiledObjectGroup *objectGroup);
+
+    QObject *beginCreate(QQmlContext *publicContext) override;
+    void completeCreate() override;
+
+    QQmlComponent *component() const;
+    TMXMapObject mapObject() const;
+    TiledObjectGroup *objectGroup();
+private:
+    QQmlComponent *m_component;
+    TMXMapObject m_mapObject;
+    TiledObjectGroup *m_objectGroup;
+};
+
+class TiledObjectGroup : public QObject
 {
     Q_OBJECT
-    Q_INTERFACES(QQmlParserStatus)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(QQmlComponent *entity READ entity WRITE setEntity NOTIFY entityChanged)
     Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
     Q_PROPERTY(bool autoMapProperties READ autoMapProperties WRITE setAutoMapProperties NOTIFY autoMapPropertiesChanged)
     Q_PROPERTY(bool ignoreFixtures READ ignoreFixtures WRITE setIgnoreFixtures NOTIFY ignoreFixturesChanged)
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
     Q_PROPERTY(QQmlListProperty<TiledPropertyMapping> mappings READ mappings)
     Q_CLASSINFO("DefaultProperty", "mappings")
 public:
-    explicit TiledObject(QQuickItem *parent = nullptr);
-    ~TiledObject() override;
+    explicit TiledObjectGroup(QQuickItem *parent = nullptr);
+    ~TiledObjectGroup() override = default;
 
     Q_INVOKABLE QVariant getProperty(const QString &entityId, const QString &property) const;
     Q_INVOKABLE QVariant getProperty(const QString &property) const;
@@ -89,14 +107,14 @@ public:
     bool ignoreFixtures() const;
     void setIgnoreFixtures(bool enabled);
 
+    int count() const;
+    void setCount(int count);
+
     QQmlListProperty<TiledPropertyMapping> mappings();
 
-    void classBegin() override;
-    void componentComplete() override;
-
-    static TiledObjectAttached *qmlAttachedProperties(QObject *entity)
+    static TiledObjectGroupAttached *qmlAttachedProperties(QObject *entity)
     {
-        return new TiledObjectAttached(entity);
+        return new TiledObjectGroupAttached(entity);
     }
 signals:
     void nameChanged();
@@ -105,6 +123,7 @@ signals:
     void activeChanged();
     void autoMapPropertiesChanged();
     void ignoreFixturesChanged();
+    void countChanged();
 
     void entityCreated(Entity *entity);
     void entityDestroyed(Entity *entity);
@@ -121,21 +140,20 @@ private:
     static int count_mapping(QQmlListProperty<TiledPropertyMapping> *list);
     static TiledPropertyMapping *at_mapping(QQmlListProperty<TiledPropertyMapping> *list, int index);
 private:
-    int m_id;
     QString m_name;
     QString m_type;
     QString m_layerName;
     QMap<QString, QVariant> m_properties;
     TMXObjectGroup *m_objectGroup;
-    bool m_componentComplete;
     QQmlComponent *m_entityComponent;
     TiledScene *m_parentScene;
     bool m_active;
     bool m_autoMapProperties;
     bool m_ignoreFixtures;
+    int m_count;
     QHash<QString, Entity *> m_entities;
     QList<TiledPropertyMapping *> m_mappings;
-}; QML_DECLARE_TYPEINFO(TiledObject, QML_HAS_ATTACHED_PROPERTIES)
+}; QML_DECLARE_TYPEINFO(TiledObjectGroup, QML_HAS_ATTACHED_PROPERTIES)
 
 #endif // TILEDOBJECT_H
 

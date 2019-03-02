@@ -4,6 +4,7 @@ import QtQml.StateMachine 1.0 as DSM
 
 PhysicsEntity {
     id: dog
+    entityType: "dog"
 
     readonly property Scene scene: parent
     readonly property bool facingLeft: !sprite.horizontalMirror
@@ -40,7 +41,7 @@ PhysicsEntity {
             width: target.width - 40
             height: target.height - groundSensorRoom
             density: .01
-            restitution: .1
+            restitution: 0
             friction: .01
             categories: Box.Category1
         },

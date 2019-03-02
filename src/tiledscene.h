@@ -76,6 +76,13 @@ protected:
     QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *) override;
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
 private:
+    bool loadMap(const QString &source);
+    void loadBackground();
+    void loadLayers();
+    void loadTileLayer(const TMXTileLayer &layer);
+    void loadImageLayer(const TMXImageLayer &layer);
+    // NOTE: Object layers are loaded by the TiledLayer and TiledObject classes.
+
     static void append_layer(QQmlListProperty<TiledLayer> *list, TiledLayer *layer);
     static int count_layer(QQmlListProperty<TiledLayer> *list);
     static TiledLayer *at_layer(QQmlListProperty<TiledLayer> *list, int index);
@@ -86,13 +93,7 @@ private:
     bool m_useMapBackgroundColor;
     QPixmap m_image;
     QList<TiledLayer *> m_layers;
-
-    bool loadMap(const QString &source);
-    void loadBackground();
-    void loadLayers();
-    void loadTileLayer(const TMXTileLayer &layer);
-    void loadImageLayer(const TMXImageLayer &layer);
-    // NOTE: Object layers are loaded by the TiledLayer and TiledObject classes.
+    QColor m_color;
 };
 
 
