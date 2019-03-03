@@ -279,7 +279,7 @@ void TiledObjectGroupAttached::setInstance(TiledObjectGroup *instance)
 }
 
 TiledObjectGroup::TiledObjectGroup(QQuickItem *parent)
-    : QObject (parent)
+    : QObject(parent)
     , m_objectGroup(nullptr)
     , m_entityComponent(nullptr)
     , m_active(true)
@@ -419,42 +419,30 @@ void TiledObjectGroup::setCount(int count)
    For example, if an object is 50 pixels wide, getProperty("width") would return
    50 pixels even if no custom property was set for \e width.
 */
-QVariant TiledObjectGroup::getProperty(const QString &entityId, const QString &property) const
+QVariant TiledObjectGroup::getProperty(const QString &entityId, const QString &property, const QVariant &defaultValue) const
 {
     Entity *entity = m_entities.value(entityId);
     if (!entity)
-        return QVariant();
+        return defaultValue;
 
     const QVariantMap &properties = entity->property("__TiledObjectGroup__properties").toMap();
 
     if(!properties.contains(property) && property.toLower() == "x")
-        return QVariant::fromValue(entity->property("__TiledObjectGroup__x").toDouble());
+        return entity->property("__TiledObjectGroup__x");
     else if(!properties.contains(property) && property.toLower() == "y")
-        return QVariant::fromValue(entity->property("__TiledObjectGroup__y").toDouble());
+        return entity->property("__TiledObjectGroup__y");
     else if(!properties.contains(property) && property.toLower() == "width")
-        return QVariant::fromValue(entity->property("__TiledObjectGroup__width").toDouble());
+        return entity->property("__TiledObjectGroup__width");
     else if(!properties.contains(property) && property.toLower() == "height")
-        return QVariant::fromValue(entity->property("__TiledObjectGroup__height").toDouble());
+        return entity->property("__TiledObjectGroup__height");
     else if(!properties.contains(property) && property.toLower() == "rotation")
-        return QVariant::fromValue(entity->property("__TiledObjectGroup__rotation").toDouble());
+        return entity->property("__TiledObjectGroup__rotation");
     else if(!properties.contains(property) && property.toLower() == "visible")
-        return QVariant::fromValue(entity->property("__TiledObjectGroup__visible").toBool());
+        return entity->property("__TiledObjectGroup__visible");
     else if(!properties.contains(property) && property.toLower() == "id")
-        return QVariant::fromValue(entity->property("__TiledObjectGroup__id").toInt());
+        return entity->property("__TiledObjectGroup__id");
 
-    return properties.value(property);
-}
-
-QVariant TiledObjectGroup::getProperty(const QString &property) const
-{
-    if (m_entities.isEmpty())
-        return QVariant();
-    if (m_entities.count() > 1) {
-        qWarning() << "TiledObjectGroup: Can't get property: Multiple entities created. Use overload TiledObjectGroup::getProperty(string, string).";
-        return QVariant();
-    }
-
-    return getProperty(m_entities.values().first()->entityId(), property);
+    return properties.value(property, defaultValue);
 }
 
 Entity *TiledObjectGroup::getEntity(const QString &entityId) const
@@ -463,6 +451,15 @@ Entity *TiledObjectGroup::getEntity(const QString &entityId) const
         return m_entities.values().first();
 
     return m_entities.value(entityId);
+}
+
+QVariantList TiledObjectGroup::createdEntities() const
+{
+    QVariantList entities;
+    for (Entity *entity : m_entities.values())
+        entities.append(QVariant::fromValue(entity));
+
+    return entities;
 }
 
 void TiledObjectGroup::initialize()

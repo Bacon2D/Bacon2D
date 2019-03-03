@@ -38,6 +38,11 @@ Entity *EntityManager::getEntity(const QString &entityId)
     return EntityFactory::instance().getEntity(entityId);
 }
 
+QList<Entity *> EntityManager::getEntities(const QString &entityType)
+{
+    return EntityFactory::instance().getEntities(entityType);
+}
+
 void EntityManager::destroyEntity(const QString &entityId)
 {
     const int initialCount = EntityFactory::instance().entityCount();

@@ -77,11 +77,11 @@ EntityFactory &EntityFactory::instance()
 Entity *EntityFactory::createEntity(const QVariant &item, Scene *parentScene, QQmlEngine *engine)
 {
     if (item.isNull()) {
-        qWarning() << Q_FUNC_INFO << ", Item passed in is null.";
+        qWarning() << "EntityFactory: Item passed in is null.";
         return nullptr;
     }
     if (!parentScene) {
-        qWarning() << Q_FUNC_INFO << ", parent Scene is null.";
+        qWarning() << "EntityFactory: parent Scene is null.";
         return nullptr;
     }
 
@@ -211,6 +211,19 @@ Entity *EntityFactory::findEntity(const QString &entityType, const QVariantMap &
 Entity *EntityFactory::getEntity(const QString &entityId)
 {
     return m_entityMap.value(entityId);
+}
+
+QList<Entity *> EntityFactory::getEntities(const QString &entityType)
+{
+    if (entityType.isEmpty())
+        return m_entityMap.values();
+
+    QList<Entity *> entities;
+    const QStringList &entityIds = m_groupMap.value(entityType);
+    for (const QString &entityId : entityIds)
+        entities.append(m_entityMap.value(entityId));
+
+    return entities;
 }
 
 void EntityFactory::destroyAllEntities(const QString &entityType)

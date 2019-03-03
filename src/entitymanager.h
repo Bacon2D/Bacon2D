@@ -15,11 +15,12 @@ class EntityManager : public QQuickItem
     Q_PROPERTY(Scene* parentScene READ parentScene WRITE setParentScene NOTIFY parentSceneChanged)
     Q_PROPERTY(int entityCount READ entityCount NOTIFY entityCountChanged)
 public:
-    EntityManager(QQuickItem *parent = nullptr);
+    explicit EntityManager(QQuickItem *parent = nullptr);
 
     Q_INVOKABLE Entity *createEntity(const QVariant &);
     Q_INVOKABLE Entity *findEntity(const QString &entityType, const QVariantMap &properties);
     Q_INVOKABLE Entity *getEntity(const QString &entityId);
+    Q_INVOKABLE QList<Entity *> getEntities(const QString &entityType = QString());
     Q_INVOKABLE void destroyEntity(const QString &entityId);
     Q_INVOKABLE int getEntityCount(const QString &entityType = QString());
     Q_INVOKABLE void destroyAllEntities(const QString &entityType = QString());
@@ -28,7 +29,7 @@ public:
 
     Scene *parentScene() const;
     void setParentScene(Scene *);
-protected:
+
     void componentComplete();
 signals:
     void parentSceneChanged();

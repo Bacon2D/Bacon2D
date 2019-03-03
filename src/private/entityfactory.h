@@ -20,6 +20,7 @@ public:
     Entity *addEntity(Entity *entity);
     Entity *findEntity(const QString &entityType, const QVariantMap &properties);
     Entity *getEntity(const QString &entityId);
+    QList<Entity *> getEntities(const QString &entityType);
     void destroyEntity(const QString &entityId);
     void destroyAllEntities(const QString &entityType = QString());
     int entityCount(const QString &entityType = QString());

@@ -77,14 +77,14 @@ class TiledObjectGroup : public QObject
     Q_PROPERTY(bool autoMapProperties READ autoMapProperties WRITE setAutoMapProperties NOTIFY autoMapPropertiesChanged)
     Q_PROPERTY(bool ignoreFixtures READ ignoreFixtures WRITE setIgnoreFixtures NOTIFY ignoreFixturesChanged)
     Q_PROPERTY(int count READ count NOTIFY countChanged)
+    Q_PROPERTY(QVariantList createdEntities READ createdEntities)
     Q_PROPERTY(QQmlListProperty<TiledPropertyMapping> mappings READ mappings)
     Q_CLASSINFO("DefaultProperty", "mappings")
 public:
     explicit TiledObjectGroup(QQuickItem *parent = nullptr);
     ~TiledObjectGroup() override = default;
 
-    Q_INVOKABLE QVariant getProperty(const QString &entityId, const QString &property) const;
-    Q_INVOKABLE QVariant getProperty(const QString &property) const;
+    Q_INVOKABLE QVariant getProperty(const QString &entityId, const QString &property, const QVariant &defaultValue = QVariant()) const;
     Q_INVOKABLE Entity *getEntity(const QString &entityId = QString()) const;
 
     void initialize();
@@ -110,6 +110,7 @@ public:
     int count() const;
     void setCount(int count);
 
+    QVariantList createdEntities() const;
     QQmlListProperty<TiledPropertyMapping> mappings();
 
     static TiledObjectGroupAttached *qmlAttachedProperties(QObject *entity)
@@ -153,7 +154,7 @@ private:
     int m_count;
     QHash<QString, Entity *> m_entities;
     QList<TiledPropertyMapping *> m_mappings;
-}; QML_DECLARE_TYPEINFO(TiledObjectGroup, QML_HAS_ATTACHED_PROPERTIES)
+}; QML_DECLARE_TYPEINFO(TiledObjectGroup, QML_HAS_ATTACHED_PROPERTIES);
 
 #endif // TILEDOBJECT_H
 

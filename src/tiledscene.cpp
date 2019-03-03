@@ -259,8 +259,6 @@ void TiledScene::loadLayers()
 
     for (auto layer : m_layers)
         layer->initialize();
-
-    QQuickItem::update();
 }
 
 void TiledScene::loadTileLayer(const TMXTileLayer &layer)
