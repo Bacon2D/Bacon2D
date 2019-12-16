@@ -83,6 +83,16 @@ qreal SpriteSheetGrid::height() const
     return m_height;
 }
 
+qreal SpriteSheetGrid::implicitWidth() const
+{
+    return m_implicitWidth;
+}
+
+qreal SpriteSheetGrid::implicitHeight() const
+{
+    return m_implicitHeight;
+}
+
 int SpriteSheetGrid::horizontalFrameCount() const
 {
     return m_horizontalFrameCount;

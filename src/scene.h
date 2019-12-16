@@ -34,10 +34,10 @@
 #include "box2dworld.h"
 #include "box2ddebugdraw.h"
 
-#include <QtCore/QtGlobal>
+#include <QtGlobal>
 
-#include <QtQml/QQmlComponent>
-#include <QtQuick/QQuickItem>
+#include <QQmlComponent>
+#include <QQuickItem>
 
 class Game;
 class Viewport;

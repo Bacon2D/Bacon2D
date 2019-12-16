@@ -6,14 +6,14 @@ QMAKE_HOST_ARCH=$$QMAKE_HOST.arch
      CONFIG += cross_build
 }
 
-CONFIG += c++11
+CONFIG += c++17
 
 QT += quick
 
 TARGET = bacon2dplugin
 TARGETPATH = Bacon2D
-
 API_VER=1.0
+
 DESTDIR = $$OUT_PWD/qml/Bacon2D
 
 OBJECTS_DIR = tmp
@@ -26,13 +26,11 @@ INCLUDEPATH += ../3rdparty/qml-box2d/
 INCLUDEPATH += ../3rdparty/tiled/src/
 
 DEFINES += STATIC_PLUGIN_BOX2D
+win32:DEFINES += WIN32
+
 include(../3rdparty/qml-box2d/box2d-static.pri)
-
-
 include(../3rdparty/tiled/src/libtiled/libtiled-static.pri)
 include($$PWD/tmx/tmx.pri)
-
-win32:DEFINES += WIN32
 
 HEADERS += \
     enums.h \
@@ -100,10 +98,6 @@ SOURCES += \
     private/entityfactory.cpp \
     tiledobjectgroup.cpp
 
-!isEmpty(QTPATH): target.path = $$QTPATH/qml/$$TARGETPATH
-else: target.path = $$[QT_INSTALL_QML]/$$replace(TARGETPATH, \\., /).$$API_VER
-;
-
 QMLFILES += \
             $$PWD/InfiniteScrollEntity.qml \
             $$PWD/BoxBody.qml \
@@ -132,14 +126,22 @@ unix {
     }
 }
 
-qmltypes.path = $$target.path
+target.path = $$[QT_INSTALL_QML]/$$replace(TARGETPATH, \\., /).$$API_VER
+target.files = $${QMLFILES}
+
+qmltypes.path = $${target.path}
 qmltypes.files += $$DESTDIR/plugins.qmltypes
 export(qmltypes.files)
 
-qmlpluginfiles.path = $$target.path
-qmlpluginfiles.files = $$QMLFILES
+QML2_IMPORT_PATH = $$OUT_PWD/qml
 
-QMAKE_EXTRA_TARGETS += qmltypes qmlpluginfiles
-INSTALLS += target qmltypes qmlpluginfiles
+QMAKE_EXTRA_TARGETS += qmltypes
 
-DISTFILES +=
+!android {
+    qmlpluginfiles.path = $${target.path}
+    qmlpluginfiles.files = $$QMLFILES
+    QMAKE_EXTRA_TARGETS += qmlpluginfiles
+    INSTALLS += qmlpluginfiles
+}
+
+INSTALLS += target qmltypes

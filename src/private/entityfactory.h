@@ -18,7 +18,7 @@ public:
 
     Entity *createEntity(const QVariant &, Scene *parentScene, QQmlEngine *engine);
     Entity *addEntity(Entity *entity);
-    Entity *findEntity(const QString &entityType, const QVariantMap &properties);
+    Entity *findEntity(const QString &entityType, const QVariantMap &properties = QVariantMap());
     Entity *getEntity(const QString &entityId);
     QList<Entity *> getEntities(const QString &entityType);
     void destroyEntity(const QString &entityId);

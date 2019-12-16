@@ -106,6 +106,12 @@ Entity *EntityFactory::createEntity(const QVariant &item, Scene *parentScene, QQ
             return nullptr;
         }
 
+        if (m_entityMap.contains(entity->entityId())) {
+            qWarning() << "EntityFactory: Entity already exists.";
+            entity->deleteLater();
+            return nullptr;
+        }
+
         return addEntity(entity);
     } else if (item.type() == QVariant::String) {
         const QUrl source = QQmlEngine::contextForObject(parentScene)->resolvedUrl(QUrl(item.toString()));
@@ -123,6 +129,12 @@ Entity *EntityFactory::createEntity(const QVariant &item, Scene *parentScene, QQ
         if (!entity) {
             qWarning() << "EntityFactory: Component must inherit Entity.";
             incubator.object()->deleteLater();
+            return nullptr;
+        }
+
+        if (m_entityMap.contains(entity->entityId())) {
+            qWarning() << "EntityFactory: Entity already exists.";
+            entity->deleteLater();
             return nullptr;
         }
 
@@ -154,6 +166,12 @@ Entity *EntityFactory::createEntity(const QVariant &item, Scene *parentScene, QQ
         entity->setProperty("__TiledObjectGroup__id", entityComponent->mapObject().id());
         entity->setProperty("__TiledObjectGroup__properties", entityComponent->mapObject().properties());
 
+        if (m_entityMap.contains(entity->entityId())) {
+            qWarning() << "EntityFactory: Entity already exists.";
+            entity->deleteLater();
+            return nullptr;
+        }
+
         return addEntity(entity);
     }
 
@@ -164,11 +182,6 @@ Entity *EntityFactory::addEntity(Entity *entity)
 {
     if (!entity) {
         qWarning() << "EntityFactory: Entity is null.";
-        return nullptr;
-    }
-    if (m_entityMap.contains(entity->entityId())) {
-        qWarning() << "EntityFactory: Entity already exists.";
-        entity->deleteLater();
         return nullptr;
     }
 

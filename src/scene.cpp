@@ -27,17 +27,15 @@
  */
 
 #include "scene.h"
-
 #include "game.h"
 #include "bacon2dlayer.h"
 #include "viewport.h"
+#include "box2dbody.h"
 
-#include <QtCore/QtGlobal>
-#include <QtQml/QQmlEngine>
+#include <QtGlobal>
+#include <QQmlEngine>
 #include <QQmlContext>
 #include <QQmlApplicationEngine>
-
-#include "../../3rdparty/qml-box2d/box2dbody.h"
 
 /*!
   \qmltype Scene
@@ -487,8 +485,7 @@ void Scene::rayCast(Box2DRayCast *rayCast, const QPointF &point1, const QPointF 
 
 void Scene::initializeEntities(QQuickItem *parent)
 {
-    QQuickItem *child;
-    foreach (child, parent->childItems()) {
+    for (QQuickItem *child : parent->childItems()) {
         if (Entity *entity = dynamic_cast<Entity *>(child)) {
             entity->setScene(this);
         } else if (Bacon2DLayer *layer = dynamic_cast<Bacon2DLayer *>(child)) {
@@ -496,7 +493,7 @@ void Scene::initializeEntities(QQuickItem *parent)
         }
 
         if (m_physics && m_world) {
-            foreach (Box2DBody *body, child->findChildren<Box2DBody *>(QString(), Qt::FindDirectChildrenOnly)) {
+            for (Box2DBody *body : child->findChildren<Box2DBody *>(QString(), Qt::FindDirectChildrenOnly)) {
                 body->setWorld(m_world);
             }
         }
@@ -538,7 +535,7 @@ void Scene::itemChange(ItemChange change, const ItemChangeData &data)
         }
 
         if (m_physics && m_world) {
-            foreach (Box2DBody *body, child->findChildren<Box2DBody *>(QString(), Qt::FindDirectChildrenOnly)) {
+            for (Box2DBody *body : child->findChildren<Box2DBody *>(QString(), Qt::FindDirectChildrenOnly)) {
                 body->setWorld(m_world);
             }
         }

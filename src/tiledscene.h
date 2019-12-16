@@ -64,7 +64,7 @@ public:
 
     QQmlListProperty<TiledLayer> layers();
 
-    Q_INVOKABLE QVariant getProperty(const QString &name, const QVariant &defaultValue = QVariant()) const;
+    Q_INVOKABLE QVariant getMapProperty(const QString &name, const QVariant &defaultValue = QVariant()) const;
 
     TMXMap *tiledMap() const { return m_map; }
 signals:

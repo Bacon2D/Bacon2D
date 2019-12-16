@@ -364,7 +364,7 @@ QQmlListProperty<TiledLayer> TiledScene::layers()
                                         nullptr);
 }
 
-QVariant TiledScene::getProperty(const QString &name, const QVariant &defaultValue) const
+QVariant TiledScene::getMapProperty(const QString &name, const QVariant &defaultValue) const
 {
     if (m_map)
         return m_map->properties().value(name, defaultValue);

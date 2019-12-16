@@ -31,15 +31,15 @@
 #include "viewport.h"
 
 #include <csignal>
-#include <QtGui/QGuiApplication>
-#include <QtQuick/QQuickWindow>
-#include <QtGui/QCursor>
+#include <QGuiApplication>
+#include <QQuickWindow>
+#include <QCursor>
 
 namespace {
     void shutdown(int sig)
     {
         qDebug() << Q_FUNC_INFO << sig;
-        QCoreApplication::instance()->quit();
+        qApp->quit();
     }
 }
 
@@ -79,14 +79,12 @@ Game::Game(QQuickItem *parent)
     , m_enterScene(nullptr)
     , m_exitScene(nullptr)
 {
-    m_sceneStack.clear();
     m_gameTime.start();
     m_timerId = startTimer(1000 / m_ups);
 
     if (QCoreApplication::instance()) {
-        connect(QCoreApplication::instance(),
-                SIGNAL(applicationStateChanged(Qt::ApplicationState)),
-                SLOT(onApplicationStateChanged(Qt::ApplicationState))
+        connect(qApp, &QGuiApplication::applicationStateChanged,
+                this, &Game::onApplicationStateChanged
         );
 
         std::signal(SIGTERM, shutdown);
@@ -96,11 +94,6 @@ Game::Game(QQuickItem *parent)
         std::signal(SIGKILL, shutdown);
 #endif
     }
-}
-
-Game::~Game()
-{
-    // qDebug() << Q_FUNC_INFO;
 }
 
 /*!
@@ -189,7 +182,7 @@ void Game::setCurrentScene(Scene *currentScene)
 {
     if(!currentScene)
         return;
-    if(m_sceneStack.size() > 0 && currentScene == m_sceneStack.top())
+    if(!m_sceneStack.isEmpty() && currentScene == m_sceneStack.top())
         return;
 
     if(m_sceneStack.isEmpty()){
@@ -202,7 +195,7 @@ void Game::setCurrentScene(Scene *currentScene)
     //we need to check the the currentScene is already on the stack
     //and remove it to put on top
     if(m_sceneStack.contains(currentScene)){
-        int index = m_sceneStack.indexOf(currentScene);
+        const int index = m_sceneStack.indexOf(currentScene);
         m_sceneStack.remove(index);
         //fix Scene Z in case of pushing a scene in the middle of
         //the stack to the top
@@ -257,7 +250,7 @@ void Game::pushScene(Scene *scene)
 {
     if(!scene)
         return;
-    if(m_sceneStack.size() > 0 && scene == m_sceneStack.top())
+    if(!m_sceneStack.isEmpty() && scene == m_sceneStack.top())
         return;
 
     int stackLevel = m_sceneStack.size();
@@ -265,7 +258,7 @@ void Game::pushScene(Scene *scene)
     //we need to check the the currentScene is already on the stack
     //and remove it to put on top
     if(m_sceneStack.contains(scene)){
-        int index = m_sceneStack.indexOf(scene);
+        const int index = m_sceneStack.indexOf(scene);
         m_sceneStack.remove(index);
         //fix Scene Z in case of pushing a scene in the middle of
         //the stack to the top
@@ -500,7 +493,7 @@ bool Game::triggerExitAnimation(Scene *scene)
     m_exitScene = scene;
     const QMetaObject *meta = exitAnimation->metaObject();
 
-    int propIndex = meta->indexOfProperty("running");
+    const int propIndex = meta->indexOfProperty("running");
 
     QMetaMethod signal  = meta->property(propIndex).notifySignal();
 
@@ -537,7 +530,7 @@ void Game::handleExitAnimationRunningChanged(bool running)
 
 QMetaMethod Game::getMetaMethod(QObject *object, QString methodSignature) const
 {
-    int methodIndex = object->metaObject()->indexOfMethod(QMetaObject::normalizedSignature(methodSignature.toLocal8Bit()));
+    const int methodIndex = object->metaObject()->indexOfMethod(QMetaObject::normalizedSignature(methodSignature.toLocal8Bit()));
 
     if(!object || methodIndex == -1)
         return QMetaMethod();

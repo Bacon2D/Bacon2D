@@ -31,10 +31,10 @@
 
 #include "enums.h"
 
-#include <QtQuick/QQuickItem>
-#include <QtCore/QTime>
-#include <QtCore/QtGlobal>
-#include <QtCore/QStack>
+#include <QQuickItem>
+#include <QTime>
+#include <QtGlobal>
+#include <QStack>
 
 class Scene;
 class Viewport;
@@ -53,7 +53,7 @@ class Game : public QQuickItem
     Q_PROPERTY(int stackLevel READ stackLevel NOTIFY stackLevelChanged)
 public:
     Game(QQuickItem *parent = nullptr);
-    virtual ~Game();
+    virtual ~Game() override = default;
 
     Scene *currentScene() const;
     void setCurrentScene(Scene *currentScene);

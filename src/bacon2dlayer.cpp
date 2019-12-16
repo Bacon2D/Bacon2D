@@ -152,8 +152,7 @@ void Bacon2DLayer::update(const int &delta)
 
 void Bacon2DLayer::updateEntities(const int &delta)
 {
-    QQuickItem *item;
-    foreach (item, childItems()) {
+    for (QQuickItem *item : childItems()) {
         if (Entity *entity = qobject_cast<Entity *>(item))
             entity->update(delta);
     }

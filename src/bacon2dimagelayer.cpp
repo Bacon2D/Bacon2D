@@ -224,7 +224,7 @@ QSGNode *Bacon2DImageLayer::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeDat
 
     if (boundingRect().isEmpty()) {
         delete n;
-        return 0;
+        return nullptr;
     }
 
     if (!n) {

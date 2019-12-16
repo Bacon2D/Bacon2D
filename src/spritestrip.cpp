@@ -21,6 +21,20 @@ SpriteStrip::SpriteStrip(QQuickItem *parent)
 {
 }
 
+QString SpriteStrip::name() const
+{
+    return m_name;
+}
+
+void SpriteStrip::setName(const QString &name)
+{
+    if (m_name == name)
+        return;
+
+    m_name = name;
+    emit nameChanged();
+}
+
 int SpriteStrip::frame() const
 {
     return m_frame;

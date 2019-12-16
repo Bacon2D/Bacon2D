@@ -409,7 +409,7 @@ void TiledObjectGroup::setCount(int count)
 }
 
 /*!
-  \qmlmethod string TiledObjectGroup::getProperty(string name, variant defaultValue)
+  \qmlmethod string TiledObjectGroup::getProperty(string entityId, string name, variant defaultValue)
   \brief This method returns the value of the custom property called \e name for this TMX object.
   If the value is not provided, the \e defaultValue is used instead.
 
@@ -464,6 +464,8 @@ QVariantList TiledObjectGroup::createdEntities() const
 
 void TiledObjectGroup::initialize()
 {
+    if (!m_active)
+        return;
     if (!m_entities.isEmpty())
         deinitialize();
 
